@@ -1,0 +1,91 @@
+---
+title: "Introduction to Statistical Learning"
+subtitle: "Bachelor’s Degree Programme in Philosophy, International and Economic Studies, Ca' Foscari University of Venice."
+author: "Aldo Solari"
+institute: "Department of Economics, Ca' Foscari University of Venice"
+lang: en
+page-layout: full
+execute:
+  cache: false
+format:
+  html:
+    html-math-method: katex
+    echo: true
+    callout-appearance: minimal
+    theme: [simplex, template.css]
+    toc: true
+    toc-title: Table of contents
+    embed-resources: false
+    code-line-numbers: true
+    smooth-scroll: true
+    fig-dpi: 250
+editor: 
+  markdown: 
+    wrap: 72
+editor_options: 
+  chunk_output_type: console
+---
+
+This is the website of the [Introduction to Statistical Learning]{.blue} course of the
+Bachelor’s Degree Programme in Philosophy, International and Economic Studies, Ca' Foscari University of Venice.
+
+## Teaching material
+
+#### Required
+
+- Gareth, J., D. Witten, T. Hastie, and R. Tibshirani. 2021. [*An Introduction to Statistical Learning with Applications in R*](https://www.statlearning.com/) (Second Edition). New York: Springer.
+
+#### Optional
+
+- Azzalini, A., and B. Scarpa. 2013. [*Data Analysis and Data Mining: an Introduction*](http://azzalini.stat.unipd.it/Book-DM/). Oxford University Press.
+
+- Gareth, J., D. Witten, T. Hastie, R. Tibshirani and J. Taylor. 2023. [*An Introduction to Statistical Learning with Applications in Python*](https://www.statlearning.com/). New York: Springer.
+
+
+### Slides and lecture notes
+
+The slides are meant to be used in HTML. However, if you *really* want
+to convert the HTML slides into pdf files, you can [follow the
+instruction of the quarto
+documentation](https://quarto.org/docs/presentations/revealjs/presenting.html#print-to-pdf).
+
+| Topic                           | Notes                                | Slides                                             | Code                  |
+|--------------------|------------------|------------------|------------------|
+| **Introduction**                | [Introduction](slides/un_intro.html) | [Slides Introduction](slides/un_intro_slides.html) |                       |
+| **Regression**            | [Unit A](slides/un_A.html)           | [Slides Unit A](slides/un_A_slides.html)           | [Code A](code/un_A.R) |
+| *Exercises*                     | [Exercises A](exe/exe_A.html)        |                                                    |                       |
+| **Classification**        | [Unit B](slides/un_B.html)           | [Slides Unit B](slides/un_B_slides.html)           | [Code B](code/un_B.R) |
+| *Exercises*                     | [Exercises B](exe/exe_B.html)        |                                                    |                       |
+| **Tree-based methods**   | [Unit C](slides/un_C.html)           | [Slides Unit C](slides/un_C_slides.html)           | [Code C](code/un_C.R) |
+| *Exercises*                     | [Exercises C](exe/exe_C.html)        |                                                    |                       |
+| **Unsupervised Learning** | [Unit D](slides/un_D.html)           | [Slides Unit D](slides/un_D_slides.html)           | [Code D](code/un_D.R) |
+| *Exercises*                     | [Exercises D](exe/exe_D.html)        |                                                    |           
+
+## Exam
+
+#### Rules
+
+#### Mock exam
+
+An example of written examination is provided at 
+<!-- [this link](exe/exe_exam.html). -->
+
+## Prerequisites
+
+Knowledge of the topics covered in the course [Introduction to Probability for Economics](https://aldosolari.github.io/IPE/) 
+is highly recommended.
+
+<!-- and [Mathematics for Social Sciences](https://www.unive.it/data/course/513067/programma) -->
+
+
+## Office hours
+
+To schedule a meeting, please write to aldo.solari@unive.it. Office hours is every DAY at HOUR.
+
+## Acknowledgments
+
+The primary source of this website's content is the textbook [Gareth, Witten, Hastie and Tibshirani (2023)]{.orange}. A few pictures have been taken from the textbook; in these cases the original source is cited.
+
+All the mistakes still present are mine.
+
+------------------------------------------------------------------------
