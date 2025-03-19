@@ -52,10 +52,4 @@ editor_options:
 
 ## Parametric models
 
-## Preliminaries
 
-## Textbooks
-
-## Inferential statistics
-
-## Likelihood
