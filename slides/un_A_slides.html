@@ -366,6 +366,11 @@
 <li><p>Cluster Analysis</p></li>
 </ul>
 </section>
+<section>
+<section id="predicting-future-values" class="title-slide slide level1 center">
+<h1>Predicting future values</h1>
+
+</section>
 <section id="predicting-the-food-delivery-time" class="slide level2 center">
 <h2>Predicting the food delivery time</h2>
 <ul>
@@ -454,7 +459,12 @@ delivery \,\, time \approx \:&amp;17\times\, I\left(\,order\,\,time &lt;  13   \
 <section id="partition-of-the-predictors-space-x_1x_2" class="slide level2 center">
 <h2>Partition of the predictors space <span class="math inline">(X_1,X_2)</span></h2>
 
-<img data-src="un_A_files/figure-revealjs/unnamed-chunk-8-1.png" width="2000" class="r-stretch"></section>
+<img data-src="un_A_files/figure-revealjs/unnamed-chunk-8-1.png" width="2000" class="r-stretch"></section></section>
+<section>
+<section id="recommender-systems" class="title-slide slide level1 center">
+<h1>Recommender Systems</h1>
+
+</section>
 <section id="the-netflix-prize" class="slide level2 center">
 <h2>The Netflix Prize</h2>
 <ul>
@@ -472,16 +482,21 @@ delivery \,\, time \approx \:&amp;17\times\, I\left(\,order\,\,time &lt;  13   \
 <h2></h2>
 
 <img data-src="img/table_12_2.png" class="quarto-figure quarto-figure-center r-stretch"></section>
-<section id="recommender-systems" class="slide level2 center">
+<section id="recommender-systems-1" class="slide level2 center">
 <h2>Recommender Systems</h2>
 <ul>
 <li><p>Digital streaming services like Netflix and Amazon use data about the content that a customer has viewed in the past, as well as data from other customers, to suggest other content for the customer.</p></li>
 <li><p>In order to suggest a movie that a particular customer might like, Netflix needed a way to impute the missing values of the customer-movie data matrix.</p></li>
 <li><p><span class="orange">Principal Component Analysis</span> (PCA) is at the heart of many recommender systems. Principal components can be used to impute the missing values, through a process known as <span class="orange">matrix completion</span>.</p></li>
 </ul>
+</section></section>
+<section>
+<section id="dimension-reduction" class="title-slide slide level1 center">
+<h1>Dimension Reduction</h1>
+
 </section>
-<section id="dimension-reduction" class="slide level2 center">
-<h2>Dimension Reduction</h2>
+<section id="section-2" class="slide level2 center">
+<h2></h2>
 
 <img data-src="un_A_files/figure-revealjs/unnamed-chunk-9-1.png" width="2000" class="r-stretch"><p><span class="math display">\underset{243 \times 220}{X}</span></p>
 </section>
@@ -512,9 +527,14 @@ delivery \,\, time \approx \:&amp;17\times\, I\left(\,order\,\,time &lt;  13   \
 
 <img data-src="un_A_files/figure-revealjs/unnamed-chunk-11-1.png" width="2000" class="r-stretch"><p>Original image made by 53460 numbers</p>
 <p>Compressed image made by 4850 numbers</p>
+</section></section>
+<section>
+<section id="cluster-analysis" class="title-slide slide level1 center">
+<h1>Cluster Analysis</h1>
+
 </section>
-<section id="cluster-analysis" class="slide level2 center">
-<h2>Cluster Analysis</h2>
+<section id="clustering" class="slide level2 center">
+<h2>Clustering</h2>
 <ul>
 <li><p><span class="orange">Clustering</span> refers to a very broad set of techniques for finding <span class="orange">subgroups</span>, or <span class="orange">clusters</span>, in a data set.</p></li>
 <li><p>We seek a partition of the data into distinct groups so that the observations within each group are quite similar to each other</p></li>
@@ -554,13 +574,67 @@ delivery \,\, time \approx \:&amp;17\times\, I\left(\,order\,\,time &lt;  13   \
   virginica  36 14  0</code></pre>
 </div>
 </div>
+</section></section>
+<section>
+<section id="supervised-versus-unsupervised" class="title-slide slide level1 center">
+<h1>Supervised Versus Unsupervised</h1>
+
+</section>
+<section id="the-supervised-learning-problem" class="slide level2 center">
+<h2>The Supervised Learning Problem</h2>
+<ul>
+<li><p><span class="blue">Outcome</span> measurement <span class="math display">Y</span> (also called dependent variable, response, target).</p></li>
+<li><p>Vector of <span class="math inline">p</span> <span class="blue">predictor</span> measurements <span class="math display">X=(X_1,X_2,\ldots,X_p)</span> (also called inputs, regressors, covariates, features, independent variables).</p></li>
+<li><p>In the <span class="orange">regression problem</span>, <span class="math inline">Y</span> is quantitative (e.g price, blood pressure).</p></li>
+<li><p>In the <span class="orange">classification problem</span>, <span class="math inline">Y</span> takes values in a finite, unordered set (survived/died, digit 0-9, cancer class of tissue sample).</p></li>
+<li><p>We have <span class="orange">training data</span> <span class="math display">(x_1, y_1), \ldots , (x_N , y_N ).</span> These are observations (examples, instances) of these measurements.</p></li>
+</ul>
+</section>
+<section id="objectives" class="slide level2 center">
+<h2>Objectives</h2>
+<p>On the basis of the training data we would like to:</p>
+<ul>
+<li><p>Accurately predict unseen test cases.</p></li>
+<li><p>Understand which inputs aﬀect the outcome, and how.</p></li>
+<li><p>Assess the quality of our predictions.</p></li>
+</ul>
+</section>
+<section id="unsupervised-learning" class="slide level2 center">
+<h2>Unsupervised learning</h2>
+<ul>
+<li><p>No outcome variable, just a set of predictors (features) measured on a set of samples.</p></li>
+<li><p>objective is more fuzzy — find groups of samples that behave similarly, find features that behave similarly, find linear combinations of features with the most variation.</p></li>
+<li><p>difficult to know how well your are doing.</p></li>
+<li><p>different from supervised learning, but can be useful as a pre-processing step for supervised learning.</p></li>
+</ul>
+</section>
+<section id="statistical-learning-versus-machine-learning" class="slide level2 center">
+<h2>Statistical Learning versus Machine Learning</h2>
+<ul>
+<li><p>Machine learning arose as a subfield of <span class="orange">Artificial Intelligence</span>.</p></li>
+<li><p>Statistical learning arose as a subfield of <span class="orange">Statistics</span>.</p></li>
+<li><p>There is much overlap - both fields focus on supervised and unsupervised problems:</p></li>
+<li><p>Machine learning has a greater emphasis on <span class="blue">large scale</span> applications and <span class="blue">prediction accuracy</span>.</p></li>
+<li><p>Statistical learning emphasizes <span class="blue">models</span> and their interpretability, and <span class="blue">precision</span> and <span class="blue">uncertainty</span>.</p></li>
+</ul>
+</section>
+<section id="course-text" class="slide level2 center">
+<h2>Course text</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img data-src="img/ISL_book.png" style="width:50.0%"></p>
+</div><div class="column" style="width:50%;">
+<p>The course will cover some of the material in this Springer book (ISLR) published in 2021 (Second Edition).</p>
+<p>Each chapter ends with an R lab, in which examples are developed.</p>
+<p>An electronic version of this book is available for free from <a href="https://www.statlearning.com/">https://www.statlearning.com/</a></p>
+</div></div>
 <div class="quarto-auto-generated-content">
 <p><img src="img/cf_logo.png" class="slide-logo"></p>
 <div class="footer footer-default">
 <p><a href="https://aldosolari.github.io/ISL">ISL</a></p>
 </div>
 </div>
-</section>
+</section></section>
     </div>
   </div>
 

@@ -14,7 +14,7 @@ format:
     center: true
     html-math-method: katex
     transition: none
-    output-file: un_A.html
+    output-file: un_A_slides.html
     slide-number: true
     callout-appearance: minimal
     code-line-numbers: true
@@ -65,6 +65,8 @@ editor_options:
 - Dimension Reduction
 
 - Cluster Analysis
+
+# Predicting future values
 
 ## Predicting the food delivery time
 
@@ -144,8 +146,6 @@ We could use this equation for new orders:
  
 * If we were four miles away, the predicted delivery time is $17.557 + 4\times 2.867 \approx 29$ minutes.
 
-
-
 ## Predictor $X_2$
 
 ```{r}
@@ -206,6 +206,8 @@ text(x=18,y=3, "28 min")
 text(x=18,y=8, "36 min")
 ```
 
+# Recommender Systems
+
 ## The Netflix Prize
 
 * Competition started in October 2006. The data is
@@ -238,7 +240,9 @@ needed a way to impute the missing values of the customer-movie data matrix.
 * [Principal Component Analysis]{.orange} (PCA) is at the heart
 of many recommender systems. Principal components can be used to impute the missing values, through a process known as [matrix completion]{.orange}.
 
-## Dimension Reduction
+# Dimension Reduction
+
+## 
 
 ```{r}
 #| echo: false
@@ -288,7 +292,9 @@ Original image made by 53460 numbers
 
 Compressed image made by 4850 numbers
 
-## Cluster Analysis
+# Cluster Analysis
+
+## Clustering
 
 * [Clustering]{.orange} refers to a very broad set of techniques for
 finding [subgroups]{.orange}, or [clusters]{.orange}, in a data set.
@@ -347,3 +353,81 @@ legend("topright", c("Cluster 1","Cluster 2","Cluster 3"),  fill=4:6, xpd=T)
 #| echo: false
 table(iris[,5], km$cluster)
 ```
+
+# Supervised Versus Unsupervised
+
+## The Supervised Learning Problem
+
+* [Outcome]{.blue} measurement $$Y$$ (also called dependent variable,
+response, target).
+
+* Vector of $p$ [predictor]{.blue} measurements $$X=(X_1,X_2,\ldots,X_p)$$ (also called inputs,
+regressors, covariates, features, independent variables).
+
+* In the [regression problem]{.orange}, $Y$ is quantitative (e.g price,
+blood pressure).
+
+* In the [classification problem]{.orange}, $Y$ takes values in a finite,
+unordered set (survived/died, digit 0-9, cancer class of
+tissue sample).
+
+* We have [training data]{.orange} $$(x_1, y_1), \ldots , (x_N , y_N ).$$ These are observations (examples, instances) of these measurements.
+
+## Objectives
+
+On the basis of the training data we would like to:
+
+* Accurately predict unseen test cases.
+
+* Understand which inputs aﬀect the outcome, and how.
+
+* Assess the quality of our predictions.
+
+## Unsupervised learning
+
+* No outcome variable, just a set of predictors (features)
+measured on a set of samples.
+
+* objective is more fuzzy — find groups of samples that
+behave similarly, find features that behave similarly, find
+linear combinations of features with the most variation.
+
+* difficult to know how well your are doing.
+
+* different from supervised learning, but can be useful as a
+pre-processing step for supervised learning.
+
+## Statistical Learning versus Machine Learning
+
+* Machine learning arose as a subfield of [Artificial
+Intelligence]{.orange}.
+
+* Statistical learning arose as a subfield of [Statistics]{.orange}.
+
+* There is much overlap - both fields focus on supervised
+and unsupervised problems:
+
+* Machine learning has a greater emphasis on [large scale]{.blue}
+applications and [prediction accuracy]{.blue}.
+
+* Statistical learning emphasizes [models]{.blue} and their
+interpretability, and [precision]{.blue} and [uncertainty]{.blue}.
+
+## Course text
+
+::: columns
+::: {.column width="50%"}
+![](img/ISL_book.png){width="50%"}
+:::
+
+::: {.column width="50%"}
+The course will cover some of the material in this
+Springer book (ISLR) published in 2021 (Second Edition).
+
+Each chapter ends with an R lab, in which examples are developed. 
+
+An electronic version of this book is available from [https://www.statlearning.com/](https://www.statlearning.com/)
+:::
+:::
+
+
