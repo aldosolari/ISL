@@ -1,0 +1,349 @@
+---
+title: "Introduction to Statistical Learning"
+subtitle: "Introduction to Statistical Learning - PISE"
+author: "[Aldo Solari]{.orange}"
+institute: "_Ca' Foscari University of Venice_"
+page-layout: full
+execute:
+  cache: false
+filters: 
+  - remove-pause.lua
+format:
+  revealjs:
+    auto-stretch: true
+    center: true
+    html-math-method: katex
+    transition: none
+    output-file: un_A.html
+    slide-number: true
+    callout-appearance: minimal
+    code-line-numbers: true
+    theme: [default, ../template.css] # alternative themes (subset): default, night, dark
+    embed-resources: false
+    echo: false
+    fig-dpi: 200
+    # incremental: true  # Remove comment if you like incremental bullet points
+    logo: img/cf_logo.png
+    footer: "[ISL](https://aldosolari.github.io/ISL)"
+    highlight-style: github
+  html:
+    html-math-method: katex
+    echo: false
+    callout-appearance: minimal
+    theme: [simplex, ../template.css]
+    toc: true
+    toc-title: Table of contents
+    embed-resources: false
+    code-line-numbers: true
+    smooth-scroll: true
+    code-fold: false
+    code-summary: "Show the code"
+    fig-dpi: 150
+    highlight-style: github
+editor: 
+  markdown: 
+    wrap: 72
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+#| warning: false
+#| echo: false
+#| include: false
+#| message: false
+#| purl: false
+```
+
+## Statistical Learning Problems
+
+- Predicting future values
+
+- Recommender Systems
+
+- Dimension Reduction
+
+- Cluster Analysis
+
+## Predicting the food delivery time
+
+- [Machine learning models]{.blue} are mathematical equations that take [inputs]{.blue}, called [predictors]{.orange}, and try to estimate some future [output]{.blue} value, called [outcome]{.orange}. 
+
+$$\underset{outcome}{Y} \leftarrow f(\underset{predictors}{X_1,\ldots,X_p})$$
+
+- For example, we want to [predict]{.blue} how long it takes to deliver food ordered from a restaurant. 
+
+- The [outcome]{.orange} is the time from the initial order (in minutes). 
+
+- There are multiple [predictors]{.orange}, including: 
+ 
+    - the distance from the restaurant to the delivery location,
+    - the date/time of the order,
+    - which items were included in the order.
+
+## Food Delivery Time Data
+
+The data are tabular, where the $31$ [variables]{.orange} (1 outcome + 30 predictors) are arranged in columns and the the $n=10012$ [observations]{.orange} in rows:
+
+```{r}
+#| echo: false
+#| message: false
+library(ggpubr)
+library(modeldata)
+data(deliveries, package = "modeldata")
+head(as.data.frame(deliveries[,c(1:8,ncol(deliveries))] ))
+```
+
+Note that the predictor values are [known]{.blue}. For future data, the outcome is [unknown]{.blue}; it is a machine learning model’s job to predict unknown outcome values.
+
+## Outcome $Y$
+
+```{r}
+#| echo: false
+#| warning: false
+gghistogram(deliveries, 
+            x = "time_to_delivery", 
+            fill = "lightgray", 
+            rug = FALSE, 
+            xlab = "Time Until Deliver (min)")
+```
+
+## Predictor $X_1$
+
+```{r}
+#| echo: false
+ggscatter(deliveries,
+          alpha = 0.1,
+          add = "reg.line",
+          add.params = list(color = "blue", fill = "lightgray"),
+            y = "time_to_delivery", 
+            x = "distance",
+          xlab = "Distance (miles)",
+            ylab = "Time Until Deliver (min)")
+```
+
+## Regression function
+
+* A machine learning model has a defined mathematical prediction equation, called [regression function]{.orange} $f(\cdot)$, defining exactly how the predictors $X_1,\ldots,X_n$ relate to the outcome $Y$:
+$$Y \approx f(X_1,\ldots,X_p)$$
+
+* Here is a simple example of regression function: the [linear model]{.blue} with a single predictor (the distance $X_1$) and two unknown [parameters]{.orange} $\beta_0$ and $\beta_1$ that have been estimated:
+
+\begin{aligned}
+Y &\approx \hat{\beta}_0 + \hat{\beta}_1 X_1\\
+\\
+delivery\,\,time &\approx 17.557 + 2.867\,\times \,distance
+\end{aligned}
+
+
+We could use this equation for new orders:
+
+* If we had placed an order at the restaurant (i.e., a zero distance) we predict that it would take $17.5$
+ minutes.
+ 
+* If we were four miles away, the predicted delivery time is $17.557 + 4\times 2.867 \approx 29$ minutes.
+
+
+
+## Predictor $X_2$
+
+```{r}
+#| echo: false
+ggscatter(deliveries,
+          alpha = 0.1,
+            y = "time_to_delivery", 
+            x = "hour",
+          xlab = "Order Time (decimal hours)",
+            ylab = "Time Until Deliver (min)")
+```
+
+## 3D scatter plot
+
+```{r}
+#| echo: false
+#| message: false
+library(lattice)
+cloud(time_to_delivery ~  hour + distance, data=deliveries, col=1, alpha.regions =0.3)
+```
+
+## Regression tree
+
+```{r}
+#| echo: false
+library(rpart)
+library(rpart.plot)
+fit <- rpart(time_to_delivery~hour + distance, deliveries, control =rpart.control(surrogatestyle = 0, maxdepth = 2))
+rpart.plot(fit, type=5, extra=0)
+```
+
+## A different regression function
+
+$$
+\begin{align}
+delivery \,\, time \approx \:&17\times\, I\left(\,order\,\,time <  13   \text{ hours } \right)  + \notag \\
+       \:&22\times\, I\left(\,13\leq \, order\,\,time <  15   \text{ hours } \right)  + \notag \\
+       \:&28\times\, I\left(\,order\,\,time \geq  15   \text{ hours and }distance < 4 \text{ miles }\right)  + \notag \\
+       \:&36\times\, I\left(\,order\,\,time \geq  15   \text{ hours and }distance \geq 4 \text{ miles }\right)\notag
+\end{align}
+$$ 
+
+
+* The [indicator function]{.blue} $I(\cdot)$ is one if the logical statement is true and zero otherwise. 
+
+* Two predictors (distance $X_1$ and order time $X_2$) were used in this case. 
+
+
+## Partition of the predictors space $(X_1,X_2)$
+
+```{r}
+#| echo: false
+library(parttree) 
+plot(parttree(fit), raw = FALSE)
+text(x=12,y=6, "17 min")
+text(x=14,y=6, "22 min")
+text(x=18,y=3, "28 min")
+text(x=18,y=8, "36 min")
+```
+
+## The Netflix Prize
+
+* Competition started in October 2006. The data is
+ratings for 18000 movies by 400000 Netflix customers,
+each rating between 1 and 5.
+
+* Data is very sparse - about 98% missing.
+
+* Objective is to predict the rating for a set of 1 million customer-movie pairs that are missing in the data.
+
+* Netflix's original algorithm achieved a [Root Mean Squared Error]{.blue} (RMSE) of 0.953.
+The first team to achieve a 10% improvement wins one million dollars.
+
+##
+
+![](img/netflix.png){fig-align="center"}
+
+
+## 
+
+![](img/table_12_2.png){fig-align="center"}
+
+## Recommender Systems
+
+* Digital streaming services like Netflix and Amazon use data about the content that a customer has viewed in the past, as well as data from other customers, to suggest other content for the customer.
+
+* In order to suggest a movie that a particular customer might like, Netflix
+needed a way to impute the missing values of the customer-movie data matrix.
+
+* [Principal Component Analysis]{.orange} (PCA) is at the heart
+of many recommender systems. Principal components can be used to impute the missing values, through a process known as [matrix completion]{.orange}.
+
+## Dimension Reduction
+
+```{r}
+#| echo: false
+face <- read.table("https://raw.githubusercontent.com/aldosolari/AE/master/docs/dati/face.txt", header=FALSE)
+X = as.matrix(face)
+n = nrow(face)
+p = ncol(face)
+mat <- apply(X, 2, rev)
+image(t(mat), col=gray(0:255/255), asp=p/n, xaxt="n", yaxt="n", frame.plot=F)
+#image(X, col=gray(0:255/255), asp=p/n, xaxt="n", yaxt="n")
+```
+
+$$\underset{243 \times 220}{X}$$ 
+
+## Image = data
+
+* An image (in black and white) can be represented as a data matrix ($n$ rows $\times$ $p$ columns): $$\underset{n \times p}{X}$$ 
+where the grayscale intensity of each pixel is represented in the corresponding cell of the matrix.
+
+* Lighter colors are associated with higher values, while darker colors are associated with lower values (in the range [0,1])
+
+```{r}
+#| echo: false
+X[1:10,1:7]
+```
+
+## Image compression
+
+```{r}
+#| echo: false
+pca = princomp(X, cor=F)
+V = pca$loadings
+Y = pca$scores
+xbar = matrix(pca$center, ncol=1)
+q = 10
+Yq = Y[,1:q]
+Vq = V[,1:q]
+Aq = Yq %*% t(Vq)
+one.n = matrix(rep(1,n), ncol=1)
+face2 = Aq + one.n %*% t(xbar)
+face2 <- pmax(pmin(face2, 1), 0)
+mat2 <- apply(face2, 2, rev)
+image(t(mat2), col=gray(0:255/255), asp=p/n, xaxt="n", yaxt="n", frame.plot=F)
+```
+
+Original image made by 53460 numbers
+
+Compressed image made by 4850 numbers
+
+## Cluster Analysis
+
+* [Clustering]{.orange} refers to a very broad set of techniques for
+finding [subgroups]{.orange}, or [clusters]{.orange}, in a data set.
+
+* We seek a partition of the data into distinct groups so that
+the observations within each group are quite similar to
+each other
+
+* We must define what it means for
+two or more observations to be [similar]{.blue} or [diﬀerent]{.blue}
+
+## Iris flowers
+
+Iris flowers, from the genus Iris (derived from the Greek word *iris*, meaning "rainbow"), are classified into three species:
+
+![](img/iris_pic.png){fig-align="center"}
+
+
+## Iris data
+
+This dataset, originally collected by Edgar Anderson and later published by Fisher in 1936, gives the measurements in centimeters of the variables [sepal]{.orange} [length]{.blue} and [width]{.blue} and [petal]{.orange}  [length]{.blue} and [width]{.blue}, respectively, for 50 flowers from each of 3 species of iris:
+
+![](img/iris_table.png){fig-align="center"}
+
+
+## Scatterplot
+
+```{r}
+#| echo: false
+plot(x=iris[,3],y=iris[,4], col=iris[,5],  xlab="Petal Length", ylab = "Petal Width",  oma = c(5, 4, 4, 10))
+legend("topleft", c("Setosa","Versicolor","Virginica"),  fill=1:3, xpd=T)
+```
+
+
+## Scatterplot matrix
+
+```{r}
+#| echo: false
+pairs(iris[,-5], col=iris[,5],  upper.panel = NULL, oma = c(5, 4, 4, 10))
+legend("topright", c("Setosa","Versicolor","Virginica"),  fill=1:3, xpd=T)
+```
+
+## $K$-Means clustering
+
+```{r}
+#| echo: false
+set.seed(101)
+km <- kmeans(iris[,1:4], center=3, nstart=20)
+pairs(iris[,-5], col=km$cluster+3,  upper.panel = NULL, oma = c(5, 4, 4, 10))
+legend("topright", c("Cluster 1","Cluster 2","Cluster 3"),  fill=4:6, xpd=T)
+```
+
+## Cross-tabulation
+
+```{r}
+#| echo: false
+table(iris[,5], km$cluster)
+```

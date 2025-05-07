@@ -1,8 +1,8 @@
 ---
-title: "Exercises A"
-subtitle: "Statistical Inference - Ph.D. in Economics, Statistics, and Data Science"
-author: "[Tommaso Rigon]{.orange}"
-institute: "_Università degli Studi di Milano-Bicocca_"
+title: "	Exercises A"
+subtitle: "Bachelor’s Degree Programme in Philosophy, International and Economic Studies, Ca' Foscari University of Venice."
+author: "Aldo Solari"
+institute: "Department of Economics, Ca' Foscari University of Venice"
 lang: en
 page-layout: full
 execute:
