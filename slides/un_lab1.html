@@ -278,7 +278,7 @@ window.Quarto = {
 <span id="cb27-2"><a href="#cb27-2"></a>y <span class="ot">&lt;-</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> <span class="dv">50</span>, <span class="at">sd =</span> .<span class="dv">1</span>)</span>
 <span id="cb27-3"><a href="#cb27-3"></a><span class="fu">cor</span>(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9951853</code></pre>
+<pre><code>[1] 0.9936504</code></pre>
 </div>
 </div>
 <p>By default, <code>rnorm()</code> creates standard normal random variables with a mean of <span class="math inline">0</span> and a standard deviation of <span class="math inline">1</span>. However, the mean and standard deviation can be altered using the <code>mean</code> and <code>sd</code> arguments, as illustrated above. Sometimes we want our code to reproduce the exact same set of random numbers; we can use the <code>set.seed()</code> function to do this. The <code>set.seed()</code> function takes an (arbitrary) integer argument.</p>

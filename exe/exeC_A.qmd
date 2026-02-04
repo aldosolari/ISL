@@ -1,0 +1,72 @@
+---
+title: "Exercises Unit A - Conceptual"
+subtitle: "Bachelor’s Degree Programme in Philosophy, International and Economic Studies, Ca' Foscari University of Venice."
+author: "Aldo Solari"
+institute: "Department of Economics, Ca' Foscari University of Venice"
+lang: en
+page-layout: full
+execute:
+  cache: false
+format:
+  html:
+    html-math-method: katex
+    echo: true
+    callout-appearance: minimal
+    theme: [simplex, template.css]
+    toc: true
+    toc-title: Table of contents
+    embed-resources: false
+    code-line-numbers: true
+    smooth-scroll: true
+    fig-dpi: 250
+editor: 
+  markdown: 
+    wrap: 72
+editor_options: 
+  chunk_output_type: console
+---
+
+
+### [Homepage](../index.html)
+
+#### Chapter 2 Exercise 1.
+
+For each of parts (a) through (d), indicate whether we would generally
+expect the performance of a flexible statistical learning method to be
+better or worse than an inflexible method. Justify your answer.
+
+(a) The sample size $n$ is extremely large, and the number of predictors $p$ is small.
+(b) The number of predictors $p$ is extremely large, and the number
+of observations $n$ is small.
+(c) The relationship between the predictors and response is highly
+non-linear.
+(d) The variance of the error terms, i.e. $\sigma^2 = \mathbb{V}\mathrm{ar}(\epsilon)$, is extremely
+high.
+
+
+#### Chapter 2 Exercise 4.
+
+You will now think of some real-life applications for statistical learn-
+ing.
+(b) Describe three real-life applications in which regression might
+be useful. Describe the response, as well as the predictors. Is the
+goal of each application inference or prediction? Explain your
+answer.
+
+
+#### Chapter 2 Exercise 5.
+
+What are the advantages and disadvantages of a very flexible (versus
+a less flexible) approach for regression or classification? Under what
+circumstances might a more flexible approach be preferred to a less
+flexible approach? When might a less flexible approach be preferred?
+
+#### Chapter 2 Exercise 6.
+
+Describe the differences between a parametric and a non-parametric
+statistical learning approach. What are the advantages of a para-
+metric approach to regression or classification (as opposed to a non-
+parametric approach)? What are its disadvantages?
+
+
+
