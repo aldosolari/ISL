@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.7.32">
 
   <meta name="author" content="Aldo Solari">
-  <title>Introduction</title>
+  <title>The Bias-Variance Trade-off</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -30,6 +30,22 @@
     }
   </style>
   <link rel="stylesheet" href="un_B_files/libs/revealjs/dist/theme/quarto-52f9c9ea99cef3131c4880afbe91edc6.css">
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
   <link href="un_B_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="un_B_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="un_B_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -127,7 +143,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Introduction</h1>
+  <h1 class="title">The Bias-Variance Trade-off</h1>
   <p class="subtitle">Introduction to Statistical Learning - PISE</p>
 
 <div class="quarto-title-authors">
@@ -142,50 +158,270 @@
 </div>
 
 </section>
-<section id="prerequisites" class="slide level2 center">
-<h2>Prerequisites</h2>
+<section class="slide level2 center">
+
+<p>This unit will cover the following <span class="orange">topics</span>:</p>
+<pre><code>-   Simple linear regression
+-   Polynomial regression
+-   Bias-variance trade-off
+-   Cross-validation</code></pre>
+</section>
+<section>
+<section id="yesterdays-and-tomorrows-data" class="title-slide slide level1 center">
+<h1>Yesterday’s and tomorrow’s data</h1>
+
+</section>
+<section id="the-signal-and-the-noise" class="slide level2 center">
+<h2>The signal and the noise</h2>
 <ul>
-<li><p>Basic mathematical background (no advanced mathematics needed)</p></li>
-<li><p>Elementary knowledge of statistics is recommended but not required (e.g., <a href="https://aldosolari.github.io/IPE/">Introduction to Probability for Economics</a>)</p></li>
-<li><p>Familiarity with linear regression is helpful but not required</p></li>
-<li><p>No detailed knowledge of matrix operations is required</p></li>
-<li><p>Previous exposure to a programming language (e.g., R or Python) is useful but not required</p></li>
+<li><p>Let us presume that <span class="orange">yesterday</span> we observed <span class="math inline">n = 30</span> pairs of data <span class="math inline">(x_i, y_i)</span>.</p></li>
+<li><p>Data were generated according to <span class="math display">
+  Y_i = f(x_i) + \epsilon_i, \quad i=1,\dots,n,
+  </span> with each <span class="math inline">y_i</span> being the realization of <span class="math inline">Y_i</span>.</p></li>
+<li><p>The <span class="math inline">\epsilon_1,\dots,\epsilon_n</span> are iid “<span class="orange">error</span>” terms, such that <span class="math inline">\mathbb{E}(\epsilon_i)=0</span> and <span class="math inline">\mathbb{V}\text{ar}(\epsilon_i)=\sigma^2 = 10^{-4}</span>.</p></li>
+<li><p>Here <span class="math inline">f(x)</span> is a regression function (<span class="blue">signal</span>) that we leave unspecified .</p></li>
+<li><p><span class="blue">Tomorrow</span> we will get a new <span class="math inline">x</span>. We wish to <span class="orange">predict</span> <span class="math inline">Y</span>.</p></li>
 </ul>
 </section>
-<section id="overview-of-the-topics" class="slide level2 center">
-<h2>Overview of the topics</h2>
+<section id="section" class="slide level2 center">
+<h2></h2>
+
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1000"></section>
+<section id="yesterdays-data" class="slide level2 center">
+<h2>Yesterday’s data</h2>
+
+<!-- ## Overfitting: mistaking noise for the signal -->
+<!-- ```{r} -->
+<!-- #| fig-width: 5 -->
+<!-- #| fig-height: 4.5 -->
+<!-- #| fig-align: center -->
+<!-- #| warning: false -->
+<!-- degree = 15 -->
+<!-- fit <- lm(y.yesterday ~ poly(x, degree = degree, raw = FALSE), data = dataset) -->
+<!-- # Fitted values -->
+<!-- x_seq <- seq(from = min(dataset$x), to = max(dataset$x), length = 30000)  -->
+<!-- y_hat <- predict(fit, newdata = data.frame(x = x_seq)) -->
+<!-- data_pred <- data.frame(x = x_seq, y_hat = y_hat) -->
+<!-- ggplot(data = dataset, aes(x = x, y = y.yesterday)) + -->
+<!--   geom_line(data = dataset, aes(x = x, y = ftrue), col="blue") + -->
+<!--   geom_line(data = data_pred, aes(x = x_seq, y = y_hat)) + -->
+<!--   geom_point() + -->
+<!--   theme_light() + -->
+<!--   scale_color_tableau(palette = "Color Blind") + -->
+<!--   xlab("x") + -->
+<!--   ylab("y") -->
+<!-- ``` -->
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1000"></section>
+<section id="simple-linear-regression" class="slide level2 center">
+<h2>Simple linear regression</h2>
+<ul>
+<li class="fragment"><p>The function <span class="math inline">f(x)</span> is unknown, therefore, it should be estimated.</p></li>
+<li class="fragment"><p>A simple approach is using <span class="blue">simple linear regression</span>: <span class="math display">
+f(x; \beta) = \beta_0 + \beta_1 x,
+</span> namely <span class="math inline">f(x)</span> is <span class="orange">approximated</span> with a straight line where <span class="math inline">\beta_0</span> and <span class="math inline">\beta_1</span> are two unknown constants that represent the <span class="blue">intercept</span> and <span class="blue">slope</span>, also known as <span class="orange">coefficients</span> or <span class="orange">parameters</span></p></li>
+<li class="fragment"><p>Giving some <span class="orange">estimates</span> <span class="math inline">\hat{\beta}_0</span> and <span class="math inline">\hat{\beta}_1</span> for the model coefficients, we predict future values using <span class="math display">\hat{y} =  \hat\beta_0 + \hat\beta_1 x</span> where <span class="math inline">\hat{y}</span> indicates a <span class="blue">prediction</span> of <span class="math inline">Y</span> on the basis of <span class="math inline">X=x</span>. The <span class="orange">hat</span> symbol denotes an estimated value.</p></li>
+</ul>
+</section>
+<section id="estimation-of-the-parameters-by-least-squares" class="slide level2 center">
+<h2>Estimation of the parameters by least squares</h2>
+<ul>
+<li class="fragment"><p>Let <span class="math inline">\hat y_i = \hat\beta_0 + \hat\beta_1 x_i</span> be the prediction for <span class="math inline">Y</span> based on the <span class="math inline">i</span>th value of <span class="math inline">X</span>. Then <span class="math inline">e_i = y_i - \hat y_i</span> represents the <span class="math inline">i</span>th <span class="blue">residual</span></p></li>
+<li class="fragment"><p>We define the <span class="blue">residual sum of squares</span> (<span class="math inline">\mathrm{RSS}</span>) as <span class="math display">\mathrm{RSS} = e_1^2+e_2^2+\ldots+e_n^2,</span> or equivalently as <span class="math display">\mathrm{RSS} = (y_1 - \hat\beta_0 - \hat\beta_1 x_1)^2+(y_2 - \hat\beta_0 -
+\hat\beta_1 x_2)^2+\ldots+ (y_n- \hat\beta_0 - \hat\beta_1 x_n)^2.</span></p></li>
+<li class="fragment"><p>The <span class="blue">least squares</span> approach chooses <span class="math inline">\hat{\beta}_0</span> and <span class="math inline">\hat{\beta}_1</span> to minimize the . The minimizing values can be shown to be <span class="math display">
+\begin{aligned}
+\hat{\beta}_1 &amp;= \frac{\sum_{i=1}^{n}(x_i - \bar x)(y_i - \bar y)}{\sum_{i=1}^{n}(x_i - \bar x)^2}\\
+\hat{\beta}_0 &amp;= \bar y - \beta_1 \bar x
+\end{aligned}
+</span> where <span class="math inline">\bar y = \frac{1}{n}\sum_{i=1}^n y_i</span> and <span class="math inline">\bar x = \frac{1}{n}\sum_{i=1}^n x_i</span> are the sample means.</p></li>
+</ul>
+</section>
+<section id="least-squares-fit-hat-y-0.520627---0.003-x" class="slide level2 center">
+<h2>Least squares fit : <span class="math inline">\hat y = 0.520627 - 0.003 x</span></h2>
+
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1000"></section>
+<section id="assessing-the-overall-accuracy-of-the-model" class="slide level2 center">
+<h2>Assessing the Overall Accuracy of the Model</h2>
+<ul>
+<li class="fragment"><p>We compute the <span class="blue">mean squared error</span> (<span class="math inline">\mathrm{MSE}</span>) <span class="math display">\mathrm{MSE} = \frac{1}{n} \sum_{i=1}^{n}(y_i - \hat{y}_i)^2  = \frac{1}{n}\mathrm{RSS}</span></p></li>
+<li class="fragment"><p><span class="blue">R-squared</span> or fraction of variance explained is <span class="math display">R^2 = \frac{\mathrm{TSS} - \mathrm{RSS}}{\mathrm{TSS}} = 1 - \frac{\mathrm{RSS}}{\mathrm{TSS}}</span> where <span class="math inline">\mathrm{TSS} = \sum_{i=1}^{n}(y_i - \bar y)^2</span> is the <span class="blue">total sum of squares</span>.</p></li>
+</ul>
+</section>
+<section id="section-1" class="slide level2 center">
+<h2></h2>
 <table class="caption-top">
-<colgroup>
-<col style="width: 39%">
-<col style="width: 60%">
-</colgroup>
 <thead>
 <tr class="header">
-<th><span class="orange">Unit</span></th>
-<th><span class="blue">Description</span></th>
+<th>Quantity</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Linear Regression.</td>
-<td>Simple and Multiple Linear Regression. Estimating the coefficients.</td>
+<td>RSS</td>
+<td>0.0171726</td>
 </tr>
 <tr class="even">
-<td>Bias-variance trade-off.</td>
-<td>Polynomial Regression. Assessing the Accuracy of the Model. Training and test paradigm. Cross-Validation.</td>
+<td>MSE</td>
+<td>0.00057242</td>
 </tr>
 <tr class="odd">
-<td>Classification.</td>
-<td>Logistic Regression. Classification Trees.</td>
+<td>TSS</td>
+<td>0.01731363</td>
 </tr>
 <tr class="even">
-<td>Principal Components Analysis.</td>
-<td>Missing Values and Matrix Completion.</td>
+<td><span class="math inline">R^2</span></td>
+<td>0.008146</td>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="polynomial-regression" class="slide level2 center">
+<h2>Polynomial regression</h2>
+<ul>
+<li class="fragment"><p>The function <span class="math inline">f(x)</span> is unknown, therefore, it should be estimated.</p></li>
+<li class="fragment"><p>A simple approach is using <span class="orange">polynomial regression</span>: <span class="math display">
+f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
+</span> namely <span class="math inline">f(x)</span> is <span class="orange">approximated</span> with a polynomial of degree <span class="math inline">d</span></p></li>
+<li class="fragment"><p>This model is linear in the parameters: ordinary least squares can be applied.</p></li>
+<li class="fragment"><p>How do we choose the <span class="blue">degree of the polynomial</span> <span class="math inline">d</span>?</p></li>
+<li class="fragment"><p>Without clear guidance, in principle, any value of <span class="math inline">d \in \{0,\dots,n-1\}</span> could be appropriate.</p></li>
+<li class="fragment"><p>Let us compare the <span class="blue">mean squared error</span> (MSE) on yesterday’s data (<span class="orange">training</span>) <span class="math display">
+\text{MSE}_{\text{train}} = \frac{1}{n}\sum_{i=1}^n\{y_i -f(x_i; \hat{\beta})\}^2,
+</span> or alternatively <span class="math inline">R^2_\text{train}</span>, for different values of <span class="math inline">d</span>…</p></li>
+</ul>
+</section>
+<section id="yesterdays-data-polynomial-regression" class="slide level2 center">
+<h2>Yesterday’s data, polynomial regression</h2>
+
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1560"></section>
+<section id="yesterdays-data-goodness-of-fit" class="slide level2 center">
+<h2>Yesterday’s data, goodness of fit</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_B_files/figure-revealjs/unnamed-chunk-7-1.png" width="1000"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_B_files/figure-revealjs/unnamed-chunk-8-1.png" width="1000"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="yesterdays-data-polynomial-interpolation-p-n" class="slide level2 center">
+<h2>Yesterday’s data, polynomial interpolation (<span class="math inline">d = n-1</span>)</h2>
+
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-9-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1800"></section>
+<section id="yesterdays-data-tomorrows-prediction" class="slide level2 center">
+<h2>Yesterday’s data, tomorrow’s prediction</h2>
+<ul>
+<li class="fragment"><p>The <span class="blue">MSE</span> decreases as the number of parameter increases; similarly, the <span class="blue"><span class="math inline">R^2</span></span> increases as a function of <span class="math inline">d</span>. It can be <span class="orange">proved</span> that this <span class="orange">always happens</span> using ordinary least squares.</p></li>
+<li class="fragment"><p>One might be tempted to let <span class="math inline">d</span> as large as possible to make the model more flexible…</p></li>
+<li class="fragment"><p>Taking this reasoning to the extreme would lead to the choice <span class="math inline">d = n-1</span>, so that <span class="math display">
+\text{MSE}_\text{train} = 0, \qquad R^2_\text{train} = 1,
+</span> i.e., a perfect fit. This procedure is called <span class="blue">interpolation</span>.</p></li>
+<li class="fragment"><p>However, we are <span class="orange">not</span> interested in predicting <span class="orange">yesterday</span> data. Our goal is to predict <span class="blue">tomorrow</span>’s data, i.e.&nbsp;a <span class="blue">new set</span> of <span class="math inline">n = 30</span> points: <span class="math display">
+(x_1, \tilde{y}_1), \dots, (x_n, \tilde{y}_n),
+</span> using <span class="math inline">\hat{y}_i = f(x_i; \hat{\beta})</span>, where <span class="math inline">\hat{\beta}</span> is obtained using yesterday’s data.</p></li>
+<li class="fragment"><p><span class="orange">Remark</span>. Tomorrow’s r.v. <span class="math inline">\tilde{Y}_1,\dots, \tilde{Y}_n</span> follow the same scheme as yesterday’s data.</p></li>
+</ul>
+</section>
+<section id="tomorrows-data-polynomial-regression" class="slide level2 center">
+<h2>Tomorrow’s data, polynomial regression</h2>
+
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-10-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1600"></section>
+<section id="tomorrows-data-goodness-of-fit" class="slide level2 center">
+<h2>Tomorrow’s data, goodness of fit</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_B_files/figure-revealjs/unnamed-chunk-11-1.png" width="1000"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_B_files/figure-revealjs/unnamed-chunk-12-1.png" width="1000"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="comments-and-remarks" class="slide level2 center">
+<h2>Comments and remarks</h2>
+<ul>
+<li class="fragment"><p>The mean squared error on tomorrow’s data (<span class="blue">test</span>) is defined as <span class="math display">
+\text{MSE}_{\text{test}} = \frac{1}{n}\sum_{i=1}^n\{\tilde{y}_i -f(x_i; \hat{\beta})\}^2,
+</span> and similarly the <span class="math inline">R^2_\text{test}</span>. We would like the <span class="math inline">\text{MSE}_{\text{test}}</span> to be <span class="orange">as small as possible</span>.</p></li>
+<li class="fragment"><p>For <span class="blue">small values</span> of <span class="math inline">d</span>, an increase in the degree of the polynomial <span class="blue">improves the fit</span>. In other words, at the beginning, both the <span class="math inline">\text{MSE}_{\text{train}}</span> and the <span class="math inline">\text{MSE}_{\text{test}}</span> decrease.</p></li>
+<li class="fragment"><p>For <span class="orange">larger values</span> of <span class="math inline">d</span>, the improvement gradually ceases, and the polynomial follows <span class="orange">random fluctuations</span> in yesterday’s data, which are <span class="blue">not observed</span> in the <span class="blue">new sample</span>.</p></li>
+<li class="fragment"><p>An over-adaptation to yesterday’s data is called <span class="orange">overfitting</span>, which occurs when the training <span class="math inline">\text{MSE}_{\text{train}}</span> is low but the test <span class="math inline">\text{MSE}_{\text{test}}</span> is high.</p></li>
+<li class="fragment"><p>Yesterday’s dataset is available from the website of the textbook Azzalini and Scarpa. (2013):</p>
+<ul>
+<li class="fragment">Dataset <a href="http://azzalini.stat.unipd.it/Book-DM/yesterday.dat" class="uri">http://azzalini.stat.unipd.it/Book-DM/yesterday.dat</a></li>
+<li class="fragment">True <span class="math inline">f(\bm{x})</span> <a href="http://azzalini.stat.unipd.it/Book-DM/f_true.R" class="uri">http://azzalini.stat.unipd.it/Book-DM/f_true.R</a></li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="the-bias-variance-trade-off" class="title-slide slide level1 center">
+<h1>The Bias-Variance Trade-Off</h1>
 
 </section>
+<section id="if-we-knew-fx" class="slide level2 center">
+<h2>If we knew <span class="math inline">f(x)</span>…</h2>
+
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-15-1.png" width="1600" class="r-stretch"></section>
+<section id="bias-variance-trade-off" class="slide level2 center">
+<h2>Bias-variance trade-off</h2>
+<ul>
+<li class="fragment"><p>When <span class="math inline">p</span> grows, the mean squared error first decreases and then it increases. In the example, the <span class="orange">theoretical optimum</span> is <span class="math inline">p = 6</span> (5th degree polynomial).</p></li>
+<li class="fragment"><p>The <span class="orange">bias</span> measures the ability of <span class="math inline">\hat{f}(\bm{x})</span> to reconstruct the true <span class="math inline">f(\bm{x})</span>. The bias is due to <span class="blue">lack of knowledge</span> of the data-generating mechanism. It equals zero when <span class="math inline">\mathbb{E}\{\hat{f}(\bm{x})\} = f(\bm{x})</span>.</p></li>
+<li class="fragment"><p>The <span class="orange">bias</span> term can be reduced by increasing the flexibility of the model (e.g., by considering a high value for <span class="math inline">p</span>).</p></li>
+<li class="fragment"><p>The <span class="blue">variance</span> measures the variability of the estimator <span class="math inline">\hat{f}(\bm{x})</span> and its tendency to follow random fluctuations of the data.</p></li>
+<li class="fragment"><p>The <span class="blue">variance</span> increases with the model complexity.</p></li>
+<li class="fragment"><p>It is not possible to minimize both the bias and the variance, there is a <span class="orange">trade-off</span>.</p></li>
+<li class="fragment"><p>We say that an estimator is <span class="orange">overfitting</span> the data if an increase in variance comes without important gains in terms of bias.</p></li>
+</ul>
+<!-- - **Summary**. Low model complexity: [high bias]{.orange}, [low variance]{.blue}. High model complexity: [low bias]{.blue}, [high variance]{.orange}. -->
+</section>
+<section id="but-since-we-do-not-know-fx" class="slide level2 center">
+<h2>But since we do not know <span class="math inline">f(x)</span>…</h2>
+<ul>
+<li class="fragment"><p>We just concluded that we must expect a trade-off between error and variance components. In practice, however, we cannot do this because, of course, <span class="math inline">f(x)</span> is <span class="orange">unknown</span>.</p></li>
+<li class="fragment"><p>A simple solution consists indeed in <span class="orange">splitting</span> the observations in two parts: a <span class="orange">training set</span> <span class="math inline">(y_1,\dots,y_n)</span> and a <span class="blue">test set</span> <span class="math inline">(\tilde{y}_1,\dots,\tilde{y}_n)</span>, having the same covariates <span class="math inline">x_1,\dots,x_n</span>.</p></li>
+<li class="fragment"><p>We fit the model <span class="math inline">\hat{f}</span> using <span class="math inline">n</span> observations of the training and we use it to predict the <span class="math inline">n</span> observations on the test set.</p></li>
+<li class="fragment"><p>This leads to an <span class="orange">unbiased estimate</span> of the <span class="blue">in-sample prediction error</span>, i.e.: <span class="math display">
+\widehat{\mathrm{ErrF}} =  \frac{1}{n}\sum_{i=1}^n\mathscr{L}\{\tilde{y}_i; \hat{f}(\bm{x}_i)\}.
+</span></p></li>
+<li class="fragment"><p>This is precisely what we already did with yesterday’s and tomorrow’s data!</p></li>
+</ul>
+</section>
+<section id="mse-on-training-and-test-set-recap" class="slide level2 center">
+<h2>MSE on training and test set (recap)</h2>
+
+
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-16-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1600"></section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="img/cf_logo.png" class="slide-logo"></p>

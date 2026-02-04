@@ -80,7 +80,7 @@ An example of written examination is provided at
 
 * Basic mathematical background (no advanced mathematics needed)
 
-* Elementary knowledge of statistics is recommended but not required (e.g., [Introduction to Probability for Economics](https://aldosolari.github.io/IPE/)) 
+* Elementary knowledge of statistics is strongly recommended but not required (e.g., [Introduction to Probability for Economics](https://aldosolari.github.io/IPE/)) 
 
 * Familiarity with linear regression is helpful but not required
 

@@ -98,6 +98,24 @@ window.Quarto = {
   <li><a href="#yesterdays-data" id="toc-yesterdays-data" class="nav-link" data-scroll-target="#yesterdays-data">Yesterday’s data</a></li>
   <li><a href="#simple-linear-regression" id="toc-simple-linear-regression" class="nav-link" data-scroll-target="#simple-linear-regression">Simple linear regression</a></li>
   <li><a href="#estimation-of-the-parameters-by-least-squares" id="toc-estimation-of-the-parameters-by-least-squares" class="nav-link" data-scroll-target="#estimation-of-the-parameters-by-least-squares">Estimation of the parameters by least squares</a></li>
+  <li><a href="#least-squares-fit-hat-y-0.520627---0.003-x" id="toc-least-squares-fit-hat-y-0.520627---0.003-x" class="nav-link" data-scroll-target="#least-squares-fit-hat-y-0.520627---0.003-x">Least squares fit : <span class="math inline">\hat y = 0.520627 - 0.003 x</span></a></li>
+  <li><a href="#assessing-the-overall-accuracy-of-the-model" id="toc-assessing-the-overall-accuracy-of-the-model" class="nav-link" data-scroll-target="#assessing-the-overall-accuracy-of-the-model">Assessing the Overall Accuracy of the Model</a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"></a></li>
+  <li><a href="#polynomial-regression" id="toc-polynomial-regression" class="nav-link" data-scroll-target="#polynomial-regression">Polynomial regression</a></li>
+  <li><a href="#yesterdays-data-polynomial-regression" id="toc-yesterdays-data-polynomial-regression" class="nav-link" data-scroll-target="#yesterdays-data-polynomial-regression">Yesterday’s data, polynomial regression</a></li>
+  <li><a href="#yesterdays-data-goodness-of-fit" id="toc-yesterdays-data-goodness-of-fit" class="nav-link" data-scroll-target="#yesterdays-data-goodness-of-fit">Yesterday’s data, goodness of fit</a></li>
+  <li><a href="#yesterdays-data-polynomial-interpolation-p-n" id="toc-yesterdays-data-polynomial-interpolation-p-n" class="nav-link" data-scroll-target="#yesterdays-data-polynomial-interpolation-p-n">Yesterday’s data, polynomial interpolation (<span class="math inline">d = n-1</span>)</a></li>
+  <li><a href="#yesterdays-data-tomorrows-prediction" id="toc-yesterdays-data-tomorrows-prediction" class="nav-link" data-scroll-target="#yesterdays-data-tomorrows-prediction">Yesterday’s data, tomorrow’s prediction</a></li>
+  <li><a href="#tomorrows-data-polynomial-regression" id="toc-tomorrows-data-polynomial-regression" class="nav-link" data-scroll-target="#tomorrows-data-polynomial-regression">Tomorrow’s data, polynomial regression</a></li>
+  <li><a href="#tomorrows-data-goodness-of-fit" id="toc-tomorrows-data-goodness-of-fit" class="nav-link" data-scroll-target="#tomorrows-data-goodness-of-fit">Tomorrow’s data, goodness of fit</a></li>
+  <li><a href="#comments-and-remarks" id="toc-comments-and-remarks" class="nav-link" data-scroll-target="#comments-and-remarks">Comments and remarks</a></li>
+  </ul></li>
+  <li><a href="#the-bias-variance-trade-off" id="toc-the-bias-variance-trade-off" class="nav-link" data-scroll-target="#the-bias-variance-trade-off">The Bias-Variance Trade-Off</a>
+  <ul class="collapse">
+  <li><a href="#if-we-knew-fx" id="toc-if-we-knew-fx" class="nav-link" data-scroll-target="#if-we-knew-fx">If we knew <span class="math inline">f(x)</span>…</a></li>
+  <li><a href="#bias-variance-trade-off" id="toc-bias-variance-trade-off" class="nav-link" data-scroll-target="#bias-variance-trade-off">Bias-variance trade-off</a></li>
+  <li><a href="#but-since-we-do-not-know-fx" id="toc-but-since-we-do-not-know-fx" class="nav-link" data-scroll-target="#but-since-we-do-not-know-fx">But since we do not know <span class="math inline">f(x)</span>…</a></li>
+  <li><a href="#mse-on-training-and-test-set-recap" id="toc-mse-on-training-and-test-set-recap" class="nav-link" data-scroll-target="#mse-on-training-and-test-set-recap">MSE on training and test set (recap)</a></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="un_B_slides.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
@@ -137,14 +155,12 @@ window.Quarto = {
 </header>
 
 
-<ul>
-<li><p>This unit will cover the following <span class="orange">topics</span>:</p>
+<p>This unit will cover the following <span class="orange">topics</span>:</p>
 <ul>
 <li>Simple linear regression</li>
 <li>Polynomial regression</li>
 <li>Bias-variance trade-off</li>
 <li>Cross-validation</li>
-</ul></li>
 </ul>
 <section id="yesterdays-and-tomorrows-data" class="level1">
 <h1>Yesterday’s and tomorrow’s data</h1>
@@ -231,6 +247,8 @@ f(x; \beta) = \beta_0 + \beta_1 x,
 \end{aligned}
 </span> where <span class="math inline">\bar y = \frac{1}{n}\sum_{i=1}^n y_i</span> and <span class="math inline">\bar x = \frac{1}{n}\sum_{i=1}^n x_i</span> are the sample means.</p></li>
 </ul>
+</div>
+</section>
 <section id="least-squares-fit-hat-y-0.520627---0.003-x" class="level2">
 <h2 class="anchored" data-anchor-id="least-squares-fit-hat-y-0.520627---0.003-x">Least squares fit : <span class="math inline">\hat y = 0.520627 - 0.003 x</span></h2>
 <div class="cell" data-layout-align="center">
@@ -250,6 +268,8 @@ f(x; \beta) = \beta_0 + \beta_1 x,
 <li><p>We compute the <span class="blue">mean squared error</span> (<span class="math inline">\mathrm{MSE}</span>) <span class="math display">\mathrm{MSE} = \frac{1}{n} \sum_{i=1}^{n}(y_i - \hat{y}_i)^2  = \frac{1}{n}\mathrm{RSS}</span></p></li>
 <li><p><span class="blue">R-squared</span> or fraction of variance explained is <span class="math display">R^2 = \frac{\mathrm{TSS} - \mathrm{RSS}}{\mathrm{TSS}} = 1 - \frac{\mathrm{RSS}}{\mathrm{TSS}}</span> where <span class="math inline">\mathrm{TSS} = \sum_{i=1}^{n}(y_i - \bar y)^2</span> is the <span class="blue">total sum of squares</span>.</p></li>
 </ul>
+</div>
+</section>
 <section id="section-1" class="level2">
 <h2 class="anchored" data-anchor-id="section-1"></h2>
 <table class="caption-top table">
@@ -418,6 +438,7 @@ f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
 </ul>
 </div>
 </section>
+</section>
 <section id="the-bias-variance-trade-off" class="level1">
 <h1>The Bias-Variance Trade-Off</h1>
 <section id="if-we-knew-fx" class="level2">
@@ -471,11 +492,6 @@ f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
 </figure>
 </div>
 </div>
-</div>
-</section>
-</section>
-</div>
-</section>
 </div>
 </section>
 </section>

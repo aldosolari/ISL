@@ -1,99 +1,218 @@
-set.seed(123)
-y <- c(rnorm(8), 3, 6, 9)
+library(ggpubr)
+library(modeldata)
+data(deliveries, package = "modeldata")
+deliveries$distance <- 1.60934*deliveries$distance
+head(as.data.frame(deliveries[,c(1:8,ncol(deliveries))] ))
 
-m_huber <- function(y, k) {
-  0.5 * y^2 * I(abs(y) <= k) + (k * abs(y) - 0.5 * k^2) * I(abs(y) >= k)
-}
+gghistogram(deliveries, 
+            x = "time_to_delivery", 
+            fill = "lightgray", 
+            rug = FALSE, 
+            xlab = "Time Until Deliver (min)")
 
-M_huber <- function(theta, y, k) {
-  -mean(m_huber(y - theta, k))
-}
-M_huber <- Vectorize(M_huber, vectorize.args = "theta")
+ggscatter(deliveries,
+          alpha = 0.1,
+          add = "reg.line",
+          add.params = list(color = "blue", fill = "lightgray"),
+            y = "time_to_delivery", 
+            x = "distance",
+          xlab = "Distance (km)",
+            ylab = "Time Until Deliver (min)")
 
-k_values <- c(0.5, 1, 2, 4, 6, 8)
-m_hat <- numeric(length(k_values))
-for (i in 1:length(k_values)) {
-  m_hat[i] <- nlminb(start = median(y), objective = function(theta) -M_huber(theta, y = y, k = k_values[i]))$par
-}
+ggscatter(deliveries,
+          alpha = 0.1,
+            y = "time_to_delivery", 
+            x = "hour",
+          xlab = "Order Time (decimal hours)",
+            ylab = "Time Until Deliver (min)")
 
-print(y)
+library(plotly)
 
-tab <- c(median(y), m_hat)
-names(tab) <- c(0, k_values)
-# knitr::kable(t(tab), digits = 3)
+# Fit linear model
+fit <- lm(time_to_delivery ~ hour + distance, data = deliveries)
 
-library(ggplot2)
-library(ggthemes)
+# 3D scatter with alpha
+p <- plot_ly(deliveries,
+  x = ~hour,
+  y = ~distance,
+  z = ~time_to_delivery,
+  type = "scatter3d",
+  mode = "markers",
+  marker = list(
+    size = 3,
+    color = "black",
+    opacity = 0.4
+  )
+)
 
-n <- 4
-data_plot <- data.frame(p = rep(seq(from = 0, to = 1, length = 1000), 2))
-data_plot$n <- "Sample size (n) = 4"
-data_plot$MSE <- c(data_plot$p[1:1000] * (1 - data_plot$p[1:1000]) / n, data_plot$p[1:1000] * 0 + n / (4 * (n + sqrt(n))^2))
-data_plot$Estimator <- rep(c("Maximum likelihood", "Minimax"), each = 1000)
+# Grid for regression plane
+hx <- seq(min(deliveries$hour), max(deliveries$hour), length.out = 30)
+dy <- seq(min(deliveries$distance), max(deliveries$distance), length.out = 30)
+grid <- expand.grid(hour = hx, distance = dy)
 
-n <- 4000
-data_plot2 <- data.frame(p = rep(seq(from = 0, to = 1, length = 1000), 2))
-data_plot2$n <- "Sample size (n) = 4000"
-data_plot2$MSE <- c(data_plot2$p[1:1000] * (1 - data_plot2$p[1:1000]) / n, data_plot2$p[1:1000] * 0 + n / (4 * (n + sqrt(n))^2))
-data_plot2$Estimator <- rep(c("Maximum likelihood", "Minimax"), each = 1000)
+z <- matrix(
+  predict(fit, newdata = grid),
+  nrow = length(hx),
+  ncol = length(dy)
+)
 
-data_plot <- rbind(data_plot, data_plot2)
+# Add blue transparent plane
+p <- add_surface(
+  p,
+  x = hx,
+  y = dy,
+  z = z,
+  opacity = 0.5,
+  colorscale = list(c(0, 1), c("blue", "blue")),
+  showscale = FALSE
+)
 
-ggplot(data = data_plot, aes(x = p, y = MSE, col = Estimator)) +
-  geom_line() +
-  facet_wrap(. ~ n, scales = "free_y") +
-  theme_light() +
-  theme(legend.position = "top") +
-  scale_color_tableau(palette = "Color Blind") +
-  xlab("p") +
-  ylab("MSE")
+# Axis labels
+p <- layout(
+  p,
+  scene = list(
+    xaxis = list(title = "Order Time (decimal hours)"),
+    yaxis = list(title = "Distance (km)"),
+    zaxis = list(title = "Time Until Deliver (min)")
+  )
+)
 
-data_plot <- data.frame(n = rep(round(seq(from = 3, 50, length = 5000)), 2))
-data_plot$BayesRisk <- c(1 / (6 * data_plot$n[1:5000]), data_plot$n[1:5000] / (4 * (data_plot$n[1:5000] + sqrt(data_plot$n[1:5000]))^2))
-data_plot$Estimator <- rep(c("Maximum likelihood", "Minimax"), each = 5000)
+p
 
-ggplot(data = data_plot, aes(x = n, y = BayesRisk, col = Estimator)) +
-  geom_line() +
-  theme_light() +
-  theme(legend.position = "top") +
-  scale_color_tableau(palette = "Color Blind") +
-  xlab("n") +
-  ylab("Integrated risk (Bayes risk)")
+library(mgcv)
 
-data_plot <- data.frame(n = rep(round(seq(from = 3, 50, length = 5000)), 3))
-data_plot$BayesRisk <- c(1 / (6 * data_plot$n[1:5000]), data_plot$n[1:5000] / (4 * (data_plot$n[1:5000] + sqrt(data_plot$n[1:5000]))^2), 1 / (6 * (data_plot$n[1:5000] + 2)))
-data_plot$Estimator <- rep(c("Maximum likelihood", "Minimax", "Bayes"), each = 5000)
+fit_spline <- gam(time_to_delivery ~ s(hour, distance), data = deliveries)
 
-ggplot(data = data_plot, aes(x = n, y = BayesRisk, col = Estimator)) +
-  geom_line() +
-  theme_light() +
-  theme(legend.position = "top") +
-  scale_color_tableau(palette = "Color Blind") +
-  xlab("n") +
-  ylab("Integrated risk (Bayes risk)")
+# grid to evaluate the smooth surface
+hx <- seq(min(deliveries$hour), max(deliveries$hour), length.out = 40)
+dy <- seq(min(deliveries$distance), max(deliveries$distance), length.out = 40)
+grid <- expand.grid(hour = hx, distance = dy)
 
-library(ggplot2)
-library(ggthemes)
+z <- matrix(predict(fit_spline, newdata = grid),
+            nrow = length(hx), ncol = length(dy))
 
-n <- 100
-data_plot <- data.frame(p = rep(seq(from = 0, to = 1, length = 1000), 2))
-data_plot$n <- "Sample size (n) = 100"
-data_plot$MSE <- c(data_plot$p[1:1000] * (1 - data_plot$p[1:1000]) / n, data_plot$p[1:1000] * 0 + n / (4 * (n + sqrt(n))^2))
-data_plot$Estimator <- rep(c("Maximum likelihood", "Minimax"), each = 1000)
+p <- plot_ly(deliveries,
+  x = ~hour, y = ~distance, z = ~time_to_delivery,
+  type = "scatter3d", mode = "markers",
+  marker = list(size = 3, color = "black", opacity = 0.4)
+)
 
-n <- 10000
-data_plot2 <- data.frame(p = rep(seq(from = 0, to = 1, length = 1000), 2))
-data_plot2$n <- "Sample size (n) = 10000"
-data_plot2$MSE <- c(data_plot2$p[1:1000] * (1 - data_plot2$p[1:1000]) / n, data_plot2$p[1:1000] * 0 + n / (4 * (n + sqrt(n))^2))
-data_plot2$Estimator <- rep(c("Maximum likelihood", "Minimax"), each = 1000)
+p <- add_surface(p,
+  x = hx, y = dy, z = z,
+  opacity = 0.5,
+  colorscale = "Blues",
+  showscale = FALSE
+)
 
-data_plot <- rbind(data_plot, data_plot2)
+p <- layout(
+  p,
+  scene = list(
+    xaxis = list(title = "Order Time (decimal hours)"),
+    yaxis = list(title = "Distance (km)"),
+    zaxis = list(title = "Time Until Deliver (min)")
+  )
+)
 
-ggplot(data = data_plot, aes(x = p, y = MSE, col = Estimator)) +
-  geom_line() +
-  facet_wrap(. ~ n, scales = "free_y") +
-  theme_light() +
-  theme(legend.position = "top") +
-  scale_color_tableau(palette = "Color Blind") +
-  xlab("p") +
-  ylab("MSE")
+p
+
+library(rpart)
+library(rpart.plot)
+fit <- rpart(time_to_delivery~hour + distance, deliveries, control =rpart.control(surrogatestyle = 0, maxdepth = 2))
+rpart.plot(fit, type=5, extra=0)
+
+library(parttree) 
+plot(parttree(fit), raw = FALSE)
+text(x=12,y=10, "17 min")
+text(x=14,y=10, "22 min")
+text(x=18,y=4.5, "28 min")
+text(x=18,y=12, "36 min")
+
+df <- deliveries
+
+# Step-function prediction
+df$step_pred <- with(df,
+  ifelse(hour < 13, 17,
+  ifelse(hour < 15, 22,
+  ifelse(distance < 6.4, 28, 36)))
+)
+
+df$step_pred <- predict(fit)
+
+# 3D scatter
+p <- plot_ly(df,
+  x = ~hour,
+  y = ~distance,
+  z = ~time_to_delivery,
+  type = "scatter3d",
+  mode = "markers",
+  marker = list(size = 3, color = "black", opacity = 0.4)
+)
+
+# Grid for step surface
+hx <- seq(min(df$hour), max(df$hour), length.out = 60)
+dy <- seq(min(df$distance), max(df$distance), length.out = 60)
+grid <- expand.grid(hour = hx, distance = dy)
+
+# Apply step rule to grid
+z_step <- with(grid,
+  ifelse(hour < 13, 17,
+  ifelse(hour < 15, 22,
+  ifelse(distance < 6.4, 28, 36)))
+)
+
+z_step <- matrix(z_step, nrow = length(hx), ncol = length(dy))
+
+# Add step surface
+p <- add_surface(
+  p,
+  x = hx,
+  y = dy,
+  z = z_step,
+  opacity = 0.6,
+  colorscale = list(
+    c(0, 0.33, 0.66, 1),
+    c("lightblue", "deepskyblue", "royalblue", "navy")
+  ),
+  showscale = FALSE
+)
+
+# Axis labels
+p <- layout(
+  p,
+  scene = list(
+    xaxis = list(title = "Order Time (decimal hours)"),
+    yaxis = list(title = "Distance (km)"),
+    zaxis = list(title = "Time Until Deliver (min)")
+  )
+)
+
+p
+
+data("heptathlon", package = "HSAUR")
+library(kableExtra)
+kable(heptathlon, format = "html") %>%
+  column_spec(ncol(heptathlon)+1, color = "red")
+
+face <- read.table("https://raw.githubusercontent.com/aldosolari/AE/master/docs/dati/face.txt", header=FALSE)
+X = as.matrix(face)
+n = nrow(face)
+p = ncol(face)
+mat <- apply(X, 2, rev)
+image(t(mat), col=gray(0:255/255), asp=p/n, xaxt="n", yaxt="n", frame.plot=F)
+#image(X, col=gray(0:255/255), asp=p/n, xaxt="n", yaxt="n")
+
+X[1:10,1:7]
+
+pca = princomp(X, cor=F)
+V = pca$loadings
+Y = pca$scores
+xbar = matrix(pca$center, ncol=1)
+q = 10
+Yq = Y[,1:q]
+Vq = V[,1:q]
+Aq = Yq %*% t(Vq)
+one.n = matrix(rep(1,n), ncol=1)
+face2 = Aq + one.n %*% t(xbar)
+face2 <- pmax(pmin(face2, 1), 0)
+mat2 <- apply(face2, 2, rev)
+image(t(mat2), col=gray(0:255/255), asp=p/n, xaxt="n", yaxt="n", frame.plot=F)
