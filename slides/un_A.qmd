@@ -1,5 +1,5 @@
 ---
-title: "Introduction to Statistical Learning"
+title: "Introduction"
 subtitle: "Introduction to Statistical Learning - PISE"
 author: "[Aldo Solari]{.orange}"
 institute: "_Ca' Foscari University of Venice_"
@@ -64,7 +64,7 @@ editor_options:
 
 - Dimension Reduction
 
-- Cluster Analysis
+- ...
 
 # Predicting future values
 
@@ -86,7 +86,7 @@ $$\underset{outcome}{Y} \leftarrow f(\underset{predictors}{X_1,\ldots,X_p})$$
 
 ## Food Delivery Time Data
 
-The data are tabular, where the $31$ [variables]{.orange} (1 outcome + 30 predictors) are arranged in columns and the the $n=10012$ [observations]{.orange} in rows:
+- The data are tabular, where the $31$ [variables]{.orange} (1 outcome + 30 predictors) are arranged in columns and the the $n=10012$ [observations]{.orange} in rows:
 
 ```{r}
 #| echo: false
@@ -94,10 +94,11 @@ The data are tabular, where the $31$ [variables]{.orange} (1 outcome + 30 predic
 library(ggpubr)
 library(modeldata)
 data(deliveries, package = "modeldata")
+deliveries$distance <- 1.60934*deliveries$distance
 head(as.data.frame(deliveries[,c(1:8,ncol(deliveries))] ))
 ```
 
-Note that the predictor values are [known]{.blue}. For future data, the outcome is [unknown]{.blue}; it is a machine learning model’s job to predict unknown outcome values.
+- Note that the predictor values are [known]{.blue}. For future data, the outcome is [unknown]{.blue}; it is a machine learning model’s job to predict unknown outcome values.
 
 ## Outcome $Y$
 
@@ -121,30 +122,30 @@ ggscatter(deliveries,
           add.params = list(color = "blue", fill = "lightgray"),
             y = "time_to_delivery", 
             x = "distance",
-          xlab = "Distance (miles)",
+          xlab = "Distance (km)",
             ylab = "Time Until Deliver (min)")
 ```
 
 ## Regression function
 
-* A machine learning model has a defined mathematical prediction equation, called [regression function]{.orange} $f(\cdot)$, defining exactly how the predictors $X_1,\ldots,X_n$ relate to the outcome $Y$:
+- A machine learning model has a defined mathematical prediction equation, called [regression function]{.orange} $f(\cdot)$, defining exactly how the predictors $X_1,\ldots,X_n$ relate to the outcome $Y$:
 $$Y \approx f(X_1,\ldots,X_p)$$
 
-* Here is a simple example of regression function: the [linear model]{.blue} with a single predictor (the distance $X_1$) and two unknown [parameters]{.orange} $\beta_0$ and $\beta_1$ that have been estimated:
+- Here is a simple example of regression function: the [linear model]{.blue} with a single predictor (the distance $X_1$) and two unknown [parameters]{.orange} $\beta_0$ and $\beta_1$ that have been estimated:
 
 \begin{aligned}
 Y &\approx \hat{\beta}_0 + \hat{\beta}_1 X_1\\
 \\
-delivery\,\,time &\approx 17.557 + 2.867\,\times \,distance
+delivery\,\,time &\approx 17.557 + 1.781\,\times \,distance
 \end{aligned}
 
 
-We could use this equation for new orders:
+- We could use this equation for new orders:
 
-* If we had placed an order at the restaurant (i.e., a zero distance) we predict that it would take $17.5$
+     - If we had placed an order at the restaurant (i.e., a zero distance) we predict that it would take $17.5$
  minutes.
  
-* If we were four miles away, the predicted delivery time is $17.557 + 4\times 2.867 \approx 29$ minutes.
+     - If we were seven kilometers away, the predicted delivery time is $17.557 + 7\times 1.781 \approx 30$ minutes.
 
 ## Predictor $X_2$
 
@@ -158,14 +159,133 @@ ggscatter(deliveries,
             ylab = "Time Until Deliver (min)")
 ```
 
-## 3D scatter plot
+
+## 3D scatter plot 
 
 ```{r}
 #| echo: false
 #| message: false
-library(lattice)
-cloud(time_to_delivery ~  hour + distance, data=deliveries, col=1, alpha.regions =0.3)
+#| warning: false
+#| fig-align: center
+#| out-width: "100%"
+#| fig-height: 3
+
+library(plotly)
+
+# Fit linear model
+fit <- lm(time_to_delivery ~ hour + distance, data = deliveries)
+
+# 3D scatter with alpha
+p <- plot_ly(deliveries,
+  x = ~hour,
+  y = ~distance,
+  z = ~time_to_delivery,
+  type = "scatter3d",
+  mode = "markers",
+  marker = list(
+    size = 3,
+    color = "black",
+    opacity = 0.4
+  )
+)
+
+# Grid for regression plane
+hx <- seq(min(deliveries$hour), max(deliveries$hour), length.out = 30)
+dy <- seq(min(deliveries$distance), max(deliveries$distance), length.out = 30)
+grid <- expand.grid(hour = hx, distance = dy)
+
+z <- matrix(
+  predict(fit, newdata = grid),
+  nrow = length(hx),
+  ncol = length(dy)
+)
+
+# Add blue transparent plane
+p <- add_surface(
+  p,
+  x = hx,
+  y = dy,
+  z = z,
+  opacity = 0.5,
+  colorscale = list(c(0, 1), c("blue", "blue")),
+  showscale = FALSE
+)
+
+# Axis labels
+p <- layout(
+  p,
+  scene = list(
+    xaxis = list(title = "Order Time (decimal hours)"),
+    yaxis = list(title = "Distance (km)"),
+    zaxis = list(title = "Time Until Deliver (min)")
+  )
+)
+
+p
 ```
+
+## Regression plane
+
+With two predictors, say $X_1$ and $X_2$, the linear regression function becomes a plane in the three-dimensional space:
+$$Y \approx \hat\beta_0 + \hat\beta_1 X_1 + \hat\beta_2 X_2.$$
+
+The fitted regression function is
+$$delivery\,\,time \approx −11.17 + 1.76 \times distance + 1.77 \times order\,\,time$$
+
+If an order were placed at 12:00 with a distance of 7 km, the predicted delivery time would be $−11.17 + 1.76 \times 7 + 1.77 \times 12 = 22.4$ minutes.
+
+## Regression spline (non-parametric)
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-align: center
+#| out-width: "100%"
+#| fig-height: 3
+
+library(mgcv)
+
+fit_spline <- gam(time_to_delivery ~ s(hour, distance), data = deliveries)
+
+# grid to evaluate the smooth surface
+hx <- seq(min(deliveries$hour), max(deliveries$hour), length.out = 40)
+dy <- seq(min(deliveries$distance), max(deliveries$distance), length.out = 40)
+grid <- expand.grid(hour = hx, distance = dy)
+
+z <- matrix(predict(fit_spline, newdata = grid),
+            nrow = length(hx), ncol = length(dy))
+
+p <- plot_ly(deliveries,
+  x = ~hour, y = ~distance, z = ~time_to_delivery,
+  type = "scatter3d", mode = "markers",
+  marker = list(size = 3, color = "black", opacity = 0.4)
+)
+
+p <- add_surface(p,
+  x = hx, y = dy, z = z,
+  opacity = 0.5,
+  colorscale = "Blues",
+  showscale = FALSE
+)
+
+p <- layout(
+  p,
+  scene = list(
+    xaxis = list(title = "Order Time (decimal hours)"),
+    yaxis = list(title = "Distance (km)"),
+    zaxis = list(title = "Time Until Deliver (min)")
+  )
+)
+
+p
+```
+
+## Flexibility vs interpretability
+
+![](img/2_7.png){fig-align="center" width="0.25\textwidth"}
+
+*Figure 2.7 (ISL).* Representation of the tradeoff between flexibility and interpretability across statistical learning methods. In general, as flexibility increases, interpretability decreases.
 
 ## Regression tree
 
@@ -183,8 +303,8 @@ $$
 \begin{align}
 delivery \,\, time \approx \:&17\times\, I\left(\,order\,\,time <  13   \text{ hours } \right)  + \notag \\
        \:&22\times\, I\left(\,13\leq \, order\,\,time <  15   \text{ hours } \right)  + \notag \\
-       \:&28\times\, I\left(\,order\,\,time \geq  15   \text{ hours and }distance < 4 \text{ miles }\right)  + \notag \\
-       \:&36\times\, I\left(\,order\,\,time \geq  15   \text{ hours and }distance \geq 4 \text{ miles }\right)\notag
+       \:&28\times\, I\left(\,order\,\,time \geq  15   \text{ hours and }distance < 6.4 \text{ kilometers }\right)  + \notag \\
+       \:&36\times\, I\left(\,order\,\,time \geq  15   \text{ hours and }distance \geq 6.4 \text{ kilometers }\right)\notag
 \end{align}
 $$ 
 
@@ -200,12 +320,92 @@ $$
 #| echo: false
 library(parttree) 
 plot(parttree(fit), raw = FALSE)
-text(x=12,y=6, "17 min")
-text(x=14,y=6, "22 min")
-text(x=18,y=3, "28 min")
-text(x=18,y=8, "36 min")
+text(x=12,y=10, "17 min")
+text(x=14,y=10, "22 min")
+text(x=18,y=4.5, "28 min")
+text(x=18,y=12, "36 min")
 ```
 
+##
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-align: center
+#| out-width: "100%"
+#| fig-height: 3
+
+df <- deliveries
+
+# Step-function prediction
+df$step_pred <- with(df,
+  ifelse(hour < 13, 17,
+  ifelse(hour < 15, 22,
+  ifelse(distance < 6.4, 28, 36)))
+)
+
+df$step_pred <- predict(fit)
+
+# 3D scatter
+p <- plot_ly(df,
+  x = ~hour,
+  y = ~distance,
+  z = ~time_to_delivery,
+  type = "scatter3d",
+  mode = "markers",
+  marker = list(size = 3, color = "black", opacity = 0.4)
+)
+
+# Grid for step surface
+hx <- seq(min(df$hour), max(df$hour), length.out = 60)
+dy <- seq(min(df$distance), max(df$distance), length.out = 60)
+grid <- expand.grid(hour = hx, distance = dy)
+
+# Apply step rule to grid
+z_step <- with(grid,
+  ifelse(hour < 13, 17,
+  ifelse(hour < 15, 22,
+  ifelse(distance < 6.4, 28, 36)))
+)
+
+z_step <- matrix(z_step, nrow = length(hx), ncol = length(dy))
+
+# Add step surface
+p <- add_surface(
+  p,
+  x = hx,
+  y = dy,
+  z = z_step,
+  opacity = 0.6,
+  colorscale = list(
+    c(0, 0.33, 0.66, 1),
+    c("lightblue", "deepskyblue", "royalblue", "navy")
+  ),
+  showscale = FALSE
+)
+
+# Axis labels
+p <- layout(
+  p,
+  scene = list(
+    xaxis = list(title = "Order Time (decimal hours)"),
+    yaxis = list(title = "Distance (km)"),
+    zaxis = list(title = "Time Until Deliver (min)")
+  )
+)
+
+p
+```
+
+
+## Predictor $X_3$
+
+![](img/fig-delivery-predictors-1-2.png){fig-align="center" width="0.25\textwidth"}
+
+Figure 2.2 in Kuhn, M and Johnson, K (2023) Applied Machine Learning for Tabular Data.
+ https://aml4td.org/ 
+ 
 # Recommender Systems
 
 ## The Netflix Prize
@@ -241,6 +441,44 @@ needed a way to impute the missing values of the customer-movie data matrix.
 of many recommender systems. Principal components can be used to impute the missing values, through a process known as [matrix completion]{.orange}.
 
 # Dimension Reduction
+
+## Heptathlon data
+
+
+
+* 100m hurdles.
+
+* high jump.
+
+* shot.
+
+* 200m race.
+
+* long jump.
+
+* javelin.
+
+* 800m race.
+
+Results in the women's heptathlon in the 1988 Olympics held in Seoul are given in the next table (timed events have times in seconds, distances are measured in metres). 
+
+##
+
+```{r}
+#| echo: false
+data("heptathlon", package = "HSAUR")
+library(kableExtra)
+kable(heptathlon, format = "html") %>%
+  column_spec(ncol(heptathlon)+1, color = "red")
+```
+
+
+## Goal
+
+Determine a score to assign to each athlete that summarizes the performances across the seven events in order to obtain the final ranking, that is, to reduce the dimensionality from 7 to 1.
+
+
+$$\underset{25 \times 7}{X} \mapsto \color{red}{\underset{25 \times 1}{y}}$$
 
 ## 
 
@@ -288,71 +526,73 @@ mat2 <- apply(face2, 2, rev)
 image(t(mat2), col=gray(0:255/255), asp=p/n, xaxt="n", yaxt="n", frame.plot=F)
 ```
 
-Original image made by 53460 numbers
+* Original image made by 53460 numbers
 
-Compressed image made by 4850 numbers
-
-# Cluster Analysis
-
-## Clustering
-
-* [Clustering]{.orange} refers to a very broad set of techniques for
-finding [subgroups]{.orange}, or [clusters]{.orange}, in a data set.
-
-* We seek a partition of the data into distinct groups so that
-the observations within each group are quite similar to
-each other
-
-* We must define what it means for
-two or more observations to be [similar]{.blue} or [diﬀerent]{.blue}
-
-## Iris flowers
-
-Iris flowers, from the genus Iris (derived from the Greek word *iris*, meaning "rainbow"), are classified into three species:
-
-![](img/iris_pic.png){fig-align="center"}
+* Compressed image made by 4850 numbers
 
 
-## Iris data
 
-This dataset, originally collected by Edgar Anderson and later published by Fisher in 1936, gives the measurements in centimeters of the variables [sepal]{.orange} [length]{.blue} and [width]{.blue} and [petal]{.orange}  [length]{.blue} and [width]{.blue}, respectively, for 50 flowers from each of 3 species of iris:
+<!-- # Cluster Analysis -->
 
-![](img/iris_table.png){fig-align="center"}
+<!-- ## Clustering -->
+
+<!-- * [Clustering]{.orange} refers to a very broad set of techniques for -->
+<!-- finding [subgroups]{.orange}, or [clusters]{.orange}, in a data set. -->
+
+<!-- * We seek a partition of the data into distinct groups so that -->
+<!-- the observations within each group are quite similar to -->
+<!-- each other -->
+
+<!-- * We must define what it means for -->
+<!-- two or more observations to be [similar]{.blue} or [diﬀerent]{.blue} -->
+
+<!-- ## Iris flowers -->
+
+<!-- * Iris flowers, from the genus Iris (derived from the Greek word *iris*, meaning "rainbow"), are classified into three species: -->
+
+<!-- ![](img/iris_pic.png){fig-align="center"} -->
 
 
-## Scatterplot
+<!-- ## Iris data -->
 
-```{r}
-#| echo: false
-plot(x=iris[,3],y=iris[,4], col=iris[,5],  xlab="Petal Length", ylab = "Petal Width",  oma = c(5, 4, 4, 10))
-legend("topleft", c("Setosa","Versicolor","Virginica"),  fill=1:3, xpd=T)
-```
+<!-- * This dataset, originally collected by Edgar Anderson and later published by Fisher in 1936, gives the measurements in centimeters of the variables [sepal]{.orange} [length]{.blue} and [width]{.blue} and [petal]{.orange}  [length]{.blue} and [width]{.blue}, respectively, for 50 flowers from each of 3 species of iris: -->
+
+<!-- ![](img/iris_table.png){fig-align="center"} -->
 
 
-## Scatterplot matrix
+<!-- ## Scatterplot -->
 
-```{r}
-#| echo: false
-pairs(iris[,-5], col=iris[,5],  upper.panel = NULL, oma = c(5, 4, 4, 10))
-legend("topright", c("Setosa","Versicolor","Virginica"),  fill=1:3, xpd=T)
-```
+<!-- ```{r} -->
+<!-- #| echo: false -->
+<!-- plot(x=iris[,3],y=iris[,4], col=iris[,5],  xlab="Petal Length", ylab = "Petal Width",  oma = c(5, 4, 4, 10)) -->
+<!-- legend("topleft", c("Setosa","Versicolor","Virginica"),  fill=1:3, xpd=T) -->
+<!-- ``` -->
 
-## $K$-Means clustering
 
-```{r}
-#| echo: false
-set.seed(101)
-km <- kmeans(iris[,1:4], center=3, nstart=20)
-pairs(iris[,-5], col=km$cluster+3,  upper.panel = NULL, oma = c(5, 4, 4, 10))
-legend("topright", c("Cluster 1","Cluster 2","Cluster 3"),  fill=4:6, xpd=T)
-```
+<!-- ## Scatterplot matrix -->
 
-## Cross-tabulation
+<!-- ```{r} -->
+<!-- #| echo: false -->
+<!-- pairs(iris[,-5], col=iris[,5],  upper.panel = NULL, oma = c(5, 4, 4, 10)) -->
+<!-- legend("topright", c("Setosa","Versicolor","Virginica"),  fill=1:3, xpd=T) -->
+<!-- ``` -->
 
-```{r}
-#| echo: false
-table(iris[,5], km$cluster)
-```
+<!-- ## $K$-Means clustering -->
+
+<!-- ```{r} -->
+<!-- #| echo: false -->
+<!-- set.seed(101) -->
+<!-- km <- kmeans(iris[,1:4], center=3, nstart=20) -->
+<!-- pairs(iris[,-5], col=km$cluster+3,  upper.panel = NULL, oma = c(5, 4, 4, 10)) -->
+<!-- legend("topright", c("Cluster 1","Cluster 2","Cluster 3"),  fill=4:6, xpd=T) -->
+<!-- ``` -->
+
+<!-- ## Cross-tabulation -->
+
+<!-- ```{r} -->
+<!-- #| echo: false -->
+<!-- table(iris[,5], km$cluster) -->
+<!-- ``` -->
 
 # Supervised Versus Unsupervised
 
@@ -388,13 +628,13 @@ On the basis of the training data we would like to:
 * No outcome variable, just a set of predictors (features)
 measured on a set of samples.
 
-* objective is more fuzzy — find groups of samples that
+* Objective is more fuzzy — find groups of samples that
 behave similarly, find features that behave similarly, find
 linear combinations of features with the most variation.
 
-* difficult to know how well your are doing.
+* Difficult to know how well your are doing.
 
-* different from supervised learning, but can be useful as a
+* Different from supervised learning, but can be useful as a
 pre-processing step for supervised learning.
 
 ## Statistical Learning versus Machine Learning
@@ -421,13 +661,30 @@ interpretability, and [precision]{.blue} and [uncertainty]{.blue}.
 :::
 
 ::: {.column width="50%"}
-The course will cover some of the material in this
+* The course will cover some of the material in this
 Springer book (ISLR) published in 2021 (Second Edition).
 
-Each chapter ends with an R lab, in which examples are developed. 
+* Each chapter ends with an R lab, in which examples are developed. 
 
-An electronic version of this book is available from [https://www.statlearning.com/](https://www.statlearning.com/)
+* An electronic version of this book is available from [https://www.statlearning.com/](https://www.statlearning.com/)
 :::
 :::
 
 
+## Required readings from the textbook and course materials
+
+- **Chapter 1: Introduction**
+
+- **Chapter 2: Statistical Learning**
+  - 2.1 *What Is Statistical Learning?*
+    - 2.1.1 *Why Estimate* $f$?
+    - 2.1.2 *How Do We Estimate* $f$?
+    - 2.1.3 *The Trade-Off Between Prediction Accuracy and Model Interpretability*
+    - 2.1.4 *Supervised Versus Unsupervised Learning*
+    - 2.1.5 *Regression Versus Classification Problems*
+
+
+[Video SL 1.1 Opening Remarks - 18:19](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)  
+[Video SL 1.2 Examples and Framework - 12:13](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)  
+[Video SL 2.1 Introduction to Regression Models - 11:42](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)  
+[Video SL 2.2 Dimensionality and Structured Models - 11:41](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)

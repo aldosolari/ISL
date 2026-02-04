@@ -51,19 +51,19 @@ documentation](https://quarto.org/docs/presentations/revealjs/presenting.html#pr
 
 | Topic                                  | Notes                                | Slides                                             | Code                      |
 |----------------------------------------|--------------------------------------|----------------------------------------------------|---------------------------|
-| **Statistical Learning**               | [Unit A](slides/un_A.html)           | [Slides Unit A](slides/un_A_slides.html)           | [Code A](code/un_A.R)     |
+| **Introduction**               | [Unit A](slides/un_A.html)           | [Slides Unit A](slides/un_A_slides.html)           | [Code A](code/un_A.R)     |
 | **Lab 1**                              | [Lab 1](slides/un_lab1.html)         |                                                    | [Code Lab 1](code/lab1.R) |
 | *Exercises*                            | [Exercises A - Conceptual](exe/exeC_A.html)        |                                      | [Exercises A - Applied](exe/exeA_A.html)|
-| **Regression**                         | [Unit B](slides/un_B.html)           | [Slides Unit B](slides/un_B_slides.html)           | [Code B](code/un_B.R)     |
+| **The Bias-Variance Trade-Off**                         | [Unit B](slides/un_B.html)           | [Slides Unit B](slides/un_B_slides.html)           | [Code B](code/un_B.R)     |
 | **Lab 2**                              | [Code Lab 2](slides/un_lab2.html)    |                                                    | [Code Lab 2](code/lab2.R) |
 | *Exercises*                            | [Exercises B - Conceptual](exe/exeC_B.html)        |                                      | [Exercises B - Applied](exe/exeA_B.html)|
-| **Classification**                     | [Unit C](slides/un_C.html)           | [Slides Unit C](slides/un_C_slides.html)           | [Code C](code/un_C.R)     |
+| **Linear Regression**                     | [Unit C](slides/un_C.html)           | [Slides Unit C](slides/un_C_slides.html)           | [Code C](code/un_C.R)     |
 | **Lab 3**                              | [Code Lab 3](slides/un_lab3.html)    |                                                    | [Code Lab 3](code/lab3.R) |
 | *Exercises*                            | [Exercises C - Conceptual](exe/exeC_C.html)        |                                      | [Exercises C - Applied](exe/exeA_C.html)|
 | **Principal Components Analysis**                         | [Unit D](slides/un_D.html)           | [Slides Unit D](slides/un_D_slides.html)           | [Code D](code/un_D.R)     |
 | **Lab 4**                              | [Code Lab 4](slides/un_lab4.html)    |                                                    | [Code Lab 4](code/lab4.R) |
-| *Exercises*                            | [Exercises D - Conceptual](exe/exeC_D.html)        |                                      | [Exercises C - Applied](exe/exeA_D.html)|
-| **Clustering**                  | [Unit E](slides/un_E.html)           | [Slides Unit E](slides/un_E_slides.html)           | [Code E](code/un_E.R)     |
+| *Exercises*                            | [Exercises D - Conceptual](exe/exeC_D.html)        |                                      | [Exercises D - Applied](exe/exeA_D.html)|
+| **Matrix Completion**                  | [Unit E](slides/un_E.html)           | [Slides Unit E](slides/un_E_slides.html)           | [Code E](code/un_E.R)     |
 | **Lab 5**                              | [Code Lab 5](slides/un_lab5.html)    |                                                    | [Code Lab 5](code/lab5.R) |
 | *Exercises*                            | [Exercises E - Conceptual](exe/exeC_E.html)        |                                      | [Exercises E - Applied](exe/exeA_E.html)|
 
@@ -78,10 +78,15 @@ An example of written examination is provided at
 
 ## Prerequisites
 
-Knowledge of the topics covered in the course [Introduction to Probability for Economics](https://aldosolari.github.io/IPE/) 
-is highly recommended.
+* Basic mathematical background (no advanced mathematics needed)
 
-<!-- and [Mathematics for Social Sciences](https://www.unive.it/data/course/513067/programma) -->
+* Elementary knowledge of statistics is recommended but not required (e.g., [Introduction to Probability for Economics](https://aldosolari.github.io/IPE/)) 
+
+* Familiarity with linear regression is helpful but not required
+
+* No detailed knowledge of matrix operations is required
+
+* Previous exposure to a programming language (e.g., R or Python) is useful but not required
 
 
 ## Office hours
