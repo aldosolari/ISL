@@ -281,7 +281,7 @@ p <- layout(
 p
 ```
 
-## Flexibility vs interpretability
+## Flexibility versus Interpretability
 
 ![](img/2_7.png){fig-align="center" width="0.25\textwidth"}
 

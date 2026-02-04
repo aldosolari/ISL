@@ -56,6 +56,589 @@ editor_options:
 #| purl: false
 ```
 
-## The Bias-Variance Tradeoff
+
+-   This unit will cover the following [topics]{.orange}:
+
+    -   Simple linear regression
+    -   Polynomial regression
+    -   Bias-variance trade-off
+    -   Cross-validation
+
+# Yesterday's and tomorrow's data
 
 
+## The signal and the noise
+
+-   Let us presume that [yesterday]{.orange} we observed $n = 30$ pairs
+    of data $(x_i, y_i)$.
+
+-   Data were generated according to $$
+      Y_i = f(x_i) + \epsilon_i, \quad i=1,\dots,n,
+      $$ with each $y_i$ being the realization of $Y_i$.
+
+-   The $\epsilon_1,\dots,\epsilon_n$ are iid "[error]{.orange}" terms,
+    such that $\mathbb{E}(\epsilon_i)=0$ and
+    $\mathbb{V}\text{ar}(\epsilon_i)=\sigma^2 = 10^{-4}$.
+
+-   Here $f(x)$ is a regression function ([signal]{.blue}) that we leave
+    unspecified .
+
+-   [Tomorrow]{.blue} we will get a new $x$. We wish to
+    [predict]{.orange} $Y$.
+
+## 
+
+```{r}
+#| fig-width: 5
+#| fig-height: 4.5
+#| fig-align: center
+#| warning: false
+
+rm(list = ls())
+library(tidyverse)
+library(ggplot2)
+library(ggthemes)
+
+# The dataset can be downloaded here: https://aldosolari.github.io/ISL/data/yesterday.txt
+dataset <- read.table("../data/yesterday.txt", header = TRUE)
+
+ftrue <- c(
+  0.4342, 0.4780, 0.5072, 0.5258, 0.5369,
+  0.5426, 0.5447, 0.5444, 0.5425, 0.5397,
+  0.5364, 0.5329, 0.5294, 0.5260, 0.5229,
+  0.5200, 0.5174, 0.5151, 0.5131, 0.5113,
+  0.5097, 0.5083, 0.5071, 0.5061, 0.5052,
+  0.5044, 0.5037, 0.5032, 0.5027, 0.5023
+)
+
+ggplot(data = dataset, aes(x = x, y = ftrue)) +
+  geom_line(color="blue") +
+  geom_point(aes(x=1.6206897,y=0.5032543),colour="#fc7d0b") +
+  geom_segment(aes(x = 1.6206897, xend = 1.6206897, y=0.5032543, yend = 0.5260), col = "#fc7d0b", linetype = "dotted") +
+  theme_light() +
+  scale_color_tableau(palette = "Color Blind") +
+  xlab("x") +
+  ylab("y")
+
+```
+
+## Yesterday's data
+
+
+```{r}
+#| fig-width: 5
+#| fig-height: 4.5
+#| fig-align: center
+#| warning: false
+
+ggplot(data = dataset, aes(x = x, y = y.yesterday)) +
+  geom_point() +
+  theme_light() +
+  scale_color_tableau(palette = "Color Blind") +
+  xlab("x") +
+  ylab("y")
+```
+
+<!-- ## Overfitting: mistaking noise for the signal -->
+
+
+<!-- ```{r} -->
+<!-- #| fig-width: 5 -->
+<!-- #| fig-height: 4.5 -->
+<!-- #| fig-align: center -->
+<!-- #| warning: false -->
+
+<!-- degree = 15 -->
+<!-- fit <- lm(y.yesterday ~ poly(x, degree = degree, raw = FALSE), data = dataset) -->
+<!-- # Fitted values -->
+<!-- x_seq <- seq(from = min(dataset$x), to = max(dataset$x), length = 30000)  -->
+<!-- y_hat <- predict(fit, newdata = data.frame(x = x_seq)) -->
+<!-- data_pred <- data.frame(x = x_seq, y_hat = y_hat) -->
+
+<!-- ggplot(data = dataset, aes(x = x, y = y.yesterday)) + -->
+<!--   geom_line(data = dataset, aes(x = x, y = ftrue), col="blue") + -->
+<!--   geom_line(data = data_pred, aes(x = x_seq, y = y_hat)) + -->
+<!--   geom_point() + -->
+<!--   theme_light() + -->
+<!--   scale_color_tableau(palette = "Color Blind") + -->
+<!--   xlab("x") + -->
+<!--   ylab("y") -->
+<!-- ``` -->
+
+
+## Simple linear regression
+
+::: incremental
+-   The function $f(x)$ is unknown, therefore, it should be estimated.
+
+-   A simple approach is using [simple linear regression]{.blue}: $$
+    f(x; \beta) = \beta_0 + \beta_1 x,
+    $$ namely $f(x)$ is [approximated]{.orange} with a straight line where 
+    $\beta_0$ and $\beta_1$ are two unknown constants that represent
+the [intercept]{.blue} and [slope]{.blue}, also known as [coefficients]{.orange} or
+[parameters]{.orange}
+    
+-   Giving some [estimates]{.orange} $\hat{\beta}_0$ and $\hat{\beta}_1$ for the model coefficients, we predict future values using 
+    $$\hat{y} =  \hat\beta_0 + \hat\beta_1 x$$
+    where $\hat{y}$ indicates a [prediction]{.blue} of $Y$ on the basis of $X=x$. The [hat]{.orange} symbol denotes an estimated value.
+:::
+
+
+## Estimation of the parameters by least squares
+
+::: incremental
+- Let $\hat y_i = \hat\beta_0 + \hat\beta_1 x_i$ be the prediction for $Y$
+based on the $i$th value of $X$. Then $e_i = y_i - \hat y_i$ represents the 
+$i$th [residual]{.blue} 
+
+- We define the [residual sum of squares]{.blue} ($\mathrm{RSS}$) as
+$$\mathrm{RSS} = e_1^2+e_2^2+\ldots+e_n^2,$$
+or equivalently as
+$$\mathrm{RSS} = (y_1 - \hat\beta_0 - \hat\beta_1 x_1)^2+(y_2 - \hat\beta_0 - 
+\hat\beta_1 x_2)^2+\ldots+ (y_n- \hat\beta_0 - \hat\beta_1 x_n)^2.$$
+
+- The [least squares]{.blue} approach chooses $\hat{\beta}_0$ and $\hat{\beta}_1$ to minimize the \mathrm{RSS}. The minimizing values can be shown to be
+$$
+\begin{aligned}
+\hat{\beta}_1 &= \frac{\sum_{i=1}^{n}(x_i - \bar x)(y_i - \bar y)}{\sum_{i=1}^{n}(x_i - \bar x)^2}\\
+\hat{\beta}_0 &= \bar y - \beta_1 \bar x
+\end{aligned}
+$$
+where $\bar y = \frac{1}{n}\sum_{i=1}^n y_i$ and $\bar x = \frac{1}{n}\sum_{i=1}^n x_i$ are the sample means.
+
+## Least squares fit : $\hat y = 0.520627 - 0.003 x$
+
+```{r}
+#| fig-width: 5
+#| fig-height: 4.5
+#| fig-align: center
+#| warning: false
+
+fit <- lm(y.yesterday ~ x, data = dataset)
+# Fitted values
+x_seq <- sort(dataset$x)
+y_hat <- predict(fit, newdata = data.frame(x = x_seq))
+data_pred <- data.frame(x = x_seq, y_hat = y_hat)
+
+ggplot(data = dataset, aes(x = x, y = y.yesterday)) +
+  geom_line(data = data_pred, aes(x = x_seq, y = y_hat)) +
+  geom_point() +
+  theme_light() +
+  scale_color_tableau(palette = "Color Blind") +
+  xlab("x") +
+  ylab("y") + 
+geom_segment(
+  aes(xend = x, y = y_hat, yend = y.yesterday),
+  color = "#fc7d0b",
+  linewidth = 0.4
+)
+```
+
+## Assessing the Overall Accuracy of the Model
+
+::: incremental
+- We compute the [mean squared error]{.blue} ($\mathrm{MSE}$)
+$$\mathrm{MSE} = \frac{1}{n} \sum_{i=1}^{n}(y_i - \hat{y}_i)^2  = \frac{1}{n}\mathrm{RSS}$$
+
+- [R-squared]{.blue} or fraction of variance explained is
+$$R^2 = \frac{\mathrm{TSS} - \mathrm{RSS}}{\mathrm{TSS}} = 1 - \frac{\mathrm{RSS}}{\mathrm{TSS}}$$
+where $\mathrm{TSS} = \sum_{i=1}^{n}(y_i - \bar y)^2$ is the [total sum of squares]{.blue}.
+
+
+## 
+
+| Quantity | Value | 
+|---------|----------|
+| RSS      | 0.0171726     | 
+| MSE     | 0.00057242     | 
+| TSS      | 0.01731363     | 
+| $R^2$      | 0.008146     |
+
+## Polynomial regression
+
+::: incremental
+-   The function $f(x)$ is unknown, therefore, it should be estimated.
+
+-   A simple approach is using [polynomial regression]{.orange}: $$
+    f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
+    $$ namely $f(x)$ is [approximated]{.orange} with a polynomial of
+    degree $d$ 
+
+-   This model is linear in the parameters: ordinary least squares can
+    be applied.
+
+-   How do we choose the [degree of the polynomial]{.blue} $d$?
+
+-   Without clear guidance, in principle, any value of
+    $d \in \{0,\dots,n-1\}$ could be appropriate.
+
+-   Let us compare the [mean squared error]{.blue} (MSE) on yesterday's
+    data ([training]{.orange}) $$
+    \text{MSE}_{\text{train}} = \frac{1}{n}\sum_{i=1}^n\{y_i -f(x_i; \hat{\beta})\}^2,
+    $$ or alternatively $R^2_\text{train}$, for different values of
+    $d$...
+:::
+
+## Yesterday's data, polynomial regression
+
+```{r}
+#| fig-width: 7.8
+#| fig-height: 4.55
+#| fig-align: center
+
+# Degrees of the polynomials
+degree_list <- c(1, 3, 5, 11, 17, 23)
+
+# I am using 30.000 obs to improve the quality of the graph
+x_seq <- seq(from = min(dataset$x), to = max(dataset$x), length = 30000) 
+
+# Actual fitting procedure
+data_pred <- NULL
+for (degree in degree_list) {
+  # Fitting a polynomial of degree p - 1
+  fit <- lm(y.yesterday ~ poly(x, degree = degree, raw = FALSE), data = dataset)
+  # Fitted values
+  y_hat <- predict(fit, newdata = data.frame(x = x_seq))
+  data_pred <- rbind(data_pred, data.frame(x = x_seq, y_hat = y_hat, degree = paste("Degree d:", degree)))
+}
+
+# Graphical adjustment to get the plots in the right order
+data_pred$degree <- factor(data_pred$degree)
+data_pred$degree <- factor(data_pred$degree, levels = levels(data_pred$degree)[c(3, 5, 6, 1, 2, 4)])
+
+# Final plot
+ggplot(data = data_pred) +
+  geom_line(aes(x = x, y = y_hat, col = degree)) +
+  geom_point(data = dataset, aes(x = x, y = y.yesterday), size = 0.8) +
+  theme_light() +
+  theme(legend.position = "none") +
+  facet_wrap(. ~ degree, ncol = 3) +
+  scale_color_tableau(palette = "Color Blind") +
+  xlab("x") +
+  ylab("y") +
+  ylim(c(0.42, 0.56)) # Manual identification of an "interesting" region
+```
+
+## Yesterday's data, goodness of fit
+
+```{r}
+# Main chunk of code; fitting several models and storing some relevant quantities
+degree_list <- 1:23
+
+# Tomorrow's mean-squared error
+MSE_tot <- mean((dataset$y.tomorrow - mean(dataset$y.tomorrow))^2)
+
+# Initialization
+data_goodness <- data.frame(degree = degree_list, MSE = NA, R_squared = NA, MSE_test = NA, R_squared_test = NA)
+
+# Code execution
+for (degree in degree_list) {
+  # Fitting a polynomial of degree p -1
+  fit <- lm(y.yesterday ~ poly(x, degree = degree, raw = FALSE), data = dataset)
+  y_hat <- fitted(fit)
+  
+  # Training goodness of fit
+  data_goodness$MSE[degree] <- mean((dataset$y.yesterday - y_hat)^2)
+  data_goodness$R_squared[degree] <- summary(fit)$r.squared
+  
+  # Test goodness of fit
+  data_goodness$MSE_test[degree] <- mean((dataset$y.tomorrow - y_hat)^2)
+  data_goodness$R_squared_test[degree] <- 1 - data_goodness$MSE_test[degree] / MSE_tot
+}
+```
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| fig-width: 5
+#| fig-height: 4.5
+ggplot(data = data_goodness, aes(x = degree, y = MSE)) +
+  geom_line() +
+  geom_point() +
+  theme_light() +
+  xlab("Degree d") +
+  ylab("MSE")
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| fig-width: 5
+#| fig-height: 4.5
+ggplot(data = data_goodness, aes(x = degree, y = R_squared)) +
+  geom_line() +
+  geom_point() +
+  theme_light() +
+  xlab("Degree d") +
+  ylab(expression(R^2))
+```
+:::
+:::
+
+## Yesterday's data, polynomial interpolation ($d = n-1$) {#yesterdays-data-polynomial-interpolation-p-n}
+
+```{r}
+#| fig-width: 9
+#| fig-height: 6
+#| fig-align: center
+lagrange <- function(x0, y0) {
+  f <- function(x) {
+    sum(y0 * sapply(seq_along(x0), function(j) {prod(x - x0[-j]) / prod(x0[j] - x0[-j])}))
+  }
+  Vectorize(f, "x")
+}
+f <- lagrange(dataset$x, dataset$y.yesterday)
+
+plot(dataset$x, dataset$y.yesterday, pch = 16, xlab = "x", ylab = "y", main = "Degree of the polynomial: n-1")
+curve(f(x), n = 300, add = TRUE)
+```
+
+## Yesterday's data, tomorrow's prediction
+
+::: incremental
+-   The [MSE]{.blue} decreases as the number of parameter increases;
+    similarly, the [$R^2$]{.blue} increases as a function of $d$. It can
+    be [proved]{.orange} that this [always happens]{.orange} using
+    ordinary least squares.
+
+-   One might be tempted to let $d$ as large as possible to make the
+    model more flexible...
+
+-   Taking this reasoning to the extreme would lead to the choice
+    $d = n-1$, so that $$
+    \text{MSE}_\text{train} = 0, \qquad R^2_\text{train} = 1,
+    $$ i.e., a perfect fit. This procedure is called
+    [interpolation]{.blue}.
+
+-   However, we are [not]{.orange} interested in predicting
+    [yesterday]{.orange} data. Our goal is to predict
+    [tomorrow]{.blue}'s data, i.e. a [new set]{.blue} of $n = 30$
+    points: $$
+    (x_1, \tilde{y}_1), \dots, (x_n, \tilde{y}_n), 
+    $$ using $\hat{y}_i = f(x_i; \hat{\beta})$, where $\hat{\beta}$ is
+    obtained using yesterday's data.
+
+-   [Remark]{.orange}. Tomorrow's r.v. $\tilde{Y}_1,\dots, \tilde{Y}_n$
+    follow the same scheme as yesterday's data.
+:::
+
+## Tomorrow's data, polynomial regression
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4.5
+#| fig-align: center
+ggplot(data = data_pred) +
+  geom_line(aes(x = x, y = y_hat, col = degree)) +
+  geom_point(data = dataset, aes(x = x, y = y.tomorrow), size = 0.8) +
+  theme_light() +
+  theme(legend.position = "none") +
+  facet_wrap(. ~ degree, ncol = 3) +
+  scale_color_tableau(palette = "Color Blind") +
+  xlab("x") +
+  ylab("y") +
+  ylim(c(0.42, 0.56))
+```
+
+## Tomorrow's data, goodness of fit
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| fig-width: 5
+#| fig-height: 4.5
+ggplot(data = data_goodness, aes(x = degree, y = MSE_test)) +
+  geom_line() +
+  geom_point() +
+  theme_light() +
+  xlab("Degree d") +
+  ylab("MSE")
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| fig-width: 5
+#| fig-height: 4.5
+ggplot(data = data_goodness, aes(x = degree, y = R_squared_test)) +
+  geom_line() +
+  geom_point() +
+  theme_light() +
+  xlab("Degree d") +
+  ylab(expression(R^2))
+```
+:::
+:::
+
+## Comments and remarks
+
+::: incremental
+-   The mean squared error on tomorrow's data ([test]{.blue}) is defined
+    as $$
+    \text{MSE}_{\text{test}} = \frac{1}{n}\sum_{i=1}^n\{\tilde{y}_i -f(x_i; \hat{\beta})\}^2,
+    $$ and similarly the $R^2_\text{test}$. We would like the
+    $\text{MSE}_{\text{test}}$ to be [as small as possible]{.orange}.
+
+-   For [small values]{.blue} of $d$, an increase in the degree of the
+    polynomial [improves the fit]{.blue}. In other words, at the
+    beginning, both the $\text{MSE}_{\text{train}}$ and the
+    $\text{MSE}_{\text{test}}$ decrease.
+
+-   For [larger values]{.orange} of $d$, the improvement gradually
+    ceases, and the polynomial follows [random fluctuations]{.orange} in
+    yesterday's data, which are [not observed]{.blue} in the [new
+    sample]{.blue}.
+
+-   An over-adaptation to yesterday's data is called
+    [overfitting]{.orange}, which occurs when the training
+    $\text{MSE}_{\text{train}}$ is low but the test
+    $\text{MSE}_{\text{test}}$ is high.
+
+-   Yesterday's dataset is available from the website of the textbook Azzalini and Scarpa. (2013):
+
+    -   Dataset <http://azzalini.stat.unipd.it/Book-DM/yesterday.dat>
+    -   True $f(\bm{x})$
+        <http://azzalini.stat.unipd.it/Book-DM/f_true.R>
+:::
+
+
+# The Bias-Variance Trade-Off
+
+## If we knew $f(x)$...
+
+```{r}
+# I am storing this information for simplicity
+x <- dataset$x
+n <- nrow(dataset)
+
+# The standard deviation of the data generative process is sigma2true = 0.01, declared in the book and the slides
+sigmatrue <- 0.01
+
+# The true values have been downloaded from the A&S textbook; see here: http://azzalini.stat.unipd.it/Book-DM/f_true.R
+ftrue <- c(
+  0.4342, 0.4780, 0.5072, 0.5258, 0.5369,
+  0.5426, 0.5447, 0.5444, 0.5425, 0.5397,
+  0.5364, 0.5329, 0.5294, 0.5260, 0.5229,
+  0.5200, 0.5174, 0.5151, 0.5131, 0.5113,
+  0.5097, 0.5083, 0.5071, 0.5061, 0.5052,
+  0.5044, 0.5037, 0.5032, 0.5027, 0.5023
+)
+```
+
+```{r}
+# Number of degrees of the polynomial
+degree_list <- 1:23
+# Number of parameters in the model
+p_list <- degree_list + 1
+
+# Squared bias
+Bias2s <- sapply(p_list, function(p) {
+  mean((ftrue - fitted(lm(ftrue ~ poly(x, degree = p - 1))))^2)
+})
+
+# Variance
+Vars <- p_list * (sigmatrue^2) / n 
+
+# Reducible errors
+MSEs <- Bias2s + Vars
+
+# Organize the data to 
+data_bv <- data.frame(p = p_list, Bias = Bias2s, Variance = Vars, MSE = MSEs)
+data_bv <- reshape2::melt(data_bv, id = "p")
+levels(data_bv$variable) <- c("Squared Bias", "Variance", "Reducible error")
+colnames(data_bv) <- c("p", "Error term", "value")
+```
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4.5
+#| #| fig-align: center
+ggplot(data = data_bv, aes(x = p, y = value, col = `Error term`)) +
+  geom_line() +
+  geom_point() +
+  geom_vline(xintercept = 6, linetype = "dotted") +
+  theme_light() +
+  scale_color_tableau(palette = "Color Blind") +
+  xlab("Model complexity (p)") +
+  ylab("Error")
+```
+
+## Bias-variance trade-off
+
+::: incremental
+-   When $p$ grows, the mean squared error first decreases and then it
+    increases. In the example, the [theoretical optimum]{.orange} is
+    $p = 6$ (5th degree polynomial).
+
+-   The [bias]{.orange} measures the ability of $\hat{f}(\bm{x})$ to
+    reconstruct the true $f(\bm{x})$. The bias is due to [lack of
+    knowledge]{.blue} of the data-generating mechanism. It equals zero
+    when $\mathbb{E}\{\hat{f}(\bm{x})\} = f(\bm{x})$.
+
+-   The [bias]{.orange} term can be reduced by increasing the
+    flexibility of the model (e.g., by considering a high value for
+    $p$).
+
+-   The [variance]{.blue} measures the variability of the estimator
+    $\hat{f}(\bm{x})$ and its tendency to follow random fluctuations of
+    the data.
+
+-   The [variance]{.blue} increases with the model complexity.
+
+-   It is not possible to minimize both the bias and the variance, there
+    is a [trade-off]{.orange}.
+
+-   We say that an estimator is [overfitting]{.orange} the data if an
+    increase in variance comes without important gains in terms of bias.
+
+<!-- - **Summary**. Low model complexity: [high bias]{.orange}, [low variance]{.blue}. High model complexity: [low bias]{.blue}, [high variance]{.orange}. -->
+:::
+
+## But since we do not know $f(x)$...
+
+::: incremental
+-   We just concluded that we must expect a trade-off between error and
+    variance components. In practice, however, we cannot do this
+    because, of course, $f(x)$ is [unknown]{.orange}.
+
+-   A simple solution consists indeed in [splitting]{.orange} the
+    observations in two parts: a [training set]{.orange}
+    $(y_1,\dots,y_n)$ and a [test set]{.blue}
+    $(\tilde{y}_1,\dots,\tilde{y}_n)$, having the same covariates
+    $x_1,\dots,x_n$.
+
+-   We fit the model $\hat{f}$ using $n$ observations of the training
+    and we use it to predict the $n$ observations on the test set.
+
+-   This leads to an [unbiased estimate]{.orange} of the [in-sample
+    prediction error]{.blue}, i.e.: $$
+    \widehat{\mathrm{ErrF}} =  \frac{1}{n}\sum_{i=1}^n\mathscr{L}\{\tilde{y}_i; \hat{f}(\bm{x}_i)\}.
+    $$
+
+-   This is precisely what we already did with yesterday's and
+    tomorrow's data!
+:::
+
+## MSE on training and test set (recap)
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4.5
+#| fig-align: center
+
+data_bv <- data.frame(p = p_list, #MSE = sigmatrue^2 + Bias2s + Vars, 
+                      MSE_train = data_goodness$MSE, MSE_test = data_goodness$MSE_test)
+data_bv <- reshape2::melt(data_bv, id = "p")
+levels(data_bv$variable) <- c("MSE train (yesterday's data)", "MSE test (tomorrow's data)")
+colnames(data_bv) <- c("p", "Error term", "value")
+
+ggplot(data = data_bv, aes(x = p, y = value, col = `Error term`)) +
+  geom_line() +
+  geom_point() +
+  geom_vline(xintercept = 5, linetype = "dotted") +
+  theme_light() +
+  theme(legend.position = "top") +
+  scale_color_tableau(palette = "Color Blind") +
+  xlab("Model complexity (p)") +
+  ylab("Error")
+```
