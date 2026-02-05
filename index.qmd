@@ -97,6 +97,8 @@ To schedule a meeting, please write to aldo.solari@unive.it. Office hours is eve
 
 The primary source of this website's content is the textbook [Gareth, Witten, Hastie and Tibshirani (2023)]{.orange}. A few pictures have been taken from the textbook; in these cases the original source is cited.
 
+I am also grateful to [Tommaso Rigon](https://tommasorigon.github.io/) for the use of his Quarto template.
+
 All the mistakes still present are mine.
 
 ------------------------------------------------------------------------
