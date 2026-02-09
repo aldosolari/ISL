@@ -60,21 +60,13 @@ documentation](https://quarto.org/docs/presentations/revealjs/presenting.html#pr
 | **Linear Regression**                     | [Unit C](slides/un_C.html)           | [Slides Unit C](slides/un_C_slides.html)           | [Code C](code/un_C.R)     |
 | **Lab 3**                              | [Code Lab 3](slides/un_lab3.html)    |                                                    | [Code Lab 3](code/lab3.R) |
 | *Exercises*                            | [Exercises C - Conceptual](exe/exeC_C.html)        |                                      | [Exercises C - Applied](exe/exeA_C.html)|
-| **Principal Components Analysis**                         | [Unit D](slides/un_D.html)           | [Slides Unit D](slides/un_D_slides.html)           | [Code D](code/un_D.R)     |
+| **Tree-Based Methods**                         | [Unit D](slides/un_D.html)           | [Slides Unit D](slides/un_D_slides.html)           | [Code D](code/un_D.R)     |
 | **Lab 4**                              | [Code Lab 4](slides/un_lab4.html)    |                                                    | [Code Lab 4](code/lab4.R) |
 | *Exercises*                            | [Exercises D - Conceptual](exe/exeC_D.html)        |                                      | [Exercises D - Applied](exe/exeA_D.html)|
-| **Matrix Completion**                  | [Unit E](slides/un_E.html)           | [Slides Unit E](slides/un_E_slides.html)           | [Code E](code/un_E.R)     |
+| **PCA and Matrix Completion**                  | [Unit E](slides/un_E.html)           | [Slides Unit E](slides/un_E_slides.html)           | [Code E](code/un_E.R)     |
 | **Lab 5**                              | [Code Lab 5](slides/un_lab5.html)    |                                                    | [Code Lab 5](code/lab5.R) |
 | *Exercises*                            | [Exercises E - Conceptual](exe/exeC_E.html)        |                                      | [Exercises E - Applied](exe/exeA_E.html)|
 
-## Exam
-
-#### Rules
-
-#### Mock exam
-
-An example of written examination is provided at 
-<!-- [this link](exe/exe_exam.html). -->
 
 ## Prerequisites
 
@@ -87,6 +79,19 @@ An example of written examination is provided at
 * No detailed knowledge of matrix operations is required
 
 * Previous exposure to a programming language (e.g., R or Python) is useful but not required
+
+## Labs
+
+The course is delivered in a lecture format, with selected sessions  devoted to programming activities (``*labs*''). Students must bring their own laptop to these sessions and have [R](https://cloud.r-project.org) and [RStudio](https://rstudio.com/products/rstudio/) installed.
+
+## Exam
+
+The final assessment consists of a written test, followed by an oral interview, conditional on successful completion of the written test. The written test is open book and requires students to bring their own laptop. It consists of the submission of a compiled R Markdown PDF file presenting a complete data analysis. Examples of written tests are available on the Ca’ Foscari Moodle e-learning platform.
+
+#### Rules
+
+#### Mock exam
+
 
 
 ## Office hours
