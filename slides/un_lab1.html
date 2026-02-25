@@ -72,49 +72,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="un_lab1_files/libs/bootstrap/bootstrap-721140556699abb0ff907dddd6c78b98.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <style>html{ scroll-behavior: smooth; }</style>
 
-  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
-  <script>document.addEventListener("DOMContentLoaded", function () {
- var mathElements = document.getElementsByClassName("math");
- var macros = [];
- for (var i = 0; i < mathElements.length; i++) {
-  var texText = mathElements[i].firstChild;
-  if (mathElements[i].tagName == "SPAN") {
-   katex.render(texText.data, mathElements[i], {
-    displayMode: mathElements[i].classList.contains('display'),
-    throwOnError: false,
-    macros: macros,
-    fleqn: false
-   });
-}}});
-  </script>
-  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -174,14 +131,34 @@ window.Quarto = {
 
 <section id="introduction-to-r" class="level1">
 <h1>Introduction to R</h1>
-<p>In this lab, we will introduce some simple <code>R</code> commands. The best way to learn a new language is to try out the commands. <code>R</code> can be downloaded from</p>
-<p><code>http://cran.r-project.org/</code></p>
-<p>We recommend that you run <code>R</code> within an integrated development environment (IDE) such as <code>RStudio</code>, which can be freely downloaded from</p>
-<p><code>http://rstudio.com</code></p>
-<p>The <code>RStudio</code> website also provides a cloud-based version of <code>R</code>, which does not require installing any software.</p>
+<ul>
+<li>In this lab we learn basic R commands by running them.</li>
+<li>The best way to learn R is to try the commands yourself.</li>
+<li>Download R: http://cran.r-project.org/</li>
+<li>Recommended IDE: RStudio (desktop or cloud version)
+<ul>
+<li>http://rstudio.com/</li>
+</ul></li>
+</ul>
 <section id="basic-commands" class="level2">
 <h2 class="anchored" data-anchor-id="basic-commands">Basic Commands</h2>
-<p><code>R</code> uses <em>functions</em> to perform operations. To run a function called <code>funcname</code>, we type <code>funcname(input1, input2)</code>, where the inputs (or <em>arguments</em>) <code>input1</code> and <code>input2</code> tell <code>R</code> how to run the function. A function can have any number of inputs. For example, to create a vector of numbers, we use the function <code>c()</code> (for <em>concatenate</em>). Any numbers inside the parentheses are joined together. The following command instructs <code>R</code> to join together the numbers 1, 3, 2, and 5, and to save them as a vector named <code>x</code>. When we type <code>x</code>, it gives us back the vector.</p>
+<ul>
+<li><code>R</code> uses <em>functions</em> to perform operations<br>
+</li>
+<li>General syntax: <code>funcname(input1, input2, ...)</code><br>
+</li>
+<li>Inputs are called <em>arguments</em><br>
+</li>
+<li>A function can have any number of arguments<br>
+</li>
+<li>Example: <code>c()</code> (<em>concatenate</em>) creates a vector<br>
+</li>
+<li>Values inside <code>c()</code> are joined into one vector<br>
+</li>
+<li>Assign the result to an object (e.g., <code>x</code>)<br>
+</li>
+<li>Typing <code>x</code> prints the vector</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">5</span>)</span>
 <span id="cb1-2"><a href="#cb1-2"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -189,7 +166,13 @@ window.Quarto = {
 <pre><code>[1] 1 3 2 5</code></pre>
 </div>
 </div>
-<p>Note that the <code>&gt;</code> is not part of the command; rather, it is printed by <code>R</code> to indicate that it is ready for another command to be entered. We can also save things using <code>=</code> rather than <code>&lt;-</code>:</p>
+<ul>
+<li><code>&gt;</code> is just the R prompt (not part of the command)<br>
+</li>
+<li>It indicates that R is ready for input<br>
+</li>
+<li>You can also assign values using <code>=</code> instead of <code>&lt;-</code></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">2</span>)</span>
 <span id="cb3-2"><a href="#cb3-2"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -198,8 +181,16 @@ window.Quarto = {
 </div>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>y <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Hitting the <em>up</em> arrow multiple times will display the previous commands, which can then be edited. This is useful since one often wishes to repeat a similar command. In addition, typing <code>?funcname</code> will always cause <code>R</code> to open a new help file window with additional information about the function <code>funcname()</code>.</p>
-<p>We can tell <code>R</code> to add two sets of numbers together. It will then add the first number from <code>x</code> to the first number from <code>y</code>, and so on. However, <code>x</code> and <code>y</code> should be the same length. We can check their length using the <code>length()</code> function.</p>
+<ul>
+<li><p>Use the <em>up</em> arrow to recall and edit previous commands<br>
+</p></li>
+<li><p>Type <code>?funcname</code> to open the help page for a function</p></li>
+<li><p>R adds vectors <em>element-wise</em><br>
+</p></li>
+<li><p>Vectors should have the same length<br>
+</p></li>
+<li><p>Check length using <code>length()</code></p></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">length</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -214,7 +205,11 @@ window.Quarto = {
 <pre><code>[1]  2 10  5</code></pre>
 </div>
 </div>
-<p>The <code>ls()</code> function allows us to look at a list of all of the objects, such as data and functions, that we have saved so far. The <code>rm()</code> function can be used to delete any that we don’t want.</p>
+<ul>
+<li><code>ls()</code> lists all objects currently in memory<br>
+</li>
+<li><code>rm()</code> removes objects you no longer need</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">ls</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -226,15 +221,27 @@ window.Quarto = {
 <pre><code>character(0)</code></pre>
 </div>
 </div>
-<p>It’s also possible to remove all objects at once:</p>
+<ul>
+<li>Remove all objects at once with <code>rm(list = ls())</code></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The <code>matrix()</code> function can be used to create a matrix of numbers. Before we use the <code>matrix()</code> function, we can learn more about it:</p>
+<ul>
+<li><code>matrix()</code> creates a matrix of numbers<br>
+</li>
+<li>Use <code>?matrix</code> to read the documentation</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>?matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The help file reveals that the <code>matrix()</code> function takes a number of inputs, but for now we focus on the first three: the data (the entries in the matrix), the number of rows, and the number of columns. First, we create a simple matrix.</p>
+<ul>
+<li><code>matrix()</code> has several arguments<br>
+</li>
+<li>Main ones: <code>data</code>, <code>nrow</code>, <code>ncol</code><br>
+</li>
+<li>Create a simple matrix using these three inputs</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>x <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
 <span id="cb18-2"><a href="#cb18-2"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -244,11 +251,23 @@ window.Quarto = {
 [2,]    2    4</code></pre>
 </div>
 </div>
-<p>Note that we could just as well omit typing <code>data=</code>, <code>nrow=</code>, and <code>ncol=</code> in the <code>matrix()</code> command above: that is, we could just type</p>
+<ul>
+<li>Argument names (<code>data=</code>, <code>nrow=</code>, <code>ncol=</code>) can be omitted<br>
+</li>
+<li>Order matters if names are not specified</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>x <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="dv">2</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>and this would have the same effect. However, it can sometimes be useful to specify the names of the arguments passed in, since otherwise <code>R</code> will assume that the function arguments are passed into the function in the same order that is given in the function’s help file. As this example illustrates, by default <code>R</code> creates matrices by successively filling in columns. Alternatively, the <code>byrow = TRUE</code> option can be used to populate the matrix in order of the rows.</p>
+<ul>
+<li>Omitting argument names gives the same result (if order is correct)<br>
+</li>
+<li>Specifying names improves clarity and avoids mistakes<br>
+</li>
+<li>By default, <code>matrix()</code> fills entries <em>by column</em><br>
+</li>
+<li>Use <code>byrow = TRUE</code> to fill entries <em>by row</em></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="dv">2</span>, <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -257,7 +276,15 @@ window.Quarto = {
 [2,]    3    4</code></pre>
 </div>
 </div>
-<p>Notice that in the above command we did not assign the matrix to a value such as <code>x</code>. In this case the matrix is printed to the screen but is not saved for future calculations. The <code>sqrt()</code> function returns the square root of each element of a vector or matrix. The command <code>x^2</code> raises each element of <code>x</code> to the power <code>2</code>; any powers are possible, including fractional or negative powers.</p>
+<ul>
+<li>If not assigned, the matrix is printed but not saved<br>
+</li>
+<li><code>sqrt()</code> applies element-wise to vectors or matrices<br>
+</li>
+<li><code>x^2</code> raises each element of <code>x</code> to the power 2<br>
+</li>
+<li>Any power is allowed (including fractional or negative)</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">sqrt</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -272,16 +299,37 @@ window.Quarto = {
 [2,]    4   16</code></pre>
 </div>
 </div>
-<p>The <code>rnorm()</code> function generates a vector of random normal variables, with first argument <code>n</code> the sample size. Each time we call this function, we will get a different answer. Here we create two correlated sets of numbers, <code>x</code> and <code>y</code>, and use the <code>cor()</code> function to compute the correlation between them.</p>
+<ul>
+<li><code>rnorm(n)</code> generates <code>n</code> random normal variables<br>
+</li>
+<li>Each call produces different values<br>
+</li>
+<li>Create two related vectors <code>x</code> and <code>y</code><br>
+</li>
+<li>Use <code>cor()</code> to compute their correlation</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">50</span>)</span>
 <span id="cb27-2"><a href="#cb27-2"></a>y <span class="ot">&lt;-</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> <span class="dv">50</span>, <span class="at">sd =</span> .<span class="dv">1</span>)</span>
 <span id="cb27-3"><a href="#cb27-3"></a><span class="fu">cor</span>(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9936504</code></pre>
+<pre><code>[1] 0.9920188</code></pre>
 </div>
 </div>
-<p>By default, <code>rnorm()</code> creates standard normal random variables with a mean of <span class="math inline">0</span> and a standard deviation of <span class="math inline">1</span>. However, the mean and standard deviation can be altered using the <code>mean</code> and <code>sd</code> arguments, as illustrated above. Sometimes we want our code to reproduce the exact same set of random numbers; we can use the <code>set.seed()</code> function to do this. The <code>set.seed()</code> function takes an (arbitrary) integer argument.</p>
+<ul>
+<li>By default, <code>rnorm()</code> generates standard normal variables
+<ul>
+<li>Mean = 0<br>
+</li>
+<li>Standard deviation = 1<br>
+</li>
+</ul></li>
+<li>Modify using <code>mean</code> and <code>sd</code> arguments<br>
+</li>
+<li>Use <code>set.seed(integer)</code> for reproducibility<br>
+</li>
+<li>The seed ensures the same random numbers are generated</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">set.seed</span>(<span class="dv">1303</span>)</span>
 <span id="cb29-2"><a href="#cb29-2"></a><span class="fu">rnorm</span>(<span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -298,8 +346,18 @@ window.Quarto = {
 [46]  1.3120237985 -0.0300020767 -0.2500257125  0.0234144857  1.6598706557</code></pre>
 </div>
 </div>
-<p>We use <code>set.seed()</code> throughout the labs whenever we perform calculations involving random quantities. In general this should allow the user to reproduce our results. However, as new versions of <code>R</code> become available, small discrepancies may arise between this book and the output from <code>R</code>.</p>
-<p>The <code>mean()</code> and <code>var()</code> functions can be used to compute the mean and variance of a vector of numbers. Applying <code>sqrt()</code> to the output of <code>var()</code> will give the standard deviation. Or we can simply use the <code>sd()</code> function.</p>
+<ul>
+<li><p>Use <code>set.seed()</code> to ensure reproducible results<br>
+</p></li>
+<li><p>Different R versions may produce small differences</p></li>
+<li><p><code>mean()</code> computes the sample mean<br>
+</p></li>
+<li><p><code>var()</code> computes the variance<br>
+</p></li>
+<li><p><code>sqrt(var(x))</code> gives the standard deviation<br>
+</p></li>
+<li><p>Alternatively, use <code>sd()</code> directly</p></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">set.seed</span>(<span class="dv">3</span>)</span>
 <span id="cb31-2"><a href="#cb31-2"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
@@ -323,7 +381,18 @@ window.Quarto = {
 </section>
 <section id="graphics" class="level2">
 <h2 class="anchored" data-anchor-id="graphics">Graphics</h2>
-<p>The <code>plot()</code> function is the primary way to plot data in <code>R</code>. For instance, <code>plot(x, y)</code> produces a scatterplot of the numbers in <code>x</code> versus the numbers in <code>y</code>. There are many additional options that can be passed in to the <code>plot()</code> function. For example, passing in the argument <code>xlab</code> will result in a label on the <span class="math inline">x</span>-axis. To find out more information about the <code>plot()</code> function, type <code>?plot</code>.</p>
+<ul>
+<li><code>plot()</code> is the main function for basic graphics in <code>R</code><br>
+</li>
+<li><code>plot(x, y)</code> creates a scatterplot<br>
+</li>
+<li>Additional arguments customize the plot
+<ul>
+<li>Example: <code>xlab</code> sets the x-axis label<br>
+</li>
+</ul></li>
+<li>Use <code>?plot</code> to see all available options</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
 <span id="cb39-2"><a href="#cb39-2"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
@@ -346,7 +415,15 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>We will often want to save the output of an <code>R</code> plot. The command that we use to do this will depend on the file type that we would like to create. For instance, to create a pdf, we use the <code>pdf()</code> function, and to create a jpeg, we use the <code>jpeg()</code> function.</p>
+<ul>
+<li>Save plots by opening a graphics device<br>
+</li>
+<li>Use <code>pdf()</code> to create a PDF file<br>
+</li>
+<li>Use <code>jpeg()</code> to create a JPEG file<br>
+</li>
+<li>The function depends on the desired file format</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="fu">pdf</span>(<span class="st">"Figure.pdf"</span>)</span>
 <span id="cb41-2"><a href="#cb41-2"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="st">"green"</span>)</span>
@@ -356,8 +433,18 @@ window.Quarto = {
                 2 </code></pre>
 </div>
 </div>
-<p>The function <code>dev.off()</code> indicates to <code>R</code> that we are done creating the plot. Alternatively, we can simply copy the plot window and paste it into an appropriate file type, such as a Word document.</p>
-<p>The function <code>seq()</code> can be used to create a sequence of numbers. For instance, <code>seq(a, b)</code> makes a vector of integers between <code>a</code> and <code>b</code>. There are many other options: for instance, <code>seq(0, 1, length = 10)</code> makes a sequence of <code>10</code> numbers that are equally spaced between <code>0</code> and <code>1</code>. Typing <code>3:11</code> is a shorthand for <code>seq(3, 11)</code> for integer arguments.</p>
+<ul>
+<li><p><code>dev.off()</code> closes the graphics device (finish saving the plot)<br>
+</p></li>
+<li><p>Alternatively, copy the plot window and paste into another document</p></li>
+<li><p><code>seq()</code> generates sequences of numbers<br>
+</p></li>
+<li><p><code>seq(a, b)</code> creates integers from <code>a</code> to <code>b</code><br>
+</p></li>
+<li><p><code>seq(0, 1, length = 10)</code> creates 10 equally spaced values<br>
+</p></li>
+<li><p><code>3:11</code> is shorthand for <code>seq(3, 11)</code></p></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>)</span>
 <span id="cb43-2"><a href="#cb43-2"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -371,13 +458,22 @@ window.Quarto = {
 </div>
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span>pi, pi, <span class="at">length =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We will now create some more sophisticated plots. The <code>contour()</code> function produces a <em>contour plot</em> in order to represent three-dimensional data; it is like a topographical map. It takes three arguments:</p>
 <ul>
-<li>A vector of the <code>x</code> values (the first dimension),</li>
-<li>A vector of the <code>y</code> values (the second dimension), and</li>
-<li>A matrix whose elements correspond to the <code>z</code> value (the third dimension) for each pair of (<code>x</code>, <code>y</code>) coordinates.</li>
+<li><p><code>contour()</code> creates a <em>contour plot</em> (3D surface representation)<br>
+</p></li>
+<li><p>Similar to a topographical map</p></li>
+<li><p>Required inputs:</p>
+<ul>
+<li>Vector of <code>x</code> values<br>
+</li>
+<li>Vector of <code>y</code> values<br>
+</li>
+<li>Matrix of <code>z</code> values (for each <code>(x, y)</code> pair)</li>
+</ul></li>
+<li><p>Additional arguments allow customization<br>
+</p></li>
+<li><p>Use <code>?contour</code> for documentation</p></li>
 </ul>
-<p>As with the <code>plot()</code> function, there are many other inputs that can be used to fine-tune the output of the <code>contour()</code> function. To learn more about these, take a look at the help file by typing <code>?contour</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>y <span class="ot">&lt;-</span> x</span>
 <span id="cb48-2"><a href="#cb48-2"></a>f <span class="ot">&lt;-</span> <span class="fu">outer</span>(x, y, <span class="cf">function</span>(x, y) <span class="fu">cos</span>(y) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> x<span class="sc">^</span><span class="dv">2</span>))</span>
@@ -400,7 +496,16 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>The <code>image()</code> function works the same way as <code>contour()</code>, except that it produces a color-coded plot whose colors depend on the <code>z</code> value. This is known as a <em>heatmap</em>, and is sometimes used to plot temperature in weather forecasts. Alternatively, <code>persp()</code> can be used to produce a three-dimensional plot. The arguments <code>theta</code> and <code>phi</code> control the angles at which the plot is viewed.</p>
+<ul>
+<li><p><code>image()</code> produces a color-coded plot (heatmap)<br>
+</p></li>
+<li><p>Colors represent the <code>z</code> values<br>
+</p></li>
+<li><p>Often used for temperature-style maps</p></li>
+<li><p><code>persp()</code> creates a 3D surface plot<br>
+</p></li>
+<li><p><code>theta</code> and <code>phi</code> control the viewing angles</p></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">image</span>(x, y, fa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -454,7 +559,11 @@ window.Quarto = {
 </section>
 <section id="indexing-data" class="level2">
 <h2 class="anchored" data-anchor-id="indexing-data">Indexing Data</h2>
-<p>We often wish to examine part of a set of data. Suppose that our data is stored in the matrix <code>A</code>.</p>
+<ul>
+<li>Often we need to examine part of a data set<br>
+</li>
+<li>Suppose the data are stored in a matrix <code>A</code></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a>A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>, <span class="dv">4</span>, <span class="dv">4</span>)</span>
 <span id="cb56-2"><a href="#cb56-2"></a>A</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -466,14 +575,22 @@ window.Quarto = {
 [4,]    4    8   12   16</code></pre>
 </div>
 </div>
-<p>Then, typing</p>
+<ul>
+<li><code>A[2, 3]</code> selects the element in row 2, column 3<br>
+</li>
+<li>First index = row<br>
+</li>
+<li>Second index = column</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a>A[<span class="dv">2</span>, <span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 10</code></pre>
 </div>
 </div>
-<p>will select the element corresponding to the second row and the third column. The first number after the open-bracket symbol <code>[</code> always refers to the row, and the second number always refers to the column. We can also select multiple rows and columns at a time, by providing vectors as the indices.</p>
+<ul>
+<li>Use vectors or ranges to select multiple rows and/or columns</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a>A[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>), <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -503,14 +620,28 @@ window.Quarto = {
 [4,]    4    8</code></pre>
 </div>
 </div>
-<p>The last two examples include either no index for the columns or no index for the rows. These indicate that <code>R</code> should include all columns or all rows, respectively. <code>R</code> treats a single row or column of a matrix as a vector.</p>
+<ul>
+<li>Leaving one index empty selects all rows or all columns<br>
+</li>
+<li><code>A[1:2, ]</code> → all columns<br>
+</li>
+<li><code>A[, 1:2]</code> → all rows<br>
+</li>
+<li>A single row or column is treated as a vector</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a>A[<span class="dv">1</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  1  5  9 13</code></pre>
 </div>
 </div>
-<p>The use of a negative sign <code>-</code> in the index tells <code>R</code> to keep all rows or columns except those indicated in the index.</p>
+<ul>
+<li>Use a negative index (<code>-</code>) to exclude rows or columns<br>
+</li>
+<li><code>A[-1, ]</code> removes row 1<br>
+</li>
+<li><code>A[, -1]</code> removes column 1</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a>A[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -523,7 +654,11 @@ window.Quarto = {
 <pre><code>[1] 6 8</code></pre>
 </div>
 </div>
-<p>The <code>dim()</code> function outputs the number of rows followed by the number of columns of a given matrix.</p>
+<ul>
+<li><code>dim()</code> returns the dimensions of a matrix<br>
+</li>
+<li>Output format: (number of rows, number of columns)</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a><span class="fu">dim</span>(A)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -533,9 +668,22 @@ window.Quarto = {
 </section>
 <section id="loading-data" class="level2">
 <h2 class="anchored" data-anchor-id="loading-data">Loading Data</h2>
-<p>For most analyses, the first step involves importing a data set into <code>R</code>. The <code>read.table()</code> function is one of the primary ways to do this. The help file contains details about how to use this function. We can use the function <code>write.table()</code> to export data.</p>
-<p>Before attempting to load a data set, we must make sure that <code>R</code> knows to search for the data in the proper directory. For example, on a Windows system one could select the directory using the <code>Change dir ...</code> option under the <code>File</code> menu. However, the details of how to do this depend on the operating system (e.g.&nbsp;Windows, Mac, Unix) that is being used, and so we do not give further details here.</p>
-<p>We begin by loading in the <code>Auto</code> data set. This data is part of the <code>ISLR2</code> library, discussed in Chapter 3. To illustrate the <code>read.table()</code> function, we load it now from a text file, <code>Auto.data</code>, which you can find on the textbook website. The following command will load the <code>Auto.data</code> file into <code>R</code> and store it as an object called <code>Auto</code>, in a format referred to as a <em>data frame</em>. Once the data has been loaded, the <code>View()</code> function can be used to view it in a spreadsheet-like window. (This function can sometimes be a bit finicky. If you have trouble using it, then try the <code>head()</code> function instead.) The <code>head()</code> function can also be used to view the first few rows of the data.</p>
+<ul>
+<li><p>First step in analysis: import the data<br>
+</p></li>
+<li><p>Use <code>read.table()</code> to load text files<br>
+</p></li>
+<li><p>Use <code>write.table()</code> to export data<br>
+</p></li>
+<li><p>Check the working directory before loading files</p></li>
+<li><p>Load the <code>Auto</code> data set from <code>Auto.data</code><br>
+</p></li>
+<li><p>Data are stored as a <em>data frame</em><br>
+</p></li>
+<li><p>Use <code>View()</code> to inspect the data<br>
+</p></li>
+<li><p>Use <code>head()</code> to display the first rows</p></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a>Auto <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"../data/Auto.data"</span>)</span>
 <span id="cb76-2"><a href="#cb76-2"></a><span class="fu">View</span>(Auto)</span>
@@ -557,13 +705,37 @@ window.Quarto = {
 6               ford torino</code></pre>
 </div>
 </div>
-<p>Note that Auto.data is simply a text file, which you could alternatively open on your computer using a standard text editor. It is often a good idea to view a data set using a text editor or other software such as Excel before loading it into <code>R</code>.</p>
-<p>This particular data set has not been loaded correctly, because <code>R</code> has assumed that the variable names are part of the data and so has included them in the first row. The data set also includes a number of missing observations, indicated by a question mark <code>?</code>. Missing values are a common occurrence in real data sets. Using the option <code>header = T</code> (or <code>header = TRUE</code>) in the <code>read.table()</code> function tells <code>R</code> that the first line of the file contains the variable names, and using the option <code>na.strings</code> tells <code>R</code> that any time it sees a particular character or set of characters (such as a question mark), it should be treated as a missing element of the data matrix.</p>
+<ul>
+<li><p><code>Auto.data</code> is a plain text file<br>
+</p></li>
+<li><p>It can be opened with a text editor or Excel before importing</p></li>
+<li><p>Data were loaded incorrectly because:</p>
+<ul>
+<li>R treated variable names as data<br>
+</li>
+<li>Missing values are coded as <code>?</code></li>
+</ul></li>
+<li><p>Use <code>header = TRUE</code> to specify that the first row contains variable names<br>
+</p></li>
+<li><p>Use <code>na.strings = "?"</code> to define missing values<br>
+</p></li>
+<li><p>Missing values are common in real data sets</p></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1"></a>Auto <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"../data/Auto.data"</span>, <span class="at">header =</span> T, <span class="at">na.strings =</span> <span class="st">"?"</span>, <span class="at">stringsAsFactors =</span> T)</span>
 <span id="cb78-2"><a href="#cb78-2"></a><span class="fu">View</span>(Auto)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The <code>stringsAsFactors = T</code> argument tells <code>R</code> that any variable containing character strings should be interpreted as a qualitative variable, and that each distinct character string represents a distinct level for that qualitative variable. An easy way to load data from Excel into <code>R</code> is to save it as a csv (comma-separated values) file, and then use the <code>read.csv()</code> function.</p>
+<ul>
+<li><p><code>stringsAsFactors = TRUE</code> converts character variables into <em>factors</em><br>
+</p></li>
+<li><p>Each distinct string becomes a separate level</p></li>
+<li><p>To import Excel data:</p>
+<ul>
+<li>Save as CSV (comma-separated values)<br>
+</li>
+<li>Use <code>read.csv()</code> in R</li>
+</ul></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1"></a>Auto <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data/Auto.csv"</span>, <span class="at">na.strings =</span> <span class="st">"?"</span>, <span class="at">stringsAsFactors =</span> T)</span>
 <span id="cb79-2"><a href="#cb79-2"></a><span class="fu">View</span>(Auto)</span>
@@ -585,7 +757,19 @@ window.Quarto = {
 4             amc rebel sst</code></pre>
 </div>
 </div>
-<p>The <code>dim()</code> function tells us that the data has <span class="math inline">397</span> observations, or rows, and nine variables, or columns. There are various ways to deal with the missing data. In this case, only five of the rows contain missing observations, and so we choose to use the <code>na.omit()</code> function to simply remove these rows.</p>
+<ul>
+<li><code>dim()</code> returns the data dimensions
+<ul>
+<li>397 observations (rows)<br>
+</li>
+<li>9 variables (columns)</li>
+</ul></li>
+<li>Several methods exist to handle missing data<br>
+</li>
+<li>Here, only 5 rows contain missing values<br>
+</li>
+<li>Use <code>na.omit()</code> to remove those rows</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1"></a>Auto <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(Auto)</span>
 <span id="cb83-2"><a href="#cb83-2"></a><span class="fu">dim</span>(Auto)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -593,7 +777,11 @@ window.Quarto = {
 <pre><code>[1] 392   9</code></pre>
 </div>
 </div>
-<p>Once the data are loaded correctly, we can use <code>names()</code> to check the variable names.</p>
+<ul>
+<li>After loading the data correctly<br>
+</li>
+<li>Use <code>names()</code> to view the variable names</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1"></a><span class="fu">names</span>(Auto)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -604,11 +792,23 @@ window.Quarto = {
 </section>
 <section id="additional-graphical-and-numerical-summaries" class="level2">
 <h2 class="anchored" data-anchor-id="additional-graphical-and-numerical-summaries">Additional Graphical and Numerical Summaries</h2>
-<p>We can use the <code>plot()</code> function to produce <em>scatterplots</em> of the quantitative variables. However, simply typing the variable names will produce an error message, because <code>R</code> does not know to look in the <code>Auto</code> data set for those variables.</p>
+<ul>
+<li>Use <code>plot()</code> to create <em>scatterplots</em> of quantitative variables<br>
+</li>
+<li>Typing variable names alone gives an error<br>
+</li>
+<li>R must be told which data set contains the variables</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1"></a><span class="fu">plot</span>(cylinders, mpg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>To refer to a variable, we must type the data set and the variable name joined with a <code>$</code> symbol. Alternatively, we can use the <code>attach()</code> function in order to tell <code>R</code> to make the variables in this data frame available by name.</p>
+<ul>
+<li>Access variables using <code>dataset$variable</code><br>
+</li>
+<li>Example: <code>Auto$mpg</code><br>
+</li>
+<li>Alternatively, use <code>attach(Auto)</code> to access variables directly</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1"></a><span class="fu">plot</span>(Auto<span class="sc">$</span>cylinders, Auto<span class="sc">$</span>mpg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -628,11 +828,23 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>The <code>cylinders</code> variable is stored as a numeric vector, so <code>R</code> has treated it as quantitative. However, since there are only a small number of possible values for <code>cylinders</code>, one may prefer to treat it as a qualitative variable. The <code>as.factor()</code> function converts quantitative variables into qualitative variables.</p>
+<ul>
+<li><code>cylinders</code> is stored as numeric → treated as quantitative<br>
+</li>
+<li>Since it has few distinct values, it can be treated as qualitative<br>
+</li>
+<li>Use <code>as.factor()</code> to convert numeric to categorical</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1"></a>cylinders <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(cylinders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>If the variable plotted on the <span class="math inline">x</span>-axis is qualitative, then <em>boxplots</em> will automatically be produced by the <code>plot()</code> function. As usual, a number of options can be specified in order to customize the plots.</p>
+<ul>
+<li>If the x-axis variable is qualitative, <code>plot()</code> produces a <em>boxplot</em><br>
+</li>
+<li>Boxplots summarize distributions by category<br>
+</li>
+<li>Additional arguments can customize the plot</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1"></a><span class="fu">plot</span>(cylinders, mpg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -677,7 +889,11 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>The <code>hist()</code> function can be used to plot a <em>histogram</em>. Note that <code>col = 2</code> has the same effect as <code>col = "red"</code>.</p>
+<ul>
+<li>Use <code>hist()</code> to create a <em>histogram</em><br>
+</li>
+<li><code>col = 2</code> is equivalent to <code>col = "red"</code></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1"></a><span class="fu">hist</span>(mpg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -704,7 +920,13 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>The <code>pairs()</code> function creates a <em>scatterplot matrix</em>, i.e.&nbsp;a scatterplot for every pair of variables. We can also produce scatterplots for just a subset of the variables.</p>
+<ul>
+<li><code>pairs()</code> creates a <em>scatterplot matrix</em><br>
+</li>
+<li>Shows scatterplots for all pairs of variables<br>
+</li>
+<li>Can specify a subset of variables</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1"></a><span class="fu">pairs</span>(Auto)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -726,7 +948,17 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>In conjunction with the <code>plot()</code> function, <code>identify()</code> provides a useful interactive method for identifying the value of a particular variable for points on a plot. We pass in three arguments to <code>identify()</code>: the <span class="math inline">x</span>-axis variable, the <span class="math inline">y</span>-axis variable, and the variable whose values we would like to see printed for each point. Then clicking one or more points in the plot and hitting Escape will cause <code>R</code> to print the values of the variable of interest. The numbers printed under the <code>identify()</code> function correspond to the rows for the selected points.</p>
+<ul>
+<li><code>identify()</code> works with <code>plot()</code> for interactive labeling<br>
+</li>
+<li>Arguments: x-variable, y-variable, label variable<br>
+</li>
+<li>Click points on the plot to display labels<br>
+</li>
+<li>Press <em>Esc</em> to stop<br>
+</li>
+<li>Printed numbers correspond to row indices</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb101"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1"></a><span class="fu">plot</span>(horsepower, mpg)</span>
 <span id="cb101-2"><a href="#cb101-2"></a><span class="fu">identify</span>(horsepower, mpg, name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -741,7 +973,11 @@ window.Quarto = {
 <pre><code>integer(0)</code></pre>
 </div>
 </div>
-<p>The <code>summary()</code> function produces a numerical summary of each variable in a particular data set.</p>
+<ul>
+<li><code>summary()</code> provides a numerical summary of each variable<br>
+</li>
+<li>Output depends on the variable type (numeric or factor)</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb103"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1"></a><span class="fu">summary</span>(Auto)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -763,7 +999,11 @@ window.Quarto = {
                                                  (Other)           :365  </code></pre>
 </div>
 </div>
-<p>For qualitative variables such as <code>name</code>, <code>R</code> will list the number of observations that fall in each category. We can also produce a summary of just a single variable.</p>
+<ul>
+<li>For qualitative variables, <code>summary()</code> shows counts per category<br>
+</li>
+<li>You can also summarize a single variable (e.g., <code>summary(mpg)</code>)</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb105"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1"></a><span class="fu">summary</span>(mpg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -771,7 +1011,15 @@ window.Quarto = {
    9.00   17.00   22.75   23.45   29.00   46.60 </code></pre>
 </div>
 </div>
-<p>Once we have finished using <code>R</code>, we type <code>q()</code> in order to shut it down, or quit. When exiting <code>R</code>, we have the option to save the current <em>workspace</em> so that all objects (such as data sets) that we have created in this <code>R</code> session will be available next time. Before exiting <code>R</code>, we may want to save a record of all of the commands that we typed in the most recent session; this can be accomplished using the <code>savehistory()</code> function. Next time we enter <code>R</code>, we can load that history using the <code>loadhistory()</code> function, if we wish.</p>
+<ul>
+<li>Use <code>q()</code> to quit R<br>
+</li>
+<li>Option to save the current <em>workspace</em> on exit<br>
+</li>
+<li>Save command history with <code>savehistory()</code><br>
+</li>
+<li>Reload history with <code>loadhistory()</code></li>
+</ul>
 </section>
 </section>
 
