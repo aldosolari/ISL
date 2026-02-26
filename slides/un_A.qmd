@@ -673,6 +673,8 @@ Springer book (ISLR) published in 2021 (Second Edition).
 
 
 
+# Notation
+
 ## Wage Data
 
 * Study examines wage data for men in the Atlantic region of the U.S.
@@ -681,7 +683,7 @@ Springer book (ISLR) published in 2021 (Second Edition).
 
 ## FIGURE 1.1 ISL
 
-![](img/1_1){width="50%"}
+![](img/1_1){width="80%"}
 
 
 ## 
@@ -759,7 +761,7 @@ Workers raw wage
 
 ---
 
-## The Data Matrix **X**
+## The Data Matrix $\textbf{X}$
 
 - $\textbf{X}$ is an $n \times p$ matrix  
 - The $(i,j)$th element of $\textbf{X}$ is $x_{ij}$
@@ -776,7 +778,7 @@ $$
 
 ---
 
-## How to Think About **X**
+## How to Think About $\textbf{X}$
 
 - A [spreadsheet of numbers]{.blue}
 - [Rows ($n$)]{.blue} → observations  
