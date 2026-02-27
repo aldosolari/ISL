@@ -161,10 +161,12 @@
 <section class="slide level2 center">
 
 <p>This unit will cover the following <span class="orange">topics</span>:</p>
-<pre><code>-   Simple linear regression
--   Polynomial regression
--   Bias-variance trade-off
--   Cross-validation</code></pre>
+<ul>
+<li>Simple linear regression</li>
+<li>Polynomial regression</li>
+<li>Bias-variance trade-off</li>
+<li>Cross-validation</li>
+</ul>
 </section>
 <section>
 <section id="yesterdays-and-tomorrows-data" class="title-slide slide level1 center">
@@ -367,6 +369,10 @@ f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
 </div>
 </div></div>
 </section>
+<section id="mse-on-training-and-test-set" class="slide level2 center">
+<h2>MSE on training and test set</h2>
+
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-13-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1600"></section>
 <section id="comments-and-remarks" class="slide level2 center">
 <h2>Comments and remarks</h2>
 <ul>
@@ -388,10 +394,54 @@ f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
 <h1>The Bias-Variance Trade-Off</h1>
 
 </section>
+<section id="prediction-error" class="slide level2 center">
+<h2>Prediction error</h2>
+<p>Suppose we predict <span class="math inline">\tilde Y_i</span> by <span class="math inline">\hat{f}(x_i)</span> where <span class="math inline">\hat f</span> is estimated from the training data.</p>
+<p>Our goal is to minimize the (expected) prediction error <span class="math display">\mathbb{E}[\text{MSE}_{\text{test}}] = \frac{1}{n}\sum_{i=1}^n\mathbb{E}\Big[ (\tilde{Y}_i -\hat f(x_i) )^2 \Big],</span> where the response variable is given by a signal-plus-noise model, <span class="math display">Y = f(x) + \varepsilon,</span> with <span class="math inline">f(x)</span> representing the true underlying signal and <span class="math inline">\varepsilon</span> the random error term</p>
+</section>
+<section id="sources-of-error" class="slide level2 center">
+<h2>Sources of Error</h2>
+<ul>
+<li><p><strong>Irreducible Error</strong> Can we make predictions without committing errors? No — not even if we knew the true function <span class="math inline">f</span>, because of the presence of the error term <span class="math inline">\varepsilon</span></p></li>
+<li><p><strong>Bias</strong> How far (on average) is the estimator <span class="math inline">\hat f</span> from the true function <span class="math inline">f</span>? For example, if we estimate a linear regression line when the true relationship is quadratic.</p></li>
+<li><p><strong>Variance</strong> How variable is the estimator <span class="math inline">\hat f</span>? In other words, how much would our estimates change if we computed them using different training sets?</p></li>
+</ul>
+</section>
+<section id="reducible-and-irreducible-error" class="slide level2 center">
+<h2>Reducible and Irreducible Error</h2>
+<p><span class="math display">
+\mathbb{E}\big[(\tilde Y_i - \hat{f}(x_i))^2\big]
+=
+\mathbb{E}\big[(f(x_i) + \tilde \varepsilon_i - \hat{f}(x_i))^2\big].
+</span></p>
+<p>Expanding and using <span class="math inline">\mathbb{E}[\tilde \varepsilon_i] = 0</span>,</p>
+<p><span class="math display">
+=
+\underbrace{\mathbb{E}\big[(f(x_i) - \hat{f}(x_i))^2\big]}_{\text{Reducible error}}
++
+\underbrace{\mathrm{Var}(\tilde \varepsilon_i)}_{\text{Irreducible error}}.
+</span></p>
+<p>The <span class="orange">prediction error</span> is the sum of a <span class="blue">reducible</span> and an <span class="blue">irreducible</span> component.</p>
+</section>
+<section id="reducible-error-the-bias-variance-tradeoff" class="slide level2 center">
+<h2>Reducible error: the bias-variance tradeoff</h2>
+<p>The reducible error can be further decomposed into the <span class="blue">squared bias</span> and the <span class="blue">variance</span> of the estimator <span class="math inline">\hat{f}</span>.</p>
+<p><span class="math display">
+\begin{aligned}
+\mathbb{E}\big[(f(x_i) - \hat{f}(x_i))^2\big]
+&amp;= \mathbb{E}\big[(f(x_i) - \mathbb{E}\hat{f}(x_i) + \mathbb{E}\hat{f}(x_i) - \hat{f}(x_i))^2\big] \\
+&amp;= \underbrace{\big(f(x_i) - \mathbb{E}\hat{f}(x_i)\big)^2}_{\text{Bias}^2}
++ \underbrace{\mathrm{Var}\big(\hat{f}(x_i)\big)}_{\text{Variance}}.
+\end{aligned}
+</span></p>
+<p>Bias and variance are competing quantities: reducing one typically increases the other.<br>
+Hence, we must choose a <span class="orange">trade-off</span> between bias and variance.</p>
+<p>Typically as the <span class="blue">flexibility</span> of <span class="math inline">\hat f</span> increases, its variance increases, and its bias decreases. So choosing the flexibility based on average test error amounts to a bias-variance trade-off.</p>
+</section>
 <section id="if-we-knew-fx" class="slide level2 center">
 <h2>If we knew <span class="math inline">f(x)</span>…</h2>
 
-<img data-src="un_B_files/figure-revealjs/unnamed-chunk-15-1.png" width="1600" class="r-stretch"></section>
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-16-1.png" width="1600" class="r-stretch"></section>
 <section id="bias-variance-trade-off" class="slide level2 center">
 <h2>Bias-variance trade-off</h2>
 <ul>
@@ -416,12 +466,8 @@ f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
 </span></p></li>
 <li class="fragment"><p>This is precisely what we already did with yesterday’s and tomorrow’s data!</p></li>
 </ul>
-</section>
-<section id="mse-on-training-and-test-set-recap" class="slide level2 center">
-<h2>MSE on training and test set (recap)</h2>
 
-
-<img data-src="un_B_files/figure-revealjs/unnamed-chunk-16-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1600"></section></section>
+</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="img/cf_logo.png" class="slide-logo"></p>

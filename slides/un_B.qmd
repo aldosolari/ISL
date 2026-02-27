@@ -280,6 +280,117 @@ where $\mathrm{TSS} = \sum_{i=1}^{n}(y_i - \bar y)^2$ is the [total sum of squar
     $d$...
 :::
 
+
+## Estimating Polynomial Regression
+
+Let
+
+$$
+\mathbf{y} = (y_1,\dots,y_n)^\top
+$$
+
+be the vector of observed responses, and let $\mathbf{X} \in \mathbb{R}^{n \times (d+1)}$
+be the design matrix whose $i$-th row is
+
+$$
+(1, x_i, x_i^2, \dots, x_i^d).
+$$
+
+[Ordinary least squares]{.orange} (OLS) estimation chooses the coefficient vector
+
+$$
+\hat{\beta}
+=
+\begin{pmatrix}
+\hat{\beta}_0 \\
+\hat{\beta}_1 \\
+\vdots \\
+\hat{\beta}_d
+\end{pmatrix}
+\in \mathbb{R}^{d+1}
+$$
+
+to **minimize the residual sum of squares (RSS)**:
+
+$$
+\hat{\beta}
+=
+\arg\min_{\beta \in \mathbb{R}^{d+1}}
+\sum_{i=1}^n
+\bigl(y_i - f(x_i; \beta)\bigr)^2.
+$$
+Thus, OLS finds the coefficients that make the fitted polynomial
+as close as possible (in squared distance) to the observed data.
+
+
+## Solution
+
+The solution to this optimization problem is
+
+$$
+\hat{\beta}
+=
+(\mathbf{X}^\top \mathbf{X})^{-1}
+\mathbf{X}^\top \mathbf{y},
+$$
+
+
+We avoid matrix algebra whenever possible, but in the OLS formula it is useful to understand matrix multiplication and inversion.
+
+### Matrix Multiplication
+
+Suppose
+
+$$
+\mathbf{A} \in \mathbb{R}^{r \times d},
+\quad
+\mathbf{B} \in \mathbb{R}^{d \times s}.
+$$
+
+Then the product $\mathbf{A}\mathbf{B}$ is an $r \times s$ matrix defined only if the number of columns of $\mathbf{A}$ equals the number of rows of $\mathbf{B}$.
+
+The $(i,j)$-th element of $\mathbf{A}\mathbf{B}$ is
+
+$$
+(\mathbf{A}\mathbf{B})_{ij}
+=
+\sum_{k=1}^{d} a_{ik} b_{kj}.
+$$
+
+That is:
+
+- Take the $i$-th row of $\mathbf{A}$,
+- Take the $j$-th column of $\mathbf{B}$,
+- Multiply corresponding elements,
+- Sum the results.
+
+Matrix multiplication is **not commutative**:
+$$
+\mathbf{A}\mathbf{B} \neq \mathbf{B}\mathbf{A}
+\quad \text{in general}.
+$$
+
+### Matrix Inverse
+
+A square matrix $\mathbf{A} \in \mathbb{R}^{p \times p}$ has an inverse
+$\mathbf{A}^{-1}$ if
+
+$$
+\mathbf{A}\mathbf{A}^{-1}
+=
+\mathbf{A}^{-1}\mathbf{A}
+=
+\mathbf{I}_p,
+$$
+
+where $\mathbf{I}_p$ is the $p \times p$ identity matrix.
+
+The inverse exists only if:
+
+- $\mathbf{A}$ is square,
+- $\mathbf{A}$ is nonsingular (its columns are linearly independent).
+
+
 ## Yesterday's data, polynomial regression
 
 ```{r}
@@ -471,6 +582,37 @@ ggplot(data = data_goodness, aes(x = degree, y = R_squared_test)) +
 :::
 :::
 
+## MSE on training and test set
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4.5
+#| fig-align: center
+
+# Number of degrees of the polynomial
+degree_list <- 1:23
+# Number of parameters in the model
+p_list <- degree_list + 1
+
+data_bv <- data.frame(p = p_list, #MSE = sigmatrue^2 + Bias2s + Vars, 
+                      MSE_train = data_goodness$MSE, MSE_test = data_goodness$MSE_test)
+data_bv <- reshape2::melt(data_bv, id = "p")
+levels(data_bv$variable) <- c("MSE train (yesterday's data)", "MSE test (tomorrow's data)")
+colnames(data_bv) <- c("p", "Error term", "value")
+
+ggplot(data = data_bv, aes(x = p, y = value, col = `Error term`)) +
+  geom_line() +
+  geom_point() +
+  geom_vline(xintercept = 5, linetype = "dotted") +
+  theme_light() +
+  theme(legend.position = "top") +
+  scale_color_tableau(palette = "Color Blind") +
+  xlab("Model complexity (p)") +
+  ylab("Error")
+```
+
+
+
 ## Comments and remarks
 
 ::: incremental
@@ -503,143 +645,722 @@ ggplot(data = data_goodness, aes(x = degree, y = R_squared_test)) +
 :::
 
 
+
+
+
+
 # The Bias-Variance Trade-Off
 
-## If we knew $f(x)$...
+
+## Prediction error
+
+Suppose we predict $\tilde Y_i$ by $\hat{f}(x_i)$ where $\hat f$ is estimated from the training data. 
+
+Our goal is to minimize the (expected) prediction error
+$$\mathbb{E}[\text{MSE}_{\text{test}}] = \frac{1}{n}\sum_{i=1}^n\mathbb{E}\Big[ (\tilde{Y}_i -\hat f(x_i) )^2 \Big],$$ 
+where the response variable is given by a signal-plus-noise model, 
+$$Y = f(x) + \varepsilon,$$
+with $f(x)$ representing the true underlying signal and $\varepsilon$ the random error term
+
+## Sources of Error
+
+- **Irreducible Error**
+Can we make predictions without committing errors?
+No — not even if we knew the true function $f$, because of the presence of the error term $\varepsilon$
+
+- **Bias**
+How far (on average) is the estimator $\hat f$ from the true function $f$?
+For example, if we estimate a linear regression line when the true relationship is quadratic.
+
+- **Variance**
+How variable is the estimator $\hat f$?
+In other words, how much would our estimates change if we computed them using different training sets?
+
+## Reducible and Irreducible Error
+
+
+$$
+\mathbb{E}\big[(\tilde Y_i - \hat{f}(x_i))^2\big]
+=
+\mathbb{E}\big[(f(x_i) + \tilde \varepsilon_i - \hat{f}(x_i))^2\big].
+$$
+
+Expanding and using $\mathbb{E}[\tilde \varepsilon_i] = 0$,
+
+$$
+=
+\underbrace{\mathbb{E}\big[(f(x_i) - \hat{f}(x_i))^2\big]}_{\text{Reducible error}}
++
+\underbrace{\mathrm{Var}(\tilde \varepsilon_i)}_{\text{Irreducible error}}.
+$$
+
+The [prediction error]{.orange} is the sum of a [reducible]{.blue} and an [irreducible]{.blue} component.
+
+## Reducible error: the bias-variance tradeoff
+
+The reducible error can be further decomposed into the [squared bias]{.blue} and the [variance]{.blue} of the estimator $\hat{f}$.
+
+$$
+\begin{aligned}
+\mathbb{E}\big[(f(x_i) - \hat{f}(x_i))^2\big]
+&= \mathbb{E}\big[(f(x_i) - \mathbb{E}\hat{f}(x_i) + \mathbb{E}\hat{f}(x_i) - \hat{f}(x_i))^2\big] \\
+&= \underbrace{\big(f(x_i) - \mathbb{E}\hat{f}(x_i)\big)^2}_{\text{Bias}^2}
++ \underbrace{\mathrm{Var}\big(\hat{f}(x_i)\big)}_{\text{Variance}}.
+\end{aligned}
+$$
+
+Bias and variance are competing quantities: reducing one typically increases the other.  
+Hence, we must choose a [trade-off]{.orange} between bias and variance.
+
+Typically as the [flexibility]{.blue} of $\hat f$ increases, its variance increases, and its bias decreases. 
+
+## Low flexibility: high bias, low variance
 
 ```{r}
-# I am storing this information for simplicity
-x <- dataset$x
-n <- nrow(dataset)
-
-# The standard deviation of the data generative process is sigma2true = 0.01, declared in the book and the slides
-sigmatrue <- 0.01
-
-# The true values have been downloaded from the A&S textbook; see here: http://azzalini.stat.unipd.it/Book-DM/f_true.R
-ftrue <- c(
-  0.4342, 0.4780, 0.5072, 0.5258, 0.5369,
-  0.5426, 0.5447, 0.5444, 0.5425, 0.5397,
-  0.5364, 0.5329, 0.5294, 0.5260, 0.5229,
-  0.5200, 0.5174, 0.5151, 0.5131, 0.5113,
-  0.5097, 0.5083, 0.5071, 0.5061, 0.5052,
-  0.5044, 0.5037, 0.5032, 0.5027, 0.5023
-)
-```
-
-```{r}
-# Number of degrees of the polynomial
-degree_list <- 1:23
-# Number of parameters in the model
-p_list <- degree_list + 1
-
-# Squared bias
-Bias2s <- sapply(p_list, function(p) {
-  mean((ftrue - fitted(lm(ftrue ~ poly(x, degree = p - 1))))^2)
-})
-
-# Variance
-Vars <- p_list * (sigmatrue^2) / n 
-
-# Reducible errors
-MSEs <- Bias2s + Vars
-
-# Organize the data to 
-data_bv <- data.frame(p = p_list, Bias = Bias2s, Variance = Vars, MSE = MSEs)
-data_bv <- reshape2::melt(data_bv, id = "p")
-levels(data_bv$variable) <- c("Squared Bias", "Variance", "Reducible error")
-colnames(data_bv) <- c("p", "Error term", "value")
-```
-
-```{r}
-#| fig-width: 8
-#| fig-height: 4.5
-#| #| fig-align: center
-ggplot(data = data_bv, aes(x = p, y = value, col = `Error term`)) +
-  geom_line() +
-  geom_point() +
-  geom_vline(xintercept = 6, linetype = "dotted") +
-  theme_light() +
-  scale_color_tableau(palette = "Color Blind") +
-  xlab("Model complexity (p)") +
-  ylab("Error")
-```
-
-## Bias-variance trade-off
-
-::: incremental
--   When $p$ grows, the mean squared error first decreases and then it
-    increases. In the example, the [theoretical optimum]{.orange} is
-    $p = 6$ (5th degree polynomial).
-
--   The [bias]{.orange} measures the ability of $\hat{f}(\bm{x})$ to
-    reconstruct the true $f(\bm{x})$. The bias is due to [lack of
-    knowledge]{.blue} of the data-generating mechanism. It equals zero
-    when $\mathbb{E}\{\hat{f}(\bm{x})\} = f(\bm{x})$.
-
--   The [bias]{.orange} term can be reduced by increasing the
-    flexibility of the model (e.g., by considering a high value for
-    $p$).
-
--   The [variance]{.blue} measures the variability of the estimator
-    $\hat{f}(\bm{x})$ and its tendency to follow random fluctuations of
-    the data.
-
--   The [variance]{.blue} increases with the model complexity.
-
--   It is not possible to minimize both the bias and the variance, there
-    is a [trade-off]{.orange}.
-
--   We say that an estimator is [overfitting]{.orange} the data if an
-    increase in variance comes without important gains in terms of bias.
-
-<!-- - **Summary**. Low model complexity: [high bias]{.orange}, [low variance]{.blue}. High model complexity: [low bias]{.blue}, [high variance]{.orange}. -->
-:::
-
-## But since we do not know $f(x)$...
-
-::: incremental
--   We just concluded that we must expect a trade-off between error and
-    variance components. In practice, however, we cannot do this
-    because, of course, $f(x)$ is [unknown]{.orange}.
-
--   A simple solution consists indeed in [splitting]{.orange} the
-    observations in two parts: a [training set]{.orange}
-    $(y_1,\dots,y_n)$ and a [test set]{.blue}
-    $(\tilde{y}_1,\dots,\tilde{y}_n)$, having the same covariates
-    $x_1,\dots,x_n$.
-
--   We fit the model $\hat{f}$ using $n$ observations of the training
-    and we use it to predict the $n$ observations on the test set.
-
--   This leads to an [unbiased estimate]{.orange} of the [in-sample
-    prediction error]{.blue}, i.e.: $$
-    \widehat{\mathrm{ErrF}} =  \frac{1}{n}\sum_{i=1}^n\mathscr{L}\{\tilde{y}_i; \hat{f}(\bm{x}_i)\}.
-    $$
-
--   This is precisely what we already did with yesterday's and
-    tomorrow's data!
-:::
-
-## MSE on training and test set (recap)
-
-```{r}
-#| fig-width: 8
-#| fig-height: 4.5
 #| fig-align: center
+#| warning: false
 
-data_bv <- data.frame(p = p_list, #MSE = sigmatrue^2 + Bias2s + Vars, 
-                      MSE_train = data_goodness$MSE, MSE_test = data_goodness$MSE_test)
-data_bv <- reshape2::melt(data_bv, id = "p")
-levels(data_bv$variable) <- c("MSE train (yesterday's data)", "MSE test (tomorrow's data)")
-colnames(data_bv) <- c("p", "Error term", "value")
+rm(list=ls())
 
-ggplot(data = data_bv, aes(x = p, y = value, col = `Error term`)) +
+library(ggplot2)
+library(ggpubr)
+library(reshape2)
+
+sigmatrue <- 0.01
+x <- seq(.5, 3, length = 30)
+n <- length(x)
+
+ftrue <- c(0.4342,0.4780,0.5072,0.5258,0.5369,
+           0.5426,0.5447,0.5444,0.5425,0.5397,
+           0.5364,0.5329,0.5294,0.5260,0.5229,
+           0.5200,0.5174,0.5151,0.5131,0.5113,
+           0.5097,0.5083,0.5071,0.5061,0.5052,
+           0.5044,0.5037,0.5032,0.5027,0.5023)
+
+# ---- Degree 3 simulation ----
+B <- 100
+d <- 3
+set.seed(123)
+
+sim <- function(d){
+  y <- ftrue + rnorm(n, 0, sigmatrue)
+  fit <- lm(y ~ poly(x, degree = d))
+  fitted(fit)
+}
+
+yhats <- replicate(B, sim(d))
+Ehatf <- rowMeans(yhats)
+
+df_sim <- data.frame(
+  x = rep(x, B),
+  yhat = as.vector(yhats),
+  Simulation = factor(rep(1:B, each = n))
+)
+
+df_true <- data.frame(x = x, y = ftrue)
+df_mean <- data.frame(x = x, y = Ehatf)
+
+# ---- Left plot ----
+p_left <- ggplot() +
+  geom_line(data = df_sim,
+            aes(x = x, y = yhat, group = Simulation, color = "estimated f"),
+            linewidth = 0.3, alpha = 0.6) +
+  geom_line(data = df_true,
+            aes(x = x, y = y, color = "true f"),
+            linewidth = 1) +
+  geom_line(data = df_mean,
+            aes(x = x, y = y, color = "average estimated f"),
+            linewidth = 1) +
+  scale_color_manual(values = c("estimated f" = "gray70",
+                                "true f" = "blue",
+                                "average estimated f" = "black")) +
+  scale_x_continuous(breaks = c(1,2,3)) +
+  coord_cartesian(ylim = c(.45, .55)) +
+  labs(title = "Polynomial regression (degree 3)",
+       x = "x",
+       y = "Fitted values",
+       color = NULL) +
+  theme_pubr(base_size = 10) +
+  theme(legend.position = "bottom",
+        legend.direction = "horizontal",
+        legend.text = element_text(size = 8))
+
+# ---- Bias² and Variance ----
+X <- model.matrix(lm(ftrue ~ poly(x, degree = d)))
+invXtX <- solve(crossprod(X))
+
+Bias2 <- (apply(X, 1, function(xrow)
+  xrow %*% invXtX %*% t(X) %*% ftrue) - ftrue)^2
+
+Var <- apply(X, 1, function(xrow)
+  sigmatrue^2 * t(xrow) %*% invXtX %*% xrow
+)
+
+df_bv <- data.frame(
+  x = x,
+  Bias2 = as.numeric(Bias2),
+  Var = as.numeric(Var)
+)
+
+df_bv_long <- melt(df_bv,
+                   id.vars = "x",
+                   variable.name = "Component",
+                   value.name = "Value")
+
+# ---- Right plot ----
+p_right <- ggplot(df_bv_long, aes(x = x, y = Value, fill = Component)) +
+  geom_bar(stat = "identity", width = 0.07) +
+  scale_x_continuous(breaks = c(1,2,3)) +
+  labs(title = "Bias² and Variance (degree 3)",
+       x = "x",
+       y = "Bias² + Var",
+       fill = NULL) +
+  theme_pubr(base_size = 10) +
+  theme(legend.position = "bottom",
+        legend.direction = "horizontal",
+        legend.text = element_text(size = 8))
+
+# ---- Combine ----
+fig <- ggarrange(p_left, p_right, ncol = 2, widths = c(1.2, 1))
+
+fig
+```
+
+
+## High flexibility: low bias, high variance
+
+```{r}
+#| fig-align: center
+#| warning: false
+
+
+# ---- Degree 12 simulation ----
+B <- 100
+d <- 12
+set.seed(123)
+
+sim <- function(d){
+  y <- ftrue + rnorm(n, 0, sigmatrue)
+  fit <- lm(y ~ poly(x, degree = d))
+  fitted(fit)
+}
+
+yhats <- replicate(B, sim(d))
+Ehatf <- rowMeans(yhats)
+
+df_sim <- data.frame(
+  x = rep(x, B),
+  yhat = as.vector(yhats),
+  Simulation = factor(rep(1:B, each = n))
+)
+
+df_true <- data.frame(x = x, y = ftrue)
+df_mean <- data.frame(x = x, y = Ehatf)
+
+# ---- Left plot ----
+p_left <- ggplot() +
+  geom_line(data = df_sim,
+            aes(x = x, y = yhat, group = Simulation, color = "estimated f"),
+            linewidth = 0.3, alpha = 0.6) +
+  geom_line(data = df_true,
+            aes(x = x, y = y, color = "true f"),
+            linewidth = 1) +
+  geom_line(data = df_mean,
+            aes(x = x, y = y, color = "average estimated f"),
+            linewidth = 1) +
+  scale_color_manual(values = c("estimated f" = "gray70",
+                                "true f" = "blue",
+                                "average estimated f" = "black")) +
+  scale_x_continuous(breaks = c(1,2,3)) +
+  coord_cartesian(ylim = c(.45, .55)) +
+  labs(title = "Polynomial regression (degree 12)",
+       x = "x",
+       y = "Fitted values",
+       color = NULL) +
+  theme_pubr(base_size = 10) +
+  theme(legend.position = "bottom",
+        legend.direction = "horizontal",
+        legend.text = element_text(size = 8))
+
+# ---- Bias² and Variance ----
+X <- model.matrix(lm(ftrue ~ poly(x, degree = d)))
+invXtX <- solve(crossprod(X))
+
+Bias2 <- (apply(X, 1, function(xrow)
+  xrow %*% invXtX %*% t(X) %*% ftrue) - ftrue)^2
+
+Var <- apply(X, 1, function(xrow)
+  sigmatrue^2 * t(xrow) %*% invXtX %*% xrow
+)
+
+df_bv <- data.frame(
+  x = x,
+  Bias2 = as.numeric(Bias2),
+  Var = as.numeric(Var)
+)
+
+df_bv_long <- melt(df_bv,
+                   id.vars = "x",
+                   variable.name = "Component",
+                   value.name = "Value")
+
+# ---- Right plot ----
+p_right <- ggplot(df_bv_long, aes(x = x, y = Value, fill = Component)) +
+  geom_bar(stat = "identity", width = 0.07) +
+  scale_x_continuous(breaks = c(1,2,3)) +
+  labs(title = "Bias² and Variance (degree 12)",
+       x = "x",
+       y = "Bias² + Var",
+       fill = NULL) +
+  theme_pubr(base_size = 10) +
+  theme(legend.position = "bottom",
+        legend.direction = "horizontal",
+        legend.text = element_text(size = 8))
+
+# ---- Combine ----
+fig <- ggarrange(p_left, p_right, ncol = 2, widths = c(1.2, 1))
+
+fig
+```
+
+
+## Optimal choice
+
+```{r}
+#| fig-align: center
+#| warning: false
+
+
+# ---- Degree 12 simulation ----
+B <- 100
+d <- 5
+set.seed(123)
+
+sim <- function(d){
+  y <- ftrue + rnorm(n, 0, sigmatrue)
+  fit <- lm(y ~ poly(x, degree = d))
+  fitted(fit)
+}
+
+yhats <- replicate(B, sim(d))
+Ehatf <- rowMeans(yhats)
+
+df_sim <- data.frame(
+  x = rep(x, B),
+  yhat = as.vector(yhats),
+  Simulation = factor(rep(1:B, each = n))
+)
+
+df_true <- data.frame(x = x, y = ftrue)
+df_mean <- data.frame(x = x, y = Ehatf)
+
+# ---- Left plot ----
+p_left <- ggplot() +
+  geom_line(data = df_sim,
+            aes(x = x, y = yhat, group = Simulation, color = "estimated f"),
+            linewidth = 0.3, alpha = 0.6) +
+  geom_line(data = df_true,
+            aes(x = x, y = y, color = "true f"),
+            linewidth = 1) +
+  geom_line(data = df_mean,
+            aes(x = x, y = y, color = "average estimated f"),
+            linewidth = 1) +
+  scale_color_manual(values = c("estimated f" = "gray70",
+                                "true f" = "blue",
+                                "average estimated f" = "black")) +
+  scale_x_continuous(breaks = c(1,2,3)) +
+  coord_cartesian(ylim = c(.45, .55)) +
+  labs(title = "Polynomial regression (degree 5)",
+       x = "x",
+       y = "Fitted values",
+       color = NULL) +
+  theme_pubr(base_size = 10) +
+  theme(legend.position = "bottom",
+        legend.direction = "horizontal",
+        legend.text = element_text(size = 8))
+
+# ---- Bias² and Variance ----
+X <- model.matrix(lm(ftrue ~ poly(x, degree = d)))
+invXtX <- solve(crossprod(X))
+
+Bias2 <- (apply(X, 1, function(xrow)
+  xrow %*% invXtX %*% t(X) %*% ftrue) - ftrue)^2
+
+Var <- apply(X, 1, function(xrow)
+  sigmatrue^2 * t(xrow) %*% invXtX %*% xrow
+)
+
+df_bv <- data.frame(
+  x = x,
+  Bias2 = as.numeric(Bias2),
+  Var = as.numeric(Var)
+)
+
+df_bv_long <- melt(df_bv,
+                   id.vars = "x",
+                   variable.name = "Component",
+                   value.name = "Value")
+
+# ---- Right plot ----
+p_right <- ggplot(df_bv_long, aes(x = x, y = Value, fill = Component)) +
+  geom_bar(stat = "identity", width = 0.07) +
+  scale_x_continuous(breaks = c(1,2,3)) +
+  labs(title = "Bias² and Variance (degree 5)",
+       x = "x",
+       y = "Bias² + Var",
+       fill = NULL) +
+  theme_pubr(base_size = 10) +
+  theme(legend.position = "bottom",
+        legend.direction = "horizontal",
+        legend.text = element_text(size = 8))
+
+# ---- Combine ----
+fig <- ggarrange(p_left, p_right, ncol = 2, widths = c(1.2, 1))
+
+fig
+```
+
+
+
+
+## Bias-Variance as a function of flexibility
+
+```{r}
+#| fig-align: center
+#| warning: false
+
+ds <- 1:20
+ps <- ds + 1
+
+Bias2s <- sapply(ps, function(p) 
+  mean((ftrue - fitted(lm(ftrue ~ poly(x, degree = (p - 1)))))^2)
+)
+
+Vars <- ps * (sigmatrue^2) / n
+Reds <- Bias2s + Vars
+
+df_red <- data.frame(
+  Degree = ds,
+  `total Bias2` = Bias2s,
+  `total Var` = Vars
+)
+
+df_long <- melt(df_red,
+                id.vars = "Degree",
+                variable.name = "Component",
+                value.name = "Value")
+
+p <- ggplot(df_long, aes(x = Degree, y = Value, fill = Component)) +
+  geom_bar(stat = "identity", width = 0.7) +
+  scale_x_continuous(breaks = seq(1, 20, by = 2)) +
+  labs(
+       x = "Flexibility (degree d)",
+       y = "Reducible error",
+       fill = NULL) +
+  theme_pubr(base_size = 11) +
+  theme(legend.position = "bottom",
+        legend.direction = "horizontal")
+
+p
+```
+
+## Comments and remarks
+
+- **Reducible error** = [Bias²]{.orange} + [Variance]{.blue}
+
+- Models with [low bias]{.orange} tend to have [high variance]{.blue}.
+
+- Models with [low variance]{.blue} tend to have [high bias]{.orange}.
+
+- On one hand, even if our model is **unbiased**,  
+  the prediction error can still be large if the model is highly variable.
+
+- On the other hand, a model that predicts a **constant** 
+  has [zero variance]{.blue} but [high bias]{.orange}.
+
+- To achieve good prediction performance, we must **balance** [bias]{.orange} and [variance]{.blue}.
+
+
+
+# Cross-validation
+
+## Training Error versus Test error
+
+Recall the distinction between the [test error]{.orange} and the
+[training error]{.blue}:
+
+-  The [test error]{.orange} is the average error that results from using a
+statistical learning method to predict the response on a new
+observation, one that was not used in training the method.
+
+-  In contrast, the [training error]{.blue} can be easily calculated by
+applying the statistical learning method to the observations
+used in its training.
+
+-  But the [training error]{.blue} rate often is quite different from the
+[test error]{.orange} rate, and in particular the former can
+dramatically **underestimate** the latter.
+
+## Training- versus Test-Set Performance
+
+![](img/ELS_2_11.png){width="100%"}
+
+Figure from the book [The Elements of Statistical Learning: Data Mining, Inference, and Prediction](https://hastie.su.domains/ElemStatLearn/). Second Edition February 2009. Trevor Hastie, Robert Tibshirani, Jerome Friedman.
+
+## Validation-set approach
+
+- Estimate
+the test error by [holding out]{.orange} a subset of the training observations from the fitting process
+
+- Here we randomly divide the available set of samples into
+two parts: a [training set]]{.blue} and a [validation set]{.orange}.
+
+- The model is fit on the training set, and the fitted model is
+used to predict the responses for the observations in the
+validation set.
+
+- The resulting validation-set error provides an estimate of
+the test error.
+
+## The Validation process
+
+
+![](img/5_1.png){width="100%"}
+A random splitting into two halves: left part is training set,
+right part is validation set
+
+## Example: yesterday-tomorrow data 
+
+- We randomly split the 30 observations into two sets: a [training set]]{.blue} with 15 data points and a [validation set]]{.orange} with the remaining 15 observations.
+
+- We fit the polynomial regression model on the training set and compute the **MSE** on the validation set.
+
+```{r}
+#| fig-align: center
+#| warning: false
+
+library(readr)
+library(boot)
+library(ggplot2)
+library(ggpubr)
+
+PATH <- "http://azzalini.stat.unipd.it/Book-DM/yesterday.dat"
+df <- read_table(PATH)
+
+train <- data.frame(x = df$x, y = df$y.yesterday)
+test  <- data.frame(x = df$x, y = df$y.tomorrow)
+
+ds <- 1:12
+
+# --- helper: 2-fold CV estimate for a given degree d ---
+cv2_mse <- function(d){
+  fit <- glm(y ~ poly(x, degree = d), data = train, family = gaussian)
+  cv.glm(train, fit, K = 2)$delta[1]
+}
+
+# =========================
+# Left panel: single split
+# =========================
+set.seed(123)
+KCV1 <- sapply(ds, cv2_mse)
+
+df_left <- data.frame(degree = ds, mse = KCV1)
+
+p_left <- ggplot(df_left, aes(x = degree, y = mse)) +
   geom_line() +
   geom_point() +
-  geom_vline(xintercept = 5, linetype = "dotted") +
-  theme_light() +
-  theme(legend.position = "top") +
-  scale_color_tableau(palette = "Color Blind") +
-  xlab("Model complexity (p)") +
-  ylab("Error")
+  scale_x_continuous(breaks = ds) +   # integers only
+  scale_y_log10() +
+  labs(title = "Single split",
+       x = "Degree (polynomial)",
+       y = "Validation MSE") +
+  theme_pubr(base_size = 11)
+
+# ==========================
+# Right panel: many splits
+# ==========================
+B <- 10
+set.seed(123)
+
+KCVmat <- replicate(B, sapply(ds, cv2_mse))
+
+df_right <- data.frame(
+  degree = rep(ds, times = B),
+  mse = as.vector(KCVmat),
+  split = factor(rep(1:B, each = length(ds)))
+)
+
+# minimum for each split
+mins <- aggregate(mse ~ split, data = df_right, FUN = min)
+df_min <- merge(df_right, mins, by = c("split", "mse"))
+
+p_right <- ggplot(df_right,
+                  aes(x = degree, y = mse, group = split, color = split)) +
+  geom_line(alpha = 0.8) +
+  geom_point(data = df_min, size = 2, show.legend = FALSE) +
+  scale_x_continuous(breaks = ds) +   # integers only
+  scale_y_log10() +
+  labs(title = "Multiple splits",
+       x = "Degree (polynomial)",
+       y = "Validation MSE",
+       color = "Split") +
+  theme_pubr(base_size = 11)
+
+# --- combine ---
+fig <- ggarrange(p_left, p_right, ncol = 2, widths = c(1, 1))
+fig
 ```
+
+
+## Drawbacks of validation set approach
+
+- The validation estimate of the test error can be [highly
+variable]{.orange}, depending on precisely which observations are
+included in the training set and which observations are
+included in the validation set.
+
+- In the validation approach, only a subset of the
+observations — those that are included in the training set
+rather than in the validation set — are used to fit the
+model. This suggests that the validation set error may tend to
+[overestimate]{.blue} the test error for the model fit on the entire data set.
+
+## K-fold Cross-validation
+
+-  Widely used approach for estimating test error.
+
+-  Estimates can be used to select best model, and to give an
+idea of the test error of the final chosen model.
+
+-  Idea is to randomly divide the data into $K$ equal-sized
+parts. We leave out part $k$, fit the model to the other
+$K−1$ parts (combined), and then obtain predictions for
+the left-out $k$th part.
+
+- This is done in turn for each part $k= 1,2,...K$, and then
+the results are combined.
+
+
+## $K$-fold Cross-validation in detail
+
+Divide data into $K$ roughly equal-sized parts ($K = 5$ here)
+
+![](img/5_5.png){width="100%"}
+
+## The details
+
+
+- Let the $K$ parts (folds) be $C_1, C_2, \dots, C_K$,  
+where $C_k$ denotes the indices of the observations in fold $k$.
+
+- Let $n_k$ be the number of observations in fold $k$. Without loss of geenrality, suppose $n_k = n/K$.
+
+- For each fold $k$, fit the model using all data **excluding** $C_k$,   and compute the validation mean squared error
+$$
+\text{MSE}_k
+=
+\frac{1}{n_k}
+\sum_{i \in C_k}
+\bigl(y_i - \hat{y}_i^{-k}\bigr)^2,
+$$
+where $\hat{y}_i^{-k}$ is the prediction for observation $i$ obtained from the model trained without fold $k$.
+
+- The $K$-fold cross-validation estimate is their average: 
+$$
+\text{CV}(K)
+=
+\frac{1}{K}\sum_{k=1}^{K}
+\text{MSE}_k.
+$$
+- Common choices are $K=5$ or $K=10$ It is quite evident that a larger $K$ requires more computations.
+
+## Leave-One-Out Cross-Validation
+
+- The maximum possible value for $K$ is $n$, yielding leave-one-out cross-validation (LOOCV).
+
+
+![](img/5_3.png){width="100%"}
+
+
+## Example: yesterday-tomorrow data 
+
+- The LOOCV is hard to implement because it requires the estimation of $n$ different models.
+
+- However, in ordinary least squares there is a brilliant computational shortcut.
+
+```{r}
+#| fig-align: center
+#| warning: false
+
+library(ggplot2)
+library(ggpubr)
+library(boot)
+
+ds <- 1:12
+
+# LOOCV via cv.glm
+LOOCV <- sapply(ds, function(d)
+  cv.glm(train,
+         glm(y ~ poly(x, degree = d),
+             data = train,
+             family = gaussian))$delta[1]
+)
+
+df_loocv <- data.frame(
+  degree = ds,
+  LOOCV = LOOCV
+)
+
+# identify minimum
+min_idx <- which.min(df_loocv$LOOCV)
+df_min <- df_loocv[min_idx, ]
+
+p <- ggplot(df_loocv, aes(x = degree, y = LOOCV)) +
+  geom_line() +
+  geom_point() +
+  geom_point(data = df_min, color = "red", size = 3) +
+  scale_x_continuous(breaks = ds) +
+  labs(x = "Degree (polynomial)",
+       y = "LOOCV MSE") +
+  theme_pubr(base_size = 11)
+
+p
+```
+
+## On the Choice of $K$
+
+
+* A $K$-fold cross-validation with $K = 5$ or $K = 10$ provides an **upward biased** estimate of the true prediction error $\mathrm{Err}$, because each model is trained on fewer observations than the full dataset (either $4/5$ or $9/10$ of the data).
+
+* Leave-one-out cross-validation (LOOCV) has **very small bias**, since each model is trained on $n - 1$ observations.  
+However, it has **high variance**, because it averages $n$ highly positively correlated error estimates.
+
+* Overall, the choice of $K$ is largely **context-dependent**, balancing bias, variance, and computational cost.
+
+
+## Required readings from the textbook and course materials
+
+
+- **Chapter 2: Statistical Learning**
+  - 2.2 Assessing Model Accuracy
+  - 2.2.1 Measuring the Quality of Fit
+  - 2.2.2 The Bias-Variance Trade-Off
+  
+- **Chapter 5: Resampling Methods**
+  - 5.1 Cross-Validation
+    - 5.1.1 The Validation Set Approach
+    - 5.1.2 Leave-One-Out Cross-Validation
+    - 5.1.3 k-Fold Cross-Validation
+   
+- **Chapter 7: Moving Beyond Linearity**
+   - 7.1 Polynomial Regression
+
+[Video SL 2.3 Model Selection and Bias Variance Tradeoff - 10:05](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 5.1 Cross Validation - 14:02 ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video 5.2 K-fold Cross Validation - 13:34 ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 7.1 Polynomials and Step Functions - first 7 minutes](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+
