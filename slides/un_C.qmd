@@ -1,0 +1,394 @@
+---
+title: "Linear Regression"
+subtitle: "Introduction to Statistical Learning - PISE"
+author: "[Aldo Solari]{.orange}"
+institute: "_Ca' Foscari University of Venice_"
+page-layout: full
+execute:
+  cache: false
+filters: 
+  - remove-pause.lua
+format:
+  revealjs:
+    auto-stretch: true
+    center: true
+    html-math-method: katex
+    transition: none
+    output-file: un_C_slides.html
+    slide-number: true
+    callout-appearance: minimal
+    code-line-numbers: true
+    theme: [default, ../template.css] # alternative themes (subset): default, night, dark
+    embed-resources: false
+    echo: false
+    fig-dpi: 200
+    # incremental: true  # Remove comment if you like incremental bullet points
+    logo: img/cf_logo.png
+    footer: "[ISL](https://aldosolari.github.io/ISL)"
+    highlight-style: github
+  html:
+    html-math-method: katex
+    echo: false
+    callout-appearance: minimal
+    theme: [simplex, ../template.css]
+    toc: true
+    toc-title: Table of contents
+    embed-resources: false
+    code-line-numbers: true
+    smooth-scroll: true
+    code-fold: false
+    code-summary: "Show the code"
+    fig-dpi: 150
+    highlight-style: github
+editor: 
+  markdown: 
+    wrap: 72
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+#| warning: false
+#| echo: false
+#| include: false
+#| message: false
+#| purl: false
+```
+
+
+This unit will cover the following [topics]{.orange}:
+
+-   Linear models
+-   The modeling process
+
+
+## Car data ([diesel]{.blue} or [gas]{.orange})
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 5
+#| fig-height: 4.5
+#| 
+library(tidyverse)
+library(broom)
+library(knitr)
+library(ggplot2)
+library(ggthemes)
+library(GGally)
+library(ISLR)
+
+rm(list = ls())
+
+library(readr)
+auto <- read.table("http://azzalini.stat.unipd.it/Book-DM/auto.dat", header=T)[,c(2,11,12,16,18)]
+
+p0 <- ggpairs(auto,
+  columns = c(4,3,5,2), aes(colour = fuel),
+  lower = list(continuous = wrap("points", size = 0.5)),
+  upper = list(continuous = wrap("points", size = 0.5)),
+  diag = "blank"
+) +
+  theme_light() +
+  scale_color_tableau(palette = "Color Blind")
+p0
+```
+:::
+
+::: {.column width="50%"}
+-   We consider data for $n = 203$ models of cars in circulation in 1985
+    in the USA.
+-   We want to [predict]{.blue} the distance per unit of fuel as a
+    function of the vehicle features.
+-   We consider the following [variables]{.orange}:
+    -   The city distance per unit of fuel (km/L, `city.distance`)
+    -   The engine size (L, `engine.size`)
+    -   The number of cylinders (`n.cylinders`)
+    -   The curb weight (kg, `curb.weight`)
+    -   The fuel type (gasoline or diesel, `fuel`).
+:::
+:::
+
+## Simple linear regression
+
+::: columns
+::: {.column width="40%"}
+```{r}
+#| fig-width: 4
+#| fig-height: 3.7
+ggplot(data = auto, aes(x = engine.size, y = city.distance, col = fuel)) +
+  geom_point() +
+  theme_light() +
+  scale_color_tableau(palette = "Color Blind") +
+  theme(legend.position = "top") +
+  xlab("Engine size (L)") +
+  ylab("Urban distance (km/L)")
+```
+:::
+
+::: {.column width="60%"}
+-   Let us consider the variables `city.distance` ($y$), `engine.size`
+    ($x$) and `fuel` ($z$).
+
+-   A [simple linear regression]{.blue} $$
+    Y = \beta_0 + \beta_1 X + \epsilon
+    $$ could be easily fit by least squares...
+
+-   ... but the plot suggests that the relationship between
+    `city.distance` and `engine.size` is [not]{.orange} well
+    approximated by a [linear]{.orange} function.
+
+-   ... and also that `fuel` has a non-negligible effect on the
+    response.
+:::
+:::
+
+## Multiple linear regression
+
+
+-   Linear regression is a simple approach to supervised
+learning. It assumes that the dependence of $Y$ on
+$X_1,X_2,\ldots,X_p$ is linear.
+
+- Here our [linear model]{.orange} is
+$$Y = \beta_0 + \beta_1X_1 + \beta_2 X_2 + \ldots + \beta_p X_p + \varepsilon$$
+
+- Given estimates $\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_p$ we can make predictions using the formula
+$$\hat{y} = \hat\beta_0 + \hat\beta_1 x_1 + \hat\beta_2 x_2 + \ldots + \hat\beta_p x_p$$
+
+- We estimate $\beta_0,\beta_1,\ldots,\beta_p$ as the values that minimize the sum of squared residuals 
+
+$$\mathrm{RSS} = \sum_{i=1}^{n}
+(y_i - \hat y_i)^2= \sum_{i=1}^{n}
+(y_i - \hat{\beta}_0- \hat{\beta}_1 x_{i1}- \hat{\beta}_2 x_{i2}- \cdots - \hat{\beta}_p x_{ip})^2$$
+
+- This is done using standard statistical software. The values
+$\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_p$ that minimize RSS are the multiple least
+squares regression coefficient estimates.
+
+
+## Car data, a first model
+
+-   Let us consider again the variables `city.distance` ($Y$),
+    `engine.size` ($X$) and `fuel` ($Z$).
+
+-   A first attempt is to consider a [polynomial term]{.orange} combined
+    with a [dummy variable]{.blue} $$
+    Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \beta_3 X^3 + \beta_4 I(Z = \texttt{gas}) + \varepsilon,
+    $$ which is a special instance of [linear model]{.orange}.
+
+
+-   Indeed, by looking at the plot of the data, it is plausible that we
+    need a [polynomial]{.orange} of degree $3$ or $4$
+
+-   It is also clear from the plot that `fuel` is a relevant variable.
+    Categorical variables are [encoded]{.orange} using [indicator
+    variables]{.blue}:
+$$
+z_i =
+\begin{cases}
+1 & \text{if the $i$th car is gas} \\
+0 & \text{if the $i$th car is diesel}
+\end{cases}
+$$
+Resulting model:
+$$
+\hat{y}
+=
+\begin{cases}
+\hat\beta_0 + \hat\beta_1 x + \hat\beta_2 x^2 + \hat\beta_3 x^3 + \hat\beta_4 & \text{if the car is gas} \\
+\hat\beta_0 + \hat\beta_1 x + \hat\beta_2 x^2 + \hat\beta_3 x^3 & \text{if the car is diesel}
+\end{cases}
+$$
+
+
+
+## A first model: estimated coefficients
+
+-   We obtain the following [summary]{.orange} for the regression
+    coefficients $\hat{\beta}$.
+
+```{r}
+#| output: false
+m1 <- lm(city.distance ~ engine.size + I(engine.size^2) + I(engine.size^3) + fuel, data = auto)
+kable(tidy(m1, conf.int = FALSE), digits = 3)
+```
+
+| term            | estimate | std.error | statistic | p.value |
+|:----------------|---------:|----------:|----------:|--------:|
+| `(Intercept)`   |   28.045 |     3.076 |     9.119 |   0.000 |
+| `engine.size`   |  -10.980 |     3.531 |    -3.109 |   0.002 |
+| `engine.size^2` |    2.098 |     1.271 |     1.651 |   0.100 |
+| `engine.size^3` |   -0.131 |     0.139 |    -0.939 |   0.349 |
+| `fuel_gas`      |   -3.214 |     0.427 |    -7.523 |   0.000 |
+
+
+
+## A first model: fitted values
+
+```{r}
+#| fig-width: 7.8
+#| fig-height: 4.55
+#| fig-align: center
+augmented_m1 <- augment(m1)
+ggplot(data = augmented_m1, aes(x = engine.size, y = city.distance, col = fuel)) +
+  geom_point() +
+  geom_line(aes(y = .fitted)) +
+  theme_light() +
+  theme(legend.position = "right") +
+  scale_color_tableau(palette = "Color Blind") +
+  xlab("Engine size (L)") +
+  ylab("Urban distance (km/L)")
+```
+
+
+## Linear models and non-linear patterns
+
+-   A significant advantage of linear models is that they can describe non-linear relationships via [variable transformations]{.blue} such as polynomials, logarithms, etc.
+
+. . .
+
+-   This gives the statistician a lot of modeling flexibility. For
+    instance, we could let: $$
+    \log{Y} = \beta_0 + \beta_1 \log{X} + \beta_2 I(Z = \texttt{gas}) + \epsilon
+    $$
+
+. . .
+
+-   This specification is [linear in the parameters]{.orange}, it fixes
+    the domain issues, and it imposes a monotone relationship between
+    engine size and consumption.
+
+. . .
+
+```{r}
+#| output: false
+m2 <- lm(log(city.distance) ~ I(log(engine.size)) + fuel, data = auto)
+kable(tidy(m2, conf.int = FALSE), digits = 3)
+```
+
+| term               | estimate | std.error | statistic | p.value |
+|:-------------------|---------:|----------:|----------:|--------:|
+| `(Intercept)`      |    3.060 |     0.047 |    64.865 |       0 |
+| `log(engine.size)` |   -0.682 |     0.040 |   -17.129 |       0 |
+| `fuel_gas`         |   -0.278 |     0.038 |    -7.344 |       0 |
+
+## Second model: fitted values
+
+```{r}
+#| fig-width: 7.8
+#| fig-height: 4.55
+#| fig-align: center
+augmented_m2 <- augment(m2, data = auto)
+ggplot(data = augmented_m2, aes(x = engine.size, y = city.distance, col = fuel)) +
+  geom_point() +
+  geom_line(aes(y = exp(.fitted))) +
+  theme_light() +
+  theme(legend.position = "right") +
+  scale_color_tableau(palette = "Color Blind") +
+  xlab("Engine size (L)") +
+  ylab("Urban distance (km/L)")
+```
+
+
+
+## A third model: additional variables
+
+-   Let us consider [two additional variables]{.blue}: `curb.weight`
+    ($W$) and `n.cylinders` ($V$).
+
+-   A richer model, therefore, could be: $$
+    \log{Y} = \beta_0 + \beta_1 \log{X} +  \beta_2 \log{W} + \beta_3 I(Z = \texttt{gas}) + \beta_4 I(V = 2) + \epsilon,
+      $$ for $i=1,\dots,n$. The estimates are:
+
+. . .
+
+```{r}
+#| output: false
+auto$cylinders2 <- factor(auto$n.cylinders == 2)
+m3 <- lm(log(city.distance) ~ I(log(engine.size)) + I(log(curb.weight)) + fuel + cylinders2, data = auto)
+kable(tidy(m3, conf.int = FALSE), digits = 3)
+```
+
+| term               | estimate | std.error | statistic | p.value |
+|:-------------------|---------:|----------:|----------:|--------:|
+| `(Intercept)`      |    9.423 |     0.482 |    19.549 |   0.000 |
+| `log(engine.size)` |   -0.180 |     0.051 |    -3.504 |   0.001 |
+| `log(curb.weight)` |   -0.943 |     0.072 |   -13.066 |   0.000 |
+| `fuel_gas`         |   -0.353 |     0.022 |   -15.934 |   0.000 |
+| `cylinders2_TRUE`  |   -0.481 |     0.052 |    -9.301 |   0.000 |
+
+
+## Train MSE 
+
+```{r}
+fit1 <- lm(city.distance ~ poly(engine.size, degree = 3, raw = TRUE) + fuel, auto)
+mse1 <- mean(resid(fit1)^2)
+
+fit2 <- lm(log(city.distance) ~ log(engine.size) + fuel, auto)
+mse2 <- mean((auto$city.distance - exp(fitted(fit2)))^2)
+
+fit3 <- update(fit2, . ~ . + log(curb.weight) + I(n.cylinders == 2))
+mse3 <- mean((auto$city.distance - exp(fitted(fit3)))^2)
+```
+
+$$
+\begin{aligned}
+\textbf{Model 1: } 
+&\; y_i = \beta_0 + \beta_1 \text{engine.size}_i + \beta_2 \text{engine.size}_i^2 + \beta_3 \text{engine.size}_i^3 + \beta_4 I(\text{fuel}_i=\text{gas}) + \varepsilon_i
+\\[6pt]
+\textbf{MSE}_1
+&= \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2
+\\[12pt]
+\textbf{Model 2: } 
+&\; \log(y_i) = \beta_0 + \beta_1 \log(\text{engine.size}_i) + \beta_2 I(\text{fuel}_i=\text{gas}) + \varepsilon_i
+\\[6pt]
+\textbf{MSE}_2
+&= \frac{1}{n}\sum_{i=1}^{n}\left(y_i - \exp(\widehat{\log(y_i)})\right)^2
+\\[12pt]
+\textbf{Model 3: } 
+&\; \log(y_i) = \beta_0 + \beta_1 \log(\text{engine.size}_i) + \beta_2 I(\text{fuel}_i=\text{gas}) + \beta_3 \log(\text{curb.weight}_i) + \beta_4 I(\text{n.cylinders}_i = 2) + \varepsilon_i
+\\[6pt]
+\textbf{MSE}_3
+&= \frac{1}{n}\sum_{i=1}^{n}\left(y_i - \exp(\widehat{\log(y_i)})\right)^2
+\end{aligned}
+$$
+
+- **MSE₁:** `r round(mse1, 3)`  
+- **MSE₂:** `r round(mse2, 3)`  
+- **MSE₃:** `r round(mse3, 3)`  
+
+## Data
+
+-   The car dataset is available from the textbook website:
+
+    -   Dataset <http://azzalini.stat.unipd.it/Book-DM/auto.dat>
+    -   Variable description
+        <http://azzalini.stat.unipd.it/Book-DM/auto.names> 
+
+## Required readings from the textbook and course materials
+
+
+- **Chapter 3: Linear Regression**
+ - 3.1 Simple Linear Regression
+   - 3.1.1 Estimating the Coeﬀicients
+   - 3.1.3 Assessing the Accuracy of the Model
+  
+ - 3.2 Multiple Linear Regression
+   - 3.2.1 Estimating the Regression Coeﬀicients
+   
+ - 3.3 Other Considerations in the Regression Model
+   - 3.3.1 Qualitative Predictors
+
+[Video SL 3.1 Simple Linear Regression - 13:02](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 3.3 Multiple Linear Regression - 15:38 ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 3.4 Some Important Questions - 14:52 ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 3.5 Extensions of the Linear Model - 14:17](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+

@@ -285,95 +285,110 @@ f(x; \beta) = \beta_0 + \beta_1 x,
 <li class="fragment"><p>A simple approach is using <span class="orange">polynomial regression</span>: <span class="math display">
 f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
 </span> namely <span class="math inline">f(x)</span> is <span class="orange">approximated</span> with a polynomial of degree <span class="math inline">d</span></p></li>
-<li class="fragment"><p>This model is linear in the parameters: ordinary least squares can be applied.</p></li>
-<li class="fragment"><p>How do we choose the <span class="blue">degree of the polynomial</span> <span class="math inline">d</span>?</p></li>
-<li class="fragment"><p>Without clear guidance, in principle, any value of <span class="math inline">d \in \{0,\dots,n-1\}</span> could be appropriate.</p></li>
+<li class="fragment"><p>This is a <span class="blue">parametric model</span> with coefficient vector <span class="math display">
+\beta
+=
+\begin{pmatrix}
+\beta_0 \\
+\beta_1 \\
+\vdots \\
+\beta_d
+\end{pmatrix}
+\in \mathbb{R}^{d+1}
+</span></p></li>
+<li class="fragment"><p>How do we choose the <span class="blue">degree of the polynomial</span> <span class="math inline">d</span>? Without clear guidance, in principle, any value of <span class="math inline">d \in \{0,\dots,n-1\}</span> could be appropriate.</p></li>
 <li class="fragment"><p>Let us compare the <span class="blue">mean squared error</span> (MSE) on yesterday’s data (<span class="orange">training</span>) <span class="math display">
 \text{MSE}_{\text{train}} = \frac{1}{n}\sum_{i=1}^n\{y_i -f(x_i; \hat{\beta})\}^2,
 </span> or alternatively <span class="math inline">R^2_\text{train}</span>, for different values of <span class="math inline">d</span>…</p></li>
 </ul>
 </section>
 <section id="estimating-polynomial-regression" class="slide level2 center">
-<h2>Estimating Polynomial Regression</h2>
-<p>Let</p>
-<p><span class="math display">
-\mathbf{y} = (y_1,\dots,y_n)^\top
-</span></p>
-<p>be the vector of observed responses, and let <span class="math inline">\mathbf{X} \in \mathbb{R}^{n \times (d+1)}</span> be the design matrix whose <span class="math inline">i</span>-th row is</p>
-<p><span class="math display">
-(1, x_i, x_i^2, \dots, x_i^d).
-</span></p>
-<p><span class="orange">Ordinary least squares</span> (OLS) estimation chooses the coefficient vector</p>
-<p><span class="math display">
-\hat{\beta}
-=
-\begin{pmatrix}
-\hat{\beta}_0 \\
-\hat{\beta}_1 \\
-\vdots \\
-\hat{\beta}_d
-\end{pmatrix}
-\in \mathbb{R}^{d+1}
-</span></p>
-<p>to <strong>minimize the residual sum of squares (RSS)</strong>:</p>
-<p><span class="math display">
-\hat{\beta}
-=
-\arg\min_{\beta \in \mathbb{R}^{d+1}}
-\sum_{i=1}^n
-\bigl(y_i - f(x_i; \beta)\bigr)^2.
-</span> Thus, OLS finds the coefficients that make the fitted polynomial as close as possible (in squared distance) to the observed data.</p>
-</section>
-<section id="solution" class="slide level2 center">
-<h2>Solution</h2>
-<p>The solution to this optimization problem is</p>
-<p><span class="math display">
-\hat{\beta}
-=
-(\mathbf{X}^\top \mathbf{X})^{-1}
-\mathbf{X}^\top \mathbf{y},
-</span></p>
-<p>We avoid matrix algebra whenever possible, but in the OLS formula it is useful to understand matrix multiplication and inversion.</p>
-</section>
-<section id="matrix-multiplication" class="slide level2 center">
-<h2>Matrix Multiplication</h2>
-<p>Suppose</p>
-<p><span class="math display">
-\mathbf{A} \in \mathbb{R}^{r \times d},
-\quad
-\mathbf{B} \in \mathbb{R}^{d \times s}.
-</span></p>
-<p>Then the product <span class="math inline">\mathbf{A}\mathbf{B}</span> is an <span class="math inline">r \times s</span> matrix defined only if the number of columns of <span class="math inline">\mathbf{A}</span> equals the number of rows of <span class="math inline">\mathbf{B}</span>.</p>
-<p>The <span class="math inline">(i,j)</span>-th element of <span class="math inline">\mathbf{A}\mathbf{B}</span> is</p>
-<p><span class="math display">
-(\mathbf{A}\mathbf{B})_{ij}
-=
-\sum_{k=1}^{d} a_{ik} b_{kj}.
-</span></p>
-<p>That is:</p>
+<h2>Estimating polynomial regression</h2>
 <ul>
-<li>Take the <span class="math inline">i</span>-th row of <span class="math inline">\mathbf{A}</span>,</li>
-<li>Take the <span class="math inline">j</span>-th column of <span class="math inline">\mathbf{B}</span>,</li>
-<li>Multiply corresponding elements,</li>
-<li>Sum the results.</li>
+<li><p>Here our polynomial regression model of degree <span class="math inline">d</span> is <span class="math display">f(x_i;\beta) = \beta_0 + \beta_1x_i + \beta_2 x_i^2 + \ldots + \beta_d x_i^d</span></p></li>
+<li><p>Given estimates <span class="math inline">\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_d</span> we can make predictions using the formula <span class="math display">\hat{y}_i = f(x_i;\hat{\beta}) = \hat\beta_0 + \hat\beta_1 x_i + \hat\beta_2 x_i^2 + \ldots + \hat\beta_d x_i^d</span></p></li>
+<li><p>We estimate <span class="math inline">\beta_0,\beta_1,\ldots,\beta_d</span> as the values that minimize the sum of squared residuals</p></li>
 </ul>
-</section>
-<section id="matrix-inverse" class="slide level2 center">
-<h2>Matrix Inverse</h2>
-<p>A square matrix <span class="math inline">\mathbf{A} \in \mathbb{R}^{p \times p}</span> has an inverse <span class="math inline">\mathbf{A}^{-1}</span> if</p>
-<p><span class="math display">
-\mathbf{A}\mathbf{A}^{-1}
-=
-\mathbf{A}^{-1}\mathbf{A}
-=
-\mathbf{I}_p,
-</span></p>
-<p>where <span class="math inline">\mathbf{I}_p</span> is the <span class="math inline">p \times p</span> identity matrix.</p>
-<p>The inverse exists only if:</p>
+<p><span class="math display">\mathrm{RSS} = \sum_{i=1}^{n}
+(y_i - \hat y_i)^2= \sum_{i=1}^{n}
+(y_i - \hat{\beta}_0- \hat{\beta}_1 x_{i}- \hat{\beta}_2 x^2_{i}- \cdots - \hat{\beta}_d x_{i}^d)^2</span></p>
 <ul>
-<li><span class="math inline">\mathbf{A}</span> is square,</li>
-<li><span class="math inline">\mathbf{A}</span> is nonsingular (its columns are linearly independent).</li>
+<li>This is done using standard statistical software. The values <span class="math inline">\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_d</span> that minimize RSS are the <span class="blue">least squares coefficient estimates</span>.</li>
 </ul>
+<!-- ## Estimating Polynomial Regression -->
+<!-- Let -->
+<!-- $$ -->
+<!-- \mathbf{y} = (y_1,\dots,y_n)^\top -->
+<!-- $$ -->
+<!-- be the vector of observed responses, and let $\mathbf{X} \in \mathbb{R}^{n \times (d+1)}$ -->
+<!-- be the design matrix whose $i$-th row is -->
+<!-- $$ -->
+<!-- (1, x_i, x_i^2, \dots, x_i^d). -->
+<!-- $$ -->
+<!-- [Ordinary least squares]{.orange} (OLS) estimation chooses the coefficient vector -->
+<!-- $$ -->
+<!-- \hat{\beta} -->
+<!-- = -->
+<!-- \begin{pmatrix} -->
+<!-- \hat{\beta}_0 \\ -->
+<!-- \hat{\beta}_1 \\ -->
+<!-- \vdots \\ -->
+<!-- \hat{\beta}_d -->
+<!-- \end{pmatrix} -->
+<!-- \in \mathbb{R}^{d+1} -->
+<!-- $$ -->
+<!-- to **minimize the residual sum of squares (RSS)**: -->
+<!-- $$ -->
+<!-- \hat{\beta} -->
+<!-- = -->
+<!-- \arg\min_{\beta \in \mathbb{R}^{d+1}} -->
+<!-- \sum_{i=1}^n -->
+<!-- \bigl(y_i - f(x_i; \beta)\bigr)^2. -->
+<!-- $$ -->
+<!-- Thus, OLS finds the coefficients that make the fitted polynomial -->
+<!-- as close as possible (in squared distance) to the observed data. -->
+<!-- ## Solution -->
+<!-- The solution to this optimization problem is -->
+<!-- $$ -->
+<!-- \hat{\beta} -->
+<!-- = -->
+<!-- (\mathbf{X}^\top \mathbf{X})^{-1} -->
+<!-- \mathbf{X}^\top \mathbf{y}, -->
+<!-- $$ -->
+<!-- We avoid matrix algebra whenever possible, but in the OLS formula it is useful to understand matrix multiplication and inversion. -->
+<!-- ## Matrix Multiplication -->
+<!-- Suppose -->
+<!-- $$ -->
+<!-- \mathbf{A} \in \mathbb{R}^{r \times d}, -->
+<!-- \quad -->
+<!-- \mathbf{B} \in \mathbb{R}^{d \times s}. -->
+<!-- $$ -->
+<!-- Then the product $\mathbf{A}\mathbf{B}$ is an $r \times s$ matrix defined only if the number of columns of $\mathbf{A}$ equals the number of rows of $\mathbf{B}$. -->
+<!-- The $(i,j)$-th element of $\mathbf{A}\mathbf{B}$ is -->
+<!-- $$ -->
+<!-- (\mathbf{A}\mathbf{B})_{ij} -->
+<!-- = -->
+<!-- \sum_{k=1}^{d} a_{ik} b_{kj}. -->
+<!-- $$ -->
+<!-- That is: -->
+<!-- - Take the $i$-th row of $\mathbf{A}$, -->
+<!-- - Take the $j$-th column of $\mathbf{B}$, -->
+<!-- - Multiply corresponding elements, -->
+<!-- - Sum the results. -->
+<!-- ## Matrix Inverse -->
+<!-- A square matrix $\mathbf{A} \in \mathbb{R}^{p \times p}$ has an inverse -->
+<!-- $\mathbf{A}^{-1}$ if -->
+<!-- $$ -->
+<!-- \mathbf{A}\mathbf{A}^{-1} -->
+<!-- = -->
+<!-- \mathbf{A}^{-1}\mathbf{A} -->
+<!-- = -->
+<!-- \mathbf{I}_p, -->
+<!-- $$ -->
+<!-- where $\mathbf{I}_p$ is the $p \times p$ identity matrix. -->
+<!-- The inverse exists only if: -->
+<!-- - $\mathbf{A}$ is square, -->
+<!-- - $\mathbf{A}$ is nonsingular (its columns are linearly independent). -->
 </section>
 <section id="yesterdays-data-polynomial-regression" class="slide level2 center">
 <h2>Yesterday’s data, polynomial regression</h2>

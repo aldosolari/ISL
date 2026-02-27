@@ -265,12 +265,21 @@ where $\mathrm{TSS} = \sum_{i=1}^{n}(y_i - \bar y)^2$ is the [total sum of squar
     $$ namely $f(x)$ is [approximated]{.orange} with a polynomial of
     degree $d$ 
 
--   This model is linear in the parameters: ordinary least squares can
-    be applied.
+- This is a [parametric model]{.blue} with coefficient vector
+$$
+\beta
+=
+\begin{pmatrix}
+\beta_0 \\
+\beta_1 \\
+\vdots \\
+\beta_d
+\end{pmatrix}
+\in \mathbb{R}^{d+1}
+$$
+    
 
--   How do we choose the [degree of the polynomial]{.blue} $d$?
-
--   Without clear guidance, in principle, any value of
+-   How do we choose the [degree of the polynomial]{.blue} $d$? Without clear guidance, in principle, any value of
     $d \in \{0,\dots,n-1\}$ could be appropriate.
 
 -   Let us compare the [mean squared error]{.blue} (MSE) on yesterday's
@@ -280,111 +289,127 @@ where $\mathrm{TSS} = \sum_{i=1}^{n}(y_i - \bar y)^2$ is the [total sum of squar
     $d$...
 :::
 
+## Estimating polynomial regression
 
-## Estimating Polynomial Regression
+- Here our polynomial regression model of degree $d$ is
+$$f(x_i;\beta) = \beta_0 + \beta_1x_i + \beta_2 x_i^2 + \ldots + \beta_d x_i^d$$
 
-Let
+- Given estimates $\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_d$ we can make predictions using the formula
+$$\hat{y}_i = f(x_i;\hat{\beta}) = \hat\beta_0 + \hat\beta_1 x_i + \hat\beta_2 x_i^2 + \ldots + \hat\beta_d x_i^d$$
 
-$$
-\mathbf{y} = (y_1,\dots,y_n)^\top
-$$
+- We estimate $\beta_0,\beta_1,\ldots,\beta_d$ as the values that minimize the sum of squared residuals 
 
-be the vector of observed responses, and let $\mathbf{X} \in \mathbb{R}^{n \times (d+1)}$
-be the design matrix whose $i$-th row is
+$$\mathrm{RSS} = \sum_{i=1}^{n}
+(y_i - \hat y_i)^2= \sum_{i=1}^{n}
+(y_i - \hat{\beta}_0- \hat{\beta}_1 x_{i}- \hat{\beta}_2 x^2_{i}- \cdots - \hat{\beta}_d x_{i}^d)^2$$
 
-$$
-(1, x_i, x_i^2, \dots, x_i^d).
-$$
+- This is done using standard statistical software. The values
+$\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_d$ that minimize RSS are the [least squares coefficient estimates]{.blue}.
 
-[Ordinary least squares]{.orange} (OLS) estimation chooses the coefficient vector
+<!-- ## Estimating Polynomial Regression -->
 
-$$
-\hat{\beta}
-=
-\begin{pmatrix}
-\hat{\beta}_0 \\
-\hat{\beta}_1 \\
-\vdots \\
-\hat{\beta}_d
-\end{pmatrix}
-\in \mathbb{R}^{d+1}
-$$
+<!-- Let -->
 
-to **minimize the residual sum of squares (RSS)**:
+<!-- $$ -->
+<!-- \mathbf{y} = (y_1,\dots,y_n)^\top -->
+<!-- $$ -->
 
-$$
-\hat{\beta}
-=
-\arg\min_{\beta \in \mathbb{R}^{d+1}}
-\sum_{i=1}^n
-\bigl(y_i - f(x_i; \beta)\bigr)^2.
-$$
-Thus, OLS finds the coefficients that make the fitted polynomial
-as close as possible (in squared distance) to the observed data.
+<!-- be the vector of observed responses, and let $\mathbf{X} \in \mathbb{R}^{n \times (d+1)}$ -->
+<!-- be the design matrix whose $i$-th row is -->
 
+<!-- $$ -->
+<!-- (1, x_i, x_i^2, \dots, x_i^d). -->
+<!-- $$ -->
 
-## Solution
+<!-- [Ordinary least squares]{.orange} (OLS) estimation chooses the coefficient vector -->
 
-The solution to this optimization problem is
+<!-- $$ -->
+<!-- \hat{\beta} -->
+<!-- = -->
+<!-- \begin{pmatrix} -->
+<!-- \hat{\beta}_0 \\ -->
+<!-- \hat{\beta}_1 \\ -->
+<!-- \vdots \\ -->
+<!-- \hat{\beta}_d -->
+<!-- \end{pmatrix} -->
+<!-- \in \mathbb{R}^{d+1} -->
+<!-- $$ -->
 
-$$
-\hat{\beta}
-=
-(\mathbf{X}^\top \mathbf{X})^{-1}
-\mathbf{X}^\top \mathbf{y},
-$$
+<!-- to **minimize the residual sum of squares (RSS)**: -->
 
-
-We avoid matrix algebra whenever possible, but in the OLS formula it is useful to understand matrix multiplication and inversion.
-
-## Matrix Multiplication
-
-Suppose
-
-$$
-\mathbf{A} \in \mathbb{R}^{r \times d},
-\quad
-\mathbf{B} \in \mathbb{R}^{d \times s}.
-$$
-
-Then the product $\mathbf{A}\mathbf{B}$ is an $r \times s$ matrix defined only if the number of columns of $\mathbf{A}$ equals the number of rows of $\mathbf{B}$.
-
-The $(i,j)$-th element of $\mathbf{A}\mathbf{B}$ is
-
-$$
-(\mathbf{A}\mathbf{B})_{ij}
-=
-\sum_{k=1}^{d} a_{ik} b_{kj}.
-$$
-
-That is:
-
-- Take the $i$-th row of $\mathbf{A}$,
-- Take the $j$-th column of $\mathbf{B}$,
-- Multiply corresponding elements,
-- Sum the results.
+<!-- $$ -->
+<!-- \hat{\beta} -->
+<!-- = -->
+<!-- \arg\min_{\beta \in \mathbb{R}^{d+1}} -->
+<!-- \sum_{i=1}^n -->
+<!-- \bigl(y_i - f(x_i; \beta)\bigr)^2. -->
+<!-- $$ -->
+<!-- Thus, OLS finds the coefficients that make the fitted polynomial -->
+<!-- as close as possible (in squared distance) to the observed data. -->
 
 
+<!-- ## Solution -->
 
-## Matrix Inverse
+<!-- The solution to this optimization problem is -->
 
-A square matrix $\mathbf{A} \in \mathbb{R}^{p \times p}$ has an inverse
-$\mathbf{A}^{-1}$ if
+<!-- $$ -->
+<!-- \hat{\beta} -->
+<!-- = -->
+<!-- (\mathbf{X}^\top \mathbf{X})^{-1} -->
+<!-- \mathbf{X}^\top \mathbf{y}, -->
+<!-- $$ -->
 
-$$
-\mathbf{A}\mathbf{A}^{-1}
-=
-\mathbf{A}^{-1}\mathbf{A}
-=
-\mathbf{I}_p,
-$$
 
-where $\mathbf{I}_p$ is the $p \times p$ identity matrix.
+<!-- We avoid matrix algebra whenever possible, but in the OLS formula it is useful to understand matrix multiplication and inversion. -->
 
-The inverse exists only if:
+<!-- ## Matrix Multiplication -->
 
-- $\mathbf{A}$ is square,
-- $\mathbf{A}$ is nonsingular (its columns are linearly independent).
+<!-- Suppose -->
+
+<!-- $$ -->
+<!-- \mathbf{A} \in \mathbb{R}^{r \times d}, -->
+<!-- \quad -->
+<!-- \mathbf{B} \in \mathbb{R}^{d \times s}. -->
+<!-- $$ -->
+
+<!-- Then the product $\mathbf{A}\mathbf{B}$ is an $r \times s$ matrix defined only if the number of columns of $\mathbf{A}$ equals the number of rows of $\mathbf{B}$. -->
+
+<!-- The $(i,j)$-th element of $\mathbf{A}\mathbf{B}$ is -->
+
+<!-- $$ -->
+<!-- (\mathbf{A}\mathbf{B})_{ij} -->
+<!-- = -->
+<!-- \sum_{k=1}^{d} a_{ik} b_{kj}. -->
+<!-- $$ -->
+
+<!-- That is: -->
+
+<!-- - Take the $i$-th row of $\mathbf{A}$, -->
+<!-- - Take the $j$-th column of $\mathbf{B}$, -->
+<!-- - Multiply corresponding elements, -->
+<!-- - Sum the results. -->
+
+
+
+<!-- ## Matrix Inverse -->
+
+<!-- A square matrix $\mathbf{A} \in \mathbb{R}^{p \times p}$ has an inverse -->
+<!-- $\mathbf{A}^{-1}$ if -->
+
+<!-- $$ -->
+<!-- \mathbf{A}\mathbf{A}^{-1} -->
+<!-- = -->
+<!-- \mathbf{A}^{-1}\mathbf{A} -->
+<!-- = -->
+<!-- \mathbf{I}_p, -->
+<!-- $$ -->
+
+<!-- where $\mathbf{I}_p$ is the $p \times p$ identity matrix. -->
+
+<!-- The inverse exists only if: -->
+
+<!-- - $\mathbf{A}$ is square, -->
+<!-- - $\mathbf{A}$ is nonsingular (its columns are linearly independent). -->
 
 
 ## Yesterday's data, polynomial regression
