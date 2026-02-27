@@ -293,6 +293,88 @@ f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
 </span> or alternatively <span class="math inline">R^2_\text{train}</span>, for different values of <span class="math inline">d</span>…</p></li>
 </ul>
 </section>
+<section id="estimating-polynomial-regression" class="slide level2 center">
+<h2>Estimating Polynomial Regression</h2>
+<p>Let</p>
+<p><span class="math display">
+\mathbf{y} = (y_1,\dots,y_n)^\top
+</span></p>
+<p>be the vector of observed responses, and let <span class="math inline">\mathbf{X} \in \mathbb{R}^{n \times (d+1)}</span> be the design matrix whose <span class="math inline">i</span>-th row is</p>
+<p><span class="math display">
+(1, x_i, x_i^2, \dots, x_i^d).
+</span></p>
+<p><span class="orange">Ordinary least squares</span> (OLS) estimation chooses the coefficient vector</p>
+<p><span class="math display">
+\hat{\beta}
+=
+\begin{pmatrix}
+\hat{\beta}_0 \\
+\hat{\beta}_1 \\
+\vdots \\
+\hat{\beta}_d
+\end{pmatrix}
+\in \mathbb{R}^{d+1}
+</span></p>
+<p>to <strong>minimize the residual sum of squares (RSS)</strong>:</p>
+<p><span class="math display">
+\hat{\beta}
+=
+\arg\min_{\beta \in \mathbb{R}^{d+1}}
+\sum_{i=1}^n
+\bigl(y_i - f(x_i; \beta)\bigr)^2.
+</span> Thus, OLS finds the coefficients that make the fitted polynomial as close as possible (in squared distance) to the observed data.</p>
+</section>
+<section id="solution" class="slide level2 center">
+<h2>Solution</h2>
+<p>The solution to this optimization problem is</p>
+<p><span class="math display">
+\hat{\beta}
+=
+(\mathbf{X}^\top \mathbf{X})^{-1}
+\mathbf{X}^\top \mathbf{y},
+</span></p>
+<p>We avoid matrix algebra whenever possible, but in the OLS formula it is useful to understand matrix multiplication and inversion.</p>
+</section>
+<section id="matrix-multiplication" class="slide level2 center">
+<h2>Matrix Multiplication</h2>
+<p>Suppose</p>
+<p><span class="math display">
+\mathbf{A} \in \mathbb{R}^{r \times d},
+\quad
+\mathbf{B} \in \mathbb{R}^{d \times s}.
+</span></p>
+<p>Then the product <span class="math inline">\mathbf{A}\mathbf{B}</span> is an <span class="math inline">r \times s</span> matrix defined only if the number of columns of <span class="math inline">\mathbf{A}</span> equals the number of rows of <span class="math inline">\mathbf{B}</span>.</p>
+<p>The <span class="math inline">(i,j)</span>-th element of <span class="math inline">\mathbf{A}\mathbf{B}</span> is</p>
+<p><span class="math display">
+(\mathbf{A}\mathbf{B})_{ij}
+=
+\sum_{k=1}^{d} a_{ik} b_{kj}.
+</span></p>
+<p>That is:</p>
+<ul>
+<li>Take the <span class="math inline">i</span>-th row of <span class="math inline">\mathbf{A}</span>,</li>
+<li>Take the <span class="math inline">j</span>-th column of <span class="math inline">\mathbf{B}</span>,</li>
+<li>Multiply corresponding elements,</li>
+<li>Sum the results.</li>
+</ul>
+</section>
+<section id="matrix-inverse" class="slide level2 center">
+<h2>Matrix Inverse</h2>
+<p>A square matrix <span class="math inline">\mathbf{A} \in \mathbb{R}^{p \times p}</span> has an inverse <span class="math inline">\mathbf{A}^{-1}</span> if</p>
+<p><span class="math display">
+\mathbf{A}\mathbf{A}^{-1}
+=
+\mathbf{A}^{-1}\mathbf{A}
+=
+\mathbf{I}_p,
+</span></p>
+<p>where <span class="math inline">\mathbf{I}_p</span> is the <span class="math inline">p \times p</span> identity matrix.</p>
+<p>The inverse exists only if:</p>
+<ul>
+<li><span class="math inline">\mathbf{A}</span> is square,</li>
+<li><span class="math inline">\mathbf{A}</span> is nonsingular (its columns are linearly independent).</li>
+</ul>
+</section>
 <section id="yesterdays-data-polynomial-regression" class="slide level2 center">
 <h2>Yesterday’s data, polynomial regression</h2>
 
@@ -436,36 +518,171 @@ f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
 </span></p>
 <p>Bias and variance are competing quantities: reducing one typically increases the other.<br>
 Hence, we must choose a <span class="orange">trade-off</span> between bias and variance.</p>
-<p>Typically as the <span class="blue">flexibility</span> of <span class="math inline">\hat f</span> increases, its variance increases, and its bias decreases. So choosing the flexibility based on average test error amounts to a bias-variance trade-off.</p>
+<p>Typically as the <span class="blue">flexibility</span> of <span class="math inline">\hat f</span> increases, its variance increases, and its bias decreases.</p>
 </section>
-<section id="if-we-knew-fx" class="slide level2 center">
-<h2>If we knew <span class="math inline">f(x)</span>…</h2>
+<section id="low-flexibility-high-bias-low-variance" class="slide level2 center">
+<h2>Low flexibility: high bias, low variance</h2>
 
-<img data-src="un_B_files/figure-revealjs/unnamed-chunk-16-1.png" width="1600" class="r-stretch"></section>
-<section id="bias-variance-trade-off" class="slide level2 center">
-<h2>Bias-variance trade-off</h2>
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-14-1.png" class="quarto-figure quarto-figure-center r-stretch" width="2000"></section>
+<section id="high-flexibility-low-bias-high-variance" class="slide level2 center">
+<h2>High flexibility: low bias, high variance</h2>
+
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-15-1.png" class="quarto-figure quarto-figure-center r-stretch" width="2000"></section>
+<section id="optimal-choice" class="slide level2 center">
+<h2>Optimal choice</h2>
+
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-16-1.png" class="quarto-figure quarto-figure-center r-stretch" width="2000"></section>
+<section id="bias-variance-as-a-function-of-flexibility" class="slide level2 center">
+<h2>Bias-Variance as a function of flexibility</h2>
+
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-17-1.png" class="quarto-figure quarto-figure-center r-stretch" width="2000"></section>
+<section id="comments-and-remarks-1" class="slide level2 center">
+<h2>Comments and remarks</h2>
 <ul>
-<li class="fragment"><p>When <span class="math inline">p</span> grows, the mean squared error first decreases and then it increases. In the example, the <span class="orange">theoretical optimum</span> is <span class="math inline">p = 6</span> (5th degree polynomial).</p></li>
-<li class="fragment"><p>The <span class="orange">bias</span> measures the ability of <span class="math inline">\hat{f}(\bm{x})</span> to reconstruct the true <span class="math inline">f(\bm{x})</span>. The bias is due to <span class="blue">lack of knowledge</span> of the data-generating mechanism. It equals zero when <span class="math inline">\mathbb{E}\{\hat{f}(\bm{x})\} = f(\bm{x})</span>.</p></li>
-<li class="fragment"><p>The <span class="orange">bias</span> term can be reduced by increasing the flexibility of the model (e.g., by considering a high value for <span class="math inline">p</span>).</p></li>
-<li class="fragment"><p>The <span class="blue">variance</span> measures the variability of the estimator <span class="math inline">\hat{f}(\bm{x})</span> and its tendency to follow random fluctuations of the data.</p></li>
-<li class="fragment"><p>The <span class="blue">variance</span> increases with the model complexity.</p></li>
-<li class="fragment"><p>It is not possible to minimize both the bias and the variance, there is a <span class="orange">trade-off</span>.</p></li>
-<li class="fragment"><p>We say that an estimator is <span class="orange">overfitting</span> the data if an increase in variance comes without important gains in terms of bias.</p></li>
+<li><p><strong>Reducible error</strong> = <span class="orange">Bias²</span> + <span class="blue">Variance</span></p></li>
+<li><p>Models with <span class="orange">low bias</span> tend to have <span class="blue">high variance</span>.</p></li>
+<li><p>Models with <span class="blue">low variance</span> tend to have <span class="orange">high bias</span>.</p></li>
+<li><p>On one hand, even if our model is <strong>unbiased</strong>,<br>
+the prediction error can still be large if the model is highly variable.</p></li>
+<li><p>On the other hand, a model that predicts a <strong>constant</strong> has <span class="blue">zero variance</span> but <span class="orange">high bias</span>.</p></li>
+<li><p>To achieve good prediction performance, we must <strong>balance</strong> <span class="orange">bias</span> and <span class="blue">variance</span>.</p></li>
 </ul>
-<!-- - **Summary**. Low model complexity: [high bias]{.orange}, [low variance]{.blue}. High model complexity: [low bias]{.blue}, [high variance]{.orange}. -->
+</section></section>
+<section>
+<section id="cross-validation" class="title-slide slide level1 center">
+<h1>Cross-validation</h1>
+
 </section>
-<section id="but-since-we-do-not-know-fx" class="slide level2 center">
-<h2>But since we do not know <span class="math inline">f(x)</span>…</h2>
+<section id="training-error-versus-test-error" class="slide level2 center">
+<h2>Training Error versus Test error</h2>
+<p>Recall the distinction between the <span class="orange">test error</span> and the <span class="blue">training error</span>:</p>
 <ul>
-<li class="fragment"><p>We just concluded that we must expect a trade-off between error and variance components. In practice, however, we cannot do this because, of course, <span class="math inline">f(x)</span> is <span class="orange">unknown</span>.</p></li>
-<li class="fragment"><p>A simple solution consists indeed in <span class="orange">splitting</span> the observations in two parts: a <span class="orange">training set</span> <span class="math inline">(y_1,\dots,y_n)</span> and a <span class="blue">test set</span> <span class="math inline">(\tilde{y}_1,\dots,\tilde{y}_n)</span>, having the same covariates <span class="math inline">x_1,\dots,x_n</span>.</p></li>
-<li class="fragment"><p>We fit the model <span class="math inline">\hat{f}</span> using <span class="math inline">n</span> observations of the training and we use it to predict the <span class="math inline">n</span> observations on the test set.</p></li>
-<li class="fragment"><p>This leads to an <span class="orange">unbiased estimate</span> of the <span class="blue">in-sample prediction error</span>, i.e.: <span class="math display">
-\widehat{\mathrm{ErrF}} =  \frac{1}{n}\sum_{i=1}^n\mathscr{L}\{\tilde{y}_i; \hat{f}(\bm{x}_i)\}.
-</span></p></li>
-<li class="fragment"><p>This is precisely what we already did with yesterday’s and tomorrow’s data!</p></li>
+<li><p>The <span class="orange">test error</span> is the average error that results from using a statistical learning method to predict the response on a new observation, one that was not used in training the method.</p></li>
+<li><p>In contrast, the <span class="blue">training error</span> can be easily calculated by applying the statistical learning method to the observations used in its training.</p></li>
+<li><p>But the <span class="blue">training error</span> rate often is quite different from the <span class="orange">test error</span> rate, and in particular the former can dramatically <strong>underestimate</strong> the latter.</p></li>
 </ul>
+</section>
+<section id="training--versus-test-set-performance" class="slide level2 center">
+<h2>Training- versus Test-Set Performance</h2>
+
+<img data-src="img/ELS_2_11.png" style="width:100.0%" class="r-stretch"><p>Figure from the book <a href="https://hastie.su.domains/ElemStatLearn/">The Elements of Statistical Learning: Data Mining, Inference, and Prediction</a>. Second Edition February 2009. Trevor Hastie, Robert Tibshirani, Jerome Friedman.</p>
+</section>
+<section id="validation-set-approach" class="slide level2 center">
+<h2>Validation-set approach</h2>
+<ul>
+<li><p>Estimate the test error by <span class="orange">holding out</span> a subset of the training observations from the fitting process</p></li>
+<li><p>Here we randomly divide the available set of samples into two parts: a [training set]]{.blue} and a <span class="orange">validation set</span>.</p></li>
+<li><p>The model is fit on the training set, and the fitted model is used to predict the responses for the observations in the validation set.</p></li>
+<li><p>The resulting validation-set error provides an estimate of the test error.</p></li>
+</ul>
+</section>
+<section id="the-validation-process" class="slide level2 center">
+<h2>The Validation process</h2>
+
+<img data-src="img/5_1.png" style="width:100.0%" class="r-stretch"><p>A random splitting into two halves: left part is training set, right part is validation set</p>
+</section>
+<section id="example-yesterday-tomorrow-data" class="slide level2 center">
+<h2>Example: yesterday-tomorrow data</h2>
+<ul>
+<li><p>We randomly split the 30 observations into two sets: a [training set]]{.blue} with 15 data points and a [validation set]]{.orange} with the remaining 15 observations.</p></li>
+<li><p>We fit the polynomial regression model on the training set and compute the <strong>MSE</strong> on the validation set.</p></li>
+</ul>
+
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-18-1.png" class="quarto-figure quarto-figure-center r-stretch" width="2000"></section>
+<section id="drawbacks-of-validation-set-approach" class="slide level2 center">
+<h2>Drawbacks of validation set approach</h2>
+<ul>
+<li><p>The validation estimate of the test error can be <span class="orange">highly variable</span>, depending on precisely which observations are included in the training set and which observations are included in the validation set.</p></li>
+<li><p>In the validation approach, only a subset of the observations — those that are included in the training set rather than in the validation set — are used to fit the model. This suggests that the validation set error may tend to <span class="blue">overestimate</span> the test error for the model fit on the entire data set.</p></li>
+</ul>
+</section>
+<section id="k-fold-cross-validation" class="slide level2 center">
+<h2>K-fold Cross-validation</h2>
+<ul>
+<li><p>Widely used approach for estimating test error.</p></li>
+<li><p>Estimates can be used to select best model, and to give an idea of the test error of the final chosen model.</p></li>
+<li><p>Idea is to randomly divide the data into <span class="math inline">K</span> equal-sized parts. We leave out part <span class="math inline">k</span>, fit the model to the other <span class="math inline">K−1</span> parts (combined), and then obtain predictions for the left-out <span class="math inline">k</span>th part.</p></li>
+<li><p>This is done in turn for each part <span class="math inline">k= 1,2,...K</span>, and then the results are combined.</p></li>
+</ul>
+</section>
+<section id="k-fold-cross-validation-in-detail" class="slide level2 center">
+<h2><span class="math inline">K</span>-fold Cross-validation in detail</h2>
+<p>Divide data into <span class="math inline">K</span> roughly equal-sized parts (<span class="math inline">K = 5</span> here)</p>
+
+<img data-src="img/5_5.png" style="width:100.0%" class="r-stretch"></section>
+<section id="the-details" class="slide level2 center">
+<h2>The details</h2>
+<ul>
+<li><p>Let the <span class="math inline">K</span> parts (folds) be <span class="math inline">C_1, C_2, \dots, C_K</span>,<br>
+where <span class="math inline">C_k</span> denotes the indices of the observations in fold <span class="math inline">k</span>.</p></li>
+<li><p>Let <span class="math inline">n_k</span> be the number of observations in fold <span class="math inline">k</span>. Without loss of geenrality, suppose <span class="math inline">n_k = n/K</span>.</p></li>
+<li><p>For each fold <span class="math inline">k</span>, fit the model using all data <strong>excluding</strong> <span class="math inline">C_k</span>, and compute the validation mean squared error <span class="math display">
+\text{MSE}_k
+=
+\frac{1}{n_k}
+\sum_{i \in C_k}
+\bigl(y_i - \hat{y}_i^{-k}\bigr)^2,
+</span> where <span class="math inline">\hat{y}_i^{-k}</span> is the prediction for observation <span class="math inline">i</span> obtained from the model trained without fold <span class="math inline">k</span>.</p></li>
+<li><p>The <span class="math inline">K</span>-fold cross-validation estimate is their average: <span class="math display">
+\text{CV}(K)
+=
+\frac{1}{K}\sum_{k=1}^{K}
+\text{MSE}_k.
+</span></p></li>
+<li><p>Common choices are <span class="math inline">K=5</span> or <span class="math inline">K=10</span> It is quite evident that a larger <span class="math inline">K</span> requires more computations.</p></li>
+</ul>
+</section>
+<section id="leave-one-out-cross-validation" class="slide level2 center">
+<h2>Leave-One-Out Cross-Validation</h2>
+<ul>
+<li>The maximum possible value for <span class="math inline">K</span> is <span class="math inline">n</span>, yielding leave-one-out cross-validation (LOOCV).</li>
+</ul>
+
+<img data-src="img/5_3.png" style="width:100.0%" class="r-stretch"></section>
+<section id="example-yesterday-tomorrow-data-1" class="slide level2 center">
+<h2>Example: yesterday-tomorrow data</h2>
+<ul>
+<li><p>The LOOCV is hard to implement because it requires the estimation of <span class="math inline">n</span> different models.</p></li>
+<li><p>However, in ordinary least squares there is a brilliant computational shortcut.</p></li>
+</ul>
+
+<img data-src="un_B_files/figure-revealjs/unnamed-chunk-19-1.png" class="quarto-figure quarto-figure-center r-stretch" width="2000"></section>
+<section id="on-the-choice-of-k" class="slide level2 center">
+<h2>On the Choice of <span class="math inline">K</span></h2>
+<ul>
+<li><p>A <span class="math inline">K</span>-fold cross-validation with <span class="math inline">K = 5</span> or <span class="math inline">K = 10</span> provides an <strong>upward biased</strong> estimate of the true prediction error <span class="math inline">\mathrm{Err}</span>, because each model is trained on fewer observations than the full dataset (either <span class="math inline">4/5</span> or <span class="math inline">9/10</span> of the data).</p></li>
+<li><p>Leave-one-out cross-validation (LOOCV) has <strong>very small bias</strong>, since each model is trained on <span class="math inline">n - 1</span> observations.<br>
+However, it has <strong>high variance</strong>, because it averages <span class="math inline">n</span> highly positively correlated error estimates.</p></li>
+<li><p>Overall, the choice of <span class="math inline">K</span> is largely <strong>context-dependent</strong>, balancing bias, variance, and computational cost.</p></li>
+</ul>
+</section>
+<section id="required-readings-from-the-textbook-and-course-materials" class="slide level2 center">
+<h2>Required readings from the textbook and course materials</h2>
+<ul>
+<li><strong>Chapter 2: Statistical Learning</strong>
+<ul>
+<li>2.2 Assessing Model Accuracy</li>
+<li>2.2.1 Measuring the Quality of Fit</li>
+<li>2.2.2 The Bias-Variance Trade-Off</li>
+</ul></li>
+<li><strong>Chapter 5: Resampling Methods</strong>
+<ul>
+<li>5.1 Cross-Validation
+<ul>
+<li>5.1.1 The Validation Set Approach</li>
+<li>5.1.2 Leave-One-Out Cross-Validation</li>
+<li>5.1.3 k-Fold Cross-Validation</li>
+</ul></li>
+</ul></li>
+<li><strong>Chapter 7: Moving Beyond Linearity</strong>
+<ul>
+<li>7.1 Polynomial Regression</li>
+</ul></li>
+</ul>
+<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 2.3 Model Selection and Bias Variance Tradeoff - 10:05</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 5.1 Cross Validation - 14:02</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 5.2 K-fold Cross Validation - 13:34</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 7.1 Polynomials and Step Functions - first 7 minutes</a></p>
 
 </section></section>
     </div>

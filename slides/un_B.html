@@ -103,11 +103,9 @@ window.Quarto = {
   <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"></a></li>
   <li><a href="#polynomial-regression" id="toc-polynomial-regression" class="nav-link" data-scroll-target="#polynomial-regression">Polynomial regression</a></li>
   <li><a href="#estimating-polynomial-regression" id="toc-estimating-polynomial-regression" class="nav-link" data-scroll-target="#estimating-polynomial-regression">Estimating Polynomial Regression</a></li>
-  <li><a href="#solution" id="toc-solution" class="nav-link" data-scroll-target="#solution">Solution</a>
-  <ul class="collapse">
+  <li><a href="#solution" id="toc-solution" class="nav-link" data-scroll-target="#solution">Solution</a></li>
   <li><a href="#matrix-multiplication" id="toc-matrix-multiplication" class="nav-link" data-scroll-target="#matrix-multiplication">Matrix Multiplication</a></li>
   <li><a href="#matrix-inverse" id="toc-matrix-inverse" class="nav-link" data-scroll-target="#matrix-inverse">Matrix Inverse</a></li>
-  </ul></li>
   <li><a href="#yesterdays-data-polynomial-regression" id="toc-yesterdays-data-polynomial-regression" class="nav-link" data-scroll-target="#yesterdays-data-polynomial-regression">Yesterday’s data, polynomial regression</a></li>
   <li><a href="#yesterdays-data-goodness-of-fit" id="toc-yesterdays-data-goodness-of-fit" class="nav-link" data-scroll-target="#yesterdays-data-goodness-of-fit">Yesterday’s data, goodness of fit</a></li>
   <li><a href="#yesterdays-data-polynomial-interpolation-p-n" id="toc-yesterdays-data-polynomial-interpolation-p-n" class="nav-link" data-scroll-target="#yesterdays-data-polynomial-interpolation-p-n">Yesterday’s data, polynomial interpolation (<span class="math inline">d = n-1</span>)</a></li>
@@ -385,8 +383,9 @@ f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
 \mathbf{X}^\top \mathbf{y},
 </span></p>
 <p>We avoid matrix algebra whenever possible, but in the OLS formula it is useful to understand matrix multiplication and inversion.</p>
-<section id="matrix-multiplication" class="level3">
-<h3 class="anchored" data-anchor-id="matrix-multiplication">Matrix Multiplication</h3>
+</section>
+<section id="matrix-multiplication" class="level2">
+<h2 class="anchored" data-anchor-id="matrix-multiplication">Matrix Multiplication</h2>
 <p>Suppose</p>
 <p><span class="math display">
 \mathbf{A} \in \mathbb{R}^{r \times d},
@@ -407,13 +406,9 @@ f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
 <li>Multiply corresponding elements,</li>
 <li>Sum the results.</li>
 </ul>
-<p>Matrix multiplication is <strong>not commutative</strong>: <span class="math display">
-\mathbf{A}\mathbf{B} \neq \mathbf{B}\mathbf{A}
-\quad \text{in general}.
-</span></p>
 </section>
-<section id="matrix-inverse" class="level3">
-<h3 class="anchored" data-anchor-id="matrix-inverse">Matrix Inverse</h3>
+<section id="matrix-inverse" class="level2">
+<h2 class="anchored" data-anchor-id="matrix-inverse">Matrix Inverse</h2>
 <p>A square matrix <span class="math inline">\mathbf{A} \in \mathbb{R}^{p \times p}</span> has an inverse <span class="math inline">\mathbf{A}^{-1}</span> if</p>
 <p><span class="math display">
 \mathbf{A}\mathbf{A}^{-1}
@@ -428,7 +423,6 @@ f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
 <li><span class="math inline">\mathbf{A}</span> is square,</li>
 <li><span class="math inline">\mathbf{A}</span> is nonsingular (its columns are linearly independent).</li>
 </ul>
-</section>
 </section>
 <section id="yesterdays-data-polynomial-regression" class="level2">
 <h2 class="anchored" data-anchor-id="yesterdays-data-polynomial-regression">Yesterday’s data, polynomial regression</h2>
@@ -699,7 +693,8 @@ the prediction error can still be large if the model is highly variable.</p></li
 </section>
 <section id="the-validation-process" class="level2">
 <h2 class="anchored" data-anchor-id="the-validation-process">The Validation process</h2>
-<p><img src="img/5_1.png" class="img-fluid" style="width:100.0%"> A random splitting into two halves: left part is training set, right part is validation set</p>
+<p><img src="img/5_1.png" class="img-fluid" style="width:100.0%"></p>
+<p>A random splitting into two halves: left part is training set, right part is validation set</p>
 </section>
 <section id="example-yesterday-tomorrow-data" class="level2">
 <h2 class="anchored" data-anchor-id="example-yesterday-tomorrow-data">Example: yesterday-tomorrow data</h2>
@@ -817,7 +812,7 @@ However, it has <strong>high variance</strong>, because it averages <span class=
 </ul>
 <p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 2.3 Model Selection and Bias Variance Tradeoff - 10:05</a></p>
 <p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 5.1 Cross Validation - 14:02</a></p>
-<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video 5.2 K-fold Cross Validation - 13:34</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 5.2 K-fold Cross Validation - 13:34</a></p>
 <p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 7.1 Polynomials and Step Functions - first 7 minutes</a></p>
 </section>
 </section>

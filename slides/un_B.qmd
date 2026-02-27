@@ -337,7 +337,7 @@ $$
 
 We avoid matrix algebra whenever possible, but in the OLS formula it is useful to understand matrix multiplication and inversion.
 
-### Matrix Multiplication
+## Matrix Multiplication
 
 Suppose
 
@@ -364,13 +364,9 @@ That is:
 - Multiply corresponding elements,
 - Sum the results.
 
-Matrix multiplication is **not commutative**:
-$$
-\mathbf{A}\mathbf{B} \neq \mathbf{B}\mathbf{A}
-\quad \text{in general}.
-$$
 
-### Matrix Inverse
+
+## Matrix Inverse
 
 A square matrix $\mathbf{A} \in \mathbb{R}^{p \times p}$ has an inverse
 $\mathbf{A}^{-1}$ if
@@ -1126,6 +1122,7 @@ the test error.
 
 
 ![](img/5_1.png){width="100%"}
+
 A random splitting into two halves: left part is training set,
 right part is validation set
 
@@ -1359,7 +1356,7 @@ However, it has **high variance**, because it averages $n$ highly positively cor
 
 [Video SL 5.1 Cross Validation - 14:02 ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
 
-[Video 5.2 K-fold Cross Validation - 13:34 ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+[Video SL 5.2 K-fold Cross Validation - 13:34 ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
 
 [Video SL 7.1 Polynomials and Step Functions - first 7 minutes](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
 
