@@ -62,98 +62,77 @@ This unit will cover the following [topics]{.orange}:
 -   Linear models
 -   The modeling process
 
+# Trees data
 
-## Car data ([diesel]{.blue} or [gas]{.orange})
+- These data give the `Volume` (cubic feet), `Height` (feet) and `Diameter` (inches) (at 54 inches above ground) for a sample of $n=31$ black cherry trees in the Allegheny National Forest, Pennsylvania. 
 
-::: columns
-::: {.column width="50%"}
+- The data were collected in order to find an estimate for the
+volume of a tree $Y$ (and therefore for the timber yield), given its diameter $X_1$ and height $X_2$.
+
+```{r}
+library(knitr)
+
+data(trees)  # cherry tree data
+df <- trees
+names(df) <- c("Diameter", "Height", "Volume")
+df <- df[, c("Volume", "Diameter", "Height")]
+
+kable(head(df))
+```
+
+## Scatterplot Matrix
+
 ```{r}
 #| warning: false
 #| message: false
 #| fig-width: 5
 #| fig-height: 4.5
-#| 
-library(tidyverse)
-library(broom)
-library(knitr)
-library(ggplot2)
-library(ggthemes)
-library(GGally)
-library(ISLR)
 
-rm(list = ls())
+library(GGally)   # for ggpairs()
+library(ggplot2)  # for theme_minimal()
 
-library(readr)
-auto <- read.table("http://azzalini.stat.unipd.it/Book-DM/auto.dat", header=T)[,c(2,11,12,16,18)]
-
-p0 <- ggpairs(auto,
-  columns = c(4,3,5,2), aes(colour = fuel),
-  lower = list(continuous = wrap("points", size = 0.5)),
-  upper = list(continuous = wrap("points", size = 0.5)),
-  diag = "blank"
-) +
-  theme_light() +
-  scale_color_tableau(palette = "Color Blind")
-p0
+ggpairs(
+  df,
+  diag = list(continuous = wrap("barDiag", fill = "steelblue", color = "white", bins=7))
+) + theme_minimal()
 ```
-:::
 
-::: {.column width="50%"}
--   We consider data for $n = 203$ models of cars in circulation in 1985
-    in the USA.
--   We want to [predict]{.blue} the distance per unit of fuel as a
-    function of the vehicle features.
--   We consider the following [variables]{.orange}:
-    -   The city distance per unit of fuel (km/L, `city.distance`)
-    -   The engine size (L, `engine.size`)
-    -   The number of cylinders (`n.cylinders`)
-    -   The curb weight (kg, `curb.weight`)
-    -   The fuel type (gasoline or diesel, `fuel`).
-:::
-:::
+## Scatterplot 3d
 
-## Simple linear regression
-
-::: columns
-::: {.column width="40%"}
 ```{r}
-#| fig-width: 4
-#| fig-height: 3.7
-ggplot(data = auto, aes(x = engine.size, y = city.distance, col = fuel)) +
-  geom_point() +
-  theme_light() +
-  scale_color_tableau(palette = "Color Blind") +
-  theme(legend.position = "top") +
-  xlab("Engine size (L)") +
-  ylab("Urban distance (km/L)")
+#| warning: false
+#| message: false
+#| fig-width: 5
+#| fig-height: 4.5
+
+library(plotly)
+
+plot_ly(
+  data = df,
+  x = ~Diameter,
+  y = ~Height,
+  z = ~Volume,
+  type = "scatter3d",
+  mode = "markers",
+  marker = list(size = 5)
+) %>%
+  layout(
+    scene = list(
+      xaxis = list(title = "Diameter (inches)"),
+      yaxis = list(title = "Height (feet)"),
+      zaxis = list(title = "Volume (ft³)")
+    )
+  )
 ```
-:::
 
-::: {.column width="60%"}
--   Let us consider the variables `city.distance` ($y$), `engine.size`
-    ($x$) and `fuel` ($z$).
-
--   A [simple linear regression]{.blue} $$
-    Y = \beta_0 + \beta_1 X + \epsilon
-    $$ could be easily fit by least squares...
-
--   ... but the plot suggests that the relationship between
-    `city.distance` and `engine.size` is [not]{.orange} well
-    approximated by a [linear]{.orange} function.
-
--   ... and also that `fuel` has a non-negligible effect on the
-    response.
-:::
-:::
 
 ## Multiple linear regression
 
-
--   Linear regression is a simple approach to supervised
+- Linear regression is a simple approach to supervised
 learning. It assumes that the dependence of $Y$ on
 $X_1,X_2,\ldots,X_p$ is linear.
 
-- Here our [linear model]{.orange} is
+- The [linear model]{.orange} is given by
 $$Y = \beta_0 + \beta_1X_1 + \beta_2 X_2 + \ldots + \beta_p X_p + \varepsilon$$
 
 - Given estimates $\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_p$ we can make predictions using the formula
@@ -163,225 +142,843 @@ $$\hat{y} = \hat\beta_0 + \hat\beta_1 x_1 + \hat\beta_2 x_2 + \ldots + \hat\beta
 
 $$\mathrm{RSS} = \sum_{i=1}^{n}
 (y_i - \hat y_i)^2= \sum_{i=1}^{n}
-(y_i - \hat{\beta}_0- \hat{\beta}_1 x_{i1}- \hat{\beta}_2 x_{i2}- \cdots - \hat{\beta}_p x_{ip})^2$$
+(y_i - \hat{\beta}_0- \hat{\beta}_1 x_{i1}- \hat{\beta}_2 x_{i2}- \ldots - \hat{\beta}_p x_{ip})^2$$
 
 - This is done using standard statistical software. The values
-$\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_p$ that minimize RSS are the multiple least
-squares regression coefficient estimates.
+$\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_p$ that minimize RSS are the [least squares estimates]{.orange}.
+
+## Interpreting regression coefficients
+
+* We interpret $\beta_j$ as the [average]{.orange} effect on $Y$ of a one unit increase in $X_j$, [holding all other predictors fixed]{.orange}
+
+* But predictors usually change together! For example, in the tree data, larger `Diameter` is typically associated with greater `Height`. Holding `Height` fixed while increasing `Diameter` may be unrealistic.
 
 
-## Car data, a first model
+## Model 1: Volume ~ Diameter + Height
 
--   Let us consider again the variables `city.distance` ($Y$),
-    `engine.size` ($X$) and `fuel` ($Z$).
+$$\mathrm{Volume} = \beta_0 + \beta_1 \times \mathrm{Diameter} + \beta_2 \times \mathrm{Height} +  \varepsilon$$
 
--   A first attempt is to consider a [polynomial term]{.orange} combined
-    with a [dummy variable]{.blue} $$
-    Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \beta_3 X^3 + \beta_4 I(Z = \texttt{gas}) + \varepsilon,
-    $$ which is a special instance of [linear model]{.orange}.
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 5
+#| fig-height: 4.5
+
+library(knitr)
+
+# Fit multiple linear regression
+m1 <- lm(Volume ~ Diameter + Height, data = df)
+
+# Extract coefficient table
+coef_table <- summary(m1)$coefficients
+
+# Convert to data frame
+results <- data.frame(
+  Estimate = coef_table[,1],
+  Std_Error = coef_table[,2],
+  t_value = coef_table[,3],
+  p_value = coef_table[,4]
+)
+
+kable(results,
+      digits = 4,
+      caption = "Model 1: Volume ~ Diameter + Height")
+```
 
 
--   Indeed, by looking at the plot of the data, it is plausible that we
-    need a [polynomial]{.orange} of degree $3$ or $4$
 
--   It is also clear from the plot that `fuel` is a relevant variable.
-    Categorical variables are [encoded]{.orange} using [indicator
-    variables]{.blue}:
+## Model 1: Regression plane
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 5
+#| fig-height: 4.5
+
+# Fit Model 1
+m1 <- lm(Volume ~ Diameter + Height, data = df)
+
+# Create grid for plane
+d_seq <- seq(min(df$Diameter), max(df$Diameter), length.out = 25)
+h_seq <- seq(min(df$Height), max(df$Height), length.out = 25)
+
+grid <- expand.grid(Diameter = d_seq, Height = h_seq)
+grid$Volume_hat <- predict(m1, newdata = grid)
+
+Z <- matrix(grid$Volume_hat,
+            nrow = length(d_seq),
+            ncol = length(h_seq))
+
+# 3D scatter + regression plane
+plot_ly() %>%
+  add_markers(data = df,
+              x = ~Diameter,
+              y = ~Height,
+              z = ~Volume,
+              type = "scatter3d",
+              mode = "markers",
+              marker = list(size = 5),
+              name = "Observed") %>%
+  add_surface(x = d_seq,
+              y = h_seq,
+              z = Z,
+              opacity = 0.5,
+              showscale = FALSE)
+```
+
+
+## Potential Problems
+
+When we fit a linear regression model to a particular data set, many problems may occur. Most common among these are the following:
+
+1. Non-linearity of the response-predictor relationships.
+
+2. Correlation of error terms.
+
+3. Non-constant variance of error terms.
+
+4. Outliers.
+
+5. High-leverage points.
+
+6. Collinearity.
+
+## Residual plot
+
+- Residual plots are a useful graphical tool for identifying non-linearity
+
+- Plot the residuals,
+  $$
+  e_i = y_i - \hat{y}_i,
+  $$
+  against the fitted values $\hat{y}_i$.
+
+- A systematic pattern in this plot may indicate violations of the linearity assumption
+
+## Model 1: residual plot
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 5
+#| fig-height: 4.5
+
+library(performance)
+library(see)
+check_model(m1, check="linearity")
+```
+
+## Model 2: Cube-root transformation of the response
+
+- A cube-root transformation of the response leads to the model
+$$\mathrm{Volume}^{1/3} = \beta_0 + \beta_1 \times \mathrm{Diameter} + \beta_2 \times \mathrm{Height} +  \varepsilon$$
+in which both sides have the dimension of length.
+
+- After fitting the model, we obtain the predicted cube-root volume
+
 $$
-z_i =
-\begin{cases}
-1 & \text{if the $i$th car is gas} \\
-0 & \text{if the $i$th car is diesel}
-\end{cases}
-$$
-Resulting model:
-$$
-\hat{y}
+\widehat{\mathrm{Volume}^{1/3}}
 =
+\hat\beta_0
++
+\hat\beta_1 \mathrm{Diameter}
++
+\hat\beta_2 \mathrm{Height}.
+$$
+
+- To predict `Volume` on the original scale, we cube the fitted value:
+
+$$
+\widehat{\mathrm{Volume}}
+=
+\left(
+\widehat{\mathrm{Volume}^{1/3}}
+\right)^3.
+$$
+
+
+## Model 2: predicted surface
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 5
+#| fig-height: 4.5
+#| 
+
+# Fit Model 2 (cube-root model)
+m2 <- lm(I(Volume^(1/3)) ~ Diameter + Height, data = df)
+
+# Prediction grid
+Dg <- seq(min(df$Diameter), max(df$Diameter), length.out = 40)
+Hg <- seq(min(df$Height), max(df$Height), length.out = 40)
+grid <- expand.grid(Diameter = Dg, Height = Hg)
+
+# Back-transform predictions
+grid$V_hat <- predict(m2, newdata = grid)^3
+
+zmat <- function(z) matrix(z, nrow = length(Dg), ncol = length(Hg))
+Z_orig <- zmat(grid$V_hat)
+
+# 3D plot on original scale
+plot_ly() %>%
+  add_markers(
+    data = df,
+    x = ~Diameter, y = ~Height, z = ~Volume,
+    marker = list(size = 4),
+    name = "Observed"
+  ) %>%
+  add_surface(
+    x = Dg, y = Hg, z = Z_orig,
+    opacity = 0.6,
+    showscale = FALSE
+  ) %>%
+  layout(
+    scene = list(
+      xaxis = list(title = "Diameter"),
+      yaxis = list(title = "Height"),
+      zaxis = list(title = "Volume")
+    )
+  )
+```
+
+
+## Model 2: residual plot
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 5
+#| fig-height: 4.5
+
+library(performance)
+library(see)
+check_model(m2, check="linearity")
+```
+
+
+## Trees as cylinders
+
+A tree trunk can be viewed as a cylinder (or a cone):
+$$
+\mathrm{Volume} = (\text{Area of base}) \times (\text{Height}).
+$$
+Since the base area is proportional to the square of the diameter,
+$$
+\text{Area of base} = \pi \left(\frac{\mathrm{Diameter}}{2}\right)^2 
+$$
+we obtain
+$$
+\mathrm{Volume} = \frac{\pi}{4} \times \mathrm{Diameter}^2 \times \mathrm{Height}.
+$$
+
+## Model 3: transformation of the predictors
+
+
+The previous reasoning suggests the regression model
+$$
+\mathrm{Volume} = \beta \times \mathrm{Diameter}^2 \times \mathrm{Height} + \varepsilon,
+$$
+where $\beta = \frac{\pi}{4}$ or $\beta = \frac{\pi}{12}$ if trees were perfect cylinder or cones.
+
+```{r}
+# Fit Model 2: V = beta D^2 H
+m3 <- lm(Volume ~ 0 + I(Diameter^2 * Height), data = df)
+
+# Extract coefficient table
+coef_table <- summary(m3)$coefficients
+
+# Convert to data frame
+results <- data.frame(
+  Estimate = coef_table[,1],
+  Std_Error = coef_table[,2],
+  t_value = coef_table[,3],
+  p_value = coef_table[,4]
+)
+
+kable(results,
+      digits = 4,
+      caption = "Model 3: Volume ~ 0 + Diameter^2 * Height")
+```
+
+## Model 3 predicted line
+
+```{r}
+library(ggpubr)
+
+# Create derived predictor
+df$D2H <- df$Diameter^2 * df$Height
+
+# ggpubr scatter + fitted line
+ggscatter(df,
+          x = "D2H",
+          xlab = "Diameter^2 x Height",
+          y = "Volume") +
+  stat_smooth(method = "lm",
+              formula = y ~ x - 1,
+              se = F,
+              color = "blue")
+```
+
+## Model 3: residual plot
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 5
+#| fig-height: 4.5
+
+library(performance)
+library(see)
+check_model(m3, check="linearity")
+```
+
+
+## Model 4: Log–Log Transformation
+
+Model 4 applies a logarithmic transformation to both the response and predictors:
+
+$$
+\log \mathrm{Volume} = \beta_0 + \beta_1 \times \log \mathrm{Diameter} + \beta_2 \times \log \mathrm{Height} + \varepsilon.
+$$
+
+For the tree data, geometry suggests
+
+$$
+\mathrm{Volume} = \beta \times \mathrm{Diameter}^2 \times \mathrm{Height},
+$$
+
+and taking logs gives
+
+$$
+\log \mathrm{Volume} = \log \beta + 2 \times \log \mathrm{Diameter} + 1 \times \log \mathrm{Height},
+$$
+Thus the log–log specification allows the exponents to be estimated from the data.
+
+```{r}
+# Fit Model 2: V = beta D^2 H
+m4 <- lm(log(Volume) ~ log(Diameter) + log(Height), data = df)
+
+# Extract coefficient table
+coef_table <- summary(m4)$coefficients
+
+# Convert to data frame
+results <- data.frame(
+  Estimate = coef_table[,1],
+  Std_Error = coef_table[,2],
+  t_value = coef_table[,3],
+  p_value = coef_table[,4]
+)
+
+kable(results,
+      digits = 4,
+      caption = "Model 3: Volume ~ 0 + Diameter^2 * Height")
+```
+
+## Model 4: residual plot
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 5
+#| fig-height: 4.5
+
+library(performance)
+library(see)
+check_model(m4, check="linearity")
+```
+
+
+## Modelling the Log Response
+
+- Consider the linear model for the log response with $p$ predictors:
+
+$$
+\log Y = \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \varepsilon.
+$$
+
+
+- If $\varepsilon \sim N(0,\sigma^2)$, then
+$$
+\log Y \mid X \sim N(\mu,\sigma^2),
+$$ where $\mu =  \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p$ and $X=(X_1,\dots,X_p)^T$. 
+
+- Then
+$$
+Y \mid X \sim \text{Lognormal}(\mu,\sigma^2).
+$$
+For a lognormal random variable:
+$$
+\text{Median}(Y \mid X) = \exp(\mu), \qquad
+\mathbb{E}(Y \mid X) = \exp(\mu + \sigma^2/2).
+$$
+
+- Thus $$\exp(\hat\mu)= \exp(\hat\beta_0+\hat\beta_1 X_1+\cdots+\hat\beta_p X_p)$$ estimates $\text{Median}(Y \mid X)$, while $\mathbb{E}(Y \mid X)$ is larger because the distribution of $Y|X$ is right-skewed.
+
+- To estimate $\mathbb{E}(Y \mid X)$, use
+
+$$
+\exp(\hat\mu)\exp(\hat\sigma^2/2).
+$$
+
+## Model comparison
+
+To compare the three models using LOOCV (leave-one-out cross-validation) on the original Volume scale, we:
+
+1. Leave one tree out
+
+2. Fit the model on the remaining 30 observations
+
+3. Predict the left-out tree
+
+4. Compute squared error on the original Volume (ft³) scale
+
+5. Repeat for all 31 trees
+
+6. Compare root mean squared prediction error (LOOCV RMSE)
+
+## 
+
+```{r}
+n <- nrow(df)
+
+# Storage for squared errors
+se_m1 <- numeric(n)
+se_m2 <- numeric(n)
+se_m3 <- numeric(n)
+se_m4 <- numeric(n)
+se_m4bc <- numeric(n)
+
+for (i in 1:n) {
+  
+  train <- df[-i, ]
+  test  <- df[i, ]
+  
+  # ---- Model 1 ----
+  m1 <- lm(Volume ~ Diameter + Height, data = train)
+  pred1 <- predict(m1, newdata = test)
+  se_m1[i] <- (test$Volume - pred1)^2
+  
+    # ---- Model 2 ----
+  m2 <- lm( I(Volume^(1/3)) ~ Diameter + Height, data = train)
+  pred2 <- predict(m2, newdata = test)^3
+  se_m2[i] <- (test$Volume - pred2)^2
+  
+  # ---- Model 3 ----
+  m3 <- lm(Volume ~ 0 + I(Diameter^2 * Height), data = train)
+  pred3 <- predict(m3, newdata = test)
+  se_m3[i] <- (test$Volume - pred3)^2
+  
+  # ---- Model 4 ----
+  m4 <- lm(log(Volume) ~ log(Diameter) + log(Height), data = train)
+  pred4 <- exp(predict(m4, newdata = test))
+  se_m4[i] <- (test$Volume - pred4)^2
+  
+  # ---- Model 4 (bias-corrected) ----
+  sigma2 <- summary(m4)$sigma^2      
+  pred4bc <- exp(predict(m4, newdata = test)) * exp(sigma2/2)
+  se_m4bc[i] <- (test$Volume - pred4bc)^2
+  
+}
+
+# LOOCV MSE
+LOOCV_MSE <- c(
+  Model1 = mean(se_m1),
+  Model2 = mean(se_m2),
+  Model3 = mean(se_m3),
+  Model4 = mean(se_m4),
+  Model4bc = mean(se_m4bc)
+)
+
+LOOCV_RMSE <- sqrt(LOOCV_MSE)
+
+comparison <- data.frame(
+  Model = c("Baseline",
+            "Cube-root",
+            "Cylinder",
+            "Log-Log",
+            "Log-Log (bias-corrected)"),
+  LOOCV_MSE,
+  LOOCV_RMSE
+)
+
+kable(comparison, digits = 3,
+      caption = "LOOCV comparison on original Volume (ft^3) scale")
+```
+
+
+# Credit data
+
+- The response variable is `Balance` (average credit card debt for each individual).
+
+- The quantitative predictors are:
+
+- `Age` — age in years  
+
+- `Cards` — number of credit cards  
+
+- `Education` — years of education  
+
+- `Income` — income (in thousands of dollars)  
+
+- `Limit` — credit limit  
+
+- `Rating` — credit rating   
+  
+  
+## Figure 3.6 ISL
+
+![](img/3_6.png){width="100%"}
+
+## Qualitative Predictors
+
+- Some predictors are not quantitative but qualitative, meaning they take values from a discrete set of categories.
+
+- These are also called [categorical predictors]{.orange} or [factor variables]{.orange}.
+
+- In regression, qualitative predictors must be represented using indicator ([dummy]{.orange}) variables.
+
+- In the Credit data, in addition to the seven quantitative variables shown in the scatterplot matrix, there are four qualitative variables:
+
+  - `Gender`  
+  - `Student` (student status)  
+  - `Married` (marital status)  
+  - `Ethnicity` (Caucasian, African American, or Asian)
+
+## Qualitative Predictors - continued
+
+- For example, `Ethnicity` has three levels, and we create two dummy variables:
+
+$$
+x_{i1} =
 \begin{cases}
-\hat\beta_0 + \hat\beta_1 x + \hat\beta_2 x^2 + \hat\beta_3 x^3 + \hat\beta_4 & \text{if the car is gas} \\
-\hat\beta_0 + \hat\beta_1 x + \hat\beta_2 x^2 + \hat\beta_3 x^3 & \text{if the car is diesel}
+1 & \text{if the } i\text{th person is Asian} \\
+0 & \text{otherwise}
+\end{cases},
+\qquad
+x_{i2} =
+\begin{cases}
+1 & \text{if the } i\text{th person is Caucasian} \\
+0 & \text{otherwise}
 \end{cases}
 $$
 
-
-
-## A first model: estimated coefficients
-
--   We obtain the following [summary]{.orange} for the regression
-    coefficients $\hat{\beta}$.
-
-```{r}
-#| output: false
-m1 <- lm(city.distance ~ engine.size + I(engine.size^2) + I(engine.size^3) + fuel, data = auto)
-kable(tidy(m1, conf.int = FALSE), digits = 3)
-```
-
-| term            | estimate | std.error | statistic | p.value |
-|:----------------|---------:|----------:|----------:|--------:|
-| `(Intercept)`   |   28.045 |     3.076 |     9.119 |   0.000 |
-| `engine.size`   |  -10.980 |     3.531 |    -3.109 |   0.002 |
-| `engine.size^2` |    2.098 |     1.271 |     1.651 |   0.100 |
-| `engine.size^3` |   -0.131 |     0.139 |    -0.939 |   0.349 |
-| `fuel_gas`      |   -3.214 |     0.427 |    -7.523 |   0.000 |
-
-
-
-## A first model: fitted values
-
-```{r}
-#| fig-width: 7.8
-#| fig-height: 4.55
-#| fig-align: center
-augmented_m1 <- augment(m1)
-ggplot(data = augmented_m1, aes(x = engine.size, y = city.distance, col = fuel)) +
-  geom_point() +
-  geom_line(aes(y = .fitted)) +
-  theme_light() +
-  theme(legend.position = "right") +
-  scale_color_tableau(palette = "Color Blind") +
-  xlab("Engine size (L)") +
-  ylab("Urban distance (km/L)")
-```
-
-
-## Linear models and non-linear patterns
-
--   A significant advantage of linear models is that they can describe non-linear relationships via [variable transformations]{.blue} such as polynomials, logarithms, etc.
-
-. . .
-
--   This gives the statistician a lot of modeling flexibility. For
-    instance, we could let: $$
-    \log{Y} = \beta_0 + \beta_1 \log{X} + \beta_2 I(Z = \texttt{gas}) + \epsilon
-    $$
-
-. . .
-
--   This specification is [linear in the parameters]{.orange}, it fixes
-    the domain issues, and it imposes a monotone relationship between
-    engine size and consumption.
-
-. . .
-
-```{r}
-#| output: false
-m2 <- lm(log(city.distance) ~ I(log(engine.size)) + fuel, data = auto)
-kable(tidy(m2, conf.int = FALSE), digits = 3)
-```
-
-| term               | estimate | std.error | statistic | p.value |
-|:-------------------|---------:|----------:|----------:|--------:|
-| `(Intercept)`      |    3.060 |     0.047 |    64.865 |       0 |
-| `log(engine.size)` |   -0.682 |     0.040 |   -17.129 |       0 |
-| `fuel_gas`         |   -0.278 |     0.038 |    -7.344 |       0 |
-
-## Second model: fitted values
-
-```{r}
-#| fig-width: 7.8
-#| fig-height: 4.55
-#| fig-align: center
-augmented_m2 <- augment(m2, data = auto)
-ggplot(data = augmented_m2, aes(x = engine.size, y = city.distance, col = fuel)) +
-  geom_point() +
-  geom_line(aes(y = exp(.fitted))) +
-  theme_light() +
-  theme(legend.position = "right") +
-  scale_color_tableau(palette = "Color Blind") +
-  xlab("Engine size (L)") +
-  ylab("Urban distance (km/L)")
-```
-
-
-
-## A third model: additional variables
-
--   Let us consider [two additional variables]{.blue}: `curb.weight`
-    ($W$) and `n.cylinders` ($V$).
-
--   A richer model, therefore, could be: $$
-    \log{Y} = \beta_0 + \beta_1 \log{X} +  \beta_2 \log{W} + \beta_3 I(Z = \texttt{gas}) + \beta_4 I(V = 2) + \epsilon,
-      $$ for $i=1,\dots,n$. The estimates are:
-
-. . .
-
-```{r}
-#| output: false
-auto$cylinders2 <- factor(auto$n.cylinders == 2)
-m3 <- lm(log(city.distance) ~ I(log(engine.size)) + I(log(curb.weight)) + fuel + cylinders2, data = auto)
-kable(tidy(m3, conf.int = FALSE), digits = 3)
-```
-
-| term               | estimate | std.error | statistic | p.value |
-|:-------------------|---------:|----------:|----------:|--------:|
-| `(Intercept)`      |    9.423 |     0.482 |    19.549 |   0.000 |
-| `log(engine.size)` |   -0.180 |     0.051 |    -3.504 |   0.001 |
-| `log(curb.weight)` |   -0.943 |     0.072 |   -13.066 |   0.000 |
-| `fuel_gas`         |   -0.353 |     0.022 |   -15.934 |   0.000 |
-| `cylinders2_TRUE`  |   -0.481 |     0.052 |    -9.301 |   0.000 |
-
-
-## Train MSE 
-
-```{r}
-fit1 <- lm(city.distance ~ poly(engine.size, degree = 3, raw = TRUE) + fuel, auto)
-mse1 <- mean(resid(fit1)^2)
-
-fit2 <- lm(log(city.distance) ~ log(engine.size) + fuel, auto)
-mse2 <- mean((auto$city.distance - exp(fitted(fit2)))^2)
-
-fit3 <- update(fit2, . ~ . + log(curb.weight) + I(n.cylinders == 2))
-mse3 <- mean((auto$city.distance - exp(fitted(fit3)))^2)
-```
+- The regression model, ignoring the other variables, becomes
 
 $$
-\begin{aligned}
-\textbf{Model 1: } 
-&\; y_i = \beta_0 + \beta_1 \text{engine.size}_i + \beta_2 \text{engine.size}_i^2 + \beta_3 \text{engine.size}_i^3 + \beta_4 I(\text{fuel}_i=\text{gas}) + \varepsilon_i
-\\[6pt]
-\textbf{MSE}_1
-&= \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2
-\\[12pt]
-\textbf{Model 2: } 
-&\; \log(y_i) = \beta_0 + \beta_1 \log(\text{engine.size}_i) + \beta_2 I(\text{fuel}_i=\text{gas}) + \varepsilon_i
-\\[6pt]
-\textbf{MSE}_2
-&= \frac{1}{n}\sum_{i=1}^{n}\left(y_i - \exp(\widehat{\log(y_i)})\right)^2
-\\[12pt]
-\textbf{Model 3: } 
-&\; \log(y_i) = \beta_0 + \beta_1 \log(\text{engine.size}_i) + \beta_2 I(\text{fuel}_i=\text{gas}) + \beta_3 \log(\text{curb.weight}_i) + \beta_4 I(\text{n.cylinders}_i = 2) + \varepsilon_i
-\\[6pt]
-\textbf{MSE}_3
-&= \frac{1}{n}\sum_{i=1}^{n}\left(y_i - \exp(\widehat{\log(y_i)})\right)^2
-\end{aligned}
+y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \varepsilon_i.
 $$
 
-- **MSE₁:** `r round(mse1, 3)`  
-- **MSE₂:** `r round(mse2, 3)`  
-- **MSE₃:** `r round(mse3, 3)`  
+- This implies
 
-## Data
+$$
+y_i =
+\begin{cases}
+\beta_0 + \beta_1 + \varepsilon_i & \text{if Asian} \\
+\beta_0 + \beta_2 + \varepsilon_i & \text{if Caucasian} \\
+\beta_0 + \varepsilon_i & \text{if African American}
+\end{cases}
+$$
 
--   The car dataset is available from the textbook website:
+- There is always [one fewer dummy variable than the number of levels]{.orange}.
 
-    -   Dataset <http://azzalini.stat.unipd.it/Book-DM/auto.dat>
-    -   Variable description
-        <http://azzalini.stat.unipd.it/Book-DM/auto.names> 
+- The level without a dummy variable (African American here) is called the [baseline level]{.orange}.
+
+- The coefficients $\beta_1$ and $\beta_2$ measure differences relative to the baseline.
+
+```{r}
+library(knitr)
+
+# If needed:
+library(ISLR)
+data(Credit)
+
+# Fit regression with Ethnicity only
+m_eth <- lm(Balance ~ Ethnicity, data = Credit)
+
+# Show coefficient table
+kable(summary(m_eth)$coefficients,
+      digits = 3,
+      caption = "Regression of Balance on Ethnicity")
+```
+
+
+## Interactions between qualitative and quantitative variables
+
+Consider the Credit data set. Suppose we wish to predict  
+`Balance` using `Income` (quantitative) and  
+`Student` (qualitative).
+
+Define an indicator variable
+$$
+x_i =
+\begin{cases}
+1 & \text{if the } i\text{th person is a student} \\
+0 & \text{otherwise}
+\end{cases}
+$$
+
+Without an interaction term, the model is
+$$
+\text{balance}_i = \beta_0 + \beta_1 \text{income}_i +\beta_2 x_i+\varepsilon_i.
+$$
+
+This implies
+
+$$
+\text{balance}_i =
+\begin{cases}
+(\beta_0 + \beta_2) + \beta_1 \text{income}_i + \varepsilon_i
+& \text{if student} \\
+\beta_0 + \beta_1 \text{income}_i + \varepsilon_i
+& \text{if not student}
+\end{cases}
+$$
+
+## 
+
+Include an interaction between `Income` and `Student`:
+
+$$
+\text{balance}_i
+=
+\beta_0
++
+\beta_1 \text{income}_i
++
+\beta_2 x_i
++
+\beta_3 (\text{income}_i x_i)
++
+\varepsilon_i,
+$$
+
+This implies
+
+$$
+\text{balance}_i =
+\begin{cases}
+(\beta_0 + \beta_2)
++
+(\beta_1 + \beta_3)\text{income}_i
++
+\varepsilon_i
+& \text{if student} \\
+\beta_0
++
+\beta_1 \text{income}_i
++
+\varepsilon_i
+& \text{if not student}
+\end{cases}
+$$
+
+- Intercepts differ.
+- Slopes differ.
+- The effect of income on balance depends on student status.
+
+## Figure 3.7 ISL
+
+![](img/3_7.png){width="100%"}
+
+Credit data; Left: no interaction between `Income` and `Student`.
+Right: with an interaction term between `Income` and `Student`.
+
+# Subset Selection
+
+- The most direct approach is called [best
+subsets regression]{.orange}: we compute the least squares fit for all
+possible subsets and then choose between them based on
+some criterion that balances training error with model size.
+
+- However we often can't examine all possible models, since
+they are $2^p$ of them; for example when $p= 40$ there are
+over a billion models!
+
+## Best Subset Selection
+
+1. Let $\mathcal M_0$ denote the [null model]{.orange}, which contains no predictors. This model predicts the sample mean of the response for all observations.
+
+2. For $k = 1, 2, \dots, p$:
+
+   - (a) Fit all $\binom{p}{k}$ models that contain exactly $k$ predictors.  
+   - (b) Among these, select the best model and call it $\mathcal M_k$.  
+     ``Best'' is typically defined as the model with the smallest RSS  
+     (equivalently, the largest $R^2$).
+
+3. From the models $\mathcal M_0, \mathcal M_1, \dots, \mathcal M_p$, choose a final model using cross-validated prediction error, Cp (AIC), BIC, or adjusted $R^2$  
+
+## Figure 6.1 ISL
+
+![](img/6_1.png){width="100%"}
+
+For each possible model containing a subset of the ten predictors
+in the Credit data set, the RSS and $R^2$ are displayed. The red frontier tracks the
+best model for a given number of predictors, according to RSS and $R^2$. Though
+the data set contains only ten predictors, the x-axis ranges from 1 to 11, since one
+of the variables is categorical and takes on three values, leading to the creation of
+two dummy variables.
+
+## Forward Stepwise Selection
+
+- Forward stepwise selection starts with the [null model]{.orange} (no predictors).
+
+- Predictors are added [one at a time]{.orange}.
+
+- At each step, the predictor that provides the greatest [additional]{.orange} improvement in model fit is added.
+
+- The procedure continues until all predictors are included.
+
+
+
+## Forward Stepwise Selection — In Detail
+
+1. Let $\mathcal M_0$ denote the null model (no predictors).
+
+2. For $k = 0, 1, \dots, p-1$:
+
+   - (a) Consider all $p - k$ models formed by adding one new predictor to $M_k$.
+   - (b) Among these models, choose the best and call it $\mathcal M_{k+1}$.
+     ``Best'' is typically defined as the model with the smallest RSS
+     (equivalently, the largest $R^2$).
+
+3. From the sequence of models $\mathcal M_0, \mathcal M_1, \dots, \mathcal M_p$,
+   select a final model using cross-validated prediction error, Cp (AIC), BIC, or adjusted $R^2$  
+   
+   
+## Credit data example
+
+The first four selected models using [best subset selection]{.blue}
+and [forward stepwise selection]{.blue}:
+
+| # Variables | Best Subset | Forward Stepwise |
+|-------------|------------|------------------|
+| One         | `rating`   | `rating`         |
+| Two         | `rating`, `income` | `rating`, `income` |
+| Three       | `rating`, `income`, `student` | `rating`, `income`, `student` |
+| Four        | `cards`, `income`, `student`, `limit` | `rating`, `income`, `student`, `limit` |
+
+The first four selected models for best subset selection and
+forward stepwise selection on the `Credit` data set. The first
+three models are identical but the fourth models differ.
+
+## Choosing the Optimal Model
+
+- The model containing all of the predictors will always have
+the smallest RSS and the largest $R^2$, since these quantities
+are related to the training error.
+
+-  We wish to choose a model with low test error, not a model
+with low training error. Recall that training error is usually
+a poor estimate of test error.
+
+- Therefore, RSS and $R^2$ are not suitable for selecting the
+best model among a collection of models with different
+numbers of predictors.
+
+## Estimating test error: two approaches
+
+- We can indirectly estimate test error by making an
+adjustment to the training error to account for the bias due
+to overfitting.
+
+- We can directly estimate the test error, using either a
+validation set approach or a cross-validation approach, as
+discussed in previous lectures
+
+## $C_p$, AIC, BIC, and Adjusted $R^2$
+
+- These techniques adjust the training error for model size, and can be used to select among a set of models with different numbers of variables.
+
+- The next figure displays $C_p$, BIC, and adjusted $R^2$ for the best model of each size produced by best subset selection on the `Credit` data set.
+
+## Figure 6.2 ISL
+
+![](img/6_2.png){width="100%"}
+
+
+## Mallows’ $C_p$
+
+$$
+C_p
+=
+\frac{1}{n}
+\left(
+\text{RSS}
++
+2 d \hat{\sigma}^2
+\right),
+$$
+
+where $d$ is the total number of parameters used and $\hat{\sigma}^2$ is an estimate of the variance of the error $\varepsilon$ associated with each response measurement.
+
+## BIC 
+
+$$
+\text{BIC}
+=
+\frac{1}{n}
+\left(
+\text{RSS}
++
+\log(n)\, d \hat{\sigma}^2
+\right).
+$$
+
+- Like $C_p$, the Bayesian Information Criterion (BIC) tends to be small for models with low test error.  
+  We typically select the model with the **lowest BIC**.
+
+- Notice that BIC replaces the $2 d \hat{\sigma}^2$ term used by $C_p$
+  with a $\log(n)\, d \hat{\sigma}^2$ term, where $n$ is the number of observations.
+
+- Since $\log(n) > 2$ for any $n > 7$, BIC generally places a heavier penalty
+  on models with many variables.
+
+- As a result, BIC tends to select **smaller models** than $C_p$.
+
+## Validation and Cross-Validation
+
+- Each model selection procedure returns a sequence of models $\mathcal M_k$ indexed by model size $k = 0, 1, 2, \dots$.
+  Our goal is to choose $\hat{k}$.  
+  Once selected, we return the model $\mathcal M_{\hat{k}}$.
+
+- We compute the **validation set error** or the **cross-validation error**
+  for each model $\mathcal M_k$, and select the value of $k$ for which the estimated test error is smallest.
+
+- This approach has an advantage over AIC, BIC, $C_p$, and adjusted $R^2$:
+  it provides a **direct estimate of test error** and does not require an estimate of the error variance $\sigma^2$.
+
+- It can also be applied in a wider range of model selection problems,
+  including settings where the model degrees of freedom are difficult to determine
+  or where estimating $\sigma^2$ is challenging.
+
+## Figure 6.3 ISL
+
+![](img/6_3.png){width="100%"}
+
 
 ## Required readings from the textbook and course materials
 
 
 - **Chapter 3: Linear Regression**
- - 3.1 Simple Linear Regression
-   - 3.1.1 Estimating the Coeﬀicients
-   - 3.1.3 Assessing the Accuracy of the Model
+  - 3.1 Simple Linear Regression
+    - 3.1.1 Estimating the Coeﬀicients
+    - 3.1.3 Assessing the Accuracy of the Model
   
- - 3.2 Multiple Linear Regression
-   - 3.2.1 Estimating the Regression Coeﬀicients
+  - 3.2 Multiple Linear Regression
+    - 3.2.1 Estimating the Regression Coeﬀicients
    
- - 3.3 Other Considerations in the Regression Model
-   - 3.3.1 Qualitative Predictors
+  - 3.3 Other Considerations in the Regression Model
+    - 3.3.1 Qualitative Predictors
+
+- **Chapter 6: Linear Model Selection
+and Regularization**
+  - 6.1 Subset Selection
+    - 6.1.1 Best Subset Selection
+    - 6.1.2 Stepwise Selection
+    - 6.1.3 Choosing the Optimal Model
+
+## Required readings from the textbook and course materials
 
 [Video SL 3.1 Simple Linear Regression - 13:02](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
 
@@ -391,4 +988,11 @@ $$
 
 [Video SL 3.5 Extensions of the Linear Model - 14:17](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
 
+[Video SL 6.1 Introduction and Best Subset Selection - 13:45  ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 6.3 Backward Stepwise Selection - 5:27  ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 6.4 Estimating Test Error - 14:07  ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 6.5 Validation and Cross Validation - 8:44  ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
 

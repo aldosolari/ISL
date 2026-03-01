@@ -36,6 +36,15 @@ ul.task-list li input[type="checkbox"] {
 <link href="un_C_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="un_C_files/libs/bootstrap/bootstrap-721140556699abb0ff907dddd6c78b98.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <style>html{ scroll-behavior: smooth; }</style>
+<link href="un_C_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="un_C_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="un_C_files/libs/plotly-binding-4.11.0/plotly.js"></script>
+<script src="un_C_files/libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="un_C_files/libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="un_C_files/libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+<script src="un_C_files/libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link href="un_C_files/libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="un_C_files/libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
@@ -91,17 +100,57 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#car-data-diesel-or-gas" id="toc-car-data-diesel-or-gas" class="nav-link active" data-scroll-target="#car-data-diesel-or-gas">Car data (<span class="blue">diesel</span> or <span class="orange">gas</span>)</a></li>
-  <li><a href="#simple-linear-regression" id="toc-simple-linear-regression" class="nav-link" data-scroll-target="#simple-linear-regression">Simple linear regression</a></li>
+  <li><a href="#trees-data" id="toc-trees-data" class="nav-link active" data-scroll-target="#trees-data">Trees data</a>
+  <ul class="collapse">
+  <li><a href="#scatterplot-matrix" id="toc-scatterplot-matrix" class="nav-link" data-scroll-target="#scatterplot-matrix">Scatterplot Matrix</a></li>
+  <li><a href="#scatterplot-3d" id="toc-scatterplot-3d" class="nav-link" data-scroll-target="#scatterplot-3d">Scatterplot 3d</a></li>
   <li><a href="#multiple-linear-regression" id="toc-multiple-linear-regression" class="nav-link" data-scroll-target="#multiple-linear-regression">Multiple linear regression</a></li>
-  <li><a href="#car-data-a-first-model" id="toc-car-data-a-first-model" class="nav-link" data-scroll-target="#car-data-a-first-model">Car data, a first model</a></li>
-  <li><a href="#a-first-model-estimated-coefficients" id="toc-a-first-model-estimated-coefficients" class="nav-link" data-scroll-target="#a-first-model-estimated-coefficients">A first model: estimated coefficients</a></li>
-  <li><a href="#a-first-model-fitted-values" id="toc-a-first-model-fitted-values" class="nav-link" data-scroll-target="#a-first-model-fitted-values">A first model: fitted values</a></li>
-  <li><a href="#linear-models-and-non-linear-patterns" id="toc-linear-models-and-non-linear-patterns" class="nav-link" data-scroll-target="#linear-models-and-non-linear-patterns">Linear models and non-linear patterns</a></li>
-  <li><a href="#second-model-fitted-values" id="toc-second-model-fitted-values" class="nav-link" data-scroll-target="#second-model-fitted-values">Second model: fitted values</a></li>
-  <li><a href="#a-third-model-additional-variables" id="toc-a-third-model-additional-variables" class="nav-link" data-scroll-target="#a-third-model-additional-variables">A third model: additional variables</a></li>
-  <li><a href="#train-mse" id="toc-train-mse" class="nav-link" data-scroll-target="#train-mse">Train MSE</a></li>
+  <li><a href="#interpreting-regression-coefficients" id="toc-interpreting-regression-coefficients" class="nav-link" data-scroll-target="#interpreting-regression-coefficients">Interpreting regression coefficients</a></li>
+  <li><a href="#model-1-volume-diameter-height" id="toc-model-1-volume-diameter-height" class="nav-link" data-scroll-target="#model-1-volume-diameter-height">Model 1: Volume ~ Diameter + Height</a></li>
+  <li><a href="#model-1-regression-plane" id="toc-model-1-regression-plane" class="nav-link" data-scroll-target="#model-1-regression-plane">Model 1: Regression plane</a></li>
+  <li><a href="#potential-problems" id="toc-potential-problems" class="nav-link" data-scroll-target="#potential-problems">Potential Problems</a></li>
+  <li><a href="#residual-plot" id="toc-residual-plot" class="nav-link" data-scroll-target="#residual-plot">Residual plot</a></li>
+  <li><a href="#model-1-residual-plot" id="toc-model-1-residual-plot" class="nav-link" data-scroll-target="#model-1-residual-plot">Model 1: residual plot</a></li>
+  <li><a href="#model-2-cube-root-transformation-of-the-response" id="toc-model-2-cube-root-transformation-of-the-response" class="nav-link" data-scroll-target="#model-2-cube-root-transformation-of-the-response">Model 2: Cube-root transformation of the response</a></li>
+  <li><a href="#model-2-predicted-surface" id="toc-model-2-predicted-surface" class="nav-link" data-scroll-target="#model-2-predicted-surface">Model 2: predicted surface</a></li>
+  <li><a href="#model-2-residual-plot" id="toc-model-2-residual-plot" class="nav-link" data-scroll-target="#model-2-residual-plot">Model 2: residual plot</a></li>
+  <li><a href="#trees-as-cylinders" id="toc-trees-as-cylinders" class="nav-link" data-scroll-target="#trees-as-cylinders">Trees as cylinders</a></li>
+  <li><a href="#model-3-transformation-of-the-predictors" id="toc-model-3-transformation-of-the-predictors" class="nav-link" data-scroll-target="#model-3-transformation-of-the-predictors">Model 3: transformation of the predictors</a></li>
+  <li><a href="#model-3-predicted-line" id="toc-model-3-predicted-line" class="nav-link" data-scroll-target="#model-3-predicted-line">Model 3 predicted line</a></li>
+  <li><a href="#model-3-residual-plot" id="toc-model-3-residual-plot" class="nav-link" data-scroll-target="#model-3-residual-plot">Model 3: residual plot</a></li>
+  <li><a href="#model-4-loglog-transformation" id="toc-model-4-loglog-transformation" class="nav-link" data-scroll-target="#model-4-loglog-transformation">Model 4: Log–Log Transformation</a></li>
+  <li><a href="#model-4-residual-plot" id="toc-model-4-residual-plot" class="nav-link" data-scroll-target="#model-4-residual-plot">Model 4: residual plot</a></li>
+  <li><a href="#modelling-the-log-response" id="toc-modelling-the-log-response" class="nav-link" data-scroll-target="#modelling-the-log-response">Modelling the Log Response</a></li>
+  <li><a href="#model-comparison" id="toc-model-comparison" class="nav-link" data-scroll-target="#model-comparison">Model comparison</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  </ul></li>
+  <li><a href="#credit-data" id="toc-credit-data" class="nav-link" data-scroll-target="#credit-data">Credit data</a>
+  <ul class="collapse">
+  <li><a href="#figure-3.6-isl" id="toc-figure-3.6-isl" class="nav-link" data-scroll-target="#figure-3.6-isl">Figure 3.6 ISL</a></li>
+  <li><a href="#qualitative-predictors" id="toc-qualitative-predictors" class="nav-link" data-scroll-target="#qualitative-predictors">Qualitative Predictors</a></li>
+  <li><a href="#qualitative-predictors---continued" id="toc-qualitative-predictors---continued" class="nav-link" data-scroll-target="#qualitative-predictors---continued">Qualitative Predictors - continued</a></li>
+  <li><a href="#interactions-between-qualitative-and-quantitative-variables" id="toc-interactions-between-qualitative-and-quantitative-variables" class="nav-link" data-scroll-target="#interactions-between-qualitative-and-quantitative-variables">Interactions between qualitative and quantitative variables</a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"></a></li>
+  <li><a href="#figure-3.7-isl" id="toc-figure-3.7-isl" class="nav-link" data-scroll-target="#figure-3.7-isl">Figure 3.7 ISL</a></li>
+  </ul></li>
+  <li><a href="#subset-selection" id="toc-subset-selection" class="nav-link" data-scroll-target="#subset-selection">Subset Selection</a>
+  <ul class="collapse">
+  <li><a href="#best-subset-selection" id="toc-best-subset-selection" class="nav-link" data-scroll-target="#best-subset-selection">Best Subset Selection</a></li>
+  <li><a href="#figure-6.1-isl" id="toc-figure-6.1-isl" class="nav-link" data-scroll-target="#figure-6.1-isl">Figure 6.1 ISL</a></li>
+  <li><a href="#forward-stepwise-selection" id="toc-forward-stepwise-selection" class="nav-link" data-scroll-target="#forward-stepwise-selection">Forward Stepwise Selection</a></li>
+  <li><a href="#forward-stepwise-selection-in-detail" id="toc-forward-stepwise-selection-in-detail" class="nav-link" data-scroll-target="#forward-stepwise-selection-in-detail">Forward Stepwise Selection — In Detail</a></li>
+  <li><a href="#credit-data-example" id="toc-credit-data-example" class="nav-link" data-scroll-target="#credit-data-example">Credit data example</a></li>
+  <li><a href="#choosing-the-optimal-model" id="toc-choosing-the-optimal-model" class="nav-link" data-scroll-target="#choosing-the-optimal-model">Choosing the Optimal Model</a></li>
+  <li><a href="#estimating-test-error-two-approaches" id="toc-estimating-test-error-two-approaches" class="nav-link" data-scroll-target="#estimating-test-error-two-approaches">Estimating test error: two approaches</a></li>
+  <li><a href="#c_p-aic-bic-and-adjusted-r2" id="toc-c_p-aic-bic-and-adjusted-r2" class="nav-link" data-scroll-target="#c_p-aic-bic-and-adjusted-r2"><span class="math inline">C_p</span>, AIC, BIC, and Adjusted <span class="math inline">R^2</span></a></li>
+  <li><a href="#figure-6.2-isl" id="toc-figure-6.2-isl" class="nav-link" data-scroll-target="#figure-6.2-isl">Figure 6.2 ISL</a></li>
+  <li><a href="#mallows-c_p" id="toc-mallows-c_p" class="nav-link" data-scroll-target="#mallows-c_p">Mallows’ <span class="math inline">C_p</span></a></li>
+  <li><a href="#bic" id="toc-bic" class="nav-link" data-scroll-target="#bic">BIC</a></li>
+  <li><a href="#validation-and-cross-validation" id="toc-validation-and-cross-validation" class="nav-link" data-scroll-target="#validation-and-cross-validation">Validation and Cross-Validation</a></li>
+  <li><a href="#figure-6.3-isl" id="toc-figure-6.3-isl" class="nav-link" data-scroll-target="#figure-6.3-isl">Figure 6.3 ISL</a></li>
   <li><a href="#required-readings-from-the-textbook-and-course-materials" id="toc-required-readings-from-the-textbook-and-course-materials" class="nav-link" data-scroll-target="#required-readings-from-the-textbook-and-course-materials">Required readings from the textbook and course materials</a></li>
+  <li><a href="#required-readings-from-the-textbook-and-course-materials-1" id="toc-required-readings-from-the-textbook-and-course-materials-1" class="nav-link" data-scroll-target="#required-readings-from-the-textbook-and-course-materials-1">Required readings from the textbook and course materials</a></li>
+  </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="un_C_slides.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
 </div>
@@ -145,327 +194,811 @@ window.Quarto = {
 <li>Linear models</li>
 <li>The modeling process</li>
 </ul>
-<section id="car-data-diesel-or-gas" class="level2">
-<h2 class="anchored" data-anchor-id="car-data-diesel-or-gas">Car data (<span class="blue">diesel</span> or <span class="orange">gas</span>)</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="un_C_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="750"></p>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
+<section id="trees-data" class="level1">
+<h1>Trees data</h1>
 <ul>
-<li><p>We consider data for <span class="math inline">n = 203</span> models of cars in circulation in 1985 in the USA.</p></li>
-<li><p>We want to <span class="blue">predict</span> the distance per unit of fuel as a function of the vehicle features.</p></li>
-<li><p>We consider the following <span class="orange">variables</span>:</p>
-<ul>
-<li>The city distance per unit of fuel (km/L, <code>city.distance</code>)</li>
-<li>The engine size (L, <code>engine.size</code>)</li>
-<li>The number of cylinders (<code>n.cylinders</code>)</li>
-<li>The curb weight (kg, <code>curb.weight</code>)</li>
-<li>The fuel type (gasoline or diesel, <code>fuel</code>).</li>
-</ul></li>
-<li><p>The car dataset is available from the textbook (A&amp;S) website:</p>
-<ul>
-<li>Dataset <a href="http://azzalini.stat.unipd.it/Book-DM/auto.dat" class="uri">http://azzalini.stat.unipd.it/Book-DM/auto.dat</a></li>
-<li>Variable description <a href="http://azzalini.stat.unipd.it/Book-DM/auto.names" class="uri">http://azzalini.stat.unipd.it/Book-DM/auto.names</a></li>
-</ul></li>
-</ul>
-</div>
-</div>
-</section>
-<section id="simple-linear-regression" class="level2">
-<h2 class="anchored" data-anchor-id="simple-linear-regression">Simple linear regression</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="un_C_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="600"></p>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:60%;">
-<ul>
-<li><p>Let us consider the variables <code>city.distance</code> (<span class="math inline">y</span>), <code>engine.size</code> (<span class="math inline">x</span>) and <code>fuel</code> (<span class="math inline">z</span>).</p></li>
-<li><p>A <span class="blue">simple linear regression</span> <span class="math display">
-Y = \beta_0 + \beta_1 X + \epsilon
-</span> could be easily fit by least squares…</p></li>
-<li><p>… but the plot suggests that the relationship between <code>city.distance</code> and <code>engine.size</code> is <span class="orange">not</span> well approximated by a <span class="orange">linear</span> function.</p></li>
-<li><p>… and also that <code>fuel</code> has a non-negligible effect on the response.</p></li>
-</ul>
-</div>
-</div>
-</section>
-<section id="multiple-linear-regression" class="level2">
-<h2 class="anchored" data-anchor-id="multiple-linear-regression">Multiple linear regression</h2>
-<div class="incremental">
-<ul class="incremental">
-<li><p>Linear regression is a simple approach to supervised learning. It assumes that the dependence of <span class="math inline">Y</span> on <span class="math inline">X_1,X_2,\ldots,X_p</span> is linear.</p></li>
-<li><p>Here our <span class="orange">linear model</span> is <span class="math display">Y = \beta_0 + \beta_1X_1 + \beta_2 X_2 + \ldots + \beta_p X_p + \varepsilon</span></p></li>
-<li><p>Given estimates <span class="math inline">\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_p</span> we can make predictions using the formula <span class="math display">\hat{y} = \hat\beta_0 + \hat\beta_1 x_1 + \hat\beta_2 x_2 + \ldots + \hat\beta_p x_p</span></p></li>
-<li><p>We estimate <span class="math inline">\beta_0,\beta_1,\ldots,\beta_p</span> as the values that minimize the sum of squared residuals</p></li>
-</ul>
-<p><span class="math display">\begin{aligned}
-\mathrm{RSS}
-&amp;= \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 \\
-&amp;= \sum_{i=1}^{n}
-\left(
-y_i - \hat{\beta}_0 - \hat{\beta}_1 x_{i1}
-- \hat{\beta}_2 x_{i2} - \cdots - \hat{\beta}_p x_{ip}
-\right)^2
-\end{aligned}
-</span></p>
-<p>This is done using standard statistical software. The values <span class="math inline">\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_p</span> that minimize RSS are the multiple least squares regression coefficient estimates.</p>
-</div>
-</section>
-<section id="car-data-a-first-model" class="level2">
-<h2 class="anchored" data-anchor-id="car-data-a-first-model">Car data, a first model</h2>
-<ul>
-<li><p>Let us consider again the variables <code>city.distance</code> (<span class="math inline">Y</span>), <code>engine.size</code> (<span class="math inline">X</span>) and <code>fuel</code> (<span class="math inline">Z</span>).</p></li>
-<li><p>A first attempt is to consider a <span class="orange">polynomial term</span> combined with a <span class="blue">dummy variable</span> <span class="math display">
-Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \beta_3 X^3 + \beta_4 I(Z = \texttt{gas}) + \varepsilon,
-</span> which is a special instance of <span class="orange">linear model</span>.</p></li>
-<li><p>Indeed, by looking at the plot of the data, it is plausible that we need a <span class="orange">polynomial</span> of degree <span class="math inline">3</span> or <span class="math inline">4</span></p></li>
-<li><p>It is also clear from the plot that <code>fuel</code> is a relevant variable. Categorical variables are <span class="orange">encoded</span> using <span class="blue">indicator variables</span>: <span class="math display">
-z_i =
-\begin{cases}
-1 &amp; \text{if the $i$th car is gas} \\
-0 &amp; \text{if the $i$th car is diesel}
-\end{cases}
-</span> Resulting model: <span class="math display">
-\hat{y}
-=
-\begin{cases}
-\hat\beta_0 + \hat\beta_1 x + \hat\beta_2 x^2 + \hat\beta_3 x^3 + \hat\beta_4 &amp; \text{if the car is gas} \\
-\hat\beta_0 + \hat\beta_1 x + \hat\beta_2 x^2 + \hat\beta_3 x^3 &amp; \text{if the car is diesel}
-\end{cases}
-</span></p></li>
-<li><p>To evaluate the goodness of fit, we can calculate the <span class="orange">coefficient of determination</span>: <span class="math display">
-R^2 = 1 - \frac{\text{(``Residual deviance'')}}{\text{(``Total deviance'')}} = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{\sum_{i=1}^n(y_i - \bar{y})^2}.
-</span></p></li>
-</ul>
-</section>
-<section id="a-first-model-estimated-coefficients" class="level2">
-<h2 class="anchored" data-anchor-id="a-first-model-estimated-coefficients">A first model: estimated coefficients</h2>
-<ul>
-<li>We obtain the following <span class="orange">summary</span> for the regression coefficients <span class="math inline">\hat{\beta}</span>.</li>
-</ul>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th style="text-align: left;">term</th>
-<th style="text-align: right;">estimate</th>
-<th style="text-align: right;">std.error</th>
-<th style="text-align: right;">statistic</th>
-<th style="text-align: right;">p.value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><code>(Intercept)</code></td>
-<td style="text-align: right;">28.045</td>
-<td style="text-align: right;">3.076</td>
-<td style="text-align: right;">9.119</td>
-<td style="text-align: right;">0.000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>engine.size</code></td>
-<td style="text-align: right;">-10.980</td>
-<td style="text-align: right;">3.531</td>
-<td style="text-align: right;">-3.109</td>
-<td style="text-align: right;">0.002</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>engine.size^2</code></td>
-<td style="text-align: right;">2.098</td>
-<td style="text-align: right;">1.271</td>
-<td style="text-align: right;">1.651</td>
-<td style="text-align: right;">0.100</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>engine.size^3</code></td>
-<td style="text-align: right;">-0.131</td>
-<td style="text-align: right;">0.139</td>
-<td style="text-align: right;">-0.939</td>
-<td style="text-align: right;">0.349</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>fuel_gas</code></td>
-<td style="text-align: right;">-3.214</td>
-<td style="text-align: right;">0.427</td>
-<td style="text-align: right;">-7.523</td>
-<td style="text-align: right;">0.000</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>Moreover, the coefficient <span class="math inline">R^2</span> and the residual standard deviation <span class="math inline">s</span> are:</li>
+<li><p>These data give the <code>Volume</code> (cubic feet), <code>Height</code> (feet) and <code>Diameter</code> (inches) (at 54 inches above ground) for a sample of <span class="math inline">n=31</span> black cherry trees in the Allegheny National Forest, Pennsylvania.</p></li>
+<li><p>The data were collected in order to find an estimate for the volume of a tree <span class="math inline">Y</span> (and therefore for the timber yield), given its diameter <span class="math inline">X_1</span> and height <span class="math inline">X_2</span>.</p></li>
 </ul>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th style="text-align: right;">r.squared</th>
-<th style="text-align: right;">sigma</th>
-<th style="text-align: right;">deviance</th>
+<th style="text-align: right;">Volume</th>
+<th style="text-align: right;">Diameter</th>
+<th style="text-align: right;">Height</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">0.5973454</td>
-<td style="text-align: right;">1.790362</td>
-<td style="text-align: right;">634.6687</td>
+<td style="text-align: right;">10.3</td>
+<td style="text-align: right;">8.3</td>
+<td style="text-align: right;">70</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10.3</td>
+<td style="text-align: right;">8.6</td>
+<td style="text-align: right;">65</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">10.2</td>
+<td style="text-align: right;">8.8</td>
+<td style="text-align: right;">63</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">16.4</td>
+<td style="text-align: right;">10.5</td>
+<td style="text-align: right;">72</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">18.8</td>
+<td style="text-align: right;">10.7</td>
+<td style="text-align: right;">81</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">19.7</td>
+<td style="text-align: right;">10.8</td>
+<td style="text-align: right;">83</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-</section>
-<section id="a-first-model-fitted-values" class="level2">
-<h2 class="anchored" data-anchor-id="a-first-model-fitted-values">A first model: fitted values</h2>
-<div class="cell" data-layout-align="center">
+<section id="scatterplot-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="scatterplot-matrix">Scatterplot Matrix</h2>
+<div class="cell">
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
+<div>
 <figure class="figure">
-<p><img src="un_C_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1170"></p>
+<p><img src="un_C_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="750"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="linear-models-and-non-linear-patterns" class="level2">
-<h2 class="anchored" data-anchor-id="linear-models-and-non-linear-patterns">Linear models and non-linear patterns</h2>
+<section id="scatterplot-3d" class="level2">
+<h2 class="anchored" data-anchor-id="scatterplot-3d">Scatterplot 3d</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-9adbf41aca4704c92ee1" style="width:100%;height:585px;"></div>
+<script type="application/json" data-for="htmlwidget-9adbf41aca4704c92ee1">{"x":{"visdat":{"11041b3cc759":["function () ","plotlyVisDat"]},"cur_data":"11041b3cc759","attrs":{"11041b3cc759":{"x":{},"y":{},"z":{},"mode":"markers","marker":{"size":5},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"Diameter (inches)"},"yaxis":{"title":"Height (feet)"},"zaxis":{"title":"Volume (ft³)"}},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[8.3000000000000007,8.5999999999999996,8.8000000000000007,10.5,10.699999999999999,10.800000000000001,11,11,11.1,11.199999999999999,11.300000000000001,11.4,11.4,11.699999999999999,12,12.9,12.9,13.300000000000001,13.699999999999999,13.800000000000001,14,14.199999999999999,14.5,16,16.300000000000001,17.300000000000001,17.5,17.899999999999999,18,18,20.600000000000001],"y":[70,65,63,72,81,83,66,75,80,75,79,76,76,69,75,74,85,86,71,64,78,80,74,72,77,81,82,80,80,80,87],"z":[10.300000000000001,10.300000000000001,10.199999999999999,16.399999999999999,18.800000000000001,19.699999999999999,15.6,18.199999999999999,22.600000000000001,19.899999999999999,24.199999999999999,21,21.399999999999999,21.300000000000001,19.100000000000001,22.199999999999999,33.799999999999997,27.399999999999999,25.699999999999999,24.899999999999999,34.5,31.699999999999999,36.299999999999997,38.299999999999997,42.600000000000001,55.399999999999999,55.700000000000003,58.299999999999997,51.5,51,77],"mode":"markers","marker":{"color":"rgba(31,119,180,1)","size":5,"line":{"color":"rgba(31,119,180,1)"}},"type":"scatter3d","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="multiple-linear-regression" class="level2">
+<h2 class="anchored" data-anchor-id="multiple-linear-regression">Multiple linear regression</h2>
 <ul>
-<li>A significant advantage of linear models is that they can describe non-linear relationships via <span class="blue">variable transformations</span> such as polynomials, logarithms, etc.</li>
+<li><p>Linear regression is a simple approach to supervised learning. It assumes that the dependence of <span class="math inline">Y</span> on <span class="math inline">X_1,X_2,\ldots,X_p</span> is linear.</p></li>
+<li><p>The <span class="orange">linear model</span> is given by <span class="math display">Y = \beta_0 + \beta_1X_1 + \beta_2 X_2 + \ldots + \beta_p X_p + \varepsilon</span></p></li>
+<li><p>Given estimates <span class="math inline">\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_p</span> we can make predictions using the formula <span class="math display">\hat{y} = \hat\beta_0 + \hat\beta_1 x_1 + \hat\beta_2 x_2 + \ldots + \hat\beta_p x_p</span></p></li>
+<li><p>We estimate <span class="math inline">\beta_0,\beta_1,\ldots,\beta_p</span> as the values that minimize the sum of squared residuals</p></li>
 </ul>
+<p><span class="math display">\mathrm{RSS} = \sum_{i=1}^{n}
+(y_i - \hat y_i)^2= \sum_{i=1}^{n}
+(y_i - \hat{\beta}_0- \hat{\beta}_1 x_{i1}- \hat{\beta}_2 x_{i2}- \ldots - \hat{\beta}_p x_{ip})^2</span></p>
 <ul>
-<li>This gives the statistician a lot of modeling flexibility. For instance, we could let: <span class="math display">
-\log{Y} = \beta_0 + \beta_1 \log{X} + \beta_2 I(Z = \texttt{gas}) + \epsilon
-</span></li>
+<li>This is done using standard statistical software. The values <span class="math inline">\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_p</span> that minimize RSS are the <span class="orange">least squares estimates</span>.</li>
 </ul>
+</section>
+<section id="interpreting-regression-coefficients" class="level2">
+<h2 class="anchored" data-anchor-id="interpreting-regression-coefficients">Interpreting regression coefficients</h2>
 <ul>
-<li>This specification is <span class="orange">linear in the parameters</span>, it fixes the domain issues, and it imposes a monotone relationship between engine size and consumption.</li>
+<li><p>We interpret <span class="math inline">\beta_j</span> as the <span class="orange">average</span> effect on <span class="math inline">Y</span> of a one unit increase in <span class="math inline">X_j</span>, <span class="orange">holding all other predictors fixed</span></p></li>
+<li><p>But predictors usually change together! For example, in the tree data, larger <code>Diameter</code> is typically associated with greater <code>Height</code>. Holding <code>Height</code> fixed while increasing <code>Diameter</code> may be unrealistic.</p></li>
 </ul>
-<table class="caption-top table">
+</section>
+<section id="model-1-volume-diameter-height" class="level2">
+<h2 class="anchored" data-anchor-id="model-1-volume-diameter-height">Model 1: Volume ~ Diameter + Height</h2>
+<p><span class="math display">\mathrm{Volume} = \beta_0 + \beta_1 \times \mathrm{Diameter} + \beta_2 \times \mathrm{Height} +  \varepsilon</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Model 1: Volume ~ Diameter + Height</caption>
 <thead>
 <tr class="header">
-<th style="text-align: left;">term</th>
-<th style="text-align: right;">estimate</th>
-<th style="text-align: right;">std.error</th>
-<th style="text-align: right;">statistic</th>
-<th style="text-align: right;">p.value</th>
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std_Error</th>
+<th style="text-align: right;">t_value</th>
+<th style="text-align: right;">p_value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><code>(Intercept)</code></td>
-<td style="text-align: right;">3.060</td>
-<td style="text-align: right;">0.047</td>
-<td style="text-align: right;">64.865</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-57.9877</td>
+<td style="text-align: right;">8.6382</td>
+<td style="text-align: right;">-6.7129</td>
+<td style="text-align: right;">0.0000</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><code>log(engine.size)</code></td>
-<td style="text-align: right;">-0.682</td>
-<td style="text-align: right;">0.040</td>
-<td style="text-align: right;">-17.129</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">Diameter</td>
+<td style="text-align: right;">4.7082</td>
+<td style="text-align: right;">0.2643</td>
+<td style="text-align: right;">17.8161</td>
+<td style="text-align: right;">0.0000</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><code>fuel_gas</code></td>
-<td style="text-align: right;">-0.278</td>
-<td style="text-align: right;">0.038</td>
-<td style="text-align: right;">-7.344</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">Height</td>
+<td style="text-align: right;">0.3393</td>
+<td style="text-align: right;">0.1302</td>
+<td style="text-align: right;">2.6066</td>
+<td style="text-align: right;">0.0145</td>
 </tr>
 </tbody>
 </table>
+</div>
+</div>
 </section>
-<section id="second-model-fitted-values" class="level2">
-<h2 class="anchored" data-anchor-id="second-model-fitted-values">Second model: fitted values</h2>
-<div class="cell" data-layout-align="center">
+<section id="model-1-regression-plane" class="level2">
+<h2 class="anchored" data-anchor-id="model-1-regression-plane">Model 1: Regression plane</h2>
+<div class="cell">
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-d07b7097dadcd963f21c" style="width:100%;height:585px;"></div>
+<script type="application/json" data-for="htmlwidget-d07b7097dadcd963f21c">{"x":{"visdat":{"1104179638179":["function () ","plotlyVisDat"],"1104173c96d31":["function () ","data"]},"cur_data":"1104173c96d31","attrs":{"1104173c96d31":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"z":{},"type":"scatter3d","mode":"markers","marker":{"size":5},"name":"Observed","inherit":true},"1104173c96d31.1":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"z":[[2.462901014080598,2.8021522483252994,3.1414034825700008,3.4806547168147022,3.8199059510594031,4.1591571853041049,4.4984084195488059,4.8376596537935068,5.1769108880382086,5.5161621222829096,5.8554133565276105,6.1946645907723124,6.5339158250170133,6.8731670592617142,7.2124182935064161,7.551669527751117,7.8909207619958188,8.2301719962405198,8.5694232304852207,8.9086744647299216,9.2479256989746244,9.5871769332193253,9.9264281674640262,10.265679401708727,10.604930635953428],[4.8758332718770685,5.2150845061217694,5.5543357403664704,5.8935869746111722,6.2328382088558731,6.572089443100575,6.9113406773452759,7.2505919115899768,7.5898431458346787,7.9290943800793796,8.2683456143240814,8.6075968485687824,8.9468480828134833,9.2860993170581843,9.6253505513028852,9.9646017855475879,10.303853019792289,10.64310425403699,10.982355488281691,11.321606722526392,11.660857956771094,12.000109191015795,12.339360425260496,12.678611659505197,13.017862893749898],[7.2887655296735492,7.6280167639182501,7.9672679981629511,8.306519232407652,8.6457704666523547,8.9850217008970557,9.3242729351417566,9.6635241693864575,10.002775403631158,10.342026637875861,10.681277872120562,11.020529106365263,11.359780340609964,11.699031574854665,12.038282809099366,12.377534043344069,12.71678527758877,13.05603651183347,13.395287746078171,13.734538980322872,14.073790214567575,14.413041448812276,14.752292683056977,15.091543917301678,15.430795151546379],[9.701697787470021,10.040949021714722,10.380200255959423,10.719451490204124,11.058702724448827,11.397953958693527,11.737205192938228,12.076456427182929,12.41570766142763,12.754958895672331,13.094210129917034,13.433461364161735,13.772712598406436,14.111963832651137,14.451215066895838,14.79046630114054,15.129717535385241,15.468968769629942,15.808220003874643,16.147471238119344,16.486722472364047,16.825973706608746,17.165224940853449,17.504476175098151,17.843727409342851],[12.1146300452665,12.453881279511201,12.793132513755902,13.132383748000603,13.471634982245305,13.810886216490006,14.150137450734707,14.489388684979408,14.828639919224109,15.167891153468812,15.507142387713513,15.846393621958214,16.185644856202916,16.524896090447616,16.864147324692318,17.203398558937018,17.54264979318172,17.881901027426423,18.221152261671122,18.560403495915825,18.899654730160524,19.238905964405227,19.578157198649926,19.917408432894629,20.256659667139331],[14.52756230306297,14.866813537307671,15.206064771552372,15.545316005797073,15.884567240041775,16.223818474286475,16.563069708531177,16.90232094277588,17.241572177020579,17.580823411265282,17.920074645509981,18.259325879754684,18.598577113999387,18.937828348244086,19.277079582488788,19.616330816733488,19.95558205097819,20.294833285222893,20.634084519467592,20.973335753712295,21.312586987956994,21.651838222201697,21.991089456446396,22.330340690691099,22.669591924935801],[16.940494560859442,17.279745795104141,17.618997029348844,17.958248263593543,18.297499497838245,18.636750732082948,18.976001966327647,19.31525320057235,19.654504434817049,19.993755669061752,20.333006903306455,20.672258137551154,21.011509371795857,21.350760606040556,21.690011840285258,22.029263074529961,22.36851430877466,22.707765543019363,23.047016777264062,23.386268011508765,23.725519245753468,24.064770479998167,24.404021714242869,24.743272948487569,25.082524182732271],[19.353426818655919,19.692678052900622,20.031929287145321,20.371180521390023,20.710431755634726,21.049682989879425,21.388934224124128,21.728185458368827,22.06743669261353,22.406687926858233,22.745939161102932,23.085190395347635,23.424441629592334,23.763692863837036,24.102944098081739,24.442195332326438,24.781446566571141,25.12069780081584,25.459949035060543,25.799200269305246,26.138451503549945,26.477702737794647,26.816953972039347,27.156205206284049,27.495456440528752],[21.7663590764524,22.105610310697102,22.444861544941801,22.784112779186504,23.123364013431203,23.462615247675906,23.801866481920605,24.141117716165308,24.480368950410011,24.81962018465471,25.158871418899412,25.498122653144112,25.837373887388814,26.176625121633517,26.515876355878216,26.855127590122919,27.194378824367618,27.533630058612321,27.872881292857024,28.212132527101723,28.551383761346425,28.890634995591125,29.229886229835827,29.56913746408053,29.908388698325229],[24.17929133424887,24.518542568493572,24.857793802738271,25.197045036982974,25.536296271227677,25.875547505472376,26.214798739717079,26.554049973961778,26.893301208206481,27.23255244245118,27.571803676695883,27.911054910940585,28.250306145185284,28.589557379429987,28.928808613674686,29.268059847919389,29.607311082164092,29.946562316408791,30.285813550653494,30.625064784898193,30.964316019142895,31.303567253387598,31.642818487632297,31.982069721877,32.321320956121703],[26.59222359204534,26.931474826290042,27.270726060534745,27.609977294779444,27.949228529024147,28.288479763268846,28.627730997513549,28.966982231758251,29.306233466002951,29.645484700247653,29.984735934492353,30.323987168737055,30.663238402981758,31.002489637226457,31.34174087147116,31.680992105715859,32.020243339960558,32.359494574205264,32.698745808449964,33.037997042694663,33.377248276939369,33.716499511184068,34.055750745428767,34.395001979673474,34.734253213918173],[29.00515584984182,29.344407084086519,29.683658318331222,30.022909552575925,30.362160786820624,30.701412021065327,31.040663255310026,31.379914489554729,31.719165723799431,32.058416958044134,32.397668192288833,32.736919426533532,33.076170660778239,33.415421895022938,33.754673129267637,34.093924363512336,34.433175597757042,34.772426832001742,35.111678066246441,35.450929300491147,35.790180534735846,36.129431768980545,36.468683003225244,36.807934237469951,37.14718547171465],[31.41808810763829,31.757339341882993,32.096590576127696,32.435841810372395,32.775093044617094,33.1143442788618,33.453595513106499,33.792846747351199,34.132097981595905,34.471349215840604,34.810600450085303,35.149851684330002,35.489102918574709,35.828354152819408,36.167605387064107,36.506856621308813,36.846107855553512,37.185359089798212,37.524610324042918,37.863861558287617,38.203112792532316,38.542364026777015,38.881615261021722,39.220866495266421,39.56011772951112],[33.831020365434767,34.170271599679474,34.509522833924173,34.848774068168872,35.188025302413578,35.527276536658277,35.866527770902977,36.205779005147683,36.545030239392382,36.884281473637081,37.22353270788178,37.562783942126487,37.902035176371186,38.241286410615885,38.580537644860591,38.91978887910529,39.25904011334999,39.598291347594696,39.937542581839395,40.276793816084094,40.616045050328793,40.9552962845735,41.294547518818199,41.633798753062898,41.973049987307604],[36.243952623231237,36.583203857475944,36.922455091720643,37.261706325965342,37.600957560210048,37.940208794454747,38.279460028699447,38.618711262944153,38.957962497188852,39.297213731433551,39.63646496567825,39.975716199922957,40.314967434167656,40.654218668412355,40.993469902657061,41.33272113690176,41.67197237114646,42.011223605391166,42.350474839635865,42.689726073880564,43.028977308125263,43.36822854236997,43.707479776614669,44.046731010859368,44.385982245104074],[38.656884881027715,38.996136115272414,39.335387349517113,39.674638583761819,40.013889818006518,40.353141052251218,40.692392286495917,41.031643520740623,41.370894754985322,41.710145989230021,42.049397223474728,42.388648457719427,42.727899691964126,43.067150926208832,43.406402160453531,43.74565339469823,44.08490462894293,44.424155863187636,44.763407097432335,45.102658331677034,45.44190956592174,45.78116080016644,46.120412034411139,46.459663268655845,46.798914502900544],[41.069817138824185,41.409068373068884,41.748319607313583,42.087570841558289,42.426822075802988,42.766073310047688,43.105324544292387,43.444575778537093,43.783827012781792,44.123078247026491,44.462329481271198,44.801580715515897,45.140831949760596,45.480083184005302,45.819334418250001,46.1585856524947,46.4978368867394,46.837088120984106,47.176339355228805,47.515590589473504,47.85484182371821,48.19409305796291,48.533344292207609,48.872595526452315,49.211846760697014],[43.482749396620669,43.822000630865375,44.161251865110074,44.500503099354773,44.839754333599473,45.179005567844179,45.518256802088878,45.857508036333577,46.196759270578283,46.536010504822983,46.875261739067682,47.214512973312381,47.553764207557087,47.893015441801786,48.232266676046486,48.571517910291192,48.910769144535891,49.25002037878059,49.589271613025296,49.928522847269996,50.267774081514695,50.607025315759394,50.9462765500041,51.285527784248799,51.624779018493498],[45.895681654417139,46.234932888661845,46.574184122906544,46.913435357151243,47.252686591395943,47.591937825640649,47.931189059885348,48.270440294130047,48.609691528374753,48.948942762619453,49.288193996864152,49.627445231108851,49.966696465353557,50.305947699598256,50.645198933842956,50.984450168087662,51.323701402332361,51.66295263657706,52.002203870821766,52.341455105066466,52.680706339311165,53.019957573555864,53.35920880780057,53.698460042045269,54.037711276289969],[48.308613912213616,48.647865146458315,48.987116380703014,49.326367614947721,49.66561884919242,50.004870083437119,50.344121317681818,50.683372551926524,51.022623786171224,51.361875020415923,51.701126254660629,52.040377488905328,52.379628723150027,52.718879957394734,53.058131191639433,53.397382425884132,53.736633660128831,54.075884894373537,54.415136128618236,54.754387362862936,55.093638597107642,55.432889831352341,55.77214106559704,56.111392299841746,56.450643534086446],[50.7215461700101,51.060797404254799,51.400048638499499,51.739299872744205,52.078551106988904,52.417802341233603,52.757053575478302,53.096304809723009,53.435556043967708,53.774807278212407,54.114058512457113,54.453309746701812,54.792560980946512,55.131812215191218,55.471063449435917,55.810314683680616,56.149565917925315,56.488817152170022,56.828068386414721,57.16731962065942,57.506570854904126,57.845822089148825,58.185073323393524,58.524324557638231,58.86357579188293],[53.134478427806556,53.473729662051255,53.812980896295954,54.152232130540661,54.49148336478536,54.830734599030059,55.169985833274758,55.509237067519464,55.848488301764164,56.187739536008863,56.526990770253569,56.866242004498268,57.205493238742967,57.544744472987674,57.883995707232373,58.223246941477072,58.562498175721771,58.901749409966477,59.241000644211177,59.580251878455876,59.919503112700582,60.258754346945281,60.59800558118998,60.937256815434687,61.276508049679386],[55.54741068560304,55.886661919847739,56.225913154092439,56.565164388337145,56.904415622581844,57.243666856826543,57.582918091071242,57.922169325315949,58.261420559560648,58.600671793805347,58.939923028050053,59.279174262294752,59.618425496539452,59.957676730784158,60.296927965028857,60.636179199273556,60.975430433518255,61.314681667762962,61.653932902007661,61.99318413625236,62.332435370497066,62.671686604741765,63.010937838986464,63.350189073231171,63.68944030747587],[57.960342943399517,58.299594177644217,58.638845411888916,58.978096646133622,59.317347880378321,59.65659911462302,59.99585034886772,60.335101583112426,60.674352817357125,61.013604051601824,61.35285528584653,61.69210652009123,62.031357754335929,62.370608988580635,62.709860222825334,63.049111457070033,63.388362691314732,63.727613925559439,64.066865159804138,64.406116394048837,64.745367628293536,65.084618862538235,65.423870096782949,65.763121331027648,66.102372565272347],[60.373275201195987,60.712526435440687,61.051777669685386,61.391028903930092,61.730280138174791,62.06953137241949,62.40878260666419,62.748033840908896,63.087285075153595,63.426536309398294,63.765787543643,64.1050387778877,64.444290012132399,64.783541246377098,65.122792480621797,65.46204371486651,65.80129494911121,66.140546183355909,66.479797417600608,66.819048651845307,67.158299886090006,67.497551120334705,67.836802354579419,68.176053588824118,68.515304823068817]],"type":"surface","x":[8.3000000000000007,8.8125,9.3250000000000011,9.8375000000000004,10.350000000000001,10.862500000000001,11.375,11.887500000000001,12.400000000000002,12.912500000000001,13.425000000000001,13.937500000000002,14.450000000000001,14.962500000000002,15.475000000000001,15.987500000000001,16.5,17.012500000000003,17.525000000000002,18.037500000000001,18.550000000000004,19.0625,19.575000000000003,20.087500000000002,20.600000000000001],"y":[63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87],"opacity":0.5,"showscale":false,"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"Diameter"},"yaxis":{"title":"Height"},"zaxis":{"title":"Volume"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[8.3000000000000007,8.5999999999999996,8.8000000000000007,10.5,10.699999999999999,10.800000000000001,11,11,11.1,11.199999999999999,11.300000000000001,11.4,11.4,11.699999999999999,12,12.9,12.9,13.300000000000001,13.699999999999999,13.800000000000001,14,14.199999999999999,14.5,16,16.300000000000001,17.300000000000001,17.5,17.899999999999999,18,18,20.600000000000001],"y":[70,65,63,72,81,83,66,75,80,75,79,76,76,69,75,74,85,86,71,64,78,80,74,72,77,81,82,80,80,80,87],"z":[10.300000000000001,10.300000000000001,10.199999999999999,16.399999999999999,18.800000000000001,19.699999999999999,15.6,18.199999999999999,22.600000000000001,19.899999999999999,24.199999999999999,21,21.399999999999999,21.300000000000001,19.100000000000001,22.199999999999999,33.799999999999997,27.399999999999999,25.699999999999999,24.899999999999999,34.5,31.699999999999999,36.299999999999997,38.299999999999997,42.600000000000001,55.399999999999999,55.700000000000003,58.299999999999997,51.5,51,77],"type":"scatter3d","mode":"markers","marker":{"color":"rgba(31,119,180,1)","size":5,"line":{"color":"rgba(31,119,180,1)"}},"name":"Observed","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"frame":null},{"colorbar":{"title":"Volume","ticklen":2},"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"z":[[2.462901014080598,2.8021522483252994,3.1414034825700008,3.4806547168147022,3.8199059510594031,4.1591571853041049,4.4984084195488059,4.8376596537935068,5.1769108880382086,5.5161621222829096,5.8554133565276105,6.1946645907723124,6.5339158250170133,6.8731670592617142,7.2124182935064161,7.551669527751117,7.8909207619958188,8.2301719962405198,8.5694232304852207,8.9086744647299216,9.2479256989746244,9.5871769332193253,9.9264281674640262,10.265679401708727,10.604930635953428],[4.8758332718770685,5.2150845061217694,5.5543357403664704,5.8935869746111722,6.2328382088558731,6.572089443100575,6.9113406773452759,7.2505919115899768,7.5898431458346787,7.9290943800793796,8.2683456143240814,8.6075968485687824,8.9468480828134833,9.2860993170581843,9.6253505513028852,9.9646017855475879,10.303853019792289,10.64310425403699,10.982355488281691,11.321606722526392,11.660857956771094,12.000109191015795,12.339360425260496,12.678611659505197,13.017862893749898],[7.2887655296735492,7.6280167639182501,7.9672679981629511,8.306519232407652,8.6457704666523547,8.9850217008970557,9.3242729351417566,9.6635241693864575,10.002775403631158,10.342026637875861,10.681277872120562,11.020529106365263,11.359780340609964,11.699031574854665,12.038282809099366,12.377534043344069,12.71678527758877,13.05603651183347,13.395287746078171,13.734538980322872,14.073790214567575,14.413041448812276,14.752292683056977,15.091543917301678,15.430795151546379],[9.701697787470021,10.040949021714722,10.380200255959423,10.719451490204124,11.058702724448827,11.397953958693527,11.737205192938228,12.076456427182929,12.41570766142763,12.754958895672331,13.094210129917034,13.433461364161735,13.772712598406436,14.111963832651137,14.451215066895838,14.79046630114054,15.129717535385241,15.468968769629942,15.808220003874643,16.147471238119344,16.486722472364047,16.825973706608746,17.165224940853449,17.504476175098151,17.843727409342851],[12.1146300452665,12.453881279511201,12.793132513755902,13.132383748000603,13.471634982245305,13.810886216490006,14.150137450734707,14.489388684979408,14.828639919224109,15.167891153468812,15.507142387713513,15.846393621958214,16.185644856202916,16.524896090447616,16.864147324692318,17.203398558937018,17.54264979318172,17.881901027426423,18.221152261671122,18.560403495915825,18.899654730160524,19.238905964405227,19.578157198649926,19.917408432894629,20.256659667139331],[14.52756230306297,14.866813537307671,15.206064771552372,15.545316005797073,15.884567240041775,16.223818474286475,16.563069708531177,16.90232094277588,17.241572177020579,17.580823411265282,17.920074645509981,18.259325879754684,18.598577113999387,18.937828348244086,19.277079582488788,19.616330816733488,19.95558205097819,20.294833285222893,20.634084519467592,20.973335753712295,21.312586987956994,21.651838222201697,21.991089456446396,22.330340690691099,22.669591924935801],[16.940494560859442,17.279745795104141,17.618997029348844,17.958248263593543,18.297499497838245,18.636750732082948,18.976001966327647,19.31525320057235,19.654504434817049,19.993755669061752,20.333006903306455,20.672258137551154,21.011509371795857,21.350760606040556,21.690011840285258,22.029263074529961,22.36851430877466,22.707765543019363,23.047016777264062,23.386268011508765,23.725519245753468,24.064770479998167,24.404021714242869,24.743272948487569,25.082524182732271],[19.353426818655919,19.692678052900622,20.031929287145321,20.371180521390023,20.710431755634726,21.049682989879425,21.388934224124128,21.728185458368827,22.06743669261353,22.406687926858233,22.745939161102932,23.085190395347635,23.424441629592334,23.763692863837036,24.102944098081739,24.442195332326438,24.781446566571141,25.12069780081584,25.459949035060543,25.799200269305246,26.138451503549945,26.477702737794647,26.816953972039347,27.156205206284049,27.495456440528752],[21.7663590764524,22.105610310697102,22.444861544941801,22.784112779186504,23.123364013431203,23.462615247675906,23.801866481920605,24.141117716165308,24.480368950410011,24.81962018465471,25.158871418899412,25.498122653144112,25.837373887388814,26.176625121633517,26.515876355878216,26.855127590122919,27.194378824367618,27.533630058612321,27.872881292857024,28.212132527101723,28.551383761346425,28.890634995591125,29.229886229835827,29.56913746408053,29.908388698325229],[24.17929133424887,24.518542568493572,24.857793802738271,25.197045036982974,25.536296271227677,25.875547505472376,26.214798739717079,26.554049973961778,26.893301208206481,27.23255244245118,27.571803676695883,27.911054910940585,28.250306145185284,28.589557379429987,28.928808613674686,29.268059847919389,29.607311082164092,29.946562316408791,30.285813550653494,30.625064784898193,30.964316019142895,31.303567253387598,31.642818487632297,31.982069721877,32.321320956121703],[26.59222359204534,26.931474826290042,27.270726060534745,27.609977294779444,27.949228529024147,28.288479763268846,28.627730997513549,28.966982231758251,29.306233466002951,29.645484700247653,29.984735934492353,30.323987168737055,30.663238402981758,31.002489637226457,31.34174087147116,31.680992105715859,32.020243339960558,32.359494574205264,32.698745808449964,33.037997042694663,33.377248276939369,33.716499511184068,34.055750745428767,34.395001979673474,34.734253213918173],[29.00515584984182,29.344407084086519,29.683658318331222,30.022909552575925,30.362160786820624,30.701412021065327,31.040663255310026,31.379914489554729,31.719165723799431,32.058416958044134,32.397668192288833,32.736919426533532,33.076170660778239,33.415421895022938,33.754673129267637,34.093924363512336,34.433175597757042,34.772426832001742,35.111678066246441,35.450929300491147,35.790180534735846,36.129431768980545,36.468683003225244,36.807934237469951,37.14718547171465],[31.41808810763829,31.757339341882993,32.096590576127696,32.435841810372395,32.775093044617094,33.1143442788618,33.453595513106499,33.792846747351199,34.132097981595905,34.471349215840604,34.810600450085303,35.149851684330002,35.489102918574709,35.828354152819408,36.167605387064107,36.506856621308813,36.846107855553512,37.185359089798212,37.524610324042918,37.863861558287617,38.203112792532316,38.542364026777015,38.881615261021722,39.220866495266421,39.56011772951112],[33.831020365434767,34.170271599679474,34.509522833924173,34.848774068168872,35.188025302413578,35.527276536658277,35.866527770902977,36.205779005147683,36.545030239392382,36.884281473637081,37.22353270788178,37.562783942126487,37.902035176371186,38.241286410615885,38.580537644860591,38.91978887910529,39.25904011334999,39.598291347594696,39.937542581839395,40.276793816084094,40.616045050328793,40.9552962845735,41.294547518818199,41.633798753062898,41.973049987307604],[36.243952623231237,36.583203857475944,36.922455091720643,37.261706325965342,37.600957560210048,37.940208794454747,38.279460028699447,38.618711262944153,38.957962497188852,39.297213731433551,39.63646496567825,39.975716199922957,40.314967434167656,40.654218668412355,40.993469902657061,41.33272113690176,41.67197237114646,42.011223605391166,42.350474839635865,42.689726073880564,43.028977308125263,43.36822854236997,43.707479776614669,44.046731010859368,44.385982245104074],[38.656884881027715,38.996136115272414,39.335387349517113,39.674638583761819,40.013889818006518,40.353141052251218,40.692392286495917,41.031643520740623,41.370894754985322,41.710145989230021,42.049397223474728,42.388648457719427,42.727899691964126,43.067150926208832,43.406402160453531,43.74565339469823,44.08490462894293,44.424155863187636,44.763407097432335,45.102658331677034,45.44190956592174,45.78116080016644,46.120412034411139,46.459663268655845,46.798914502900544],[41.069817138824185,41.409068373068884,41.748319607313583,42.087570841558289,42.426822075802988,42.766073310047688,43.105324544292387,43.444575778537093,43.783827012781792,44.123078247026491,44.462329481271198,44.801580715515897,45.140831949760596,45.480083184005302,45.819334418250001,46.1585856524947,46.4978368867394,46.837088120984106,47.176339355228805,47.515590589473504,47.85484182371821,48.19409305796291,48.533344292207609,48.872595526452315,49.211846760697014],[43.482749396620669,43.822000630865375,44.161251865110074,44.500503099354773,44.839754333599473,45.179005567844179,45.518256802088878,45.857508036333577,46.196759270578283,46.536010504822983,46.875261739067682,47.214512973312381,47.553764207557087,47.893015441801786,48.232266676046486,48.571517910291192,48.910769144535891,49.25002037878059,49.589271613025296,49.928522847269996,50.267774081514695,50.607025315759394,50.9462765500041,51.285527784248799,51.624779018493498],[45.895681654417139,46.234932888661845,46.574184122906544,46.913435357151243,47.252686591395943,47.591937825640649,47.931189059885348,48.270440294130047,48.609691528374753,48.948942762619453,49.288193996864152,49.627445231108851,49.966696465353557,50.305947699598256,50.645198933842956,50.984450168087662,51.323701402332361,51.66295263657706,52.002203870821766,52.341455105066466,52.680706339311165,53.019957573555864,53.35920880780057,53.698460042045269,54.037711276289969],[48.308613912213616,48.647865146458315,48.987116380703014,49.326367614947721,49.66561884919242,50.004870083437119,50.344121317681818,50.683372551926524,51.022623786171224,51.361875020415923,51.701126254660629,52.040377488905328,52.379628723150027,52.718879957394734,53.058131191639433,53.397382425884132,53.736633660128831,54.075884894373537,54.415136128618236,54.754387362862936,55.093638597107642,55.432889831352341,55.77214106559704,56.111392299841746,56.450643534086446],[50.7215461700101,51.060797404254799,51.400048638499499,51.739299872744205,52.078551106988904,52.417802341233603,52.757053575478302,53.096304809723009,53.435556043967708,53.774807278212407,54.114058512457113,54.453309746701812,54.792560980946512,55.131812215191218,55.471063449435917,55.810314683680616,56.149565917925315,56.488817152170022,56.828068386414721,57.16731962065942,57.506570854904126,57.845822089148825,58.185073323393524,58.524324557638231,58.86357579188293],[53.134478427806556,53.473729662051255,53.812980896295954,54.152232130540661,54.49148336478536,54.830734599030059,55.169985833274758,55.509237067519464,55.848488301764164,56.187739536008863,56.526990770253569,56.866242004498268,57.205493238742967,57.544744472987674,57.883995707232373,58.223246941477072,58.562498175721771,58.901749409966477,59.241000644211177,59.580251878455876,59.919503112700582,60.258754346945281,60.59800558118998,60.937256815434687,61.276508049679386],[55.54741068560304,55.886661919847739,56.225913154092439,56.565164388337145,56.904415622581844,57.243666856826543,57.582918091071242,57.922169325315949,58.261420559560648,58.600671793805347,58.939923028050053,59.279174262294752,59.618425496539452,59.957676730784158,60.296927965028857,60.636179199273556,60.975430433518255,61.314681667762962,61.653932902007661,61.99318413625236,62.332435370497066,62.671686604741765,63.010937838986464,63.350189073231171,63.68944030747587],[57.960342943399517,58.299594177644217,58.638845411888916,58.978096646133622,59.317347880378321,59.65659911462302,59.99585034886772,60.335101583112426,60.674352817357125,61.013604051601824,61.35285528584653,61.69210652009123,62.031357754335929,62.370608988580635,62.709860222825334,63.049111457070033,63.388362691314732,63.727613925559439,64.066865159804138,64.406116394048837,64.745367628293536,65.084618862538235,65.423870096782949,65.763121331027648,66.102372565272347],[60.373275201195987,60.712526435440687,61.051777669685386,61.391028903930092,61.730280138174791,62.06953137241949,62.40878260666419,62.748033840908896,63.087285075153595,63.426536309398294,63.765787543643,64.1050387778877,64.444290012132399,64.783541246377098,65.122792480621797,65.46204371486651,65.80129494911121,66.140546183355909,66.479797417600608,66.819048651845307,67.158299886090006,67.497551120334705,67.836802354579419,68.176053588824118,68.515304823068817]],"type":"surface","x":[8.3000000000000007,8.8125,9.3250000000000011,9.8375000000000004,10.350000000000001,10.862500000000001,11.375,11.887500000000001,12.400000000000002,12.912500000000001,13.425000000000001,13.937500000000002,14.450000000000001,14.962500000000002,15.475000000000001,15.987500000000001,16.5,17.012500000000003,17.525000000000002,18.037500000000001,18.550000000000004,19.0625,19.575000000000003,20.087500000000002,20.600000000000001],"y":[63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87],"opacity":0.5,"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="potential-problems" class="level2">
+<h2 class="anchored" data-anchor-id="potential-problems">Potential Problems</h2>
+<p>When we fit a linear regression model to a particular data set, many problems may occur. Most common among these are the following:</p>
+<ol type="1">
+<li><p>Non-linearity of the response-predictor relationships.</p></li>
+<li><p>Correlation of error terms.</p></li>
+<li><p>Non-constant variance of error terms.</p></li>
+<li><p>Outliers.</p></li>
+<li><p>High-leverage points.</p></li>
+<li><p>Collinearity.</p></li>
+</ol>
+</section>
+<section id="residual-plot" class="level2">
+<h2 class="anchored" data-anchor-id="residual-plot">Residual plot</h2>
+<ul>
+<li><p>Residual plots are a useful graphical tool for identifying non-linearity</p></li>
+<li><p>Plot the residuals, <span class="math display">
+e_i = y_i - \hat{y}_i,
+</span> against the fitted values <span class="math inline">\hat{y}_i</span>.</p></li>
+<li><p>A systematic pattern in this plot may indicate violations of the linearity assumption</p></li>
+</ul>
+</section>
+<section id="model-1-residual-plot" class="level2">
+<h2 class="anchored" data-anchor-id="model-1-residual-plot">Model 1: residual plot</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
 <figure class="figure">
-<p><img src="un_C_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1170"></p>
+<p><img src="un_C_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="750"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="a-third-model-additional-variables" class="level2">
-<h2 class="anchored" data-anchor-id="a-third-model-additional-variables">A third model: additional variables</h2>
+<section id="model-2-cube-root-transformation-of-the-response" class="level2">
+<h2 class="anchored" data-anchor-id="model-2-cube-root-transformation-of-the-response">Model 2: Cube-root transformation of the response</h2>
 <ul>
-<li><p>Let us consider <span class="blue">two additional variables</span>: <code>curb.weight</code> (<span class="math inline">w</span>) and <code>n.cylinders</code> (<span class="math inline">v</span>).</p></li>
-<li><p>A richer model, therefore, could be: <span class="math display">
-\log{Y} = \beta_0 + \beta_1 \log{x} +  \beta_2 \log{w} + \beta_3 I(Z = \texttt{gas}) + \beta_4 I(V = 2) + \epsilon,
-  </span> for <span class="math inline">i=1,\dots,n</span>. The estimates are:</p></li>
+<li><p>A cube-root transformation of the response leads to the model <span class="math display">\mathrm{Volume}^{1/3} = \beta_0 + \beta_1 \times \mathrm{Diameter} + \beta_2 \times \mathrm{Height} +  \varepsilon</span> in which both sides have the dimension of length.</p></li>
+<li><p>After fitting the model, we obtain the predicted cube-root volume</p></li>
 </ul>
-<table class="caption-top table">
+<p><span class="math display">
+\widehat{\mathrm{Volume}^{1/3}}
+=
+\hat\beta_0
++
+\hat\beta_1 \mathrm{Diameter}
++
+\hat\beta_2 \mathrm{Height}.
+</span></p>
+<ul>
+<li>To predict <code>Volume</code> on the original scale, we cube the fitted value:</li>
+</ul>
+<p><span class="math display">
+\widehat{\mathrm{Volume}}
+=
+\left(
+\widehat{\mathrm{Volume}^{1/3}}
+\right)^3.
+</span></p>
+</section>
+<section id="model-2-predicted-surface" class="level2">
+<h2 class="anchored" data-anchor-id="model-2-predicted-surface">Model 2: predicted surface</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-cf93fdb66e87df50f139" style="width:100%;height:585px;"></div>
+<script type="application/json" data-for="htmlwidget-cf93fdb66e87df50f139">{"x":{"visdat":{"11041716874ff":["function () ","plotlyVisDat"],"11041d94b84":["function () ","data"]},"cur_data":"11041d94b84","attrs":{"11041d94b84":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"z":{},"type":"scatter3d","mode":"markers","marker":{"size":4},"name":"Observed","inherit":true},"11041d94b84.1":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"z":[[9.0498067231573867,9.1663269394818645,9.2838430534919301,9.4023593030688808,9.5218799260940177,9.642409160448624,9.7639512440140059,9.8865104146714469,10.01009091030225,10.134696968787708,10.260332828009123,10.387002725847777,10.514710900184973,10.643461588902012,10.773259029880174,10.904107461000764,11.036011120145076,11.168974245194413,11.303001074030053,11.438095844533301,11.574262794585451,11.711506162067804,11.849830184861645,11.98923910084828,12.12973714790899,12.27132856392508,12.414017586777842,12.557808454348571,12.702705404518571,12.848712675169125,12.995834504181538,13.144075129437093,13.293438788817092,13.44392972020283,13.595552161475601,13.748310350516711,13.902208525207437,14.057250923429091,14.213441783062951,14.370785341990322],[9.6867510249998094,9.808664663094131,9.931596938479343,10.05555208903673,10.1805343526476,10.306547967193232,10.433597170554929,10.561686200613988,10.690819295251702,10.821000692349374,10.952234629788286,11.084525345449745,11.217877077215034,11.352294062965454,11.487780540582301,11.624340747946871,11.761978922940463,11.900699303444361,12.040506127339873,12.18140363250828,12.323396056830886,12.466487638188983,12.610682614463876,12.755985223536843,12.90239970328919,13.049930291602216,13.198581226357204,13.348356745435456,13.499261086718267,13.65129848808693,13.804473187422751,13.958789422607008,14.114251431521003,14.270863452046042,14.428629722063402,14.587554479454395,14.7476419621003,14.90889640788242,15.071322054682049,15.234923140380483],[10.352901674897735,10.480330750838561,10.608801203675569,10.738317271290052,10.868883191563311,11.000503202376629,11.133181541611314,11.26692244714865,11.401730156869936,11.537608908656468,11.674562940389549,11.812596489950458,11.951713795220501,12.091919094080975,12.233216624413165,12.375610624098373,12.519105331017892,12.663704983053025,12.809413818085055,12.956236073995282,13.104175988665,13.253237799975516,13.403425745808105,13.55474406404408,13.707196992564722,13.860788769251332,14.015523631985205,14.171405818647639,14.328439567119933,14.486629115283367,14.645978701019255,14.806492562208874,14.968174936733526,15.131030062474508,15.295062177313117,15.460275519130652,15.626674325808393,15.794262835227654,15.963045285269713,16.133025913815871],[11.048913386192496,11.181979916056488,11.316110562421962,11.451309563170199,11.587581156182509,11.724929579340174,11.863359070524494,12.002873867616765,12.143478208498282,12.285176331050348,12.427972473154243,12.571870872691278,12.716875767542732,12.862991395589907,13.010221994714099,13.158571802796605,13.308045057718724,13.458645997361739,13.610378859606959,13.763247882335664,13.917257303429157,14.072411360768733,14.228714292235695,14.386170335711322,14.544783729076919,14.704558710213787,14.865499517003206,15.027610387326478,15.1908955590649,15.355359270099767,15.521005758312379,15.687839261584019,15.855864017795989,16.025084264829591,16.195504240566105,16.367128182886844,16.539960329673082,16.714004918806129,16.889266188167273,17.065748375637813],[11.775440872225424,11.91426687208924,12.054179728059834,12.195183678018486,12.337282959846506,12.480481811425175,12.624784470635797,12.770195175359664,12.916718163478071,13.064357672872323,13.2131179414237,13.363003207013509,13.514017707523035,13.666165680833577,13.819451364826433,13.973878997382895,14.129452816384267,14.28617705971183,14.444055965246893,14.603093770870736,14.763294714464662,14.924663033909967,15.087202967087954,15.250918751879901,15.41581462616711,15.581894827830888,15.749163594752511,15.917625164813284,16.087283775894502,16.258143665877459,16.430209072643457,16.603484234073779,16.777973388049723,16.953680772452596,17.13061062516368,17.30876718406428,17.488154687035674,17.668777371959173,17.850639476716065,18.033745239187649],[12.533138846337851,12.67784633227815,12.823663413930523,12.970594329176249,13.118643315896639,13.267814611972973,13.418112455286554,13.569541083718676,13.722104735150634,13.875807647463732,14.030654058539248,14.186648206258496,14.343794328502753,14.502096663153321,14.661559448091497,14.822186921198577,14.983983320355861,15.146952883444632,15.311099848346197,15.476428452941837,15.642942935112858,15.81064753274055,15.979546483706221,16.149644025891146,16.320944397176628,16.493451835443977,16.667170578574463,16.842104864449396,17.018258930950068,17.195637015957775,17.374243357353819,17.554082193019479,17.73515776083606,17.917474298684866,18.101036044447174,18.285847236004294,18.471912111237508,18.659234908028115,18.847819864257414,19.0376712178067],[13.322662021871112,13.473373009964556,13.625216333375361,13.778196229984822,13.932316937674241,14.087582694324899,14.243997737818106,14.401566306035143,14.56029263685731,14.720180968165906,14.881235537842231,15.043460583767565,15.206860343823212,15.371439055890477,15.537200957850633,15.704150287584989,15.872291282974837,16.041628181901483,16.212165222246202,16.383906641890299,16.556856678715071,16.73101957060182,16.906399555431825,17.083000871086398,17.260827755446815,17.439884446394384,17.620175181810392,17.801704199576143,17.984475737572939,18.168494033682055,18.353763325784804,18.540287851762464,18.728071849496342,18.917119556867728,19.10743521175792,19.299023052048224,19.491887315619913,19.686032240354301,19.881462064132666,20.078181024836315],[14.144665112166528,14.301501618489775,14.459493199735677,14.618644093785532,14.778958538520639,14.940440771822281,15.103095031571767,15.266925555650378,15.431936581939416,15.598132348320176,15.765517092673962,15.934095052882052,16.10387046682575,16.274847572386356,16.447030607445154,16.620423809883448,16.795031417582525,16.970857668423697,17.14790680028824,17.326183051057452,17.505690658612636,17.686433860835095,17.868416895606099,18.05164400080697,18.236119414318981,18.421847374023436,18.608832117801629,18.797077883534861,18.98658890910443,19.177369432391615,19.369423691277728,19.562755923644048,19.757370367371877,19.953271260342515,20.150462840437253,20.348949345537395,20.548735013524219,20.749824082279041,20.952220789683132,21.155929373617798],[14.999802830565438,15.162886871195145,15.327148726352805,15.492592633919712,15.659222831777168,15.827043557806453,15.996059049888878,16.166273545905721,16.337691283738287,16.510316501267873,16.684153436375777,16.859206326943283,17.035479410851689,17.212976925982304,17.391703110216401,17.571662201435288,17.75285843752026,17.935296056352616,18.118979295813638,18.303912393784628,18.490099588146883,18.677545116781708,18.866253217570378,19.056228128394206,19.247474087134467,19.439995331672471,19.633796099889508,19.828880629666873,20.025253158885878,20.22291792542779,20.421879167173927,20.622141122005566,20.823708027804013,21.026584122450558,21.230773643826499,21.436280829813143,21.64310991829176,21.851265147143671,22.060750754250147,22.271570977492498],[15.888729890409167,16.058183481421999,16.228837626568076,16.400696563728694,16.573764530785159,16.748045765618745,16.923544506110769,17.100264990142506,17.278211455595262,17.457388140350329,17.637799282289013,17.819449119292592,18.002341889242366,18.186481830019648,18.371873179505705,18.558520175581847,18.746427056129367,18.935598059029569,19.126037422163733,19.317749383413158,19.510738180659146,19.705008051782997,19.900563234665984,20.097407967189429,20.295546487234606,20.494983032682814,20.695721841415356,20.89776715131352,21.101123200258613,21.305794226131916,21.511784466814738,21.719098160188356,21.927739544134074,22.137712856533188,22.349022335266991,22.561672218216795,22.775666743263869,22.991010148289529,23.207706671175053,23.42576054980174],[16.81210100503905,16.988046162511662,17.165214613722817,17.343610596553809,17.52323834888594,17.704102108600487,17.886206113578769,18.069554601702059,18.254151810851663,18.440001978908874,18.627109343754999,18.81547814327131,19.005112615339115,19.196016997839717,19.388195528654393,19.581652445664449,19.776391986751179,19.972418389795887,20.169735892679853,20.368348733284375,20.568261149490752,20.769477379180287,20.972001660234259,21.17583823053398,21.380991327960725,21.5874651903958,21.795264055720502,22.004392161816124,22.214853746563971,22.426653047845321,22.639794303541485,22.85428175153374,23.070119629703392,23.287312175931735,23.505863628100062,23.725778224089687,23.947060201781873,24.169713799057945,24.393743253799169,24.619152803886859],[17.770570887796421,17.953129627805474,18.136934401158364,18.321989445736385,18.508298999420845,18.695867300093017,18.884698585634215,19.074797093925717,19.266167062848826,19.458812730284841,19.65273833411506,19.847948112220767,20.044446302483259,20.242237142783846,20.441324871003804,20.641713725024431,20.843407942727033,21.046411761992903,21.250729420703326,21.456365156739604,21.66332320798303,21.871607812314913,22.081223207616524,22.292173631769181,22.504463322654161,22.718096518152763,22.933077456146282,23.149410374516023,23.367099511143284,23.586149103909339,23.806563390695505,24.028346609383057,24.251502997853301,24.476036793987532,24.701952235667044,24.929253560773144,25.157945007187106,25.388030812790245,25.619515215463835,25.852402453089184],[18.764794252022607,18.954088590644758,19.144651702216056,19.336487824617766,19.529601195731214,19.723996053437666,19.919676635618433,20.116647180154807,20.314911924928083,20.514475107819568,20.715340966710539,20.917513739482306,21.120997664016148,21.325796978193367,21.531915919895262,21.739358727003125,21.948129637398264,22.158232888961951,22.369672719575501,22.582453367120195,22.796579069477328,23.012054064528208,23.228882590154129,23.447068884236369,23.666617184656239,23.887531729295038,24.109816756034039,24.333476502754554,24.558515207337877,24.784937107665296,25.012746441618127,25.241947447077635,25.472544361925131,25.704541424041921,25.937942871309279,26.172752941608515,26.408975872820911,26.646615902827765,26.885677269510381,27.126164210750048],[19.795425811058948,19.991577764370863,20.189021230237202,20.387760446539268,20.587799651158356,20.789143081975752,20.991794976872765,21.195759573730669,21.401041110430771,21.607643824854371,21.815571954882767,22.024829738397237,22.235421413279084,22.447351217409619,22.660623388670111,22.875242164941866,23.091211784106182,23.308536484044364,23.527220502637686,23.747268077767451,23.968683447314955,24.191470849161508,24.415634521188377,24.641178701276885,24.868107627308305,25.096425537163938,25.326136668725081,25.557245259873032,25.789755548489094,26.023671772454541,26.258998169650692,26.495738977958819,26.733898435260226,26.973480779436212,27.214490248368069,27.456931079937107,27.700807512024593,27.946123782511847,28.192884129280145,28.441092790210792],[20.86312027824675,21.066251862325082,21.270697698563151,21.476462024842224,21.683549079043619,21.891963099048613,22.10170832273851,22.312788987994608,22.525209332698196,22.738973594730584,22.954086011973047,23.1705508223069,23.388372263613416,23.6075545737739,23.828101990669651,24.050018752181959,24.273309096192133,24.497977260581447,24.724027483231218,24.951464002022718,25.180291054837252,25.410512879556116,25.642133714060616,25.875157796232028,26.109589363951656,26.345432655100804,26.582691907560747,26.821371359212794,27.061475247938237,27.303007811618368,27.545973288134501,27.790375915367903,28.036219931199881,28.283509573511747,28.532249080184766,28.782442689100257,29.034094638139496,29.287209165183789,29.541790508114428,29.797842904812711],[21.968532366927384,22.178765597848795,22.390335820535224,22.603247272867968,22.817504192728329,23.033110817997581,23.250071386557046,23.468390136287994,23.688071305071727,23.909119130789549,24.131537851322758,24.355331704552629,24.580504928360472,24.80706176062759,25.035006439235257,25.264343202064776,25.495076286997449,25.727209931914576,25.960748374697431,26.195695853227324,26.432056605385547,26.669834869053407,26.909034882112174,27.149660882443172,27.391717107927668,27.63520779644697,27.880137185882372,28.126509514115174,28.374329019026678,28.623599938498156,28.874326510410928,29.126512972646267,29.380163563085475,29.635282519609852,29.891874080100692,30.149942482439304,30.409491964506955,30.670526764184967,30.933051119354605,31.197069267897188],[23.112316790442133,23.329773684283285,23.54859030949476,23.768770903957829,23.990319705553816,24.213240952163989,24.43753888166966,24.663217731952116,24.890281740892654,25.118735146372586,25.34858218627318,25.579827098475754,25.812474120861584,26.04652749131197,26.281991447708211,26.518870227931604,26.757168069863454,26.996889211385032,27.238037890377658,27.480618344722604,27.724634812301172,27.970091530994665,28.216992738684382,28.465342673251602,28.715145572577626,28.966405674543765,29.219127217031286,29.473314437921498,29.728971575095702,29.986102866435186,30.244712549821259,30.504804863135192,30.766384044258292,31.029454331071864,31.294019961457188,31.560085173295573,31.827654204468296,32.09673129285666,32.367320676341961,32.639426592805499],[24.29512826213238,24.51993083496993,24.746115878783087,24.973687631453146,25.202650330861417,25.433008214889167,25.664765521417721,25.897926488328348,26.132495353502353,26.368476354821031,26.605873730165694,26.844691717417607,27.08493455445808,27.326606479168419,27.569711729429898,27.814254543123823,28.060239158131488,28.307669812334197,28.556550743613229,28.806886189849884,29.058680388925463,29.311937578721267,29.566661997118572,29.822857881998697,30.080529471242908,30.339681002732519,30.600316714348818,30.862440843973108,31.126057629486692,31.391171308770836,31.65778611970687,31.925906300176056,32.195536088059704,32.466679721239117,32.739341437595577,33.013525475010397,33.289236071364854,33.566477464540256,33.84525389241788,34.125569592879032],[25.517621495339419,25.749891763250023,25.983567241741532,26.218652168695243,26.455150781992455,26.693067319514448,26.932406019142533,27.173171118757988,27.41536685624212,27.658997469476216,27.904067196341593,28.150580274719516,28.398540942491294,28.647953437538234,28.89882199774161,29.151150860982725,29.404944265142873,29.660206448103366,29.916941647745475,30.175154101950501,30.434848048599747,30.696027725574513,30.958697370756074,31.222861222025752,31.488523517264813,31.755688494354565,32.024360391176302,32.294543445611325,32.566241895540934,32.839459978846406,33.114201933409056,33.390471997110161,33.668274407831021,33.947613403452934,34.228493221857192,34.51091810092511,34.794892278537951,35.080419992577042,35.367505480923647,35.65615298145908],[26.780451203404603,27.020311182464926,27.261599111711448,27.504319229025462,27.74847577228828,27.994072979381169,28.241115088185452,28.489606336582394,28.739550962453308,28.990953203679485,29.243817298142236,29.498147483722828,29.753947998302571,30.011223079762772,30.2699769659847,30.530213894849666,30.791938104238962,31.055153832033895,31.319865316115738,31.586076794365798,31.853792504665368,32.123016684895759,32.393753572938238,32.666007406674126,32.939782423984688,33.215082862751245,33.491912960855082,33.770276956177497,34.050179086599798,34.331623590003254,34.614614704269179,34.899156667278859,35.185253716913586,35.472910091054665,35.762130027583382,36.052917764381057,36.345277539328947,36.639213590308387,36.934730155200626,37.231831471886991],[28.084272099669228,28.331843805955931,28.580866202034123,28.831343525785105,29.083280015090185,29.336679907830632,29.591547441887766,29.847886855142857,30.105702385477212,30.36499827077213,30.625778748908914,30.888048057768835,31.151810435233202,31.417070119183322,31.683831347500465,31.952098358065939,32.221875388761042,32.493166677467073,32.765976462065311,33.040308980437061,33.316168470463616,33.593559170026289,33.872485317006344,34.152951149285101,34.434960904743839,34.718518821263856,35.003629136726445,35.290296089012912,35.578523916004563,35.868316855582663,36.15967914562853,36.452615024023437,36.747128728648697,37.043224497385594,37.340906568115436,37.640179178719521,37.94104656707912,38.24351297107556,38.547582628590106,38.853259777504064],[29.429738897474678,29.685144347064412,29.942023226050939,30.200379772315546,30.460218223739549,30.721542818204213,30.98435779359086,31.24866738778076,31.514475838655219,31.781787384095534,32.050606261983013,32.320936710198922,32.592782966624569,32.866149269141268,33.141039855630289,33.417458963972933,33.695410832050499,33.974899697744291,34.255929798935583,34.538505373505686,34.822630659335886,35.108309894307496,35.395547316301787,35.68434716320008,35.974713672883638,36.266651083233775,36.56016363213179,36.855255557458968,37.151931097096622,37.450194488926023,37.750049970828485,38.051501780685292,38.354554156377731,38.65921133578712,38.965477556794731,39.273357057281892,39.582854075129866,39.893972848219967,40.206717614433472,40.521092611651689],[30.817506310162226,31.080867519131658,31.345724897103175,31.612082681958071,31.879945111577655,32.149316423843196,32.420200856636015,32.692602647837383,32.966526035328599,33.241975256990969,33.5189545507058,33.797468154354362,34.077520305817956,34.359115242977893,34.642257203715445,34.926950425911919,35.213199147448606,35.501007606206819,35.790380040067824,36.081320686912932,36.373833784623443,36.667923571080657,36.963594284165836,37.260850161760324,37.559695441745369,37.860134362002285,38.16217116041237,38.465810074856918,38.771055343217242,39.077911203374605,39.386381893210327,39.69647165060568,40.008184713441977,40.321525319600504,40.636497706962558,40.953106113409454,41.271354776822449,41.591247935082876,41.912789826072,42.235984687671127],[32.248229051073267,32.519668035499052,32.792625928532217,33.067106968054055,33.343115391945886,33.62065543808896,33.899731344364611,34.180347348654102,34.462507688838748,34.746216602799834,35.031478328418679,35.318297103576541,35.606677166154739,35.896622754034574,36.188138105097323,36.481227457224279,36.775895048296753,37.072145116196047,37.369981898803431,37.669409634000203,37.970432559667678,38.273054913687147,38.577280933939889,38.883114858307223,39.190560924670415,39.499623370910776,39.810306434909592,40.122614354548176,40.436551367707821,40.752121712269805,41.069329626115447,41.388179347126012,41.708675113182814,42.030821162167143,42.354621731960293,42.680081060443584,43.007203385498265,43.335992945005678,43.66645397684708,43.998590718903785],[33.722561833549079,34.002200609507881,34.283381033679355,34.5661073439448,34.850383778185524,35.136214574282796,35.423603970117938,35.71255620357222,36.003075512526941,36.295166134863408,36.588832308462926,36.884078271206754,37.180908260976217,37.479326515652609,37.779337273117207,38.080944771251318,38.384153247936233,38.688966941053259,38.995390088483674,39.303426928108784,39.613081697809875,39.924358635468273,40.237261978965222,40.55179596618207,40.867964835000066,41.185772823300525,41.505224168964737,41.826323109874011,42.149073883909644,42.473480728952907,42.799547882885129,43.127279583587566,43.45668006894153,43.787753576828315,44.120504345129227,44.454936611725572,44.791054614498599,45.128862591329657,45.468364780099996,45.80956541869093],[35.241159370931008,35.529119954499485,35.818644925885934,36.109738522971647,36.402404983637929,36.69664854576606,36.992473447237352,37.289883925933076,37.588884219734538,37.889478566523039,38.19167120417989,38.49546637058635,38.800868303623723,39.107881241173338,39.416509421116444,39.726757081334362,40.038628459708377,40.352127794119809,40.667259322449915,40.984027282580016,41.302435912391388,41.622489449765361,41.94419213258319,42.267548198726203,42.592561886075664,42.91923743251288,43.247579075919155,43.577591054175777,43.909277605164057,44.24264296676526,44.577691376860713,44.91442707333168,45.252854294059475,45.592977276925382,45.934800259810707,46.278327480596758,46.623563177164804,46.97051158739616,47.319176949172096,47.669563500373926],[36.804676376560401,37.101080783815206,37.399072318493282,37.69865521847592,37.999833721644428,38.302612065880069,38.606994489064171,38.912985229077997,39.220588523802867,39.52980861112006,39.840649728910897,40.15311611505664,40.467212007438604,40.782941643938095,41.100309262436376,41.419319100814754,41.739975396954534,42.062282388737025,42.386244314043488,42.71186541075523,43.039149916753551,43.368102069919757,43.698726108135119,44.031026269280964,44.365006791238542,44.700671911889181,45.038025869114172,45.377072900794801,45.717817244812387,46.060263139048189,46.40441482138354,46.750276529699697,47.097852501877973,47.447146975799662,47.798164189346068,48.150908380398491,48.505383786838195,48.861594646546514,49.219545197404713,49.57923967729409],[38.41376756377857,38.71873781079637,39.025317924842739,39.333512143798956,39.643324705546341,39.954759847966159,40.267821808939729,40.582514826348323,40.898843138073246,41.216810981995799,41.536422595997287,41.857682217958981,42.180594085762181,42.505162437288206,42.831391510418321,43.159285543033825,43.488848773016031,43.820085438246231,44.152999776605704,44.487596025975755,44.823878424237677,45.16185120927279,45.501518618962344,45.842884891187673,46.185954263830041,46.530730974770755,46.877219261891113,47.225423363072416,47.575347516195968,47.926995959143028,48.280372929794936,48.635482666032942,48.99232940573836,49.350917386792496,49.711250847076634,50.073334024472089,50.437171156860117,50.80276648212206,51.170124238139174,51.539248662792758],[40.069087645926857,40.382745748784309,40.698036458275624,41.014964012282086,41.333532648685008,41.653746605365662,41.97561012020536,42.299127431085381,42.624302775887024,42.951140392491588,43.279644518780394,43.609819392634684,43.941669251935785,44.275198334565012,44.610410878403613,44.947311121332909,45.285903301234185,45.626191655988769,45.968180423477918,46.31187384158293,46.657276148185119,47.004391581165784,47.353224378406189,47.703778777787669,48.05605901719148,48.410069334498935,48.765813967591328,49.123297154349956,49.482523132656127,49.84349614039111,50.206220415436228,50.570700195672742,50.936939718981975,51.304943223245203,51.674714946343734,52.04625912615888,52.419580000571898,52.794681807464123,53.171568784716804,53.550245170211269],[41.771291336346607,42.093759311120373,42.417882632133292,42.743665537266658,43.071112264401783,43.400227051419925,43.731014136202418,44.063477756630519,44.397622150585541,44.733451555948783,45.070970210601551,45.41018235242511,45.751092219300773,46.093704049109846,46.438022079733599,46.78405054905334,47.131793694950368,47.48125575530598,47.832440968001457,48.185353570918103,48.539997801937204,48.896377898940088,49.254498099808011,49.614362642422293,49.975975764664206,50.339341704415062,50.704464699556148,51.071348987968761,51.439998807534224,51.810418396133784,52.182611991648777,52.556583831960459,52.932338154950152,53.309879198499139,53.689211200488728,54.070338398800224,54.453265031314892,54.837995335914052,55.224533550478974,55.612883912890965],[43.521033348379113,43.852433211145858,44.185511159757041,44.520271432093971,44.856718266037952,45.194855899470248,45.534688570272188,45.876220516325034,46.219455975510094,46.564399185708666,46.911054384802064,47.259425810671551,47.609517701198428,47.96133429426402,48.314879827749586,48.67015853953643,49.027174667505854,49.385932449539169,49.746436123517633,50.108689927322565,50.472698098835252,50.838464875937007,51.205994496509099,51.575291198432851,51.946359219589525,52.319202797860434,52.693826171126872,53.070233577270137,53.448429254171543,53.828417439712339,54.210202371773867,54.593788288237377,54.979179426984196,55.366380025895602,55.755394322852908,56.146226555737414,56.538880962430376,56.933361780813144,57.329673248766959,57.727819604173142],[45.318968395365737,45.659422162202105,46.001576754488219,46.345436410105371,46.691005366934867,47.038287862857977,47.387288135756023,47.738010423510268,48.090458964002032,48.4446379951126,48.800551754723287,49.158204480715355,49.517600410970111,49.878743783368876,50.241638835792912,50.60628980612352,50.972700932242006,51.340876452029676,51.710820603367786,52.082537624137665,52.456031752220589,52.831307225497888,53.208368281850809,53.587219159160689,53.967864095308784,54.350307328176413,54.734553095644863,55.120605635595432,55.508469185909433,55.898147984468132,56.289646269152854,56.68296827784485,57.078118248425454,57.475100418775938,57.873919026777614,58.274578310311789,58.677082507259719,59.081435855502747,59.487642592922114,59.895706957399149],[47.165751190647811,47.51538087763047,47.866734129668174,48.219815184642201,48.574628280433878,48.931177654924461,49.289467545995272,49.649502191527588,50.011285829402702,50.374822697501919,50.740117033706561,51.107173075897869,51.475995061957164,51.846587229765767,52.218953817204927,52.593099062155964,52.969027202500165,53.346742476118848,53.726249120893272,54.107551374704755,54.490653475434584,54.875559660964072,55.262274169174489,55.65080123794715,56.041145105163331,56.433310008704332,56.827300186451453,57.223119876285992,57.620773316089256,58.020264743742509,58.421598397127084,58.824778514124233,59.229809332615275,59.636695090481496,60.045440025604208,60.456048375864711,60.868524379144269,61.282872273324209,61.699096296285795,62.117200685910333],[49.062036447566641,49.420964070772257,49.781637998638196,50.144062469045771,50.508241719876281,50.874179989010997,51.24188151433124,51.611350533718266,51.982591285053402,52.355608006217935,52.730404935093176,53.106986309560391,53.485356367500891,53.865519346795985,54.247479485326934,54.631241020975047,55.016808191621628,55.404185235147992,55.793376389435387,56.184385892365128,56.577217981818514,56.971876895676864,57.368366871821422,57.766692148133536,58.166856962494457,58.568865552785489,58.972722156887947,59.378431012683109,59.785996358052294,60.195422430876768,60.60671346903785,61.01987371041681,61.434907392894949,61.851818754353573,62.270612032673974,62.691291465737464,63.113861291425309,63.538325747618828,63.964689072199285,64.392955503048],[51.008478879463553,51.376826454968779,51.746943074739626,52.118832976657401,52.492500398603411,52.867949578458912,53.245184754105239,53.624210163423655,54.005030044295466,54.387648634601966,54.772070172224481,55.158298895044254,55.546339040942605,55.936194847800856,56.327870553500254,56.721370395922115,57.116698612947729,57.513859442458426,57.912857122335446,58.313695890460117,58.716379984713718,59.120913642977584,59.527301103132956,59.935546603061169,60.345654380643488,60.757628673761225,61.171473720295666,61.587193758128116,62.004793025139882,62.424275759212229,62.84564619822649,63.268908580063908,63.69406714260581,64.12112612373349,64.550089761328252,64.980962293271403,65.413747957444187,65.84845099172793,66.285075634003917,66.723626122153462],[53.005733199679916,53.383622743561411,53.763304071313826,54.144781420818461,54.528059029956623,54.913141136609575,55.300031978658652,55.688735793985103,56.079256820470249,56.471599295995389,56.865767458441823,57.261765545690821,57.659597795623696,58.059268446121756,58.460781735066256,58.864141900338517,59.269353179819838,59.676419811391526,60.085346032934837,60.496136082331084,60.908794197461575,61.323324616207607,61.739731576450446,62.158019316071432,62.578192072951808,63.000254084972894,63.424209590015984,63.850062825962382,64.277818030693396,64.707479442090275,65.139051298034346,65.572537836406894,66.00794329508922,66.445271911962649,66.884527924908426,67.325715571807848,67.76883909054223,68.21390271899287,68.660910695041053,69.109867256568066],[55.054454121557072,55.442007649891494,55.831375701702129,56.222562514870283,56.615572327277263,57.010409376804326,57.407077901332805,57.805582138743958,58.205926326919105,58.608114703739531,59.01215150708655,59.418040974841432,59.825787344885477,60.235394855100012,60.646867743366279,61.060210247565607,61.47542660557928,61.892521055288618,62.31149783457488,62.732361181319369,63.155115333403394,63.579764528708267,64.006313005115231,64.434765000505621,64.865124752760721,65.297396499761859,65.731584479390264,66.167692929527263,66.605726088054155,67.045688192852225,67.487583481802787,67.931416192787125,68.377190563686526,68.824910832382344,69.274581236755779,69.726206014688174,70.179789404060813,70.63533564275501,71.092848968652049,71.552333619633217],[57.155296358436274,57.552635887300283,57.951812679245812,58.352830972154138,58.755695003906595,59.160409012384427,59.566977235468968,59.975403911041482,60.385693276983282,60.797849571175661,61.211877031499931,61.627779895837349,62.04556240206923,62.465228788076892,62.886783291741594,63.310230150944641,63.735573603567332,64.162817887490959,64.591967240596873,65.023025900766271,65.455998105880482,65.890888093820834,66.327700102468583,66.766438369705057,67.207107133411526,67.649710631469347,68.094253101759719,68.540738782163984,68.989171910563428,69.439556724839363,69.891897462873075,70.346198362545849,70.802463661738997,71.260697598333849,71.720904410211617,72.183088335253629,72.647253611341199,73.113404476355612,73.581545168178152,74.051679924690134],[59.308914623658929,59.716162169129184,60.125269717286251,60.536241506011422,60.949081773186009,61.36379475669127,61.780384694408539,62.198855824219073,62.619212384004186,63.041458611645176,63.46559874502335,63.891637022019971,64.319577680516346,64.749424958393774,65.181183093533562,65.614856323816994,66.050448887125398,66.487965021340003,66.927408964342135,67.368784954013094,67.81209722823418,68.257350024886662,68.704547581851912,69.153694137011129,69.604793928245641,70.057851193436747,70.512870170465746,70.969855097213937,71.428810211562606,71.889739751393051,72.352647954586615,72.817539059024497,73.284417302588039,73.753286923158541,74.224152158617301,74.697017246845661,75.171886425724807,75.648763933136081,76.12765400696081,76.608560885080252],[61.51596363056634,61.933241208719501,62.352401529164773,62.77344882978344,63.196387348456824,63.621221323066173,64.04795499149283,64.476592591618044,64.907138361323121,65.339596538489374,65.773971360998104,66.210267066730623,66.648487893568159,67.088638079392041,67.530721862083567,67.974743479524037,68.420707169594735,68.868617170176975,69.318477719152085,69.770293054401264,70.224067413805855,70.679805035247156,71.137510156606467,71.597187015765087,72.058839850604301,72.52247289900545,72.988090398849735,73.455696588018498,73.925295704393051,74.396891985854666,74.870489670284655,75.346092995564305,75.8237061995749,76.30333352019781,76.784979195314222,77.268647462805461,77.754342560552857,78.24206872643768,78.731830198341228,79.223631214144788]],"type":"surface","x":[8.3000000000000007,8.6153846153846168,8.930769230769231,9.2461538461538471,9.5615384615384631,9.8769230769230774,10.192307692307693,10.507692307692309,10.823076923076924,11.13846153846154,11.453846153846154,11.76923076923077,12.084615384615386,12.400000000000002,12.715384615384616,13.030769230769232,13.346153846153847,13.661538461538463,13.976923076923079,14.292307692307695,14.607692307692309,14.923076923076925,15.238461538461539,15.553846153846155,15.869230769230771,16.184615384615388,16.5,16.815384615384616,17.130769230769232,17.446153846153848,17.761538461538464,18.07692307692308,18.392307692307696,18.707692307692312,19.023076923076925,19.338461538461541,19.653846153846157,19.969230769230769,20.284615384615385,20.600000000000001],"y":[63,63.615384615384613,64.230769230769226,64.84615384615384,65.461538461538467,66.07692307692308,66.692307692307693,67.307692307692307,67.92307692307692,68.538461538461533,69.15384615384616,69.769230769230774,70.384615384615387,71,71.615384615384613,72.230769230769226,72.84615384615384,73.461538461538467,74.07692307692308,74.692307692307693,75.307692307692307,75.92307692307692,76.538461538461547,77.15384615384616,77.769230769230774,78.384615384615387,79,79.615384615384613,80.230769230769226,80.84615384615384,81.461538461538467,82.07692307692308,82.692307692307693,83.307692307692307,83.92307692307692,84.538461538461547,85.15384615384616,85.769230769230774,86.384615384615387,87],"opacity":0.59999999999999998,"showscale":false,"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"Diameter"},"yaxis":{"title":"Height"},"zaxis":{"title":"Volume"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[8.3000000000000007,8.5999999999999996,8.8000000000000007,10.5,10.699999999999999,10.800000000000001,11,11,11.1,11.199999999999999,11.300000000000001,11.4,11.4,11.699999999999999,12,12.9,12.9,13.300000000000001,13.699999999999999,13.800000000000001,14,14.199999999999999,14.5,16,16.300000000000001,17.300000000000001,17.5,17.899999999999999,18,18,20.600000000000001],"y":[70,65,63,72,81,83,66,75,80,75,79,76,76,69,75,74,85,86,71,64,78,80,74,72,77,81,82,80,80,80,87],"z":[10.300000000000001,10.300000000000001,10.199999999999999,16.399999999999999,18.800000000000001,19.699999999999999,15.6,18.199999999999999,22.600000000000001,19.899999999999999,24.199999999999999,21,21.399999999999999,21.300000000000001,19.100000000000001,22.199999999999999,33.799999999999997,27.399999999999999,25.699999999999999,24.899999999999999,34.5,31.699999999999999,36.299999999999997,38.299999999999997,42.600000000000001,55.399999999999999,55.700000000000003,58.299999999999997,51.5,51,77],"type":"scatter3d","mode":"markers","marker":{"color":"rgba(31,119,180,1)","size":4,"line":{"color":"rgba(31,119,180,1)"}},"name":"Observed","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"frame":null},{"colorbar":{"title":"Volume","ticklen":2},"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"z":[[9.0498067231573867,9.1663269394818645,9.2838430534919301,9.4023593030688808,9.5218799260940177,9.642409160448624,9.7639512440140059,9.8865104146714469,10.01009091030225,10.134696968787708,10.260332828009123,10.387002725847777,10.514710900184973,10.643461588902012,10.773259029880174,10.904107461000764,11.036011120145076,11.168974245194413,11.303001074030053,11.438095844533301,11.574262794585451,11.711506162067804,11.849830184861645,11.98923910084828,12.12973714790899,12.27132856392508,12.414017586777842,12.557808454348571,12.702705404518571,12.848712675169125,12.995834504181538,13.144075129437093,13.293438788817092,13.44392972020283,13.595552161475601,13.748310350516711,13.902208525207437,14.057250923429091,14.213441783062951,14.370785341990322],[9.6867510249998094,9.808664663094131,9.931596938479343,10.05555208903673,10.1805343526476,10.306547967193232,10.433597170554929,10.561686200613988,10.690819295251702,10.821000692349374,10.952234629788286,11.084525345449745,11.217877077215034,11.352294062965454,11.487780540582301,11.624340747946871,11.761978922940463,11.900699303444361,12.040506127339873,12.18140363250828,12.323396056830886,12.466487638188983,12.610682614463876,12.755985223536843,12.90239970328919,13.049930291602216,13.198581226357204,13.348356745435456,13.499261086718267,13.65129848808693,13.804473187422751,13.958789422607008,14.114251431521003,14.270863452046042,14.428629722063402,14.587554479454395,14.7476419621003,14.90889640788242,15.071322054682049,15.234923140380483],[10.352901674897735,10.480330750838561,10.608801203675569,10.738317271290052,10.868883191563311,11.000503202376629,11.133181541611314,11.26692244714865,11.401730156869936,11.537608908656468,11.674562940389549,11.812596489950458,11.951713795220501,12.091919094080975,12.233216624413165,12.375610624098373,12.519105331017892,12.663704983053025,12.809413818085055,12.956236073995282,13.104175988665,13.253237799975516,13.403425745808105,13.55474406404408,13.707196992564722,13.860788769251332,14.015523631985205,14.171405818647639,14.328439567119933,14.486629115283367,14.645978701019255,14.806492562208874,14.968174936733526,15.131030062474508,15.295062177313117,15.460275519130652,15.626674325808393,15.794262835227654,15.963045285269713,16.133025913815871],[11.048913386192496,11.181979916056488,11.316110562421962,11.451309563170199,11.587581156182509,11.724929579340174,11.863359070524494,12.002873867616765,12.143478208498282,12.285176331050348,12.427972473154243,12.571870872691278,12.716875767542732,12.862991395589907,13.010221994714099,13.158571802796605,13.308045057718724,13.458645997361739,13.610378859606959,13.763247882335664,13.917257303429157,14.072411360768733,14.228714292235695,14.386170335711322,14.544783729076919,14.704558710213787,14.865499517003206,15.027610387326478,15.1908955590649,15.355359270099767,15.521005758312379,15.687839261584019,15.855864017795989,16.025084264829591,16.195504240566105,16.367128182886844,16.539960329673082,16.714004918806129,16.889266188167273,17.065748375637813],[11.775440872225424,11.91426687208924,12.054179728059834,12.195183678018486,12.337282959846506,12.480481811425175,12.624784470635797,12.770195175359664,12.916718163478071,13.064357672872323,13.2131179414237,13.363003207013509,13.514017707523035,13.666165680833577,13.819451364826433,13.973878997382895,14.129452816384267,14.28617705971183,14.444055965246893,14.603093770870736,14.763294714464662,14.924663033909967,15.087202967087954,15.250918751879901,15.41581462616711,15.581894827830888,15.749163594752511,15.917625164813284,16.087283775894502,16.258143665877459,16.430209072643457,16.603484234073779,16.777973388049723,16.953680772452596,17.13061062516368,17.30876718406428,17.488154687035674,17.668777371959173,17.850639476716065,18.033745239187649],[12.533138846337851,12.67784633227815,12.823663413930523,12.970594329176249,13.118643315896639,13.267814611972973,13.418112455286554,13.569541083718676,13.722104735150634,13.875807647463732,14.030654058539248,14.186648206258496,14.343794328502753,14.502096663153321,14.661559448091497,14.822186921198577,14.983983320355861,15.146952883444632,15.311099848346197,15.476428452941837,15.642942935112858,15.81064753274055,15.979546483706221,16.149644025891146,16.320944397176628,16.493451835443977,16.667170578574463,16.842104864449396,17.018258930950068,17.195637015957775,17.374243357353819,17.554082193019479,17.73515776083606,17.917474298684866,18.101036044447174,18.285847236004294,18.471912111237508,18.659234908028115,18.847819864257414,19.0376712178067],[13.322662021871112,13.473373009964556,13.625216333375361,13.778196229984822,13.932316937674241,14.087582694324899,14.243997737818106,14.401566306035143,14.56029263685731,14.720180968165906,14.881235537842231,15.043460583767565,15.206860343823212,15.371439055890477,15.537200957850633,15.704150287584989,15.872291282974837,16.041628181901483,16.212165222246202,16.383906641890299,16.556856678715071,16.73101957060182,16.906399555431825,17.083000871086398,17.260827755446815,17.439884446394384,17.620175181810392,17.801704199576143,17.984475737572939,18.168494033682055,18.353763325784804,18.540287851762464,18.728071849496342,18.917119556867728,19.10743521175792,19.299023052048224,19.491887315619913,19.686032240354301,19.881462064132666,20.078181024836315],[14.144665112166528,14.301501618489775,14.459493199735677,14.618644093785532,14.778958538520639,14.940440771822281,15.103095031571767,15.266925555650378,15.431936581939416,15.598132348320176,15.765517092673962,15.934095052882052,16.10387046682575,16.274847572386356,16.447030607445154,16.620423809883448,16.795031417582525,16.970857668423697,17.14790680028824,17.326183051057452,17.505690658612636,17.686433860835095,17.868416895606099,18.05164400080697,18.236119414318981,18.421847374023436,18.608832117801629,18.797077883534861,18.98658890910443,19.177369432391615,19.369423691277728,19.562755923644048,19.757370367371877,19.953271260342515,20.150462840437253,20.348949345537395,20.548735013524219,20.749824082279041,20.952220789683132,21.155929373617798],[14.999802830565438,15.162886871195145,15.327148726352805,15.492592633919712,15.659222831777168,15.827043557806453,15.996059049888878,16.166273545905721,16.337691283738287,16.510316501267873,16.684153436375777,16.859206326943283,17.035479410851689,17.212976925982304,17.391703110216401,17.571662201435288,17.75285843752026,17.935296056352616,18.118979295813638,18.303912393784628,18.490099588146883,18.677545116781708,18.866253217570378,19.056228128394206,19.247474087134467,19.439995331672471,19.633796099889508,19.828880629666873,20.025253158885878,20.22291792542779,20.421879167173927,20.622141122005566,20.823708027804013,21.026584122450558,21.230773643826499,21.436280829813143,21.64310991829176,21.851265147143671,22.060750754250147,22.271570977492498],[15.888729890409167,16.058183481421999,16.228837626568076,16.400696563728694,16.573764530785159,16.748045765618745,16.923544506110769,17.100264990142506,17.278211455595262,17.457388140350329,17.637799282289013,17.819449119292592,18.002341889242366,18.186481830019648,18.371873179505705,18.558520175581847,18.746427056129367,18.935598059029569,19.126037422163733,19.317749383413158,19.510738180659146,19.705008051782997,19.900563234665984,20.097407967189429,20.295546487234606,20.494983032682814,20.695721841415356,20.89776715131352,21.101123200258613,21.305794226131916,21.511784466814738,21.719098160188356,21.927739544134074,22.137712856533188,22.349022335266991,22.561672218216795,22.775666743263869,22.991010148289529,23.207706671175053,23.42576054980174],[16.81210100503905,16.988046162511662,17.165214613722817,17.343610596553809,17.52323834888594,17.704102108600487,17.886206113578769,18.069554601702059,18.254151810851663,18.440001978908874,18.627109343754999,18.81547814327131,19.005112615339115,19.196016997839717,19.388195528654393,19.581652445664449,19.776391986751179,19.972418389795887,20.169735892679853,20.368348733284375,20.568261149490752,20.769477379180287,20.972001660234259,21.17583823053398,21.380991327960725,21.5874651903958,21.795264055720502,22.004392161816124,22.214853746563971,22.426653047845321,22.639794303541485,22.85428175153374,23.070119629703392,23.287312175931735,23.505863628100062,23.725778224089687,23.947060201781873,24.169713799057945,24.393743253799169,24.619152803886859],[17.770570887796421,17.953129627805474,18.136934401158364,18.321989445736385,18.508298999420845,18.695867300093017,18.884698585634215,19.074797093925717,19.266167062848826,19.458812730284841,19.65273833411506,19.847948112220767,20.044446302483259,20.242237142783846,20.441324871003804,20.641713725024431,20.843407942727033,21.046411761992903,21.250729420703326,21.456365156739604,21.66332320798303,21.871607812314913,22.081223207616524,22.292173631769181,22.504463322654161,22.718096518152763,22.933077456146282,23.149410374516023,23.367099511143284,23.586149103909339,23.806563390695505,24.028346609383057,24.251502997853301,24.476036793987532,24.701952235667044,24.929253560773144,25.157945007187106,25.388030812790245,25.619515215463835,25.852402453089184],[18.764794252022607,18.954088590644758,19.144651702216056,19.336487824617766,19.529601195731214,19.723996053437666,19.919676635618433,20.116647180154807,20.314911924928083,20.514475107819568,20.715340966710539,20.917513739482306,21.120997664016148,21.325796978193367,21.531915919895262,21.739358727003125,21.948129637398264,22.158232888961951,22.369672719575501,22.582453367120195,22.796579069477328,23.012054064528208,23.228882590154129,23.447068884236369,23.666617184656239,23.887531729295038,24.109816756034039,24.333476502754554,24.558515207337877,24.784937107665296,25.012746441618127,25.241947447077635,25.472544361925131,25.704541424041921,25.937942871309279,26.172752941608515,26.408975872820911,26.646615902827765,26.885677269510381,27.126164210750048],[19.795425811058948,19.991577764370863,20.189021230237202,20.387760446539268,20.587799651158356,20.789143081975752,20.991794976872765,21.195759573730669,21.401041110430771,21.607643824854371,21.815571954882767,22.024829738397237,22.235421413279084,22.447351217409619,22.660623388670111,22.875242164941866,23.091211784106182,23.308536484044364,23.527220502637686,23.747268077767451,23.968683447314955,24.191470849161508,24.415634521188377,24.641178701276885,24.868107627308305,25.096425537163938,25.326136668725081,25.557245259873032,25.789755548489094,26.023671772454541,26.258998169650692,26.495738977958819,26.733898435260226,26.973480779436212,27.214490248368069,27.456931079937107,27.700807512024593,27.946123782511847,28.192884129280145,28.441092790210792],[20.86312027824675,21.066251862325082,21.270697698563151,21.476462024842224,21.683549079043619,21.891963099048613,22.10170832273851,22.312788987994608,22.525209332698196,22.738973594730584,22.954086011973047,23.1705508223069,23.388372263613416,23.6075545737739,23.828101990669651,24.050018752181959,24.273309096192133,24.497977260581447,24.724027483231218,24.951464002022718,25.180291054837252,25.410512879556116,25.642133714060616,25.875157796232028,26.109589363951656,26.345432655100804,26.582691907560747,26.821371359212794,27.061475247938237,27.303007811618368,27.545973288134501,27.790375915367903,28.036219931199881,28.283509573511747,28.532249080184766,28.782442689100257,29.034094638139496,29.287209165183789,29.541790508114428,29.797842904812711],[21.968532366927384,22.178765597848795,22.390335820535224,22.603247272867968,22.817504192728329,23.033110817997581,23.250071386557046,23.468390136287994,23.688071305071727,23.909119130789549,24.131537851322758,24.355331704552629,24.580504928360472,24.80706176062759,25.035006439235257,25.264343202064776,25.495076286997449,25.727209931914576,25.960748374697431,26.195695853227324,26.432056605385547,26.669834869053407,26.909034882112174,27.149660882443172,27.391717107927668,27.63520779644697,27.880137185882372,28.126509514115174,28.374329019026678,28.623599938498156,28.874326510410928,29.126512972646267,29.380163563085475,29.635282519609852,29.891874080100692,30.149942482439304,30.409491964506955,30.670526764184967,30.933051119354605,31.197069267897188],[23.112316790442133,23.329773684283285,23.54859030949476,23.768770903957829,23.990319705553816,24.213240952163989,24.43753888166966,24.663217731952116,24.890281740892654,25.118735146372586,25.34858218627318,25.579827098475754,25.812474120861584,26.04652749131197,26.281991447708211,26.518870227931604,26.757168069863454,26.996889211385032,27.238037890377658,27.480618344722604,27.724634812301172,27.970091530994665,28.216992738684382,28.465342673251602,28.715145572577626,28.966405674543765,29.219127217031286,29.473314437921498,29.728971575095702,29.986102866435186,30.244712549821259,30.504804863135192,30.766384044258292,31.029454331071864,31.294019961457188,31.560085173295573,31.827654204468296,32.09673129285666,32.367320676341961,32.639426592805499],[24.29512826213238,24.51993083496993,24.746115878783087,24.973687631453146,25.202650330861417,25.433008214889167,25.664765521417721,25.897926488328348,26.132495353502353,26.368476354821031,26.605873730165694,26.844691717417607,27.08493455445808,27.326606479168419,27.569711729429898,27.814254543123823,28.060239158131488,28.307669812334197,28.556550743613229,28.806886189849884,29.058680388925463,29.311937578721267,29.566661997118572,29.822857881998697,30.080529471242908,30.339681002732519,30.600316714348818,30.862440843973108,31.126057629486692,31.391171308770836,31.65778611970687,31.925906300176056,32.195536088059704,32.466679721239117,32.739341437595577,33.013525475010397,33.289236071364854,33.566477464540256,33.84525389241788,34.125569592879032],[25.517621495339419,25.749891763250023,25.983567241741532,26.218652168695243,26.455150781992455,26.693067319514448,26.932406019142533,27.173171118757988,27.41536685624212,27.658997469476216,27.904067196341593,28.150580274719516,28.398540942491294,28.647953437538234,28.89882199774161,29.151150860982725,29.404944265142873,29.660206448103366,29.916941647745475,30.175154101950501,30.434848048599747,30.696027725574513,30.958697370756074,31.222861222025752,31.488523517264813,31.755688494354565,32.024360391176302,32.294543445611325,32.566241895540934,32.839459978846406,33.114201933409056,33.390471997110161,33.668274407831021,33.947613403452934,34.228493221857192,34.51091810092511,34.794892278537951,35.080419992577042,35.367505480923647,35.65615298145908],[26.780451203404603,27.020311182464926,27.261599111711448,27.504319229025462,27.74847577228828,27.994072979381169,28.241115088185452,28.489606336582394,28.739550962453308,28.990953203679485,29.243817298142236,29.498147483722828,29.753947998302571,30.011223079762772,30.2699769659847,30.530213894849666,30.791938104238962,31.055153832033895,31.319865316115738,31.586076794365798,31.853792504665368,32.123016684895759,32.393753572938238,32.666007406674126,32.939782423984688,33.215082862751245,33.491912960855082,33.770276956177497,34.050179086599798,34.331623590003254,34.614614704269179,34.899156667278859,35.185253716913586,35.472910091054665,35.762130027583382,36.052917764381057,36.345277539328947,36.639213590308387,36.934730155200626,37.231831471886991],[28.084272099669228,28.331843805955931,28.580866202034123,28.831343525785105,29.083280015090185,29.336679907830632,29.591547441887766,29.847886855142857,30.105702385477212,30.36499827077213,30.625778748908914,30.888048057768835,31.151810435233202,31.417070119183322,31.683831347500465,31.952098358065939,32.221875388761042,32.493166677467073,32.765976462065311,33.040308980437061,33.316168470463616,33.593559170026289,33.872485317006344,34.152951149285101,34.434960904743839,34.718518821263856,35.003629136726445,35.290296089012912,35.578523916004563,35.868316855582663,36.15967914562853,36.452615024023437,36.747128728648697,37.043224497385594,37.340906568115436,37.640179178719521,37.94104656707912,38.24351297107556,38.547582628590106,38.853259777504064],[29.429738897474678,29.685144347064412,29.942023226050939,30.200379772315546,30.460218223739549,30.721542818204213,30.98435779359086,31.24866738778076,31.514475838655219,31.781787384095534,32.050606261983013,32.320936710198922,32.592782966624569,32.866149269141268,33.141039855630289,33.417458963972933,33.695410832050499,33.974899697744291,34.255929798935583,34.538505373505686,34.822630659335886,35.108309894307496,35.395547316301787,35.68434716320008,35.974713672883638,36.266651083233775,36.56016363213179,36.855255557458968,37.151931097096622,37.450194488926023,37.750049970828485,38.051501780685292,38.354554156377731,38.65921133578712,38.965477556794731,39.273357057281892,39.582854075129866,39.893972848219967,40.206717614433472,40.521092611651689],[30.817506310162226,31.080867519131658,31.345724897103175,31.612082681958071,31.879945111577655,32.149316423843196,32.420200856636015,32.692602647837383,32.966526035328599,33.241975256990969,33.5189545507058,33.797468154354362,34.077520305817956,34.359115242977893,34.642257203715445,34.926950425911919,35.213199147448606,35.501007606206819,35.790380040067824,36.081320686912932,36.373833784623443,36.667923571080657,36.963594284165836,37.260850161760324,37.559695441745369,37.860134362002285,38.16217116041237,38.465810074856918,38.771055343217242,39.077911203374605,39.386381893210327,39.69647165060568,40.008184713441977,40.321525319600504,40.636497706962558,40.953106113409454,41.271354776822449,41.591247935082876,41.912789826072,42.235984687671127],[32.248229051073267,32.519668035499052,32.792625928532217,33.067106968054055,33.343115391945886,33.62065543808896,33.899731344364611,34.180347348654102,34.462507688838748,34.746216602799834,35.031478328418679,35.318297103576541,35.606677166154739,35.896622754034574,36.188138105097323,36.481227457224279,36.775895048296753,37.072145116196047,37.369981898803431,37.669409634000203,37.970432559667678,38.273054913687147,38.577280933939889,38.883114858307223,39.190560924670415,39.499623370910776,39.810306434909592,40.122614354548176,40.436551367707821,40.752121712269805,41.069329626115447,41.388179347126012,41.708675113182814,42.030821162167143,42.354621731960293,42.680081060443584,43.007203385498265,43.335992945005678,43.66645397684708,43.998590718903785],[33.722561833549079,34.002200609507881,34.283381033679355,34.5661073439448,34.850383778185524,35.136214574282796,35.423603970117938,35.71255620357222,36.003075512526941,36.295166134863408,36.588832308462926,36.884078271206754,37.180908260976217,37.479326515652609,37.779337273117207,38.080944771251318,38.384153247936233,38.688966941053259,38.995390088483674,39.303426928108784,39.613081697809875,39.924358635468273,40.237261978965222,40.55179596618207,40.867964835000066,41.185772823300525,41.505224168964737,41.826323109874011,42.149073883909644,42.473480728952907,42.799547882885129,43.127279583587566,43.45668006894153,43.787753576828315,44.120504345129227,44.454936611725572,44.791054614498599,45.128862591329657,45.468364780099996,45.80956541869093],[35.241159370931008,35.529119954499485,35.818644925885934,36.109738522971647,36.402404983637929,36.69664854576606,36.992473447237352,37.289883925933076,37.588884219734538,37.889478566523039,38.19167120417989,38.49546637058635,38.800868303623723,39.107881241173338,39.416509421116444,39.726757081334362,40.038628459708377,40.352127794119809,40.667259322449915,40.984027282580016,41.302435912391388,41.622489449765361,41.94419213258319,42.267548198726203,42.592561886075664,42.91923743251288,43.247579075919155,43.577591054175777,43.909277605164057,44.24264296676526,44.577691376860713,44.91442707333168,45.252854294059475,45.592977276925382,45.934800259810707,46.278327480596758,46.623563177164804,46.97051158739616,47.319176949172096,47.669563500373926],[36.804676376560401,37.101080783815206,37.399072318493282,37.69865521847592,37.999833721644428,38.302612065880069,38.606994489064171,38.912985229077997,39.220588523802867,39.52980861112006,39.840649728910897,40.15311611505664,40.467212007438604,40.782941643938095,41.100309262436376,41.419319100814754,41.739975396954534,42.062282388737025,42.386244314043488,42.71186541075523,43.039149916753551,43.368102069919757,43.698726108135119,44.031026269280964,44.365006791238542,44.700671911889181,45.038025869114172,45.377072900794801,45.717817244812387,46.060263139048189,46.40441482138354,46.750276529699697,47.097852501877973,47.447146975799662,47.798164189346068,48.150908380398491,48.505383786838195,48.861594646546514,49.219545197404713,49.57923967729409],[38.41376756377857,38.71873781079637,39.025317924842739,39.333512143798956,39.643324705546341,39.954759847966159,40.267821808939729,40.582514826348323,40.898843138073246,41.216810981995799,41.536422595997287,41.857682217958981,42.180594085762181,42.505162437288206,42.831391510418321,43.159285543033825,43.488848773016031,43.820085438246231,44.152999776605704,44.487596025975755,44.823878424237677,45.16185120927279,45.501518618962344,45.842884891187673,46.185954263830041,46.530730974770755,46.877219261891113,47.225423363072416,47.575347516195968,47.926995959143028,48.280372929794936,48.635482666032942,48.99232940573836,49.350917386792496,49.711250847076634,50.073334024472089,50.437171156860117,50.80276648212206,51.170124238139174,51.539248662792758],[40.069087645926857,40.382745748784309,40.698036458275624,41.014964012282086,41.333532648685008,41.653746605365662,41.97561012020536,42.299127431085381,42.624302775887024,42.951140392491588,43.279644518780394,43.609819392634684,43.941669251935785,44.275198334565012,44.610410878403613,44.947311121332909,45.285903301234185,45.626191655988769,45.968180423477918,46.31187384158293,46.657276148185119,47.004391581165784,47.353224378406189,47.703778777787669,48.05605901719148,48.410069334498935,48.765813967591328,49.123297154349956,49.482523132656127,49.84349614039111,50.206220415436228,50.570700195672742,50.936939718981975,51.304943223245203,51.674714946343734,52.04625912615888,52.419580000571898,52.794681807464123,53.171568784716804,53.550245170211269],[41.771291336346607,42.093759311120373,42.417882632133292,42.743665537266658,43.071112264401783,43.400227051419925,43.731014136202418,44.063477756630519,44.397622150585541,44.733451555948783,45.070970210601551,45.41018235242511,45.751092219300773,46.093704049109846,46.438022079733599,46.78405054905334,47.131793694950368,47.48125575530598,47.832440968001457,48.185353570918103,48.539997801937204,48.896377898940088,49.254498099808011,49.614362642422293,49.975975764664206,50.339341704415062,50.704464699556148,51.071348987968761,51.439998807534224,51.810418396133784,52.182611991648777,52.556583831960459,52.932338154950152,53.309879198499139,53.689211200488728,54.070338398800224,54.453265031314892,54.837995335914052,55.224533550478974,55.612883912890965],[43.521033348379113,43.852433211145858,44.185511159757041,44.520271432093971,44.856718266037952,45.194855899470248,45.534688570272188,45.876220516325034,46.219455975510094,46.564399185708666,46.911054384802064,47.259425810671551,47.609517701198428,47.96133429426402,48.314879827749586,48.67015853953643,49.027174667505854,49.385932449539169,49.746436123517633,50.108689927322565,50.472698098835252,50.838464875937007,51.205994496509099,51.575291198432851,51.946359219589525,52.319202797860434,52.693826171126872,53.070233577270137,53.448429254171543,53.828417439712339,54.210202371773867,54.593788288237377,54.979179426984196,55.366380025895602,55.755394322852908,56.146226555737414,56.538880962430376,56.933361780813144,57.329673248766959,57.727819604173142],[45.318968395365737,45.659422162202105,46.001576754488219,46.345436410105371,46.691005366934867,47.038287862857977,47.387288135756023,47.738010423510268,48.090458964002032,48.4446379951126,48.800551754723287,49.158204480715355,49.517600410970111,49.878743783368876,50.241638835792912,50.60628980612352,50.972700932242006,51.340876452029676,51.710820603367786,52.082537624137665,52.456031752220589,52.831307225497888,53.208368281850809,53.587219159160689,53.967864095308784,54.350307328176413,54.734553095644863,55.120605635595432,55.508469185909433,55.898147984468132,56.289646269152854,56.68296827784485,57.078118248425454,57.475100418775938,57.873919026777614,58.274578310311789,58.677082507259719,59.081435855502747,59.487642592922114,59.895706957399149],[47.165751190647811,47.51538087763047,47.866734129668174,48.219815184642201,48.574628280433878,48.931177654924461,49.289467545995272,49.649502191527588,50.011285829402702,50.374822697501919,50.740117033706561,51.107173075897869,51.475995061957164,51.846587229765767,52.218953817204927,52.593099062155964,52.969027202500165,53.346742476118848,53.726249120893272,54.107551374704755,54.490653475434584,54.875559660964072,55.262274169174489,55.65080123794715,56.041145105163331,56.433310008704332,56.827300186451453,57.223119876285992,57.620773316089256,58.020264743742509,58.421598397127084,58.824778514124233,59.229809332615275,59.636695090481496,60.045440025604208,60.456048375864711,60.868524379144269,61.282872273324209,61.699096296285795,62.117200685910333],[49.062036447566641,49.420964070772257,49.781637998638196,50.144062469045771,50.508241719876281,50.874179989010997,51.24188151433124,51.611350533718266,51.982591285053402,52.355608006217935,52.730404935093176,53.106986309560391,53.485356367500891,53.865519346795985,54.247479485326934,54.631241020975047,55.016808191621628,55.404185235147992,55.793376389435387,56.184385892365128,56.577217981818514,56.971876895676864,57.368366871821422,57.766692148133536,58.166856962494457,58.568865552785489,58.972722156887947,59.378431012683109,59.785996358052294,60.195422430876768,60.60671346903785,61.01987371041681,61.434907392894949,61.851818754353573,62.270612032673974,62.691291465737464,63.113861291425309,63.538325747618828,63.964689072199285,64.392955503048],[51.008478879463553,51.376826454968779,51.746943074739626,52.118832976657401,52.492500398603411,52.867949578458912,53.245184754105239,53.624210163423655,54.005030044295466,54.387648634601966,54.772070172224481,55.158298895044254,55.546339040942605,55.936194847800856,56.327870553500254,56.721370395922115,57.116698612947729,57.513859442458426,57.912857122335446,58.313695890460117,58.716379984713718,59.120913642977584,59.527301103132956,59.935546603061169,60.345654380643488,60.757628673761225,61.171473720295666,61.587193758128116,62.004793025139882,62.424275759212229,62.84564619822649,63.268908580063908,63.69406714260581,64.12112612373349,64.550089761328252,64.980962293271403,65.413747957444187,65.84845099172793,66.285075634003917,66.723626122153462],[53.005733199679916,53.383622743561411,53.763304071313826,54.144781420818461,54.528059029956623,54.913141136609575,55.300031978658652,55.688735793985103,56.079256820470249,56.471599295995389,56.865767458441823,57.261765545690821,57.659597795623696,58.059268446121756,58.460781735066256,58.864141900338517,59.269353179819838,59.676419811391526,60.085346032934837,60.496136082331084,60.908794197461575,61.323324616207607,61.739731576450446,62.158019316071432,62.578192072951808,63.000254084972894,63.424209590015984,63.850062825962382,64.277818030693396,64.707479442090275,65.139051298034346,65.572537836406894,66.00794329508922,66.445271911962649,66.884527924908426,67.325715571807848,67.76883909054223,68.21390271899287,68.660910695041053,69.109867256568066],[55.054454121557072,55.442007649891494,55.831375701702129,56.222562514870283,56.615572327277263,57.010409376804326,57.407077901332805,57.805582138743958,58.205926326919105,58.608114703739531,59.01215150708655,59.418040974841432,59.825787344885477,60.235394855100012,60.646867743366279,61.060210247565607,61.47542660557928,61.892521055288618,62.31149783457488,62.732361181319369,63.155115333403394,63.579764528708267,64.006313005115231,64.434765000505621,64.865124752760721,65.297396499761859,65.731584479390264,66.167692929527263,66.605726088054155,67.045688192852225,67.487583481802787,67.931416192787125,68.377190563686526,68.824910832382344,69.274581236755779,69.726206014688174,70.179789404060813,70.63533564275501,71.092848968652049,71.552333619633217],[57.155296358436274,57.552635887300283,57.951812679245812,58.352830972154138,58.755695003906595,59.160409012384427,59.566977235468968,59.975403911041482,60.385693276983282,60.797849571175661,61.211877031499931,61.627779895837349,62.04556240206923,62.465228788076892,62.886783291741594,63.310230150944641,63.735573603567332,64.162817887490959,64.591967240596873,65.023025900766271,65.455998105880482,65.890888093820834,66.327700102468583,66.766438369705057,67.207107133411526,67.649710631469347,68.094253101759719,68.540738782163984,68.989171910563428,69.439556724839363,69.891897462873075,70.346198362545849,70.802463661738997,71.260697598333849,71.720904410211617,72.183088335253629,72.647253611341199,73.113404476355612,73.581545168178152,74.051679924690134],[59.308914623658929,59.716162169129184,60.125269717286251,60.536241506011422,60.949081773186009,61.36379475669127,61.780384694408539,62.198855824219073,62.619212384004186,63.041458611645176,63.46559874502335,63.891637022019971,64.319577680516346,64.749424958393774,65.181183093533562,65.614856323816994,66.050448887125398,66.487965021340003,66.927408964342135,67.368784954013094,67.81209722823418,68.257350024886662,68.704547581851912,69.153694137011129,69.604793928245641,70.057851193436747,70.512870170465746,70.969855097213937,71.428810211562606,71.889739751393051,72.352647954586615,72.817539059024497,73.284417302588039,73.753286923158541,74.224152158617301,74.697017246845661,75.171886425724807,75.648763933136081,76.12765400696081,76.608560885080252],[61.51596363056634,61.933241208719501,62.352401529164773,62.77344882978344,63.196387348456824,63.621221323066173,64.04795499149283,64.476592591618044,64.907138361323121,65.339596538489374,65.773971360998104,66.210267066730623,66.648487893568159,67.088638079392041,67.530721862083567,67.974743479524037,68.420707169594735,68.868617170176975,69.318477719152085,69.770293054401264,70.224067413805855,70.679805035247156,71.137510156606467,71.597187015765087,72.058839850604301,72.52247289900545,72.988090398849735,73.455696588018498,73.925295704393051,74.396891985854666,74.870489670284655,75.346092995564305,75.8237061995749,76.30333352019781,76.784979195314222,77.268647462805461,77.754342560552857,78.24206872643768,78.731830198341228,79.223631214144788]],"type":"surface","x":[8.3000000000000007,8.6153846153846168,8.930769230769231,9.2461538461538471,9.5615384615384631,9.8769230769230774,10.192307692307693,10.507692307692309,10.823076923076924,11.13846153846154,11.453846153846154,11.76923076923077,12.084615384615386,12.400000000000002,12.715384615384616,13.030769230769232,13.346153846153847,13.661538461538463,13.976923076923079,14.292307692307695,14.607692307692309,14.923076923076925,15.238461538461539,15.553846153846155,15.869230769230771,16.184615384615388,16.5,16.815384615384616,17.130769230769232,17.446153846153848,17.761538461538464,18.07692307692308,18.392307692307696,18.707692307692312,19.023076923076925,19.338461538461541,19.653846153846157,19.969230769230769,20.284615384615385,20.600000000000001],"y":[63,63.615384615384613,64.230769230769226,64.84615384615384,65.461538461538467,66.07692307692308,66.692307692307693,67.307692307692307,67.92307692307692,68.538461538461533,69.15384615384616,69.769230769230774,70.384615384615387,71,71.615384615384613,72.230769230769226,72.84615384615384,73.461538461538467,74.07692307692308,74.692307692307693,75.307692307692307,75.92307692307692,76.538461538461547,77.15384615384616,77.769230769230774,78.384615384615387,79,79.615384615384613,80.230769230769226,80.84615384615384,81.461538461538467,82.07692307692308,82.692307692307693,83.307692307692307,83.92307692307692,84.538461538461547,85.15384615384616,85.769230769230774,86.384615384615387,87],"opacity":0.59999999999999998,"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="model-2-residual-plot" class="level2">
+<h2 class="anchored" data-anchor-id="model-2-residual-plot">Model 2: residual plot</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_C_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="750"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="trees-as-cylinders" class="level2">
+<h2 class="anchored" data-anchor-id="trees-as-cylinders">Trees as cylinders</h2>
+<p>A tree trunk can be viewed as a cylinder (or a cone): <span class="math display">
+\mathrm{Volume} = (\text{Area of base}) \times (\text{Height}).
+</span> Since the base area is proportional to the square of the diameter, <span class="math display">
+\text{Area of base} = \pi \left(\frac{\mathrm{Diameter}}{2}\right)^2
+</span> we obtain <span class="math display">
+\mathrm{Volume} = \frac{\pi}{4} \times \mathrm{Diameter}^2 \times \mathrm{Height}.
+</span></p>
+</section>
+<section id="model-3-transformation-of-the-predictors" class="level2">
+<h2 class="anchored" data-anchor-id="model-3-transformation-of-the-predictors">Model 3: transformation of the predictors</h2>
+<p>The previous reasoning suggests the regression model <span class="math display">
+\mathrm{Volume} = \beta \times \mathrm{Diameter}^2 \times \mathrm{Height} + \varepsilon,
+</span> where <span class="math inline">\beta = \frac{\pi}{4}</span> or <span class="math inline">\beta = \frac{\pi}{12}</span> if trees were perfect cylinder or cones.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Model 3: Volume ~ 0 + Diameter^2 * Height</caption>
 <thead>
 <tr class="header">
-<th style="text-align: left;">term</th>
-<th style="text-align: right;">estimate</th>
-<th style="text-align: right;">std.error</th>
-<th style="text-align: right;">statistic</th>
-<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std_Error</th>
+<th style="text-align: right;">t_value</th>
+<th style="text-align: right;">p_value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><code>(Intercept)</code></td>
-<td style="text-align: right;">9.423</td>
-<td style="text-align: right;">0.482</td>
-<td style="text-align: right;">19.549</td>
-<td style="text-align: right;">0.000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>log(engine.size)</code></td>
-<td style="text-align: right;">-0.180</td>
-<td style="text-align: right;">0.051</td>
-<td style="text-align: right;">-3.504</td>
-<td style="text-align: right;">0.001</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>log(curb.weight)</code></td>
-<td style="text-align: right;">-0.943</td>
-<td style="text-align: right;">0.072</td>
-<td style="text-align: right;">-13.066</td>
-<td style="text-align: right;">0.000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>fuel_gas</code></td>
-<td style="text-align: right;">-0.353</td>
-<td style="text-align: right;">0.022</td>
-<td style="text-align: right;">-15.934</td>
-<td style="text-align: right;">0.000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>cylinders2_TRUE</code></td>
-<td style="text-align: right;">-0.481</td>
-<td style="text-align: right;">0.052</td>
-<td style="text-align: right;">-9.301</td>
-<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.0021</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">77.4365</td>
+<td style="text-align: right;">0</td>
 </tr>
 </tbody>
 </table>
+</div>
+</div>
 </section>
-<section id="train-mse" class="level2">
-<h2 class="anchored" data-anchor-id="train-mse">Train MSE</h2>
+<section id="model-3-predicted-line" class="level2">
+<h2 class="anchored" data-anchor-id="model-3-predicted-line">Model 3 predicted line</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_C_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="1050"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="model-3-residual-plot" class="level2">
+<h2 class="anchored" data-anchor-id="model-3-residual-plot">Model 3: residual plot</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_C_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="750"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="model-4-loglog-transformation" class="level2">
+<h2 class="anchored" data-anchor-id="model-4-loglog-transformation">Model 4: Log–Log Transformation</h2>
+<p>Model 4 applies a logarithmic transformation to both the response and predictors:</p>
+<p><span class="math display">
+\log \mathrm{Volume} = \beta_0 + \beta_1 \times \log \mathrm{Diameter} + \beta_2 \times \log \mathrm{Height} + \varepsilon.
+</span></p>
+<p>For the tree data, geometry suggests</p>
+<p><span class="math display">
+\mathrm{Volume} = \beta \times \mathrm{Diameter}^2 \times \mathrm{Height},
+</span></p>
+<p>and taking logs gives</p>
+<p><span class="math display">
+\log \mathrm{Volume} = \log \beta + 2 \times \log \mathrm{Diameter} + 1 \times \log \mathrm{Height},
+</span> Thus the log–log specification allows the exponents to be estimated from the data.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Model 3: Volume ~ 0 + Diameter^2 * Height</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std_Error</th>
+<th style="text-align: right;">t_value</th>
+<th style="text-align: right;">p_value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-6.6316</td>
+<td style="text-align: right;">0.7998</td>
+<td style="text-align: right;">-8.2917</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">log(Diameter)</td>
+<td style="text-align: right;">1.9826</td>
+<td style="text-align: right;">0.0750</td>
+<td style="text-align: right;">26.4316</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">log(Height)</td>
+<td style="text-align: right;">1.1171</td>
+<td style="text-align: right;">0.2044</td>
+<td style="text-align: right;">5.4644</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="model-4-residual-plot" class="level2">
+<h2 class="anchored" data-anchor-id="model-4-residual-plot">Model 4: residual plot</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_C_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="750"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="modelling-the-log-response" class="level2">
+<h2 class="anchored" data-anchor-id="modelling-the-log-response">Modelling the Log Response</h2>
+<ul>
+<li>Consider the linear model for the log response with <span class="math inline">p</span> predictors:</li>
+</ul>
+<p><span class="math display">
+\log Y = \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \varepsilon.
+</span></p>
+<ul>
+<li><p>If <span class="math inline">\varepsilon \sim N(0,\sigma^2)</span>, then <span class="math display">
+\log Y \mid X \sim N(\mu,\sigma^2),
+</span> where <span class="math inline">\mu =  \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p</span> and <span class="math inline">X=(X_1,\dots,X_p)^T</span>.</p></li>
+<li><p>Then <span class="math display">
+Y \mid X \sim \text{Lognormal}(\mu,\sigma^2).
+</span> For a lognormal random variable: <span class="math display">
+\text{Median}(Y \mid X) = \exp(\mu), \qquad
+\mathbb{E}(Y \mid X) = \exp(\mu + \sigma^2/2).
+</span></p></li>
+<li><p>Thus <span class="math display">\exp(\hat\mu)= \exp(\hat\beta_0+\hat\beta_1 X_1+\cdots+\hat\beta_p X_p)</span> estimates <span class="math inline">\text{Median}(Y \mid X)</span>, while <span class="math inline">\mathbb{E}(Y \mid X)</span> is larger because the distribution of <span class="math inline">Y|X</span> is right-skewed.</p></li>
+<li><p>To estimate <span class="math inline">\mathbb{E}(Y \mid X)</span>, use</p></li>
+</ul>
+<p><span class="math display">
+\exp(\hat\mu)\exp(\hat\sigma^2/2).
+</span></p>
+</section>
+<section id="model-comparison" class="level2">
+<h2 class="anchored" data-anchor-id="model-comparison">Model comparison</h2>
+<p>To compare the three models using LOOCV (leave-one-out cross-validation) on the original Volume scale, we:</p>
+<ol type="1">
+<li><p>Leave one tree out</p></li>
+<li><p>Fit the model on the remaining 30 observations</p></li>
+<li><p>Predict the left-out tree</p></li>
+<li><p>Compute squared error on the original Volume (ft³) scale</p></li>
+<li><p>Repeat for all 31 trees</p></li>
+<li><p>Compare root mean squared prediction error (LOOCV RMSE)</p></li>
+</ol>
+</section>
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section"></h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>LOOCV comparison on original Volume (ft^3) scale</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Model</th>
+<th style="text-align: right;">LOOCV_MSE</th>
+<th style="text-align: right;">LOOCV_RMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Model1</td>
+<td style="text-align: left;">Baseline</td>
+<td style="text-align: right;">18.158</td>
+<td style="text-align: right;">4.261</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Model2</td>
+<td style="text-align: left;">Cube-root</td>
+<td style="text-align: right;">7.314</td>
+<td style="text-align: right;">2.705</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Model3</td>
+<td style="text-align: left;">Cylinder</td>
+<td style="text-align: right;">6.399</td>
+<td style="text-align: right;">2.530</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Model4</td>
+<td style="text-align: left;">Log-Log</td>
+<td style="text-align: right;">6.984</td>
+<td style="text-align: right;">2.643</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Model4bc</td>
+<td style="text-align: left;">Log-Log (bias-corrected)</td>
+<td style="text-align: right;">6.958</td>
+<td style="text-align: right;">2.638</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+<section id="credit-data" class="level1">
+<h1>Credit data</h1>
+<ul>
+<li><p>The response variable is <code>Balance</code> (average credit card debt for each individual).</p></li>
+<li><p>The quantitative predictors are:</p></li>
+<li><p><code>Age</code> — age in years</p></li>
+<li><p><code>Cards</code> — number of credit cards</p></li>
+<li><p><code>Education</code> — years of education</p></li>
+<li><p><code>Income</code> — income (in thousands of dollars)</p></li>
+<li><p><code>Limit</code> — credit limit</p></li>
+<li><p><code>Rating</code> — credit rating</p></li>
+</ul>
+<section id="figure-3.6-isl" class="level2">
+<h2 class="anchored" data-anchor-id="figure-3.6-isl">Figure 3.6 ISL</h2>
+<p><img src="img/3_6.png" class="img-fluid" style="width:100.0%"></p>
+</section>
+<section id="qualitative-predictors" class="level2">
+<h2 class="anchored" data-anchor-id="qualitative-predictors">Qualitative Predictors</h2>
+<ul>
+<li><p>Some predictors are not quantitative but qualitative, meaning they take values from a discrete set of categories.</p></li>
+<li><p>These are also called <span class="orange">categorical predictors</span> or <span class="orange">factor variables</span>.</p></li>
+<li><p>In regression, qualitative predictors must be represented using indicator (<span class="orange">dummy</span>) variables.</p></li>
+<li><p>In the Credit data, in addition to the seven quantitative variables shown in the scatterplot matrix, there are four qualitative variables:</p>
+<ul>
+<li><code>Gender</code><br>
+</li>
+<li><code>Student</code> (student status)<br>
+</li>
+<li><code>Married</code> (marital status)<br>
+</li>
+<li><code>Ethnicity</code> (Caucasian, African American, or Asian)</li>
+</ul></li>
+</ul>
+</section>
+<section id="qualitative-predictors---continued" class="level2">
+<h2 class="anchored" data-anchor-id="qualitative-predictors---continued">Qualitative Predictors - continued</h2>
+<ul>
+<li>For example, <code>Ethnicity</code> has three levels, and we create two dummy variables:</li>
+</ul>
+<p><span class="math display">
+x_{i1} =
+\begin{cases}
+1 &amp; \text{if the } i\text{th person is Asian} \\
+0 &amp; \text{otherwise}
+\end{cases},
+\qquad
+x_{i2} =
+\begin{cases}
+1 &amp; \text{if the } i\text{th person is Caucasian} \\
+0 &amp; \text{otherwise}
+\end{cases}
+</span></p>
+<ul>
+<li>The regression model, ignoring the other variables, becomes</li>
+</ul>
+<p><span class="math display">
+y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \varepsilon_i.
+</span></p>
+<ul>
+<li>This implies</li>
+</ul>
+<p><span class="math display">
+y_i =
+\begin{cases}
+\beta_0 + \beta_1 + \varepsilon_i &amp; \text{if Asian} \\
+\beta_0 + \beta_2 + \varepsilon_i &amp; \text{if Caucasian} \\
+\beta_0 + \varepsilon_i &amp; \text{if African American}
+\end{cases}
+</span></p>
+<ul>
+<li><p>There is always <span class="orange">one fewer dummy variable than the number of levels</span>.</p></li>
+<li><p>The level without a dummy variable (African American here) is called the <span class="orange">baseline level</span>.</p></li>
+<li><p>The coefficients <span class="math inline">\beta_1</span> and <span class="math inline">\beta_2</span> measure differences relative to the baseline.</p></li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Regression of Balance on Ethnicity</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std. Error</th>
+<th style="text-align: right;">t value</th>
+<th style="text-align: right;">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">531.000</td>
+<td style="text-align: right;">46.319</td>
+<td style="text-align: right;">11.464</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EthnicityAsian</td>
+<td style="text-align: right;">-18.686</td>
+<td style="text-align: right;">65.021</td>
+<td style="text-align: right;">-0.287</td>
+<td style="text-align: right;">0.774</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EthnicityCaucasian</td>
+<td style="text-align: right;">-12.503</td>
+<td style="text-align: right;">56.681</td>
+<td style="text-align: right;">-0.221</td>
+<td style="text-align: right;">0.826</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="interactions-between-qualitative-and-quantitative-variables" class="level2">
+<h2 class="anchored" data-anchor-id="interactions-between-qualitative-and-quantitative-variables">Interactions between qualitative and quantitative variables</h2>
+<p>Consider the Credit data set. Suppose we wish to predict<br>
+<code>Balance</code> using <code>Income</code> (quantitative) and<br>
+<code>Student</code> (qualitative).</p>
+<p>Define an indicator variable <span class="math display">
+x_i =
+\begin{cases}
+1 &amp; \text{if the } i\text{th person is a student} \\
+0 &amp; \text{otherwise}
+\end{cases}
+</span></p>
+<p>Without an interaction term, the model is <span class="math display">
+\text{balance}_i = \beta_0 + \beta_1 \text{income}_i +\beta_2 x_i+\varepsilon_i.
+</span></p>
+<p>This implies</p>
+<p><span class="math display">
+\text{balance}_i =
+\begin{cases}
+(\beta_0 + \beta_2) + \beta_1 \text{income}_i + \varepsilon_i
+&amp; \text{if student} \\
+\beta_0 + \beta_1 \text{income}_i + \varepsilon_i
+&amp; \text{if not student}
+\end{cases}
+</span></p>
+</section>
+<section id="section-1" class="level2">
+<h2 class="anchored" data-anchor-id="section-1"></h2>
+<p>Include an interaction between <code>Income</code> and <code>Student</code>:</p>
+<p><span class="math display">
+\text{balance}_i
+=
+\beta_0
++
+\beta_1 \text{income}_i
++
+\beta_2 x_i
++
+\beta_3 (\text{income}_i x_i)
++
+\varepsilon_i,
+</span></p>
+<p>This implies</p>
+<p><span class="math display">
+\text{balance}_i =
+\begin{cases}
+(\beta_0 + \beta_2)
++
+(\beta_1 + \beta_3)\text{income}_i
++
+\varepsilon_i
+&amp; \text{if student} \\
+\beta_0
++
+\beta_1 \text{income}_i
++
+\varepsilon_i
+&amp; \text{if not student}
+\end{cases}
+</span></p>
+<ul>
+<li>Intercepts differ.</li>
+<li>Slopes differ.</li>
+<li>The effect of income on balance depends on student status.</li>
+</ul>
+</section>
+<section id="figure-3.7-isl" class="level2">
+<h2 class="anchored" data-anchor-id="figure-3.7-isl">Figure 3.7 ISL</h2>
+<p><img src="img/3_7.png" class="img-fluid" style="width:100.0%"></p>
+<p>Credit data; Left: no interaction between <code>Income</code> and <code>Student</code>. Right: with an interaction term between <code>Income</code> and <code>Student</code>.</p>
+</section>
+</section>
+<section id="subset-selection" class="level1">
+<h1>Subset Selection</h1>
+<ul>
+<li><p>The most direct approach is called <span class="orange">best subsets regression</span>: we compute the least squares fit for all possible subsets and then choose between them based on some criterion that balances training error with model size.</p></li>
+<li><p>However we often can’t examine all possible models, since they are <span class="math inline">2^p</span> of them; for example when <span class="math inline">p= 40</span> there are over a billion models!</p></li>
+</ul>
+<section id="best-subset-selection" class="level2">
+<h2 class="anchored" data-anchor-id="best-subset-selection">Best Subset Selection</h2>
+<ol type="1">
+<li><p>Let <span class="math inline">\mathcal M_0</span> denote the <span class="orange">null model</span>, which contains no predictors. This model predicts the sample mean of the response for all observations.</p></li>
+<li><p>For <span class="math inline">k = 1, 2, \dots, p</span>:</p>
+<ul>
+<li><ol type="a">
+<li>Fit all <span class="math inline">\binom{p}{k}</span> models that contain exactly <span class="math inline">k</span> predictors.<br>
+</li>
+</ol></li>
+<li><ol start="2" type="a">
+<li>Among these, select the best model and call it <span class="math inline">\mathcal M_k</span>.<br>
+``Best’’ is typically defined as the model with the smallest RSS<br>
+(equivalently, the largest <span class="math inline">R^2</span>).</li>
+</ol></li>
+</ul></li>
+<li><p>From the models <span class="math inline">\mathcal M_0, \mathcal M_1, \dots, \mathcal M_p</span>, choose a final model using cross-validated prediction error, Cp (AIC), BIC, or adjusted <span class="math inline">R^2</span></p></li>
+</ol>
+</section>
+<section id="figure-6.1-isl" class="level2">
+<h2 class="anchored" data-anchor-id="figure-6.1-isl">Figure 6.1 ISL</h2>
+<p><img src="img/6_1.png" class="img-fluid" style="width:100.0%"></p>
+<p>For each possible model containing a subset of the ten predictors in the Credit data set, the RSS and <span class="math inline">R^2</span> are displayed. The red frontier tracks the best model for a given number of predictors, according to RSS and <span class="math inline">R^2</span>. Though the data set contains only ten predictors, the x-axis ranges from 1 to 11, since one of the variables is categorical and takes on three values, leading to the creation of two dummy variables.</p>
+</section>
+<section id="forward-stepwise-selection" class="level2">
+<h2 class="anchored" data-anchor-id="forward-stepwise-selection">Forward Stepwise Selection</h2>
+<ul>
+<li><p>Forward stepwise selection starts with the <span class="orange">null model</span> (no predictors).</p></li>
+<li><p>Predictors are added <span class="orange">one at a time</span>.</p></li>
+<li><p>At each step, the predictor that provides the greatest <span class="orange">additional</span> improvement in model fit is added.</p></li>
+<li><p>The procedure continues until all predictors are included.</p></li>
+</ul>
+</section>
+<section id="forward-stepwise-selection-in-detail" class="level2">
+<h2 class="anchored" data-anchor-id="forward-stepwise-selection-in-detail">Forward Stepwise Selection — In Detail</h2>
+<ol type="1">
+<li><p>Let <span class="math inline">\mathcal M_0</span> denote the null model (no predictors).</p></li>
+<li><p>For <span class="math inline">k = 0, 1, \dots, p-1</span>:</p>
+<ul>
+<li><ol type="a">
+<li>Consider all <span class="math inline">p - k</span> models formed by adding one new predictor to <span class="math inline">M_k</span>.</li>
+</ol></li>
+<li><ol start="2" type="a">
+<li>Among these models, choose the best and call it <span class="math inline">\mathcal M_{k+1}</span>. ``Best’’ is typically defined as the model with the smallest RSS (equivalently, the largest <span class="math inline">R^2</span>).</li>
+</ol></li>
+</ul></li>
+<li><p>From the sequence of models <span class="math inline">\mathcal M_0, \mathcal M_1, \dots, \mathcal M_p</span>, select a final model using cross-validated prediction error, Cp (AIC), BIC, or adjusted <span class="math inline">R^2</span></p></li>
+</ol>
+</section>
+<section id="credit-data-example" class="level2">
+<h2 class="anchored" data-anchor-id="credit-data-example">Credit data example</h2>
+<p>The first four selected models using <span class="blue">best subset selection</span> and <span class="blue">forward stepwise selection</span>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 27%">
+<col style="width: 41%">
+</colgroup>
+<thead>
+<tr class="header">
+<th># Variables</th>
+<th>Best Subset</th>
+<th>Forward Stepwise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>One</td>
+<td><code>rating</code></td>
+<td><code>rating</code></td>
+</tr>
+<tr class="even">
+<td>Two</td>
+<td><code>rating</code>, <code>income</code></td>
+<td><code>rating</code>, <code>income</code></td>
+</tr>
+<tr class="odd">
+<td>Three</td>
+<td><code>rating</code>, <code>income</code>, <code>student</code></td>
+<td><code>rating</code>, <code>income</code>, <code>student</code></td>
+</tr>
+<tr class="even">
+<td>Four</td>
+<td><code>cards</code>, <code>income</code>, <code>student</code>, <code>limit</code></td>
+<td><code>rating</code>, <code>income</code>, <code>student</code>, <code>limit</code></td>
+</tr>
+</tbody>
+</table>
+<p>The first four selected models for best subset selection and forward stepwise selection on the <code>Credit</code> data set. The first three models are identical but the fourth models differ.</p>
+</section>
+<section id="choosing-the-optimal-model" class="level2">
+<h2 class="anchored" data-anchor-id="choosing-the-optimal-model">Choosing the Optimal Model</h2>
+<ul>
+<li><p>The model containing all of the predictors will always have the smallest RSS and the largest <span class="math inline">R^2</span>, since these quantities are related to the training error.</p></li>
+<li><p>We wish to choose a model with low test error, not a model with low training error. Recall that training error is usually a poor estimate of test error.</p></li>
+<li><p>Therefore, RSS and <span class="math inline">R^2</span> are not suitable for selecting the best model among a collection of models with different numbers of predictors.</p></li>
+</ul>
+</section>
+<section id="estimating-test-error-two-approaches" class="level2">
+<h2 class="anchored" data-anchor-id="estimating-test-error-two-approaches">Estimating test error: two approaches</h2>
+<ul>
+<li><p>We can indirectly estimate test error by making an adjustment to the training error to account for the bias due to overfitting.</p></li>
+<li><p>We can directly estimate the test error, using either a validation set approach or a cross-validation approach, as discussed in previous lectures</p></li>
+</ul>
+</section>
+<section id="c_p-aic-bic-and-adjusted-r2" class="level2">
+<h2 class="anchored" data-anchor-id="c_p-aic-bic-and-adjusted-r2"><span class="math inline">C_p</span>, AIC, BIC, and Adjusted <span class="math inline">R^2</span></h2>
+<ul>
+<li><p>These techniques adjust the training error for model size, and can be used to select among a set of models with different numbers of variables.</p></li>
+<li><p>The next figure displays <span class="math inline">C_p</span>, BIC, and adjusted <span class="math inline">R^2</span> for the best model of each size produced by best subset selection on the <code>Credit</code> data set.</p></li>
+</ul>
+</section>
+<section id="figure-6.2-isl" class="level2">
+<h2 class="anchored" data-anchor-id="figure-6.2-isl">Figure 6.2 ISL</h2>
+<p><img src="img/6_2.png" class="img-fluid" style="width:100.0%"></p>
+</section>
+<section id="mallows-c_p" class="level2">
+<h2 class="anchored" data-anchor-id="mallows-c_p">Mallows’ <span class="math inline">C_p</span></h2>
+<p><span class="math display">
+C_p
+=
+\frac{1}{n}
+\left(
+\text{RSS}
++
+2 d \hat{\sigma}^2
+\right),
+</span></p>
+<p>where <span class="math inline">d</span> is the total number of parameters used and <span class="math inline">\hat{\sigma}^2</span> is an estimate of the variance of the error <span class="math inline">\varepsilon</span> associated with each response measurement.</p>
+</section>
+<section id="bic" class="level2">
+<h2 class="anchored" data-anchor-id="bic">BIC</h2>
+<p><span class="math display">
+\text{BIC}
+=
+\frac{1}{n}
+\left(
+\text{RSS}
++
+\log(n)\, d \hat{\sigma}^2
+\right).
+</span></p>
+<ul>
+<li><p>Like <span class="math inline">C_p</span>, the Bayesian Information Criterion (BIC) tends to be small for models with low test error.<br>
+We typically select the model with the <strong>lowest BIC</strong>.</p></li>
+<li><p>Notice that BIC replaces the <span class="math inline">2 d \hat{\sigma}^2</span> term used by <span class="math inline">C_p</span> with a <span class="math inline">\log(n)\, d \hat{\sigma}^2</span> term, where <span class="math inline">n</span> is the number of observations.</p></li>
+<li><p>Since <span class="math inline">\log(n) &gt; 2</span> for any <span class="math inline">n &gt; 7</span>, BIC generally places a heavier penalty on models with many variables.</p></li>
+<li><p>As a result, BIC tends to select <strong>smaller models</strong> than <span class="math inline">C_p</span>.</p></li>
+</ul>
+</section>
+<section id="validation-and-cross-validation" class="level2">
+<h2 class="anchored" data-anchor-id="validation-and-cross-validation">Validation and Cross-Validation</h2>
+<ul>
+<li><p>Each model selection procedure returns a sequence of models <span class="math inline">\mathcal M_k</span> indexed by model size <span class="math inline">k = 0, 1, 2, \dots</span>. Our goal is to choose <span class="math inline">\hat{k}</span>.<br>
+Once selected, we return the model <span class="math inline">\mathcal M_{\hat{k}}</span>.</p></li>
+<li><p>We compute the <strong>validation set error</strong> or the <strong>cross-validation error</strong> for each model <span class="math inline">\mathcal M_k</span>, and select the value of <span class="math inline">k</span> for which the estimated test error is smallest.</p></li>
+<li><p>This approach has an advantage over AIC, BIC, <span class="math inline">C_p</span>, and adjusted <span class="math inline">R^2</span>: it provides a <strong>direct estimate of test error</strong> and does not require an estimate of the error variance <span class="math inline">\sigma^2</span>.</p></li>
+<li><p>It can also be applied in a wider range of model selection problems, including settings where the model degrees of freedom are difficult to determine or where estimating <span class="math inline">\sigma^2</span> is challenging.</p></li>
+</ul>
+</section>
+<section id="figure-6.3-isl" class="level2">
+<h2 class="anchored" data-anchor-id="figure-6.3-isl">Figure 6.3 ISL</h2>
+<p><img src="img/6_3.png" class="img-fluid" style="width:100.0%"></p>
 </section>
 <section id="required-readings-from-the-textbook-and-course-materials" class="level2">
 <h2 class="anchored" data-anchor-id="required-readings-from-the-textbook-and-course-materials">Required readings from the textbook and course materials</h2>
 <ul>
-<li><strong>Chapter 3: Linear Regression</strong></li>
+<li><strong>Chapter 3: Linear Regression</strong>
+<ul>
 <li>3.1 Simple Linear Regression
 <ul>
 <li>3.1.1 Estimating the Coeﬀicients</li>
@@ -479,11 +1012,29 @@ R^2 = 1 - \frac{\text{(``Residual deviance'')}}{\text{(``Total deviance'')}} = 1
 <ul>
 <li>3.3.1 Qualitative Predictors</li>
 </ul></li>
+</ul></li>
+<li><strong>Chapter 6: Linear Model Selection and Regularization</strong>
+<ul>
+<li>6.1 Subset Selection
+<ul>
+<li>6.1.1 Best Subset Selection</li>
+<li>6.1.2 Stepwise Selection</li>
+<li>6.1.3 Choosing the Optimal Model</li>
+</ul></li>
+</ul></li>
 </ul>
+</section>
+<section id="required-readings-from-the-textbook-and-course-materials-1" class="level2">
+<h2 class="anchored" data-anchor-id="required-readings-from-the-textbook-and-course-materials-1">Required readings from the textbook and course materials</h2>
 <p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 3.1 Simple Linear Regression - 13:02</a></p>
 <p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 3.3 Multiple Linear Regression - 15:38</a></p>
 <p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 3.4 Some Important Questions - 14:52</a></p>
 <p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 3.5 Extensions of the Linear Model - 14:17</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 6.1 Introduction and Best Subset Selection - 13:45</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 6.3 Backward Stepwise Selection - 5:27</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 6.4 Estimating Test Error - 14:07</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 6.5 Validation and Cross Validation - 8:44</a></p>
+</section>
 </section>
 
 </main>
