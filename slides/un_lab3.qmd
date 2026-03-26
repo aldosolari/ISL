@@ -1,0 +1,540 @@
+---
+title: "Lab 3"
+subtitle: "Introduction to Statistical Learning - PISE"
+author: "[Aldo Solari]{.orange}"
+institute: "_Ca' Foscari University of Venice_"
+page-layout: full
+execute:
+  cache: false
+filters: 
+  - remove-pause.lua
+format:
+  revealjs:
+    auto-stretch: true
+    center: true
+    html-math-method: katex
+    transition: none
+    output-file: un_lab3_slides.html
+    slide-number: true
+    callout-appearance: minimal
+    code-line-numbers: true
+    theme: [default, ../template.css] # alternative themes (subset): default, night, dark
+    embed-resources: false
+    echo: false
+    fig-dpi: 200
+    # incremental: true  # Remove comment if you like incremental bullet points
+    logo: img/cf_logo.png
+    footer: "[ISL](https://aldosolari.github.io/ISL)"
+    highlight-style: github
+  html:
+    html-math-method: katex
+    echo: false
+    callout-appearance: minimal
+    theme: [simplex, ../template.css]
+    toc: true
+    toc-title: Table of contents
+    embed-resources: false
+    code-line-numbers: true
+    smooth-scroll: true
+    code-fold: false
+    code-summary: "Show the code"
+    fig-dpi: 150
+    highlight-style: github
+editor: 
+  markdown: 
+    wrap: 72
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+# Linear Regression
+
+## Multiple Linear Regression
+
+- Fit multiple regression models with the `lm()` function  
+- Syntax: `lm(y ~ x1 + x2 + x3, data = ...)`  
+
+```{r}
+#| label: chunk1
+#| echo: true
+library(MASS)
+lm.fit <- lm(medv ~ lstat + age, data = Boston)
+summary(lm.fit)
+```
+
+- To use all predictors, write `.` as shorthand  
+
+```{r}
+#| label: chunk2
+#| echo: true
+lm.fit <- lm(medv ~ ., data = Boston)
+summary(lm.fit)
+```
+
+- Components of the summary object can be extracted by name  
+- Examples:
+  - `summary(lm.fit)$r.sq`
+  - `summary(lm.fit)$sigma`
+
+- `vif()` from the `car` package computes variance inflation factors  
+- VIFs help assess multicollinearity  
+
+```{r}
+#| label: chunk3
+#| echo: true
+library(car)
+vif(lm.fit)
+```
+
+- Exclude one predictor using `-` in the formula  
+- Example: remove `age`
+
+```{r}
+#| label: chunk4
+#| echo: true
+lm.fit1 <- lm(medv ~ . - age, data = Boston)
+summary(lm.fit1)
+```
+
+- Alternatively, update an existing model with `update()`  
+
+```{r}
+#| label: chunk5
+#| echo: true
+lm.fit1 <- update(lm.fit, ~ . - age)
+```
+
+## Interaction Terms
+
+- Include interaction terms with `:`  
+- Example: `lstat:age`  
+- Use `*` as shorthand for:
+  - main effects
+  - interaction term  
+
+- `lstat * age` is shorthand for:
+  - `lstat + age + lstat:age`
+
+```{r}
+#| label: chunk6
+#| echo: true
+summary(lm(medv ~ lstat * age, data = Boston))
+```
+
+
+## Qualitative Predictors
+
+- `Carseats` is another dataset in `ISLR2`  
+- Response variable: `Sales`  
+- Predictors include both quantitative and qualitative variables  
+
+```{r}
+#| label: chunk7
+#| echo: true
+library(ISLR2)
+head(Carseats)
+```
+
+- `ShelveLoc` is a qualitative predictor  
+- Levels:
+  - `Bad`
+  - `Medium`
+  - `Good`
+- `R` automatically creates dummy variables for qualitative predictors  
+
+```{r}
+#| label: chunk8
+#| echo: true
+lm.fit <- lm(Sales ~ . + Income:Advertising + Price:Age, 
+    data = Carseats)
+summary(lm.fit)
+```
+
+- Use `contrasts()` to see the dummy-variable coding used by `R`  
+
+```{r}
+#| label: chunk9
+#| echo: true
+attach(Carseats)
+contrasts(ShelveLoc)
+```
+
+- Use `?contrasts` for more information  
+
+- Here:
+  - `ShelveLocGood = 1` if location is good, 0 otherwise
+  - `ShelveLocMedium = 1` if location is medium, 0 otherwise
+  - `Bad` is the baseline category
+- Positive coefficients indicate higher sales relative to the baseline category  
+
+## Writing Functions
+
+- `R` includes many built-in functions  
+- We can also write our own functions when needed  
+- Example: create a function `LoadLibraries()`  
+
+- Before defining it, calling the function gives an error  
+
+```{r}
+#| label: chunk10
+#| echo: true
+#| error: true
+LoadLibraries
+LoadLibraries()
+```
+
+- Define the function with `function() { ... }`  
+- The braces `{}` contain the commands in the function body  
+
+```{r}
+#| label: chunk11
+#| echo: true
+LoadLibraries <- function() {
+ library(ISLR2)
+ library(MASS)
+ print("The libraries have been loaded.")
+}
+```
+
+- Typing the function name prints its definition  
+
+```{r}
+#| label: chunk12
+#| echo: true
+LoadLibraries
+```
+
+- Calling the function executes the commands  
+
+```{r}
+#| label: chunk13
+#| echo: true
+LoadLibraries()
+```
+
+
+# Best Subset Selection
+
+- Apply best subset selection to the `Hitters` data  
+- Goal: predict a player's `Salary` using performance statistics from the previous year  
+
+- `Salary` has missing values  
+- `is.na()` identifies missing entries  
+- `sum()` counts how many are missing  
+
+```{r}
+#| label: chunk14
+#| echo: true
+library(ISLR2)
+names(Hitters)
+dim(Hitters)
+sum(is.na(Hitters$Salary))
+```
+
+- `Salary` is missing for 59 players  
+- `na.omit()` removes rows with missing values  
+
+```{r}
+#| label: chunk15
+#| echo: true
+Hitters <- na.omit(Hitters)
+dim(Hitters)
+sum(is.na(Hitters))
+```
+
+- `regsubsets()` from the `leaps` package performs best subset selection  
+- It finds the best model of each size, where *best* means lowest RSS  
+- `summary()` shows the selected variables for each model size  
+
+```{r}
+#| label: chunk16
+#| echo: true
+library(leaps)
+regfit.full <- regsubsets(Salary ~ ., Hitters)
+summary(regfit.full)
+```
+
+- An asterisk indicates that a variable is included in the model  
+- By default, output is shown only up to 8 predictors  
+- Use `nvmax` to increase the maximum model size  
+
+```{r}
+#| label: chunk17
+#| echo: true
+regfit.full <- regsubsets(Salary ~ ., data = Hitters,
+    nvmax = 19)
+reg.summary <- summary(regfit.full)
+```
+
+- `summary()` also returns:
+  - `R^2`
+  - RSS
+  - adjusted `R^2`
+  - `C_p`
+  - BIC
+
+```{r}
+#| label: chunk18
+#| echo: true
+names(reg.summary)
+```
+
+- `R^2` increases as more variables are added  
+
+```{r}
+#| label: chunk19
+#| echo: true
+reg.summary$rsq
+```
+
+- Plot RSS and adjusted `R^2` across model sizes  
+- `type = "l"` connects the points with lines  
+
+```{r}
+#| label: chunk20
+#| echo: true
+par(mfrow = c(2, 2))
+plot(reg.summary$rss, xlab = "Number of Variables",
+    ylab = "RSS", type = "l")
+plot(reg.summary$adjr2, xlab = "Number of Variables",
+    ylab = "Adjusted RSq", type = "l")
+```
+
+- `points()` adds points to an existing plot  
+- `which.max()` identifies the location of the maximum value  
+- Mark the model with the largest adjusted `R^2`  
+
+```{r}
+#| label: chunk21
+#| echo: true
+which.max(reg.summary$adjr2)
+plot(reg.summary$adjr2, xlab = "Number of Variables",
+    ylab = "Adjusted RSq", type = "l")
+points(11, reg.summary$adjr2[11], col = "red", cex = 2, 
+    pch = 20)
+```
+
+- Use `which.min()` to identify the best model by `C_p` and BIC  
+
+```{r}
+#| label: chunk22
+#| echo: true
+plot(reg.summary$cp, xlab = "Number of Variables",
+    ylab = "Cp", type = "l")
+which.min(reg.summary$cp)
+points(10, reg.summary$cp[10], col = "red", cex = 2,
+    pch = 20)
+which.min(reg.summary$bic)
+plot(reg.summary$bic, xlab = "Number of Variables",
+    ylab = "BIC", type = "l")
+points(6, reg.summary$bic[6], col = "red", cex = 2,
+    pch = 20)
+```
+
+- `plot.regsubsets()` displays selected variables by model size  
+- Models can be ranked by:
+  - `r2`
+  - `adjr2`
+  - `Cp`
+  - `bic`
+
+```{r}
+#| label: chunk23
+#| echo: true
+plot(regfit.full, scale = "r2")
+plot(regfit.full, scale = "adjr2")
+plot(regfit.full, scale = "Cp")
+plot(regfit.full, scale = "bic")
+```
+
+- Use `coef()` to inspect coefficients for a chosen model  
+- Example: the 6-variable model  
+
+```{r}
+#| label: chunk24
+#| echo: true
+coef(regfit.full, 6)
+```
+
+# Forward and Backward Stepwise Selection
+
+- `regsubsets()` can also perform:
+  - forward stepwise selection
+  - backward stepwise selection  
+- Use `method = "forward"` or `method = "backward"`  
+
+```{r}
+#| label: chunk25
+#| echo: true
+regfit.fwd <- regsubsets(Salary ~ ., data = Hitters,
+    nvmax = 19, method = "forward")
+summary(regfit.fwd)
+regfit.bwd <- regsubsets(Salary ~ ., data = Hitters,
+    nvmax = 19, method = "backward")
+summary(regfit.bwd)
+```
+
+- Best subset, forward, and backward selection may agree for small models  
+- They can differ for larger models  
+
+```{r}
+#| label: chunk26
+#| echo: true
+coef(regfit.full, 7)
+coef(regfit.fwd, 7)
+coef(regfit.bwd, 7)
+```
+
+# Choosing Among Models Using the Validation-Set Approach and Cross-Validation
+
+- Model size can also be selected using:
+  - validation set
+  - cross-validation  
+
+- Important: all model-fitting steps must use only the training data  
+- Variable selection must also be performed within the training set  
+
+- Create a training/test split  
+- `train` is `TRUE` for training observations  
+- `test` is `TRUE` for test observations  
+
+```{r}
+#| label: chunk27
+#| echo: true
+set.seed(1)
+train <- sample(c(TRUE, FALSE), nrow(Hitters),
+    replace = TRUE)
+test <- (!train)
+```
+
+- Perform best subset selection on the training data only  
+
+```{r}
+#| label: chunk28
+#| echo: true
+regfit.best <- regsubsets(Salary ~ .,
+    data = Hitters[train, ], nvmax = 19)
+```
+
+- Build a model matrix for the test data  
+
+```{r}
+#| label: chunk29
+#| echo: true
+test.mat <- model.matrix(Salary ~ ., data = Hitters[test, ])
+```
+
+- Compute validation error for each model size  
+- For each `i`:
+  - extract coefficients
+  - compute predictions
+  - compute test MSE  
+
+```{r}
+#| label: chunk30
+#| echo: true
+val.errors <- rep(NA, 19)
+for (i in 1:19) {
+ coefi <- coef(regfit.best, id = i)
+ pred <- test.mat[, names(coefi)] %*% coefi
+ val.errors[i] <- mean((Hitters$Salary[test] - pred)^2)
+}
+```
+
+- Select the model with the smallest validation error  
+
+```{r}
+#| label: chunk31
+#| echo: true
+val.errors
+which.min(val.errors)
+coef(regfit.best, 7)
+```
+
+- `regsubsets()` has no built-in `predict()` method  
+- Define a custom prediction function for reuse  
+
+```{r}
+#| label: chunk32
+#| echo: true
+predict.regsubsets <- function(object, newdata, id, ...) {
+  form <- as.formula(object$call[[2]])
+  mat <- model.matrix(form, newdata)
+  coefi <- coef(object, id = id)
+  xvars <- names(coefi)
+  mat[, xvars] %*% coefi
+}
+```
+
+- Refit best subset selection on the full dataset  
+- Then extract the chosen model size from the full data  
+
+```{r}
+#| label: chunk33
+#| echo: true
+regfit.best <- regsubsets(Salary ~ ., data = Hitters,
+    nvmax = 19)
+coef(regfit.best, 7)
+```
+
+- The best 7-variable model on the full data may differ from the one on the training set  
+
+- Now use cross-validation for model selection  
+- Create:
+  - 10 folds
+  - a matrix to store CV errors  
+
+```{r}
+#| label: chunk34
+#| echo: true
+k <- 10
+n <- nrow(Hitters)
+set.seed(1)
+folds <- sample(rep(1:k, length = n))
+cv.errors <- matrix(NA, k, 19,
+    dimnames = list(NULL, paste(1:19)))
+```
+
+- For each fold:
+  - fit best subset selection on training folds
+  - predict on the validation fold
+  - store the MSE for each model size  
+
+```{r}
+#| label: chunk35
+#| echo: true
+for (j in 1:k) {
+  best.fit <- regsubsets(Salary ~ .,
+       data = Hitters[folds != j, ],
+       nvmax = 19)
+  for (i in 1:19) {
+    pred <- predict(best.fit, Hitters[folds == j, ], id = i)
+    cv.errors[j, i] <-
+         mean((Hitters$Salary[folds == j] - pred)^2)
+   }
+ }
+```
+
+- Average CV errors across folds using `apply()`  
+
+```{r}
+#| label: chunk36
+#| echo: true
+mean.cv.errors <- apply(cv.errors, 2, mean)
+mean.cv.errors
+par(mfrow = c(1, 1))
+plot(mean.cv.errors, type = "b")
+```
+
+- Cross-validation selects the model size with minimum average CV error  
+- Refit on the full data and extract that model  
+
+```{r}
+#| label: chunk37
+#| echo: true
+reg.best <- regsubsets(Salary ~ ., data = Hitters,
+    nvmax = 19)
+coef(reg.best, 10)
+```

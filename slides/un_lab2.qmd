@@ -1,0 +1,432 @@
+---
+title: "Lab 2"
+subtitle: "Introduction to Statistical Learning - PISE"
+author: "[Aldo Solari]{.orange}"
+institute: "_Ca' Foscari University of Venice_"
+page-layout: full
+execute:
+  cache: false
+filters: 
+  - remove-pause.lua
+format:
+  revealjs:
+    auto-stretch: true
+    center: true
+    html-math-method: katex
+    transition: none
+    output-file: un_lab2_slides.html
+    slide-number: true
+    callout-appearance: minimal
+    code-line-numbers: true
+    theme: [default, ../template.css] # alternative themes (subset): default, night, dark
+    embed-resources: false
+    echo: false
+    fig-dpi: 200
+    # incremental: true  # Remove comment if you like incremental bullet points
+    logo: img/cf_logo.png
+    footer: "[ISL](https://aldosolari.github.io/ISL)"
+    highlight-style: github
+  html:
+    html-math-method: katex
+    echo: false
+    callout-appearance: minimal
+    theme: [simplex, ../template.css]
+    toc: true
+    toc-title: Table of contents
+    embed-resources: false
+    code-line-numbers: true
+    smooth-scroll: true
+    code-fold: false
+    code-summary: "Show the code"
+    fig-dpi: 150
+    highlight-style: github
+editor: 
+  markdown: 
+    wrap: 72
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+# Linear Regression
+
+## Libraries
+
+- `library()` loads *packages*  
+- Packages contain functions and datasets not always included in base `R`  
+- Basic linear regression tools are in base `R`  
+- More specialized tools require additional packages  
+- Here we load:
+  - `MASS`
+  - `ISLR2`
+
+```{r}
+#| label: chunk1
+#| echo: true
+library(MASS)
+library(ISLR2)
+```
+
+- If a package is not installed, `library()` returns an error  
+- Some packages (e.g. `MASS`) usually come with `R`  
+- Others (e.g. `ISLR2`) may need to be installed first  
+- Install once with `install.packages("ISLR2")`  
+- Then load the package in each new `R` session with `library()`  
+
+## Simple Linear Regression
+
+- `Boston` is a dataset in `ISLR2`  
+- Response variable: `medv` (median house value)  
+- Predictors include variables such as:
+  - `rm`
+  - `age`
+  - `lstat`
+
+```{r}
+#| label: chunk2
+#| echo: true
+head(Boston)
+```
+
+- Use `?Boston` to see the dataset documentation  
+
+- Fit a simple linear regression with `lm()`  
+- Syntax: `lm(y ~ x, data = dataset)`  
+- Here:
+  - response = `medv`
+  - predictor = `lstat`
+
+```{r}
+#| label: chunk3
+#| echo: true
+#| error: true
+lm.fit <- lm(medv ~ lstat)
+```
+
+- This gives an error because `R` does not know where `medv` and `lstat` are stored  
+- Fix:
+  - specify `data = Boston`, or
+  - use `attach(Boston)`
+
+```{r}
+#| label: chunk4
+#| echo: true
+lm.fit <- lm(medv ~ lstat, data = Boston)
+attach(Boston)
+lm.fit <- lm(medv ~ lstat)
+```
+
+- Typing `lm.fit` gives basic model output  
+- `summary(lm.fit)` gives more details:
+  - coefficients
+  - standard errors
+  - $p$-values
+  - $R^2$
+  - $F$-statistic
+
+```{r}
+#| label: chunk5
+#| echo: true
+lm.fit
+summary(lm.fit)
+```
+
+- Use `names()` to see what is stored in the fitted model object  
+- Use extractor functions such as `coef()` to access components safely  
+
+```{r}
+#| label: chunk6
+#| echo: true
+names(lm.fit)
+coef(lm.fit)
+```
+
+- Use `confint()` to compute confidence intervals for coefficients  
+
+```{r}
+#| label: chunk7
+#| echo: true
+confint(lm.fit)
+```
+
+- Use `predict()` to compute:
+  - confidence intervals for the mean response
+  - prediction intervals for a new observation
+
+```{r}
+#| label: chunk8
+#| echo: true
+predict(lm.fit, data.frame(lstat = (c(5, 10, 15))),
+    interval = "confidence")
+predict(lm.fit, data.frame(lstat = (c(5, 10, 15))),
+    interval = "prediction")
+```
+
+- Confidence and prediction intervals are centered at the same fitted value  
+- Prediction intervals are wider than confidence intervals  
+
+- Plot the data and add the least-squares regression line  
+
+```{r}
+#| label: chunk9
+#| echo: true
+plot(lstat, medv)
+abline(lm.fit)
+```
+
+- The plot suggests some possible non-linearity  
+- We will revisit this later  
+
+- `abline()` can add any line to a plot  
+- `abline(a, b)` draws a line with:
+  - intercept = `a`
+  - slope = `b`
+- Plot options:
+  - `lwd` controls line width
+  - `col` controls color
+  - `pch` controls plotting symbol
+
+```{r}
+#| label: chunk10
+#| echo: true
+plot(lstat, medv)
+abline(lm.fit, lwd = 3)
+abline(lm.fit, lwd = 3, col = "red")
+plot(lstat, medv, col = "red")
+plot(lstat, medv, pch = 20)
+plot(lstat, medv, pch = "+")
+plot(1:20, 1:20, pch = 1:20)
+```
+
+## Non-linear Transformations of the Predictors
+
+- `lm()` can include transformed predictors  
+- Use `I()` when arithmetic operators would otherwise be interpreted specially in a formula  
+- Example: `I(lstat^2)` adds a quadratic term  
+
+```{r}
+#| label: chunk11
+#| echo: true
+lm.fit2 <- lm(medv ~ lstat + I(lstat^2), data = Boston)
+summary(lm.fit2)
+```
+
+- The quadratic term appears to improve the model  
+- Compare the linear and quadratic models with `anova()`  
+
+```{r}
+#| label: chunk12
+#| echo: true
+lm.fit <- lm(medv ~ lstat, data = Boston)
+anova(lm.fit, lm.fit2)
+```
+
+- Model 1: linear fit with `lstat`  
+- Model 2: quadratic fit with `lstat` and `lstat^2`  
+- `anova()` tests whether the larger model improves fit significantly  
+- Very small $p$-value indicates strong evidence in favor of the quadratic model  
+
+- Check the residual diagnostics for the quadratic model  
+
+```{r}
+#| label: chunk13
+#| echo: true
+par(mfrow = c(2, 2))
+plot(lm.fit2)
+```
+
+- With the quadratic term included, residual patterns are reduced  
+
+- For higher-order polynomials, `poly()` is more convenient than writing each power manually  
+- Example: fifth-order polynomial fit  
+
+```{r}
+#| label: chunk14
+#| echo: true
+lm.fit5 <- lm(medv ~ poly(lstat, 5), data = Boston)
+summary(lm.fit5)
+```
+
+- Higher-order polynomial terms can improve fit  
+- In this example, terms beyond fifth order are not significant  
+
+- By default, `poly()` uses orthogonal polynomials  
+- These are not the raw powers of the predictor  
+- Fitted values are the same as with raw polynomials, but coefficients differ  
+- Use `raw = TRUE` if raw powers are desired  
+
+- We are not restricted to polynomial transformations  
+- Example: log transformation  
+
+```{r}
+#| label: chunk15
+#| echo: true
+summary(lm(medv ~ log(rm), data = Boston))
+```
+
+# Cross-Validation 
+
+- In this lab, we explore *resampling methods*  
+- Focus:
+  - validation set approach
+  - leave-one-out cross-validation (LOOCV)
+  - $k$-fold cross-validation  
+- Some commands may take a while to run  
+
+## The Validation Set Approach
+
+- Use the validation set approach to estimate test error  
+- Work with the `Auto` data set  
+- Set a random seed for reproducibility  
+- This ensures the same training/validation split each time  
+
+```{r}
+#| label: chunk16
+#| echo: true
+library(ISLR2)
+set.seed(1)
+train <- sample(392, 196)
+```
+
+- Split the data into two halves  
+- Here, `train` contains the indices of the training observations  
+- Fit the model only on the training set using `subset = train`  
+
+```{r}
+#| label: chunk17
+#| echo: true
+lm.fit <- lm(mpg ~ horsepower, data = Auto, subset = train)
+```
+
+- Use `predict()` to compute fitted values for all observations  
+- Compute validation MSE on the observations not in the training set  
+- `-train` selects the validation observations  
+
+```{r}
+#| label: chunk18
+#| echo: true
+attach(Auto)
+mean((mpg - predict(lm.fit, Auto))[-train]^2)
+```
+
+- Estimate test MSE for quadratic and cubic models  
+- Use `poly()` to fit polynomial regressions  
+
+```{r}
+#| label: chunk19
+#| echo: true
+lm.fit2 <- lm(mpg ~ poly(horsepower, 2), data = Auto, 
+    subset = train)
+mean((mpg - predict(lm.fit2, Auto))[-train]^2)
+lm.fit3 <- lm(mpg ~ poly(horsepower, 3), data = Auto, 
+    subset = train)
+mean((mpg - predict(lm.fit3, Auto))[-train]^2)
+```
+
+- Different training/validation splits give slightly different results  
+- Repeat with a different random seed  
+
+```{r}
+#| label: chunk20
+#| echo: true
+set.seed(2)
+train <- sample(392, 196)
+lm.fit <- lm(mpg ~ horsepower, subset = train)
+mean((mpg - predict(lm.fit, Auto))[-train]^2)
+lm.fit2 <- lm(mpg ~ poly(horsepower, 2), data = Auto, 
+    subset = train)
+mean((mpg - predict(lm.fit2, Auto))[-train]^2)
+lm.fit3 <- lm(mpg ~ poly(horsepower, 3), data = Auto, 
+    subset = train)
+mean((mpg - predict(lm.fit3, Auto))[-train]^2)
+```
+
+- Main result:
+  - quadratic model improves over linear
+  - little evidence that cubic improves further  
+
+## Leave-One-Out Cross-Validation
+
+- LOOCV can be computed with `cv.glm()`  
+- `cv.glm()` works with models fit using `glm()`  
+- Without a `family` argument, `glm()` performs linear regression  
+- So `glm()` and `lm()` give the same fit here  
+
+```{r}
+#| label: chunk21
+#| echo: true
+glm.fit <- glm(mpg ~ horsepower, data = Auto)
+coef(glm.fit)
+```
+
+```{r}
+#| label: chunk22
+#| echo: true
+lm.fit <- lm(mpg ~ horsepower, data = Auto)
+coef(lm.fit)
+```
+
+- Use `glm()` because it works with `cv.glm()`  
+- `cv.glm()` is in the `boot` package  
+
+```{r}
+#| label: chunk23
+#| echo: true
+library(boot)
+glm.fit <- glm(mpg ~ horsepower, data = Auto)
+cv.err <- cv.glm(Auto, glm.fit)
+cv.err$delta
+```
+
+- `cv.glm()` returns a list  
+- `delta` contains the cross-validation estimates  
+- For LOOCV, the two values are essentially the same  
+
+- Compute LOOCV error for polynomial models of degree 1 to 10  
+- Store the results in a vector  
+
+```{r}
+#| label: chunk24
+#| echo: true
+cv.error <- rep(0, 10)
+for (i in 1:10) {
+  glm.fit <- glm(mpg ~ poly(horsepower, i), data = Auto)
+  cv.error[i] <- cv.glm(Auto, glm.fit)$delta[1]
+}
+cv.error
+```
+
+- Main pattern:
+  - large drop from linear to quadratic
+  - little improvement beyond degree 2  
+
+## $k$-Fold Cross-Validation
+
+- `cv.glm()` can also perform $k$-fold CV  
+- Here we use:
+  - $k = 10$
+- Again evaluate polynomial models of degree 1 to 10  
+
+```{r}
+#| label: chunk25
+#| echo: true
+set.seed(17)
+cv.error.10 <- rep(0, 10)
+for (i in 1:10) {
+  glm.fit <- glm(mpg ~ poly(horsepower, i), data = Auto)
+  cv.error.10[i] <- cv.glm(Auto, glm.fit, K = 10)$delta[1]
+}
+cv.error.10
+```
+
+- $k$-fold CV is faster to compute than LOOCV here  
+- Results are similar:
+  - quadratic model improves over linear
+  - higher-order terms add little  
+
+- With LOOCV, the two values in `delta` are almost identical  
+- With $k$-fold CV, they differ slightly:
+  - first value = standard $k$-fold CV estimate
+  - second value = bias-corrected estimate  
+- On this data set, the difference is very small  
