@@ -1,0 +1,43 @@
+---
+title: "Exercises Unit B - Conceptual"
+subtitle: "Bachelor’s Degree Programme in Philosophy, International and Economic Studies, Ca' Foscari University of Venice."
+author: "Aldo Solari"
+institute: "Department of Economics, Ca' Foscari University of Venice"
+lang: en
+page-layout: full
+execute:
+  cache: false
+format:
+  html:
+    html-math-method: katex
+    echo: true
+    callout-appearance: minimal
+    theme: [simplex, template.css]
+    toc: true
+    toc-title: Table of contents
+    embed-resources: false
+    code-line-numbers: true
+    smooth-scroll: true
+    fig-dpi: 250
+editor: 
+  markdown: 
+    wrap: 72
+editor_options: 
+  chunk_output_type: console
+---
+
+
+### [Homepage](../index.html)
+
+#### Chapter 5 Exercise 3.
+
+We now review k-fold cross-validation.
+
+(a) Explain how k-fold cross-validation is implemented.
+
+(b) What are the advantages and disadvantages of k-fold cross-
+validation relative to:
+
+   i. The validation set approach?
+   
+   ii. LOOCV?
