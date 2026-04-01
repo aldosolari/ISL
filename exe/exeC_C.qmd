@@ -1,5 +1,5 @@
 ---
-title: "Exercises Unit B - Conceptual"
+title: "Exercises Unit C - Conceptual"
 subtitle: "Bachelor’s Degree Programme in Philosophy, International and Economic Studies, Ca' Foscari University of Venice."
 author: "Aldo Solari"
 institute: "Department of Economics, Ca' Foscari University of Venice"

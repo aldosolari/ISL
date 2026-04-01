@@ -1,0 +1,51 @@
+---
+title: "Exercises Unit D - Conceptual"
+subtitle: "Bachelor’s Degree Programme in Philosophy, International and Economic Studies, Ca' Foscari University of Venice."
+author: "Aldo Solari"
+institute: "Department of Economics, Ca' Foscari University of Venice"
+lang: en
+page-layout: full
+execute:
+  cache: false
+format:
+  html:
+    html-math-method: katex
+    echo: true
+    callout-appearance: minimal
+    theme: [simplex, template.css]
+    toc: true
+    toc-title: Table of contents
+    embed-resources: false
+    code-line-numbers: true
+    smooth-scroll: true
+    fig-dpi: 250
+editor: 
+  markdown: 
+    wrap: 72
+editor_options: 
+  chunk_output_type: console
+---
+
+
+### [Homepage](../index.html)
+
+#### Chapter 8, Exercise 1
+
+Draw an example (of your own invention) of a partition of a two-dimensional feature space that could result from recursive binary splitting. Your example should contain at least six regions. 
+
+Then, draw the decision tree corresponding to this partition. Be sure to clearly label all aspects of your figures, including the regions $R_1, R_2, \ldots$, the cutpoints $t_1, t_2, \ldots$, and any relevant feature axes.
+
+*Hint:* Your result should resemble Figures 8.1 and 8.2.
+
+#### Chapter 8, Exercise 4
+
+This question refers to the plots in Figure 8.14 of *An Introduction to Statistical Learning with Applications in R* (2nd ed.), p. 362.
+
+(a). Sketch the decision tree corresponding to the partition of the predictor space shown in the left-hand panel of Figure 8.14. The numbers inside the boxes represent the mean of $Y$ within each region.
+
+(b). Create a diagram similar to the left-hand panel of Figure 8.14 using the tree shown in the right-hand panel of the same figure. Divide the predictor space into the appropriate regions and indicate the mean of $Y$ within each region.
+
+#### Chapter 8, Exercise 6
+
+Provide a detailed explanation of the algorithm that is used to fit a
+regression tree.

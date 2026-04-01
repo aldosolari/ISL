@@ -215,7 +215,7 @@ LoadLibraries()
 ```
 
 
-# Best Subset Selection
+## Best Subset Selection
 
 - Apply best subset selection to the `Hitters` data  
 - Goal: predict a player's `Salary` using performance statistics from the previous year  
@@ -358,7 +358,7 @@ plot(regfit.full, scale = "bic")
 coef(regfit.full, 6)
 ```
 
-# Forward and Backward Stepwise Selection
+## Forward and Backward Stepwise Selection
 
 - `regsubsets()` can also perform:
   - forward stepwise selection
@@ -387,7 +387,7 @@ coef(regfit.fwd, 7)
 coef(regfit.bwd, 7)
 ```
 
-# Choosing Among Models Using the Validation-Set Approach and Cross-Validation
+## Choosing Among Models Using the Validation-Set Approach and Cross-Validation
 
 - Model size can also be selected using:
   - validation set

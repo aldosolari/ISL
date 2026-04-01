@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="un_lab4_files/libs/clipboard/clipboard.min.js"></script>
+<script src="un_lab4_files/libs/quarto-html/tabby.min.js"></script>
+<script src="un_lab4_files/libs/quarto-html/popper.min.js"></script>
+<script src="un_lab4_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="un_lab4_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="un_lab4_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="un_lab4_files/libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.32">
+
+  <meta name="author" content="Aldo Solari">
+  <title>Lab 4</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="un_lab4_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="un_lab4_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #24292e;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #24292e; } /* Normal */
+    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
+    code span.an { color: #6a737d; } /* Annotation */
+    code span.at { color: #d73a49; } /* Attribute */
+    code span.bn { color: #005cc5; } /* BaseN */
+    code span.bu { color: #d73a49; } /* BuiltIn */
+    code span.cf { color: #d73a49; } /* ControlFlow */
+    code span.ch { color: #032f62; } /* Char */
+    code span.cn { color: #005cc5; } /* Constant */
+    code span.co { color: #6a737d; } /* Comment */
+    code span.cv { color: #6a737d; } /* CommentVar */
+    code span.do { color: #6a737d; } /* Documentation */
+    code span.dt { color: #d73a49; } /* DataType */
+    code span.dv { color: #005cc5; } /* DecVal */
+    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
+    code span.ex { color: #d73a49; font-weight: bold; } /* Extension */
+    code span.fl { color: #005cc5; } /* Float */
+    code span.fu { color: #6f42c1; } /* Function */
+    code span.im { color: #032f62; } /* Import */
+    code span.in { color: #6a737d; } /* Information */
+    code span.kw { color: #d73a49; } /* Keyword */
+    code span.op { color: #24292e; } /* Operator */
+    code span.ot { color: #6f42c1; } /* Other */
+    code span.pp { color: #d73a49; } /* Preprocessor */
+    code span.re { color: #6a737d; } /* RegionMarker */
+    code span.sc { color: #005cc5; } /* SpecialChar */
+    code span.ss { color: #032f62; } /* SpecialString */
+    code span.st { color: #032f62; } /* String */
+    code span.va { color: #e36209; } /* Variable */
+    code span.vs { color: #032f62; } /* VerbatimString */
+    code span.wa { color: #ff5555; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="un_lab4_files/libs/revealjs/dist/theme/quarto-52f9c9ea99cef3131c4880afbe91edc6.css">
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+  <link href="un_lab4_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="un_lab4_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="un_lab4_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="un_lab4_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Lab 4</h1>
+  <p class="subtitle">Decision Trees, Bagging, Random Forests, and Boosting</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+<span class="orange">Aldo Solari</span> 
+</div>
+        <p class="quarto-title-affiliation">
+            <em>Ca’ Foscari University of Venice</em>
+          </p>
+    </div>
+</div>
+
+</section>
+<section>
+<section id="decision-trees" class="title-slide slide level1 center">
+<h1>Decision Trees</h1>
+
+</section>
+<section id="fitting-classification-trees" class="slide level2 center">
+<h2>Fitting Classification Trees</h2>
+<p>The <code>tree</code> library is used to construct classification and regression trees.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(tree)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We first use classification trees to analyze the <code>Carseats</code> data set. In these data, <code>Sales</code> is a continuous variable, so we begin by recoding it as a binary variable. We use the <code>ifelse()</code> function to create a variable called <code>High</code>, which takes on a value of <code>Yes</code> if <code>Sales</code> exceeds <span class="math inline">8</span>, and <code>No</code> otherwise.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">library</span>(ISLR2)</span>
+<span id="cb2-2"><a href=""></a><span class="fu">attach</span>(Carseats)</span>
+<span id="cb2-3"><a href=""></a>High <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(Sales <span class="sc">&lt;=</span> <span class="dv">8</span>, <span class="st">"No"</span>, <span class="st">"Yes"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, we use the <code>data.frame()</code> function to merge <code>High</code> with the rest of the <code>Carseats</code> data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>Carseats <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(Carseats, High)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We now use the <code>tree()</code> function to fit a classification tree in order to predict <code>High</code> using all variables except <code>Sales</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>tree.carseats <span class="ot">&lt;-</span> <span class="fu">tree</span>(High <span class="sc">~</span> . <span class="sc">-</span> Sales, Carseats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>summary()</code> function lists the variables that are used as internal nodes in the tree, the number of terminal nodes, and the training error rate.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">summary</span>(tree.carseats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Classification tree:
+tree(formula = High ~ . - Sales, data = Carseats)
+Variables actually used in tree construction:
+[1] "ShelveLoc"   "Price"       "Income"      "CompPrice"   "Population" 
+[6] "Advertising" "Age"         "US"         
+Number of terminal nodes:  27 
+Residual mean deviance:  0.4575 = 170.7 / 373 
+Misclassification error rate: 0.09 = 36 / 400 </code></pre>
+</div>
+</div>
+<p>We see that the training error rate is about <span class="math inline">9\%</span>. For classification trees, the deviance reported in <code>summary()</code> is</p>
+<p><span class="math display">
+-2 \sum_m \sum_k n_{mk} \log \hat{p}_{mk},
+</span></p>
+<p>where <span class="math inline">n_{mk}</span> is the number of observations in the <span class="math inline">m</span>th terminal node that belong to the <span class="math inline">k</span>th class. A small deviance indicates a tree that provides a good fit to the training data.</p>
+<p>The residual mean deviance is the deviance divided by <span class="math inline">n - |T_0|</span>, which in this case is <span class="math inline">400 - 27 = 373</span>.</p>
+<p>One of the most attractive properties of trees is that they can be graphically displayed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">plot</span>(tree.carseats)</span>
+<span id="cb7-2"><a href=""></a><span class="fu">text</span>(tree.carseats, <span class="at">pretty =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_lab4_files/figure-revealjs/chunk6-1.png" width="2000"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The most important indicator of <code>Sales</code> appears to be shelving location, since the first branch differentiates <code>Good</code> locations from <code>Bad</code> and <code>Medium</code> locations.</p>
+<p>If we type the name of the tree object, <code>R</code> prints output corresponding to each branch of the tree.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a>tree.carseats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>node), split, n, deviance, yval, (yprob)
+      * denotes terminal node
+
+  1) root 400 541.500 No ( 0.59000 0.41000 )  
+    2) ShelveLoc: Bad,Medium 315 390.600 No ( 0.68889 0.31111 )  
+      4) Price &lt; 92.5 46  56.530 Yes ( 0.30435 0.69565 )  
+        8) Income &lt; 57 10  12.220 No ( 0.70000 0.30000 )  
+         16) CompPrice &lt; 110.5 5   0.000 No ( 1.00000 0.00000 ) *
+         17) CompPrice &gt; 110.5 5   6.730 Yes ( 0.40000 0.60000 ) *
+        9) Income &gt; 57 36  35.470 Yes ( 0.19444 0.80556 )  
+         18) Population &lt; 207.5 16  21.170 Yes ( 0.37500 0.62500 ) *
+         19) Population &gt; 207.5 20   7.941 Yes ( 0.05000 0.95000 ) *
+      5) Price &gt; 92.5 269 299.800 No ( 0.75465 0.24535 )  
+       10) Advertising &lt; 13.5 224 213.200 No ( 0.81696 0.18304 )  
+         20) CompPrice &lt; 124.5 96  44.890 No ( 0.93750 0.06250 )  
+           40) Price &lt; 106.5 38  33.150 No ( 0.84211 0.15789 )  
+             80) Population &lt; 177 12  16.300 No ( 0.58333 0.41667 )  
+              160) Income &lt; 60.5 6   0.000 No ( 1.00000 0.00000 ) *
+              161) Income &gt; 60.5 6   5.407 Yes ( 0.16667 0.83333 ) *
+             81) Population &gt; 177 26   8.477 No ( 0.96154 0.03846 ) *
+           41) Price &gt; 106.5 58   0.000 No ( 1.00000 0.00000 ) *
+         21) CompPrice &gt; 124.5 128 150.200 No ( 0.72656 0.27344 )  
+           42) Price &lt; 122.5 51  70.680 Yes ( 0.49020 0.50980 )  
+             84) ShelveLoc: Bad 11   6.702 No ( 0.90909 0.09091 ) *
+             85) ShelveLoc: Medium 40  52.930 Yes ( 0.37500 0.62500 )  
+              170) Price &lt; 109.5 16   7.481 Yes ( 0.06250 0.93750 ) *
+              171) Price &gt; 109.5 24  32.600 No ( 0.58333 0.41667 )  
+                342) Age &lt; 49.5 13  16.050 Yes ( 0.30769 0.69231 ) *
+                343) Age &gt; 49.5 11   6.702 No ( 0.90909 0.09091 ) *
+           43) Price &gt; 122.5 77  55.540 No ( 0.88312 0.11688 )  
+             86) CompPrice &lt; 147.5 58  17.400 No ( 0.96552 0.03448 ) *
+             87) CompPrice &gt; 147.5 19  25.010 No ( 0.63158 0.36842 )  
+              174) Price &lt; 147 12  16.300 Yes ( 0.41667 0.58333 )  
+                348) CompPrice &lt; 152.5 7   5.742 Yes ( 0.14286 0.85714 ) *
+                349) CompPrice &gt; 152.5 5   5.004 No ( 0.80000 0.20000 ) *
+              175) Price &gt; 147 7   0.000 No ( 1.00000 0.00000 ) *
+       11) Advertising &gt; 13.5 45  61.830 Yes ( 0.44444 0.55556 )  
+         22) Age &lt; 54.5 25  25.020 Yes ( 0.20000 0.80000 )  
+           44) CompPrice &lt; 130.5 14  18.250 Yes ( 0.35714 0.64286 )  
+             88) Income &lt; 100 9  12.370 No ( 0.55556 0.44444 ) *
+             89) Income &gt; 100 5   0.000 Yes ( 0.00000 1.00000 ) *
+           45) CompPrice &gt; 130.5 11   0.000 Yes ( 0.00000 1.00000 ) *
+         23) Age &gt; 54.5 20  22.490 No ( 0.75000 0.25000 )  
+           46) CompPrice &lt; 122.5 10   0.000 No ( 1.00000 0.00000 ) *
+           47) CompPrice &gt; 122.5 10  13.860 No ( 0.50000 0.50000 )  
+             94) Price &lt; 125 5   0.000 Yes ( 0.00000 1.00000 ) *
+             95) Price &gt; 125 5   0.000 No ( 1.00000 0.00000 ) *
+    3) ShelveLoc: Good 85  90.330 Yes ( 0.22353 0.77647 )  
+      6) Price &lt; 135 68  49.260 Yes ( 0.11765 0.88235 )  
+       12) US: No 17  22.070 Yes ( 0.35294 0.64706 )  
+         24) Price &lt; 109 8   0.000 Yes ( 0.00000 1.00000 ) *
+         25) Price &gt; 109 9  11.460 No ( 0.66667 0.33333 ) *
+       13) US: Yes 51  16.880 Yes ( 0.03922 0.96078 ) *
+      7) Price &gt; 135 17  22.070 No ( 0.64706 0.35294 )  
+       14) Income &lt; 46 6   0.000 No ( 1.00000 0.00000 ) *
+       15) Income &gt; 46 11  15.160 Yes ( 0.45455 0.54545 ) *</code></pre>
+</div>
+</div>
+<p>The printed output includes the split criterion, the number of observations in that branch, the deviance, the overall prediction for the branch, and the fraction of observations in that branch that take on values of <code>Yes</code> and <code>No</code>. Branches that lead to terminal nodes are indicated using asterisks.</p>
+<p>To properly evaluate the performance of a classification tree, we must estimate the test error rather than simply computing the training error. We split the observations into a training set and a test set, build the tree using the training set, and evaluate its performance on the test data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">2</span>)</span>
+<span id="cb10-2"><a href=""></a>train <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(Carseats), <span class="dv">200</span>)</span>
+<span id="cb10-3"><a href=""></a>Carseats.test <span class="ot">&lt;-</span> Carseats[<span class="sc">-</span>train, ]</span>
+<span id="cb10-4"><a href=""></a>High.test <span class="ot">&lt;-</span> High[<span class="sc">-</span>train]</span>
+<span id="cb10-5"><a href=""></a>tree.carseats <span class="ot">&lt;-</span> <span class="fu">tree</span>(High <span class="sc">~</span> . <span class="sc">-</span> Sales, Carseats,</span>
+<span id="cb10-6"><a href=""></a>    <span class="at">subset =</span> train)</span>
+<span id="cb10-7"><a href=""></a>tree.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(tree.carseats, Carseats.test,</span>
+<span id="cb10-8"><a href=""></a>    <span class="at">type =</span> <span class="st">"class"</span>)</span>
+<span id="cb10-9"><a href=""></a><span class="fu">table</span>(tree.pred, High.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         High.test
+tree.pred  No Yes
+      No  104  33
+      Yes  13  50</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>(<span class="dv">104</span> <span class="sc">+</span> <span class="dv">50</span>) <span class="sc">/</span> <span class="dv">200</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.77</code></pre>
+</div>
+</div>
+<p>This approach leads to correct predictions for around <span class="math inline">77\%</span> of the locations in the test data set.</p>
+<p>Next, we consider whether pruning the tree might lead to improved results. The function <code>cv.tree()</code> performs cross-validation in order to determine the optimal level of tree complexity.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">7</span>)</span>
+<span id="cb14-2"><a href=""></a>cv.carseats <span class="ot">&lt;-</span> <span class="fu">cv.tree</span>(tree.carseats, <span class="at">FUN =</span> prune.misclass)</span>
+<span id="cb14-3"><a href=""></a><span class="fu">names</span>(cv.carseats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "size"   "dev"    "k"      "method"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>cv.carseats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$size
+[1] 21 19 14  9  8  5  3  2  1
+
+$dev
+[1] 75 75 75 74 82 83 83 85 82
+
+$k
+[1] -Inf  0.0  1.0  1.4  2.0  3.0  4.0  9.0 18.0
+
+$method
+[1] "misclass"
+
+attr(,"class")
+[1] "prune"         "tree.sequence"</code></pre>
+</div>
+</div>
+<p>Despite its name, <code>dev</code> corresponds to the number of cross-validation errors. The tree with 9 terminal nodes results in only 74 cross-validation errors. We plot the error rate as a function of both <code>size</code> and <code>k</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb18-2"><a href=""></a><span class="fu">plot</span>(cv.carseats<span class="sc">$</span>size, cv.carseats<span class="sc">$</span>dev, <span class="at">type =</span> <span class="st">"b"</span>)</span>
+<span id="cb18-3"><a href=""></a><span class="fu">plot</span>(cv.carseats<span class="sc">$</span>k, cv.carseats<span class="sc">$</span>dev, <span class="at">type =</span> <span class="st">"b"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_lab4_files/figure-revealjs/chunk10-1.png" width="2000"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We now apply the <code>prune.misclass()</code> function in order to prune the tree to obtain the nine-node tree.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a>prune.carseats <span class="ot">&lt;-</span> <span class="fu">prune.misclass</span>(tree.carseats, <span class="at">best =</span> <span class="dv">9</span>)</span>
+<span id="cb19-2"><a href=""></a><span class="fu">plot</span>(prune.carseats)</span>
+<span id="cb19-3"><a href=""></a><span class="fu">text</span>(prune.carseats, <span class="at">pretty =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_lab4_files/figure-revealjs/chunk11-1.png" width="2000"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>How well does this pruned tree perform on the test data set? Once again, we apply the <code>predict()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>tree.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(prune.carseats, Carseats.test,</span>
+<span id="cb20-2"><a href=""></a>    <span class="at">type =</span> <span class="st">"class"</span>)</span>
+<span id="cb20-3"><a href=""></a><span class="fu">table</span>(tree.pred, High.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         High.test
+tree.pred No Yes
+      No  97  25
+      Yes 20  58</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>(<span class="dv">97</span> <span class="sc">+</span> <span class="dv">58</span>) <span class="sc">/</span> <span class="dv">200</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.775</code></pre>
+</div>
+</div>
+<p>Now <span class="math inline">77.5\%</span> of the test observations are correctly classified, so not only has the pruning process produced a more interpretable tree, but it has also slightly improved the classification accuracy.</p>
+<p>If we increase the value of <code>best</code>, we obtain a larger pruned tree with lower classification accuracy.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>prune.carseats <span class="ot">&lt;-</span> <span class="fu">prune.misclass</span>(tree.carseats, <span class="at">best =</span> <span class="dv">14</span>)</span>
+<span id="cb24-2"><a href=""></a><span class="fu">plot</span>(prune.carseats)</span>
+<span id="cb24-3"><a href=""></a><span class="fu">text</span>(prune.carseats, <span class="at">pretty =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_lab4_files/figure-revealjs/chunk13-1.png" width="2000"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>tree.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(prune.carseats, Carseats.test,</span>
+<span id="cb25-2"><a href=""></a>    <span class="at">type =</span> <span class="st">"class"</span>)</span>
+<span id="cb25-3"><a href=""></a><span class="fu">table</span>(tree.pred, High.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         High.test
+tree.pred  No Yes
+      No  102  31
+      Yes  15  52</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>(<span class="dv">102</span> <span class="sc">+</span> <span class="dv">52</span>) <span class="sc">/</span> <span class="dv">200</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.77</code></pre>
+</div>
+</div>
+</section>
+<section id="fitting-regression-trees" class="slide level2 center">
+<h2>Fitting Regression Trees</h2>
+<p>Here we fit a regression tree to the <code>Boston</code> data set. First, we create a training set and fit the tree to the training data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb29-2"><a href=""></a>train <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(Boston), <span class="fu">nrow</span>(Boston) <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb29-3"><a href=""></a>tree.boston <span class="ot">&lt;-</span> <span class="fu">tree</span>(medv <span class="sc">~</span> ., Boston, <span class="at">subset =</span> train)</span>
+<span id="cb29-4"><a href=""></a><span class="fu">summary</span>(tree.boston)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Regression tree:
+tree(formula = medv ~ ., data = Boston, subset = train)
+Variables actually used in tree construction:
+[1] "rm"    "lstat" "crim"  "age"  
+Number of terminal nodes:  7 
+Residual mean deviance:  10.38 = 2555 / 246 
+Distribution of residuals:
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-10.1800  -1.7770  -0.1775   0.0000   1.9230  16.5800 </code></pre>
+</div>
+</div>
+<p>Notice that the output of <code>summary()</code> indicates that only four of the variables have been used in constructing the tree. In the context of a regression tree, the deviance is simply the sum of squared errors for the tree.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="fu">plot</span>(tree.boston)</span>
+<span id="cb31-2"><a href=""></a><span class="fu">text</span>(tree.boston, <span class="at">pretty =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_lab4_files/figure-revealjs/chunk15-1.png" width="2000"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The variable <code>lstat</code> measures the percentage of individuals with lower socioeconomic status, while the variable <code>rm</code> corresponds to the average number of rooms. The tree indicates that larger values of <code>rm</code>, or lower values of <code>lstat</code>, correspond to more expensive houses. For example, the tree predicts a median house price of <span class="math inline">45{,}400</span> for homes in census tracts in which <code>rm &gt;= 7.553</code>.</p>
+<p>It is worth noting that we could have fit a much bigger tree by passing <code>control = tree.control(nobs = length(train), mindev = 0)</code> into the <code>tree()</code> function.</p>
+<p>Now we use the <code>cv.tree()</code> function to see whether pruning the tree will improve performance.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a>cv.boston <span class="ot">&lt;-</span> <span class="fu">cv.tree</span>(tree.boston)</span>
+<span id="cb32-2"><a href=""></a><span class="fu">plot</span>(cv.boston<span class="sc">$</span>size, cv.boston<span class="sc">$</span>dev, <span class="at">type =</span> <span class="st">"b"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_lab4_files/figure-revealjs/chunk16-1.png" width="2000"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In this case, the most complex tree under consideration is selected by cross-validation. However, if we wish to prune the tree, we could do so as follows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>prune.boston <span class="ot">&lt;-</span> <span class="fu">prune.tree</span>(tree.boston, <span class="at">best =</span> <span class="dv">5</span>)</span>
+<span id="cb33-2"><a href=""></a><span class="fu">plot</span>(prune.boston)</span>
+<span id="cb33-3"><a href=""></a><span class="fu">text</span>(prune.boston, <span class="at">pretty =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_lab4_files/figure-revealjs/chunk17-1.png" width="2000"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In keeping with the cross-validation results, we use the unpruned tree to make predictions on the test set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a>yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(tree.boston, <span class="at">newdata =</span> Boston[<span class="sc">-</span>train, ])</span>
+<span id="cb34-2"><a href=""></a>boston.test <span class="ot">&lt;-</span> Boston[<span class="sc">-</span>train, <span class="st">"medv"</span>]</span>
+<span id="cb34-3"><a href=""></a><span class="fu">plot</span>(yhat, boston.test)</span>
+<span id="cb34-4"><a href=""></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_lab4_files/figure-revealjs/chunk18-1.png" width="2000"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a><span class="fu">mean</span>((yhat <span class="sc">-</span> boston.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 35.28688</code></pre>
+</div>
+</div>
+<p>The test set MSE associated with the regression tree is <span class="math inline">35.29</span>. The square root of the MSE is therefore around <span class="math inline">5.941</span>, indicating that this model leads to test predictions that are, on average, within approximately <span class="math inline">5{,}941</span> of the true median home value for the census tract.</p>
+</section>
+<section id="bagging-and-random-forests" class="slide level2 center">
+<h2>Bagging and Random Forests</h2>
+<p>Here we apply bagging and random forests to the <code>Boston</code> data, using the <code>randomForest</code> package in <code>R</code>. Recall that bagging is simply a special case of a random forest with <span class="math inline">m = p</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a><span class="fu">library</span>(randomForest)</span>
+<span id="cb37-2"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb37-3"><a href=""></a>bag.boston <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(medv <span class="sc">~</span> ., <span class="at">data =</span> Boston,</span>
+<span id="cb37-4"><a href=""></a>    <span class="at">subset =</span> train, <span class="at">mtry =</span> <span class="dv">12</span>, <span class="at">importance =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb37-5"><a href=""></a>bag.boston</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+ randomForest(formula = medv ~ ., data = Boston, mtry = 12, importance = TRUE,      subset = train) 
+               Type of random forest: regression
+                     Number of trees: 500
+No. of variables tried at each split: 12
+
+          Mean of squared residuals: 11.40162
+                    % Var explained: 85.17</code></pre>
+</div>
+</div>
+<p>The argument <code>mtry = 12</code> indicates that all 12 predictors should be considered for each split of the tree, so bagging is being performed. How well does this bagged model perform on the test set?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a>yhat.bag <span class="ot">&lt;-</span> <span class="fu">predict</span>(bag.boston, <span class="at">newdata =</span> Boston[<span class="sc">-</span>train, ])</span>
+<span id="cb39-2"><a href=""></a><span class="fu">plot</span>(yhat.bag, boston.test)</span>
+<span id="cb39-3"><a href=""></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_lab4_files/figure-revealjs/chunk20-1.png" width="2000"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a><span class="fu">mean</span>((yhat.bag <span class="sc">-</span> boston.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 23.41916</code></pre>
+</div>
+</div>
+<p>The test set MSE associated with the bagged regression tree is <span class="math inline">23.42</span>, about two-thirds of that obtained using an optimally pruned single tree. We could change the number of trees grown by <code>randomForest()</code> using the <code>ntree</code> argument.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href=""></a>bag.boston <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(medv <span class="sc">~</span> ., <span class="at">data =</span> Boston,</span>
+<span id="cb42-2"><a href=""></a>    <span class="at">subset =</span> train, <span class="at">mtry =</span> <span class="dv">12</span>, <span class="at">ntree =</span> <span class="dv">25</span>)</span>
+<span id="cb42-3"><a href=""></a>yhat.bag <span class="ot">&lt;-</span> <span class="fu">predict</span>(bag.boston, <span class="at">newdata =</span> Boston[<span class="sc">-</span>train, ])</span>
+<span id="cb42-4"><a href=""></a><span class="fu">mean</span>((yhat.bag <span class="sc">-</span> boston.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 25.75055</code></pre>
+</div>
+</div>
+<p>Growing a random forest proceeds in exactly the same way, except that we use a smaller value of the <code>mtry</code> argument. By default, <code>randomForest()</code> uses <span class="math inline">p/3</span> variables when building a random forest of regression trees, and <span class="math inline">\sqrt{p}</span> variables when building a random forest of classification trees. Here we use <code>mtry = 6</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb44-2"><a href=""></a>rf.boston <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(medv <span class="sc">~</span> ., <span class="at">data =</span> Boston,</span>
+<span id="cb44-3"><a href=""></a>    <span class="at">subset =</span> train, <span class="at">mtry =</span> <span class="dv">6</span>, <span class="at">importance =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb44-4"><a href=""></a>yhat.rf <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf.boston, <span class="at">newdata =</span> Boston[<span class="sc">-</span>train, ])</span>
+<span id="cb44-5"><a href=""></a><span class="fu">mean</span>((yhat.rf <span class="sc">-</span> boston.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20.06644</code></pre>
+</div>
+</div>
+<p>The test set MSE is <span class="math inline">20.07</span>; this indicates that random forests yielded an improvement over bagging in this case.</p>
+<p>Using the <code>importance()</code> function, we can view the importance of each variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href=""></a><span class="fu">importance</span>(rf.boston)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          %IncMSE IncNodePurity
+crim    19.435587    1070.42307
+zn       3.091630      82.19257
+indus    6.140529     590.09536
+chas     1.370310      36.70356
+nox     13.263466     859.97091
+rm      35.094741    8270.33906
+age     15.144821     634.31220
+dis      9.163776     684.87953
+rad      4.793720      83.18719
+tax      4.410714     292.20949
+ptratio  8.612780     902.20190
+lstat   28.725343    5813.04833</code></pre>
+</div>
+</div>
+<p>Two measures of variable importance are reported. The first is based on the mean decrease of accuracy in predictions on the out-of-bag samples when a given variable is permuted. The second is a measure of the total decrease in node impurity that results from splits over that variable, averaged over all trees.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a><span class="fu">varImpPlot</span>(rf.boston)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_lab4_files/figure-revealjs/chunk24-1.png" width="2000"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The results indicate that across all of the trees considered in the random forest, the wealth of the community (<code>lstat</code>) and the house size (<code>rm</code>) are by far the two most important variables.</p>
+</section>
+<section id="boosting" class="slide level2 center">
+<h2>Boosting</h2>
+<p>Here we use the <code>gbm</code> package, and within it the <code>gbm()</code> function, to fit boosted regression trees to the <code>Boston</code> data set. We run <code>gbm()</code> with the option <code>distribution = "gaussian"</code> since this is a regression problem.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href=""></a><span class="fu">library</span>(gbm)</span>
+<span id="cb49-2"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb49-3"><a href=""></a>boost.boston <span class="ot">&lt;-</span> <span class="fu">gbm</span>(medv <span class="sc">~</span> ., <span class="at">data =</span> Boston[train, ],</span>
+<span id="cb49-4"><a href=""></a>    <span class="at">distribution =</span> <span class="st">"gaussian"</span>, <span class="at">n.trees =</span> <span class="dv">5000</span>,</span>
+<span id="cb49-5"><a href=""></a>    <span class="at">interaction.depth =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>summary()</code> function produces a relative influence plot and also outputs the relative influence statistics.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a><span class="fu">summary</span>(boost.boston)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_lab4_files/figure-revealjs/chunk26-1.png" width="2000"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            var     rel.inf
+rm           rm 44.48249588
+lstat     lstat 32.70281223
+crim       crim  4.85109954
+dis         dis  4.48693083
+nox         nox  3.75222394
+age         age  3.19769210
+ptratio ptratio  2.81354826
+tax         tax  1.54417603
+indus     indus  1.03384666
+rad         rad  0.87625748
+zn           zn  0.16220479
+chas       chas  0.09671228</code></pre>
+</div>
+</div>
+<p>We see that <code>lstat</code> and <code>rm</code> are by far the most important variables. We can also produce partial dependence plots for these two variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href=""></a><span class="fu">plot</span>(boost.boston, <span class="at">i =</span> <span class="st">"rm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_lab4_files/figure-revealjs/chunk27-1.png" width="2000"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href=""></a><span class="fu">plot</span>(boost.boston, <span class="at">i =</span> <span class="st">"lstat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_lab4_files/figure-revealjs/chunk27-2.png" width="2000"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>These plots illustrate the marginal effect of the selected variables on the response after integrating out the other variables. In this case, as we might expect, median house prices are increasing with <code>rm</code> and decreasing with <code>lstat</code>.</p>
+<p>We now use the boosted model to predict <code>medv</code> on the test set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href=""></a>yhat.boost <span class="ot">&lt;-</span> <span class="fu">predict</span>(boost.boston,</span>
+<span id="cb54-2"><a href=""></a>    <span class="at">newdata =</span> Boston[<span class="sc">-</span>train, ], <span class="at">n.trees =</span> <span class="dv">5000</span>)</span>
+<span id="cb54-3"><a href=""></a><span class="fu">mean</span>((yhat.boost <span class="sc">-</span> boston.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 18.39057</code></pre>
+</div>
+</div>
+<p>The test MSE obtained is <span class="math inline">18.39</span>: this is superior to the test MSE of random forests and bagging. We can also perform boosting with a different value of the shrinkage parameter <span class="math inline">\lambda</span> in (8.10). Here we take <span class="math inline">\lambda = 0.2</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href=""></a>boost.boston <span class="ot">&lt;-</span> <span class="fu">gbm</span>(medv <span class="sc">~</span> ., <span class="at">data =</span> Boston[train, ],</span>
+<span id="cb56-2"><a href=""></a>    <span class="at">distribution =</span> <span class="st">"gaussian"</span>, <span class="at">n.trees =</span> <span class="dv">5000</span>,</span>
+<span id="cb56-3"><a href=""></a>    <span class="at">interaction.depth =</span> <span class="dv">4</span>, <span class="at">shrinkage =</span> <span class="fl">0.2</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb56-4"><a href=""></a>yhat.boost <span class="ot">&lt;-</span> <span class="fu">predict</span>(boost.boston,</span>
+<span id="cb56-5"><a href=""></a>    <span class="at">newdata =</span> Boston[<span class="sc">-</span>train, ], <span class="at">n.trees =</span> <span class="dv">5000</span>)</span>
+<span id="cb56-6"><a href=""></a><span class="fu">mean</span>((yhat.boost <span class="sc">-</span> boston.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 16.54778</code></pre>
+</div>
+</div>
+<p>In this case, using <span class="math inline">\lambda = 0.2</span> leads to a lower test MSE than <span class="math inline">\lambda = 0.001</span>.</p>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="img/cf_logo.png" class="slide-logo"></p>
+<div class="footer footer-default">
+<p><a href="https://aldosolari.github.io/ISL">ISL</a></p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="un_lab4_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="un_lab4_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="un_lab4_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="un_lab4_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="un_lab4_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="un_lab4_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="un_lab4_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="un_lab4_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="un_lab4_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: true,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+            const codeEl = trigger.previousElementSibling.cloneNode(true);
+            for (const childEl of codeEl.children) {
+              if (isCodeAnnotation(childEl)) {
+                childEl.remove();
+              }
+            }
+            return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
