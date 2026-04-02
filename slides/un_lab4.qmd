@@ -56,8 +56,7 @@ knitr::opts_chunk$set(error = TRUE)
 
 ## Fitting Classification Trees
 
-The `tree` library is used to construct regression
-trees.
+- The `tree` library in R is used to construct regression trees
 
 ```{r}
 #| label: chunk1
@@ -66,8 +65,9 @@ library(tree)
 ```
 
 
-Here we fit a regression tree to the `Boston` data set. First, we create
-a training set and fit the tree to the training data.
+- Fit a regression tree using the `Boston` dataset  
+- Split data into a training set  
+- Train the tree model on the training data
 
 ```{r}
 #| label: chunk2
@@ -79,10 +79,8 @@ tree.boston <- tree(medv ~ ., Boston, subset = train)
 summary(tree.boston)
 ```
 
-Notice that the output of `summary()` indicates that only four of the
-variables have been used in constructing the tree. In the context of a
-regression tree, the deviance is simply the sum of squared errors for
-the tree.
+- `summary()` shows only 4 variables are used in the tree  
+- In regression trees, deviance = sum of squared errors (SSE)
 
 ```{r}
 #| label: chunk3
@@ -91,19 +89,19 @@ plot(tree.boston)
 text(tree.boston, pretty = 0)
 ```
 
-The variable `lstat` measures the percentage of individuals with lower
-socioeconomic status, while the variable `rm` corresponds to the average
-number of rooms. The tree indicates that larger values of `rm`, or lower
-values of `lstat`, correspond to more expensive houses. For example, the
-tree predicts a median house price of $45{,}400$ for homes in census
-tracts in which `rm >= 7.553`.
+- `lstat`: % of lower socioeconomic status  
+- `rm`: average number of rooms  
 
-It is worth noting that we could have fit a much bigger tree by passing
-`control = tree.control(nobs = length(train), mindev = 0)` into the
-`tree()` function.
+- Interpretation:
+  - Higher `rm` → higher house prices  
+  - Lower `lstat` → higher house prices  
+  - Example: `rm ≥ 7.553` → predicted price ≈ $45,400  
 
-Now we use the `cv.tree()` function to see whether pruning the tree will
-improve performance.
+- Model flexibility:
+  - Larger tree can be grown using `tree.control(..., mindev = 0)`  
+
+- Next step:
+  - Use `cv.tree()` to evaluate pruning via cross-validation
 
 ```{r}
 #| label: chunk4
@@ -112,9 +110,8 @@ cv.boston <- cv.tree(tree.boston)
 plot(cv.boston$size, cv.boston$dev, type = "b")
 ```
 
-In this case, the most complex tree under consideration is selected by
-cross-validation. However, if we wish to prune the tree, we could do so
-as follows.
+- Cross-validation selects the most complex tree in this case  
+- Tree can still be pruned manually if desired
 
 ```{r}
 #| label: chunk5
@@ -124,8 +121,8 @@ plot(prune.boston)
 text(prune.boston, pretty = 0)
 ```
 
-In keeping with the cross-validation results, we use the unpruned tree
-to make predictions on the test set.
+- Based on cross-validation, the unpruned tree is selected  
+- Use the unpruned tree to make predictions on the test set
 
 ```{r}
 #| label: chunk6
@@ -137,17 +134,14 @@ abline(0, 1)
 mean((yhat - boston.test)^2)
 ```
 
-The test set MSE associated with the regression tree is $35.29$. The
-square root of the MSE is therefore around $5.941$, indicating that this
-model leads to test predictions that are, on average, within
-approximately $5{,}941$ of the true median home value for the census
-tract.
+- Test set MSE ≈ 35.29  
+- RMSE ≈ 5.941  
+- Predictions are on average within ~$5,941 of true median house values
 
 ## Bagging and Random Forests
 
-Here we apply bagging and random forests to the `Boston` data, using the
-`randomForest` package in `R`. Recall that bagging is simply a special
-case of a random forest with $m = p$.
+- Apply bagging and random forests using the `randomForest` package in R  
+- Bagging = special case of random forest with $m = p$ (all predictors used at each split)
 
 ```{r}
 #| label: chunk7
@@ -159,9 +153,9 @@ bag.boston <- randomForest(medv ~ ., data = Boston,
 bag.boston
 ```
 
-The argument `mtry = 12` indicates that all 12 predictors should be
-considered for each split of the tree, so bagging is being performed.
-How well does this bagged model perform on the test set?
+- `mtry = 12` → all 12 predictors used at each split  
+- This corresponds to bagging  
+- Evaluate model performance on the test set
 
 ```{r}
 #| label: chunk8
@@ -172,10 +166,9 @@ abline(0, 1)
 mean((yhat.bag - boston.test)^2)
 ```
 
-The test set MSE associated with the bagged regression tree is $23.42$,
-about two-thirds of that obtained using an optimally pruned single tree.
-We could change the number of trees grown by `randomForest()` using the
-`ntree` argument.
+- Bagged model test MSE ≈ 23.42  
+- Significantly lower than single tree (~2/3 of its error)  
+- Number of trees can be controlled with the `ntree` parameter
 
 ```{r}
 #| label: chunk9
@@ -186,11 +179,10 @@ yhat.bag <- predict(bag.boston, newdata = Boston[-train, ])
 mean((yhat.bag - boston.test)^2)
 ```
 
-Growing a random forest proceeds in exactly the same way, except that we
-use a smaller value of the `mtry` argument. By default,
-`randomForest()` uses $p/3$ variables when building a random forest of
-regression trees, and $\sqrt{p}$ variables when building a random forest
-of classification trees. Here we use `mtry = 6`.
+- Random forests are built like bagging but with smaller `mtry`  
+- Default `mtry`:
+  - Regression: $p/3$ 
+- Here, `mtry = 6` is used
 
 ```{r}
 #| label: chunk10
@@ -202,11 +194,9 @@ yhat.rf <- predict(rf.boston, newdata = Boston[-train, ])
 mean((yhat.rf - boston.test)^2)
 ```
 
-The test set MSE is $20.07$; this indicates that random forests yielded
-an improvement over bagging in this case.
-
-Using the `importance()` function, we can view the importance of each
-variable.
+- Random forest test MSE ≈ 20.07  
+- Improves over bagging performance  
+- Use `importance()` to evaluate variable importance
 
 ```{r}
 #| label: chunk11
@@ -214,11 +204,9 @@ variable.
 importance(rf.boston)
 ```
 
-Two measures of variable importance are reported. The first is based on
-the mean decrease of accuracy in predictions on the out-of-bag samples
-when a given variable is permuted. The second is a measure of the total
-decrease in node impurity that results from splits over that variable,
-averaged over all trees.
+- Two measures of variable importance:
+  - Mean decrease in accuracy (via permutation on out-of-bag samples)
+  - Mean decrease in node impurity (averaged over all trees)
 
 ```{r}
 #| label: chunk12
@@ -226,16 +214,15 @@ averaged over all trees.
 varImpPlot(rf.boston)
 ```
 
-The results indicate that across all of the trees considered in the
-random forest, the wealth of the community (`lstat`) and the house size
-(`rm`) are by far the two most important variables.
+- Most important variables in the random forest:
+  - `lstat` (wealth / socioeconomic status)  
+  - `rm` (house size / number of rooms)
 
 ## Boosting
 
-Here we use the `gbm` package, and within it the `gbm()` function, to
-fit boosted regression trees to the `Boston` data set. We run `gbm()`
-with the option `distribution = "gaussian"` since this is a regression
-problem.
+- Use the `gbm` package to fit boosted regression trees  
+- Apply `gbm()` to the `Boston` dataset  
+- Set `distribution = "gaussian"` for regression problems
 
 ```{r}
 #| label: chunk13
@@ -247,8 +234,9 @@ boost.boston <- gbm(medv ~ ., data = Boston[train, ],
     interaction.depth = 4)
 ```
 
-The `summary()` function produces a relative influence plot and also
-outputs the relative influence statistics.
+- `summary()` provides:
+  - Relative influence plot  
+  - Numerical measures of variable importance
 
 ```{r}
 #| label: chunk14
@@ -256,8 +244,8 @@ outputs the relative influence statistics.
 summary(boost.boston)
 ```
 
-We see that `lstat` and `rm` are by far the most important variables. We
-can also produce partial dependence plots for these two variables.
+- `lstat` and `rm` are the most important variables  
+- Partial dependence plots can be generated for these variables
 
 ```{r}
 #| label: chunk15
@@ -266,12 +254,12 @@ plot(boost.boston, i = "rm")
 plot(boost.boston, i = "lstat")
 ```
 
-These plots illustrate the marginal effect of the selected variables on
-the response after integrating out the other variables. In this case, as
-we might expect, median house prices are increasing with `rm` and
-decreasing with `lstat`.
+- Partial dependence plots show marginal effect of variables on response  
+- Effects observed:
+  - Higher `rm` → higher house prices  
+  - Higher `lstat` → lower house prices  
 
-We now use the boosted model to predict `medv` on the test set.
+- Use boosted model to predict `medv` on the test set
 
 ```{r}
 #| label: chunk16
@@ -281,10 +269,10 @@ yhat.boost <- predict(boost.boston,
 mean((yhat.boost - boston.test)^2)
 ```
 
-The test MSE obtained is $18.39$: this is superior to the test MSE of
-random forests and bagging. We can also perform boosting with a
-different value of the shrinkage parameter $\lambda$ in (8.10). Here we
-take $\lambda = 0.2$.
+- Boosting test MSE ≈ 18.39  
+- Outperforms random forests and bagging  
+- Model can be tuned via shrinkage parameter $\lambda$  
+- Example: use $\lambda = 0.2$
 
 ```{r}
 #| label: chunk17
@@ -297,5 +285,4 @@ yhat.boost <- predict(boost.boston,
 mean((yhat.boost - boston.test)^2)
 ```
 
-In this case, using $\lambda = 0.2$ leads to a lower test MSE than
-$\lambda = 0.001$.
+- Using $\lambda = 0.2$ results in lower test MSE than $\lambda = 0.001$

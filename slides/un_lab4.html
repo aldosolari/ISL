@@ -174,11 +174,19 @@ window.Quarto = {
 <h1>Decision Trees</h1>
 <section id="fitting-classification-trees" class="level2">
 <h2 class="anchored" data-anchor-id="fitting-classification-trees">Fitting Classification Trees</h2>
-<p>The <code>tree</code> library is used to construct regression trees.</p>
+<ul>
+<li>The <code>tree</code> library in R is used to construct regression trees</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tree)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Here we fit a regression tree to the <code>Boston</code> data set. First, we create a training set and fit the tree to the training data.</p>
+<ul>
+<li>Fit a regression tree using the <code>Boston</code> dataset<br>
+</li>
+<li>Split data into a training set<br>
+</li>
+<li>Train the tree model on the training data</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(MASS)</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
@@ -198,7 +206,11 @@ Distribution of residuals:
 -10.1800  -1.7770  -0.1775   0.0000   1.9230  16.5800 </code></pre>
 </div>
 </div>
-<p>Notice that the output of <code>summary()</code> indicates that only four of the variables have been used in constructing the tree. In the context of a regression tree, the deviance is simply the sum of squared errors for the tree.</p>
+<ul>
+<li><code>summary()</code> shows only 4 variables are used in the tree<br>
+</li>
+<li>In regression trees, deviance = sum of squared errors (SSE)</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">plot</span>(tree.boston)</span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="fu">text</span>(tree.boston, <span class="at">pretty =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -210,9 +222,27 @@ Distribution of residuals:
 </div>
 </div>
 </div>
-<p>The variable <code>lstat</code> measures the percentage of individuals with lower socioeconomic status, while the variable <code>rm</code> corresponds to the average number of rooms. The tree indicates that larger values of <code>rm</code>, or lower values of <code>lstat</code>, correspond to more expensive houses. For example, the tree predicts a median house price of <span class="math inline">45{,}400</span> for homes in census tracts in which <code>rm &gt;= 7.553</code>.</p>
-<p>It is worth noting that we could have fit a much bigger tree by passing <code>control = tree.control(nobs = length(train), mindev = 0)</code> into the <code>tree()</code> function.</p>
-<p>Now we use the <code>cv.tree()</code> function to see whether pruning the tree will improve performance.</p>
+<ul>
+<li><p><code>lstat</code>: % of lower socioeconomic status<br>
+</p></li>
+<li><p><code>rm</code>: average number of rooms</p></li>
+<li><p>Interpretation:</p>
+<ul>
+<li>Higher <code>rm</code> → higher house prices<br>
+</li>
+<li>Lower <code>lstat</code> → higher house prices<br>
+</li>
+<li>Example: <code>rm ≥ 7.553</code> → predicted price ≈ $45,400</li>
+</ul></li>
+<li><p>Model flexibility:</p>
+<ul>
+<li>Larger tree can be grown using <code>tree.control(..., mindev = 0)</code></li>
+</ul></li>
+<li><p>Next step:</p>
+<ul>
+<li>Use <code>cv.tree()</code> to evaluate pruning via cross-validation</li>
+</ul></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>cv.boston <span class="ot">&lt;-</span> <span class="fu">cv.tree</span>(tree.boston)</span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="fu">plot</span>(cv.boston<span class="sc">$</span>size, cv.boston<span class="sc">$</span>dev, <span class="at">type =</span> <span class="st">"b"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -224,7 +254,11 @@ Distribution of residuals:
 </div>
 </div>
 </div>
-<p>In this case, the most complex tree under consideration is selected by cross-validation. However, if we wish to prune the tree, we could do so as follows.</p>
+<ul>
+<li>Cross-validation selects the most complex tree in this case<br>
+</li>
+<li>Tree can still be pruned manually if desired</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>prune.boston <span class="ot">&lt;-</span> <span class="fu">prune.tree</span>(tree.boston, <span class="at">best =</span> <span class="dv">5</span>)</span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="fu">plot</span>(prune.boston)</span>
@@ -237,7 +271,11 @@ Distribution of residuals:
 </div>
 </div>
 </div>
-<p>In keeping with the cross-validation results, we use the unpruned tree to make predictions on the test set.</p>
+<ul>
+<li>Based on cross-validation, the unpruned tree is selected<br>
+</li>
+<li>Use the unpruned tree to make predictions on the test set</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(tree.boston, <span class="at">newdata =</span> Boston[<span class="sc">-</span>train, ])</span>
 <span id="cb7-2"><a href="#cb7-2"></a>boston.test <span class="ot">&lt;-</span> Boston[<span class="sc">-</span>train, <span class="st">"medv"</span>]</span>
@@ -255,11 +293,21 @@ Distribution of residuals:
 <pre><code>[1] 35.28688</code></pre>
 </div>
 </div>
-<p>The test set MSE associated with the regression tree is <span class="math inline">35.29</span>. The square root of the MSE is therefore around <span class="math inline">5.941</span>, indicating that this model leads to test predictions that are, on average, within approximately <span class="math inline">5{,}941</span> of the true median home value for the census tract.</p>
+<ul>
+<li>Test set MSE ≈ 35.29<br>
+</li>
+<li>RMSE ≈ 5.941<br>
+</li>
+<li>Predictions are on average within ~$5,941 of true median house values</li>
+</ul>
 </section>
 <section id="bagging-and-random-forests" class="level2">
 <h2 class="anchored" data-anchor-id="bagging-and-random-forests">Bagging and Random Forests</h2>
-<p>Here we apply bagging and random forests to the <code>Boston</code> data, using the <code>randomForest</code> package in <code>R</code>. Recall that bagging is simply a special case of a random forest with <span class="math inline">m = p</span>.</p>
+<ul>
+<li>Apply bagging and random forests using the <code>randomForest</code> package in R<br>
+</li>
+<li>Bagging = special case of random forest with <span class="math inline">m = p</span> (all predictors used at each split)</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">library</span>(randomForest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -284,7 +332,13 @@ No. of variables tried at each split: 12
                     % Var explained: 85.56</code></pre>
 </div>
 </div>
-<p>The argument <code>mtry = 12</code> indicates that all 12 predictors should be considered for each split of the tree, so bagging is being performed. How well does this bagged model perform on the test set?</p>
+<ul>
+<li><code>mtry = 12</code> → all 12 predictors used at each split<br>
+</li>
+<li>This corresponds to bagging<br>
+</li>
+<li>Evaluate model performance on the test set</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>yhat.bag <span class="ot">&lt;-</span> <span class="fu">predict</span>(bag.boston, <span class="at">newdata =</span> Boston[<span class="sc">-</span>train, ])</span>
 <span id="cb15-2"><a href="#cb15-2"></a><span class="fu">plot</span>(yhat.bag, boston.test)</span>
@@ -301,7 +355,13 @@ No. of variables tried at each split: 12
 <pre><code>[1] 23.38773</code></pre>
 </div>
 </div>
-<p>The test set MSE associated with the bagged regression tree is <span class="math inline">23.42</span>, about two-thirds of that obtained using an optimally pruned single tree. We could change the number of trees grown by <code>randomForest()</code> using the <code>ntree</code> argument.</p>
+<ul>
+<li>Bagged model test MSE ≈ 23.42<br>
+</li>
+<li>Significantly lower than single tree (~2/3 of its error)<br>
+</li>
+<li>Number of trees can be controlled with the <code>ntree</code> parameter</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>bag.boston <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(medv <span class="sc">~</span> ., <span class="at">data =</span> Boston,</span>
 <span id="cb18-2"><a href="#cb18-2"></a>    <span class="at">subset =</span> train, <span class="at">mtry =</span> <span class="dv">12</span>, <span class="at">ntree =</span> <span class="dv">25</span>)</span>
@@ -311,7 +371,15 @@ No. of variables tried at each split: 12
 <pre><code>[1] 25.19144</code></pre>
 </div>
 </div>
-<p>Growing a random forest proceeds in exactly the same way, except that we use a smaller value of the <code>mtry</code> argument. By default, <code>randomForest()</code> uses <span class="math inline">p/3</span> variables when building a random forest of regression trees, and <span class="math inline">\sqrt{p}</span> variables when building a random forest of classification trees. Here we use <code>mtry = 6</code>.</p>
+<ul>
+<li>Random forests are built like bagging but with smaller <code>mtry</code><br>
+</li>
+<li>Default <code>mtry</code>:
+<ul>
+<li>Regression: <span class="math inline">p/3</span></li>
+</ul></li>
+<li>Here, <code>mtry = 6</code> is used</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb20-2"><a href="#cb20-2"></a>rf.boston <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(medv <span class="sc">~</span> ., <span class="at">data =</span> Boston,</span>
@@ -322,8 +390,13 @@ No. of variables tried at each split: 12
 <pre><code>[1] 19.62021</code></pre>
 </div>
 </div>
-<p>The test set MSE is <span class="math inline">20.07</span>; this indicates that random forests yielded an improvement over bagging in this case.</p>
-<p>Using the <code>importance()</code> function, we can view the importance of each variable.</p>
+<ul>
+<li>Random forest test MSE ≈ 20.07<br>
+</li>
+<li>Improves over bagging performance<br>
+</li>
+<li>Use <code>importance()</code> to evaluate variable importance</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">importance</span>(rf.boston)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -343,7 +416,13 @@ black    7.579482     275.62272
 lstat   27.129817    6027.63740</code></pre>
 </div>
 </div>
-<p>Two measures of variable importance are reported. The first is based on the mean decrease of accuracy in predictions on the out-of-bag samples when a given variable is permuted. The second is a measure of the total decrease in node impurity that results from splits over that variable, averaged over all trees.</p>
+<ul>
+<li>Two measures of variable importance:
+<ul>
+<li>Mean decrease in accuracy (via permutation on out-of-bag samples)</li>
+<li>Mean decrease in node impurity (averaged over all trees)</li>
+</ul></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">varImpPlot</span>(rf.boston)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -354,11 +433,24 @@ lstat   27.129817    6027.63740</code></pre>
 </div>
 </div>
 </div>
-<p>The results indicate that across all of the trees considered in the random forest, the wealth of the community (<code>lstat</code>) and the house size (<code>rm</code>) are by far the two most important variables.</p>
+<ul>
+<li>Most important variables in the random forest:
+<ul>
+<li><code>lstat</code> (wealth / socioeconomic status)<br>
+</li>
+<li><code>rm</code> (house size / number of rooms)</li>
+</ul></li>
+</ul>
 </section>
 <section id="boosting" class="level2">
 <h2 class="anchored" data-anchor-id="boosting">Boosting</h2>
-<p>Here we use the <code>gbm</code> package, and within it the <code>gbm()</code> function, to fit boosted regression trees to the <code>Boston</code> data set. We run <code>gbm()</code> with the option <code>distribution = "gaussian"</code> since this is a regression problem.</p>
+<ul>
+<li>Use the <code>gbm</code> package to fit boosted regression trees<br>
+</li>
+<li>Apply <code>gbm()</code> to the <code>Boston</code> dataset<br>
+</li>
+<li>Set <code>distribution = "gaussian"</code> for regression problems</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">library</span>(gbm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -372,7 +464,14 @@ lstat   27.129817    6027.63740</code></pre>
 <span id="cb28-3"><a href="#cb28-3"></a>    <span class="at">distribution =</span> <span class="st">"gaussian"</span>, <span class="at">n.trees =</span> <span class="dv">5000</span>,</span>
 <span id="cb28-4"><a href="#cb28-4"></a>    <span class="at">interaction.depth =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The <code>summary()</code> function produces a relative influence plot and also outputs the relative influence statistics.</p>
+<ul>
+<li><code>summary()</code> provides:
+<ul>
+<li>Relative influence plot<br>
+</li>
+<li>Numerical measures of variable importance</li>
+</ul></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">summary</span>(boost.boston)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -399,7 +498,11 @@ zn           zn  0.1446149
 chas       chas  0.1443986</code></pre>
 </div>
 </div>
-<p>We see that <code>lstat</code> and <code>rm</code> are by far the most important variables. We can also produce partial dependence plots for these two variables.</p>
+<ul>
+<li><code>lstat</code> and <code>rm</code> are the most important variables<br>
+</li>
+<li>Partial dependence plots can be generated for these variables</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">plot</span>(boost.boston, <span class="at">i =</span> <span class="st">"rm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -418,8 +521,17 @@ chas       chas  0.1443986</code></pre>
 </div>
 </div>
 </div>
-<p>These plots illustrate the marginal effect of the selected variables on the response after integrating out the other variables. In this case, as we might expect, median house prices are increasing with <code>rm</code> and decreasing with <code>lstat</code>.</p>
-<p>We now use the boosted model to predict <code>medv</code> on the test set.</p>
+<ul>
+<li>Partial dependence plots show marginal effect of variables on response<br>
+</li>
+<li>Effects observed:
+<ul>
+<li>Higher <code>rm</code> → higher house prices<br>
+</li>
+<li>Higher <code>lstat</code> → lower house prices</li>
+</ul></li>
+<li>Use boosted model to predict <code>medv</code> on the test set</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>yhat.boost <span class="ot">&lt;-</span> <span class="fu">predict</span>(boost.boston,</span>
 <span id="cb33-2"><a href="#cb33-2"></a>    <span class="at">newdata =</span> Boston[<span class="sc">-</span>train, ], <span class="at">n.trees =</span> <span class="dv">5000</span>)</span>
@@ -428,7 +540,15 @@ chas       chas  0.1443986</code></pre>
 <pre><code>[1] 18.84709</code></pre>
 </div>
 </div>
-<p>The test MSE obtained is <span class="math inline">18.39</span>: this is superior to the test MSE of random forests and bagging. We can also perform boosting with a different value of the shrinkage parameter <span class="math inline">\lambda</span> in (8.10). Here we take <span class="math inline">\lambda = 0.2</span>.</p>
+<ul>
+<li>Boosting test MSE ≈ 18.39<br>
+</li>
+<li>Outperforms random forests and bagging<br>
+</li>
+<li>Model can be tuned via shrinkage parameter <span class="math inline">\lambda</span><br>
+</li>
+<li>Example: use <span class="math inline">\lambda = 0.2</span></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>boost.boston <span class="ot">&lt;-</span> <span class="fu">gbm</span>(medv <span class="sc">~</span> ., <span class="at">data =</span> Boston[train, ],</span>
 <span id="cb35-2"><a href="#cb35-2"></a>    <span class="at">distribution =</span> <span class="st">"gaussian"</span>, <span class="at">n.trees =</span> <span class="dv">5000</span>,</span>
@@ -440,7 +560,9 @@ chas       chas  0.1443986</code></pre>
 <pre><code>[1] 18.33455</code></pre>
 </div>
 </div>
-<p>In this case, using <span class="math inline">\lambda = 0.2</span> leads to a lower test MSE than <span class="math inline">\lambda = 0.001</span>.</p>
+<ul>
+<li>Using <span class="math inline">\lambda = 0.2</span> results in lower test MSE than <span class="math inline">\lambda = 0.001</span></li>
+</ul>
 </section>
 </section>
 

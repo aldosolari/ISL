@@ -1,0 +1,413 @@
+---
+title: "Lab 5"
+subtitle: "Introduction to Statistical Learning - PISE"
+author: "[Aldo Solari]{.orange}"
+institute: "_Ca' Foscari University of Venice_"
+page-layout: full
+execute:
+  cache: false
+  error: true
+filters:
+  - remove-pause.lua
+format:
+  revealjs:
+    auto-stretch: true
+    center: true
+    html-math-method: katex
+    transition: none
+    output-file: un_lab5_slides.html
+    slide-number: true
+    callout-appearance: minimal
+    code-line-numbers: true
+    theme: [default, ../template.css]
+    embed-resources: false
+    echo: false
+    fig-dpi: 200
+    logo: img/cf_logo.png
+    footer: "[ISL](https://aldosolari.github.io/ISL)"
+    highlight-style: github
+  html:
+    html-math-method: katex
+    echo: false
+    callout-appearance: minimal
+    theme: [simplex, ../template.css]
+    toc: true
+    toc-title: Table of contents
+    embed-resources: false
+    code-line-numbers: true
+    smooth-scroll: true
+    code-fold: false
+    code-summary: "Show the code"
+    fig-dpi: 150
+    highlight-style: github
+editor:
+  markdown:
+    wrap: 72
+editor_options:
+  chunk_output_type: console
+---
+
+```{r}
+#| label: setup
+#| echo: false
+knitr::opts_chunk$set(error = TRUE)
+```
+
+# Unsupervised Learning
+
+## Principal Components Analysis
+
+- PCA is performed on the `USArrests` dataset (included in base R)  
+- Rows represent the 50 U.S. states  
+- States are listed in alphabetical order
+
+```{r}
+#| label: chunk1
+#| echo: true
+states <- row.names(USArrests)
+states
+```
+
+- Columns of the dataset correspond to the four variables
+
+```{r}
+#| label: chunk2
+#| echo: true
+names(USArrests)
+```
+
+- Initial data exploration is performed  
+- Variables have very different mean values
+
+```{r}
+#| label: chunk3
+#| echo: true
+apply(USArrests, 2, mean)
+```
+
+- `apply()` applies a function (e.g., `mean()`) to rows or columns of a dataset  
+- Second argument specifies dimension (`1` = rows, `2` = columns)  
+- Data shows large scale differences: rapes ≈ 3× murders, assaults ≈ 8× rapes  
+- `apply()` can also be used to compute variances of variables
+
+
+```{r}
+#| label: chunk4
+#| echo: true
+apply(USArrests, 2, var)
+```
+
+- Variables have very different variances  
+- `UrbanPop` (percentage) is not comparable to crime rates (per 100,000 people)  
+- Without scaling, PCA would be dominated by `Assault` (largest mean and variance)  
+- Therefore, variables must be standardized (mean = 0, sd = 1) before PCA  
+- PCA is performed using the `prcomp()` function in R
+
+```{r}
+#| label: chunk5
+#| echo: true
+pr.out <- prcomp(USArrests, scale = TRUE)
+```
+
+- `prcomp()` centers variables to mean 0 by default  
+- `scale = TRUE` standardizes variables to standard deviation 1  
+- Output of `prcomp()` includes several useful components
+
+```{r}
+#| label: chunk6
+#| echo: true
+names(pr.out)
+```
+
+- `center`: means of variables used for centering  
+- `scale`: standard deviations used for scaling before PCA
+
+```{r}
+#| label: chunk7
+#| echo: true
+pr.out$center
+pr.out$scale
+```
+
+- `rotation` matrix contains the principal component loadings  
+- Each column represents a principal component loading vector  
+- Multiplying the data matrix `X` by `rotation` gives the principal component scores  
+- Called "rotation" because it represents a rotation of the original coordinate system
+
+```{r}
+#| label: chunk8
+#| echo: true
+pr.out$rotation
+```
+
+- There are 4 principal components  
+- In general, number of informative PCs = $min(n − 1, p)$ 
+- `prcomp()` directly provides principal component scores  
+- `pr.out$x` is a 50 × 4 matrix of scores  
+- Each column corresponds to a principal component score vector
+
+```{r}
+#| label: chunk9
+#| echo: true
+dim(pr.out$x)
+```
+
+- The first two principal components can be visualized using a plot
+
+```{r}
+#| label: chunk10
+#| echo: true
+biplot(pr.out, scale = 0)
+```
+
+- In `biplot()`, `scale = 0` scales arrows to represent loadings  
+- Different `scale` values change interpretation of the biplot  
+- PCA results are only unique up to a sign change  
+- Plots may appear as mirror images due to sign ambiguity  
+- Sign flipping can reproduce equivalent visualizations
+
+```{r}
+#| label: chunk11
+#| echo: true
+pr.out$rotation = -pr.out$rotation
+pr.out$x = -pr.out$x
+biplot(pr.out, scale = 0)
+```
+
+- `prcomp()` outputs the standard deviation of each principal component  
+- These can be accessed via `pr.out$sdev`
+
+```{r}
+#| label: chunk12
+#| echo: true
+pr.out$sdev
+```
+
+- Variance explained by each principal component is obtained by squaring the standard deviations  
+- Computed as: `pr.var <- pr.out$sdev^2`
+
+```{r}
+#| label: chunk13
+#| echo: true
+pr.var <- pr.out$sdev^2
+pr.var
+```
+
+- Proportion of variance explained (PVE) is computed by dividing each component’s variance by total variance  
+- Computed as: `pve <- pr.var / sum(pr.var)`
+
+```{r}
+#| label: chunk14
+#| echo: true
+pve <- pr.var / sum(pr.var)
+pve
+```
+
+- First principal component explains ~62.0% of the variance  
+- Second principal component explains ~24.7%  
+- Remaining components explain smaller proportions  
+- PVE and cumulative PVE can be visualized with plots
+
+```{r}
+#| label: chunk15
+#| echo: true
+par(mfrow = c(1, 2))
+plot(pve, xlab = "Principal Component",
+    ylab = "Proportion of Variance Explained", ylim = c(0, 1),
+    type = "b")
+plot(cumsum(pve), xlab = "Principal Component",
+    ylab = "Cumulative Proportion of Variance Explained",
+    ylim = c(0, 1), type = "b")
+```
+
+- Results are visualized in a plot (Figure 12.3)  
+- `cumsum()` computes the cumulative sum of a numeric vector  
+- Used to calculate cumulative proportion of variance explained
+
+```{r}
+#| label: chunk16
+#| echo: true
+a <- c(1, 2, 8, -3)
+cumsum(a)
+```
+
+## Matrix Completion
+
+- Recreate analysis on `USArrests` dataset  
+- Convert data frame to matrix  
+- Center and scale each column (mean = 0, variance = 1)
+
+```{r}
+#| label: chunk17
+#| echo: true
+X <- data.matrix(scale(USArrests))
+pcob <- prcomp(X)
+summary(pcob)
+```
+
+- First principal component explains ~62% of the variance  
+- PCA can be formulated as an optimization problem on centered data  
+- Computing the first $M$ principal components solves this problem  
+- Singular Value Decomposition (SVD) is a general method to compute PCA
+
+```{r}
+#| label: chunk18
+#| echo: true
+sX <- svd(X)
+names(sX)
+round(sX$v, 3)
+```
+
+- `svd()` returns three components: `u`, `d`, and `v`  
+- Matrix `v` corresponds to PCA loadings (up to a sign flip)
+
+```{r}
+#| label: chunk19
+#| echo: true
+pcob$rotation
+```
+
+- Matrix `u` contains standardized principal component scores  
+- Vector `d` contains singular values (related to standard deviations)  
+- PCA scores can be recovered from SVD output  
+- These scores are identical to those from `prcomp()`
+
+```{r}
+#| label: chunk20
+#| echo: true
+t(sX$d * t(sX$u))
+pcob$x
+```
+
+- Although `prcomp()` could be used, `svd()` is used here for illustration  
+- Randomly remove 20 entries from the 50 × 4 data matrix  
+- Procedure:
+  - Select 20 rows (states) at random  
+  - For each selected row, randomly remove one of the four variables  
+- Ensures each row still has at least three observed values
+
+```{r}
+#| label: chunk21
+#| echo: true
+nomit <- 20
+set.seed(15)
+ina <- sample(seq(50), nomit)
+inb <- sample(1:4, nomit, replace = TRUE)
+Xna <- X
+index.na <- cbind(ina, inb)
+Xna[index.na] <- NA
+```
+
+- `ina`: indices of rows (states) with missing values  
+- `inb`: indices of columns (features) with missing values  
+- `index.na`: matrix combining row and column indices for missing entries  
+- Demonstrates indexing a matrix using a matrix of indices  
+
+- Implement Algorithm 12.1 for matrix completion  
+- Define a function to approximate the matrix using `svd()`  
+- This function is used in Step 2 of the algorithm  
+- `svd()` is used instead of `prcomp()` for illustration purposes
+
+```{r}
+#| label: chunk22
+#| echo: true
+fit.svd <- function(X, M = 1) {
+   svdob <- svd(X)
+   with(svdob,
+       u[, 1:M, drop = FALSE] %*%
+       (d[1:M] * t(v[, 1:M, drop = FALSE]))
+     )
+}
+```
+
+- Explicit `return()` is not needed in R; last computed value is returned automatically  
+- `with()` is used to simplify access to elements of `svdob`  
+- Alternative: directly reference components (e.g., `svdob$u`, `svdob$d`, `svdob$v`) inside the function
+
+```{r}
+#| label: chunk23
+#| echo: true
+#| eval: false
+svdob$u[, 1:M, drop = FALSE] %*%
+  (svdob$d[1:M] * t(svdob$v[, 1:M, drop = FALSE]))
+```
+
+- Step 1: initialize `Xhat` (≈ $\tilde{\mathbf{X}}$)  
+- Replace missing values with column means (computed from non-missing entries)
+
+```{r}
+#| label: chunk24
+#| echo: true
+Xhat <- Xna
+xbar <- colMeans(Xna, na.rm = TRUE)
+Xhat[index.na] <- xbar[inb]
+```
+
+- Prepare variables to track progress of the iterative algorithm  
+- Initialize error measures and convergence threshold  
+- Set up structures to monitor changes across iterations
+
+```{r}
+#| label: chunk25
+#| echo: true
+thresh <- 1e-7
+rel_err <- 1
+iter <- 0
+ismiss <- is.na(Xna)
+mssold <- mean((scale(Xna, xbar, FALSE)[!ismiss])^2)
+mss0 <- mean(Xna[!ismiss]^2)
+```
+
+- `ismiss`: logical matrix indicating missing entries (`TRUE` = missing)  
+- Allows separation of missing vs non-missing values  
+
+- Error tracking:
+  - `mss0`: mean squared value of non-missing entries  
+  - `mssold`: previous mean squared error  
+  - `mss`: current mean squared error  
+
+- Convergence criterion:
+  - Relative error = `(mssold - mss) / mss0`  
+  - Stop when relative error < `1e-7`  
+  - Scaling ensures convergence is independent of data magnitude  
+
+- Step 2 (iterative loop):
+  - (a) Approximate matrix using `fit.svd()` → `Xapp`  
+  - (b) Update missing values in `Xhat` using `Xapp`  
+  - (c) Compute new error and relative error  
+- Implemented using a `while()` loop
+
+```{r}
+#| label: chunk26
+#| echo: true
+while(rel_err > thresh) {
+    iter <- iter + 1
+    # Step 2(a)
+    Xapp <- fit.svd(Xhat, M = 1)
+    # Step 2(b)
+    Xhat[ismiss] <- Xapp[ismiss]
+    # Step 2(c)
+    mss <- mean(((Xna - Xapp)[!ismiss])^2)
+    rel_err <- (mssold - mss) / mss0
+    mssold <- mss
+    cat("Iter:", iter, "MSS:", mss,
+      "Rel. Err:", rel_err, "\n")
+    }
+```
+
+- Algorithm converges after ~8 iterations  
+- Relative error falls below threshold (`1e-7`)  
+- Final mean squared error ≈ 0.369 (on non-missing entries)  
+
+- Evaluate performance:
+  - Compute correlation between imputed values and true values
+
+```{r}
+#| label: chunk27
+#| echo: true
+cor(Xapp[ismiss], X[ismiss])
+```
+
+- Algorithm 12.1 implemented manually for learning purposes  
+- For real applications, use `softImpute` package (CRAN)  
+- Provides efficient and scalable matrix completion methods

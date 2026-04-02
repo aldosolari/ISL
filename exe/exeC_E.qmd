@@ -1,0 +1,45 @@
+---
+title: "Exercises Unit E - Conceptual"
+subtitle: "Bachelor’s Degree Programme in Philosophy, International and Economic Studies, Ca' Foscari University of Venice."
+author: "Aldo Solari"
+institute: "Department of Economics, Ca' Foscari University of Venice"
+lang: en
+page-layout: full
+execute:
+  cache: false
+format:
+  html:
+    html-math-method: katex
+    echo: true
+    callout-appearance: minimal
+    theme: [simplex, template.css]
+    toc: true
+    toc-title: Table of contents
+    embed-resources: false
+    code-line-numbers: true
+    smooth-scroll: true
+    fig-dpi: 250
+editor: 
+  markdown: 
+    wrap: 72
+editor_options: 
+  chunk_output_type: console
+---
+
+
+### [Homepage](../index.html)
+
+#### Chapter 12, Exercise 6
+
+We saw in Section 12.2.2 that the principal component loading and
+score vectors provide an approximation to a matrix, in the sense of
+(12.5). Specifically, the principal component score and loading vectors
+solve the optimization problem given in (12.6).
+
+Now, suppose that the $M$ principal component score vectors $z_{im}$,
+$m = 1, \ldots, M$, are known. Using (12.6), explain that each of the first $M$ principal component loading vectors $\phi_{jm}$, $m = 1, \dots, M$,
+can be obtained by performing $p$ separate least squares linear regressions.
+
+In each regression, the principal component score vectors are the predictors,
+and one of the features of the data matrix is the response.
+

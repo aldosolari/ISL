@@ -1,0 +1,78 @@
+---
+title: "Exercises Unit E - Applied"
+subtitle: "Bachelor’s Degree Programme in Philosophy, International and Economic Studies, Ca' Foscari University of Venice."
+author: "Aldo Solari"
+institute: "Department of Economics, Ca' Foscari University of Venice"
+lang: en
+page-layout: full
+execute:
+  cache: false
+format:
+  html:
+    html-math-method: katex
+    echo: true
+    callout-appearance: minimal
+    theme: [simplex, template.css]
+    toc: true
+    toc-title: Table of contents
+    embed-resources: false
+    code-line-numbers: true
+    smooth-scroll: true
+    fig-dpi: 250
+editor: 
+  markdown: 
+    wrap: 72
+editor_options: 
+  chunk_output_type: console
+---
+
+
+### [Homepage](../index.html)
+
+#### Chapter 12 Exercise 8.
+
+
+In Section 12.2.3, the Proportion of Variance Explained (PVE) was defined 
+in Equation (12.10). We also saw that PVE can be computed using the `sdev` 
+output of the `prcomp()` function.
+
+Using the `USArrests` dataset, compute the PVE in two ways:
+
+(a) Using the `sdev` output of `prcomp()`, as in Section 12.2.3  
+(b) By applying Equation (12.10) directly  
+
+For part (b), use `prcomp()` to obtain the principal component loadings, 
+and then plug them into Equation (12.10) to compute the PVE.
+
+The two methods should give the same results.
+
+*Hint*: The results will match only if the same preprocessing is used in both cases.  
+For example, if you use centered and scaled variables in `prcomp()`, then you must 
+also center and scale the data when applying Equation (12.10).
+
+
+#### Chapter 12 Exercise 11.
+
+Write an `R` function to perform matrix completion as in Algorithm 12.1,
+and as outlined in Section 12.5.2. In each iteration, the function
+should keep track of the relative error, as well as the iteration count.
+Iterations should continue until the relative error is small enough or
+until some maximum number of iterations is reached (set a default
+value for this maximum number). Furthermore, there should be an
+option to print out the progress in each iteration.
+
+Test your function on the `Boston` data. First, standardize the features
+to have mean zero and standard deviation one using the `scale()` function.
+Run an experiment where you randomly leave out an increasing
+(and nested) number of observations from 5% to 30%, in steps of
+5%. Apply Algorithm 12.1 with $M = 1, 2, \ldots, 8$. Display the approximation error as a function of the fraction of observations that are
+missing, and the value of $M$, averaged over 10 repetitions of the experiment.
+
+#### Chapter 12 Exercise 12.
+
+In Section 12.5.2, Algorithm 12.1 was implemented using the `svd()`
+function. However, given the connection between the `svd()` function
+and the `prcomp()` function highlighted in the lab, we could have instead implemented the algorithm using `prcomp()`.
+
+Write a function to implement Algorithm 12.1 that makes use of
+`prcomp()` rather than `svd()`.

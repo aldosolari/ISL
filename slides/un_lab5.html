@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Aldo Solari">
+
+<title>Lab 5</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="un_lab5_files/libs/clipboard/clipboard.min.js"></script>
+<script src="un_lab5_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="un_lab5_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="un_lab5_files/libs/quarto-html/popper.min.js"></script>
+<script src="un_lab5_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="un_lab5_files/libs/quarto-html/anchor.min.js"></script>
+<link href="un_lab5_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="un_lab5_files/libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="un_lab5_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="un_lab5_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="un_lab5_files/libs/bootstrap/bootstrap-721140556699abb0ff907dddd6c78b98.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-full">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#unsupervised-learning" id="toc-unsupervised-learning" class="nav-link active" data-scroll-target="#unsupervised-learning">Unsupervised Learning</a>
+  <ul class="collapse">
+  <li><a href="#principal-components-analysis" id="toc-principal-components-analysis" class="nav-link" data-scroll-target="#principal-components-analysis">Principal Components Analysis</a></li>
+  <li><a href="#matrix-completion" id="toc-matrix-completion" class="nav-link" data-scroll-target="#matrix-completion">Matrix Completion</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="un_lab5_slides.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
+</div>
+<main class="content column-page-left" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lab 5</h1>
+<p class="subtitle lead">Introduction to Statistical Learning - PISE</p>
+</div>
+
+
+<div class="quarto-title-meta-author column-page-left">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><span class="orange">Aldo Solari</span> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <em>Ca’ Foscari University of Venice</em>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta column-page-left">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="unsupervised-learning" class="level1">
+<h1>Unsupervised Learning</h1>
+<section id="principal-components-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="principal-components-analysis">Principal Components Analysis</h2>
+<ul>
+<li>PCA is performed on the <code>USArrests</code> dataset (included in base R)<br>
+</li>
+<li>Rows represent the 50 U.S. states<br>
+</li>
+<li>States are listed in alphabetical order</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>states <span class="ot">&lt;-</span> <span class="fu">row.names</span>(USArrests)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>states</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Alabama"        "Alaska"         "Arizona"        "Arkansas"      
+ [5] "California"     "Colorado"       "Connecticut"    "Delaware"      
+ [9] "Florida"        "Georgia"        "Hawaii"         "Idaho"         
+[13] "Illinois"       "Indiana"        "Iowa"           "Kansas"        
+[17] "Kentucky"       "Louisiana"      "Maine"          "Maryland"      
+[21] "Massachusetts"  "Michigan"       "Minnesota"      "Mississippi"   
+[25] "Missouri"       "Montana"        "Nebraska"       "Nevada"        
+[29] "New Hampshire"  "New Jersey"     "New Mexico"     "New York"      
+[33] "North Carolina" "North Dakota"   "Ohio"           "Oklahoma"      
+[37] "Oregon"         "Pennsylvania"   "Rhode Island"   "South Carolina"
+[41] "South Dakota"   "Tennessee"      "Texas"          "Utah"          
+[45] "Vermont"        "Virginia"       "Washington"     "West Virginia" 
+[49] "Wisconsin"      "Wyoming"       </code></pre>
+</div>
+</div>
+<ul>
+<li>Columns of the dataset correspond to the four variables</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">names</span>(USArrests)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Murder"   "Assault"  "UrbanPop" "Rape"    </code></pre>
+</div>
+</div>
+<ul>
+<li>Initial data exploration is performed<br>
+</li>
+<li>Variables have very different mean values</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">apply</span>(USArrests, <span class="dv">2</span>, mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Murder  Assault UrbanPop     Rape 
+   7.788  170.760   65.540   21.232 </code></pre>
+</div>
+</div>
+<ul>
+<li><code>apply()</code> applies a function (e.g., <code>mean()</code>) to rows or columns of a dataset<br>
+</li>
+<li>Second argument specifies dimension (<code>1</code> = rows, <code>2</code> = columns)<br>
+</li>
+<li>Data shows large scale differences: rapes ≈ 3× murders, assaults ≈ 8× rapes<br>
+</li>
+<li><code>apply()</code> can also be used to compute variances of variables</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">apply</span>(USArrests, <span class="dv">2</span>, var)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Murder    Assault   UrbanPop       Rape 
+  18.97047 6945.16571  209.51878   87.72916 </code></pre>
+</div>
+</div>
+<ul>
+<li>Variables have very different variances<br>
+</li>
+<li><code>UrbanPop</code> (percentage) is not comparable to crime rates (per 100,000 people)<br>
+</li>
+<li>Without scaling, PCA would be dominated by <code>Assault</code> (largest mean and variance)<br>
+</li>
+<li>Therefore, variables must be standardized (mean = 0, sd = 1) before PCA<br>
+</li>
+<li>PCA is performed using the <code>prcomp()</code> function in R</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>pr.out <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(USArrests, <span class="at">scale =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><code>prcomp()</code> centers variables to mean 0 by default<br>
+</li>
+<li><code>scale = TRUE</code> standardizes variables to standard deviation 1<br>
+</li>
+<li>Output of <code>prcomp()</code> includes several useful components</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">names</span>(pr.out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "sdev"     "rotation" "center"   "scale"    "x"       </code></pre>
+</div>
+</div>
+<ul>
+<li><code>center</code>: means of variables used for centering<br>
+</li>
+<li><code>scale</code>: standard deviations used for scaling before PCA</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>pr.out<span class="sc">$</span>center</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Murder  Assault UrbanPop     Rape 
+   7.788  170.760   65.540   21.232 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>pr.out<span class="sc">$</span>scale</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Murder   Assault  UrbanPop      Rape 
+ 4.355510 83.337661 14.474763  9.366385 </code></pre>
+</div>
+</div>
+<ul>
+<li><code>rotation</code> matrix contains the principal component loadings<br>
+</li>
+<li>Each column represents a principal component loading vector<br>
+</li>
+<li>Multiplying the data matrix <code>X</code> by <code>rotation</code> gives the principal component scores<br>
+</li>
+<li>Called “rotation” because it represents a rotation of the original coordinate system</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>pr.out<span class="sc">$</span>rotation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                PC1        PC2        PC3         PC4
+Murder   -0.5358995 -0.4181809  0.3412327  0.64922780
+Assault  -0.5831836 -0.1879856  0.2681484 -0.74340748
+UrbanPop -0.2781909  0.8728062  0.3780158  0.13387773
+Rape     -0.5434321  0.1673186 -0.8177779  0.08902432</code></pre>
+</div>
+</div>
+<ul>
+<li>There are 4 principal components<br>
+</li>
+<li>In general, number of informative PCs = <span class="math inline">min(n − 1, p)</span></li>
+<li><code>prcomp()</code> directly provides principal component scores<br>
+</li>
+<li><code>pr.out$x</code> is a 50 × 4 matrix of scores<br>
+</li>
+<li>Each column corresponds to a principal component score vector</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">dim</span>(pr.out<span class="sc">$</span>x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 50  4</code></pre>
+</div>
+</div>
+<ul>
+<li>The first two principal components can be visualized using a plot</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">biplot</span>(pr.out, <span class="at">scale =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_lab5_files/figure-html/chunk10-1.png" class="img-fluid figure-img" width="1050"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>In <code>biplot()</code>, <code>scale = 0</code> scales arrows to represent loadings<br>
+</li>
+<li>Different <code>scale</code> values change interpretation of the biplot<br>
+</li>
+<li>PCA results are only unique up to a sign change<br>
+</li>
+<li>Plots may appear as mirror images due to sign ambiguity<br>
+</li>
+<li>Sign flipping can reproduce equivalent visualizations</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>pr.out<span class="sc">$</span>rotation <span class="ot">=</span> <span class="sc">-</span>pr.out<span class="sc">$</span>rotation</span>
+<span id="cb21-2"><a href="#cb21-2"></a>pr.out<span class="sc">$</span>x <span class="ot">=</span> <span class="sc">-</span>pr.out<span class="sc">$</span>x</span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="fu">biplot</span>(pr.out, <span class="at">scale =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_lab5_files/figure-html/chunk11-1.png" class="img-fluid figure-img" width="1050"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><code>prcomp()</code> outputs the standard deviation of each principal component<br>
+</li>
+<li>These can be accessed via <code>pr.out$sdev</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>pr.out<span class="sc">$</span>sdev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.5748783 0.9948694 0.5971291 0.4164494</code></pre>
+</div>
+</div>
+<ul>
+<li>Variance explained by each principal component is obtained by squaring the standard deviations<br>
+</li>
+<li>Computed as: <code>pr.var &lt;- pr.out$sdev^2</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>pr.var <span class="ot">&lt;-</span> pr.out<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>pr.var</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.4802416 0.9897652 0.3565632 0.1734301</code></pre>
+</div>
+</div>
+<ul>
+<li>Proportion of variance explained (PVE) is computed by dividing each component’s variance by total variance<br>
+</li>
+<li>Computed as: <code>pve &lt;- pr.var / sum(pr.var)</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>pve <span class="ot">&lt;-</span> pr.var <span class="sc">/</span> <span class="fu">sum</span>(pr.var)</span>
+<span id="cb26-2"><a href="#cb26-2"></a>pve</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.62006039 0.24744129 0.08914080 0.04335752</code></pre>
+</div>
+</div>
+<ul>
+<li>First principal component explains ~62.0% of the variance<br>
+</li>
+<li>Second principal component explains ~24.7%<br>
+</li>
+<li>Remaining components explain smaller proportions<br>
+</li>
+<li>PVE and cumulative PVE can be visualized with plots</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb28-2"><a href="#cb28-2"></a><span class="fu">plot</span>(pve, <span class="at">xlab =</span> <span class="st">"Principal Component"</span>,</span>
+<span id="cb28-3"><a href="#cb28-3"></a>    <span class="at">ylab =</span> <span class="st">"Proportion of Variance Explained"</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb28-4"><a href="#cb28-4"></a>    <span class="at">type =</span> <span class="st">"b"</span>)</span>
+<span id="cb28-5"><a href="#cb28-5"></a><span class="fu">plot</span>(<span class="fu">cumsum</span>(pve), <span class="at">xlab =</span> <span class="st">"Principal Component"</span>,</span>
+<span id="cb28-6"><a href="#cb28-6"></a>    <span class="at">ylab =</span> <span class="st">"Cumulative Proportion of Variance Explained"</span>,</span>
+<span id="cb28-7"><a href="#cb28-7"></a>    <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">type =</span> <span class="st">"b"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_lab5_files/figure-html/chunk15-1.png" class="img-fluid figure-img" width="1050"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>Results are visualized in a plot (Figure 12.3)<br>
+</li>
+<li><code>cumsum()</code> computes the cumulative sum of a numeric vector<br>
+</li>
+<li>Used to calculate cumulative proportion of variance explained</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">8</span>, <span class="sc">-</span><span class="dv">3</span>)</span>
+<span id="cb29-2"><a href="#cb29-2"></a><span class="fu">cumsum</span>(a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  1  3 11  8</code></pre>
+</div>
+</div>
+</section>
+<section id="matrix-completion" class="level2">
+<h2 class="anchored" data-anchor-id="matrix-completion">Matrix Completion</h2>
+<ul>
+<li>Recreate analysis on <code>USArrests</code> dataset<br>
+</li>
+<li>Convert data frame to matrix<br>
+</li>
+<li>Center and scale each column (mean = 0, variance = 1)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>X <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(<span class="fu">scale</span>(USArrests))</span>
+<span id="cb31-2"><a href="#cb31-2"></a>pcob <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(X)</span>
+<span id="cb31-3"><a href="#cb31-3"></a><span class="fu">summary</span>(pcob)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Importance of components:
+                          PC1    PC2     PC3     PC4
+Standard deviation     1.5749 0.9949 0.59713 0.41645
+Proportion of Variance 0.6201 0.2474 0.08914 0.04336
+Cumulative Proportion  0.6201 0.8675 0.95664 1.00000</code></pre>
+</div>
+</div>
+<ul>
+<li>First principal component explains ~62% of the variance<br>
+</li>
+<li>PCA can be formulated as an optimization problem on centered data<br>
+</li>
+<li>Computing the first <span class="math inline">M</span> principal components solves this problem<br>
+</li>
+<li>Singular Value Decomposition (SVD) is a general method to compute PCA</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>sX <span class="ot">&lt;-</span> <span class="fu">svd</span>(X)</span>
+<span id="cb33-2"><a href="#cb33-2"></a><span class="fu">names</span>(sX)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "d" "u" "v"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="fu">round</span>(sX<span class="sc">$</span>v, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       [,1]   [,2]   [,3]   [,4]
+[1,] -0.536 -0.418  0.341  0.649
+[2,] -0.583 -0.188  0.268 -0.743
+[3,] -0.278  0.873  0.378  0.134
+[4,] -0.543  0.167 -0.818  0.089</code></pre>
+</div>
+</div>
+<ul>
+<li><code>svd()</code> returns three components: <code>u</code>, <code>d</code>, and <code>v</code><br>
+</li>
+<li>Matrix <code>v</code> corresponds to PCA loadings (up to a sign flip)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>pcob<span class="sc">$</span>rotation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                PC1        PC2        PC3         PC4
+Murder   -0.5358995 -0.4181809  0.3412327  0.64922780
+Assault  -0.5831836 -0.1879856  0.2681484 -0.74340748
+UrbanPop -0.2781909  0.8728062  0.3780158  0.13387773
+Rape     -0.5434321  0.1673186 -0.8177779  0.08902432</code></pre>
+</div>
+</div>
+<ul>
+<li>Matrix <code>u</code> contains standardized principal component scores<br>
+</li>
+<li>Vector <code>d</code> contains singular values (related to standard deviations)<br>
+</li>
+<li>PCA scores can be recovered from SVD output<br>
+</li>
+<li>These scores are identical to those from <code>prcomp()</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="fu">t</span>(sX<span class="sc">$</span>d <span class="sc">*</span> <span class="fu">t</span>(sX<span class="sc">$</span>u))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             [,1]        [,2]        [,3]         [,4]
+ [1,] -0.97566045 -1.12200121  0.43980366  0.154696581
+ [2,] -1.93053788 -1.06242692 -2.01950027 -0.434175454
+ [3,] -1.74544285  0.73845954 -0.05423025 -0.826264240
+ [4,]  0.13999894 -1.10854226 -0.11342217 -0.180973554
+ [5,] -2.49861285  1.52742672 -0.59254100 -0.338559240
+ [6,] -1.49934074  0.97762966 -1.08400162  0.001450164
+ [7,]  1.34499236  1.07798362  0.63679250 -0.117278736
+ [8,] -0.04722981  0.32208890  0.71141032 -0.873113315
+ [9,] -2.98275967 -0.03883425  0.57103206 -0.095317042
+[10,] -1.62280742 -1.26608838  0.33901818  1.065974459
+[11,]  0.90348448  1.55467609 -0.05027151  0.893733198
+[12,]  1.62331903 -0.20885253 -0.25719021 -0.494087852
+[13,] -1.36505197  0.67498834  0.67068647 -0.120794916
+[14,]  0.50038122  0.15003926 -0.22576277  0.420397595
+[15,]  2.23099579  0.10300828 -0.16291036  0.017379470
+[16,]  0.78887206  0.26744941 -0.02529648  0.204421034
+[17,]  0.74331256 -0.94880748  0.02808429  0.663817237
+[18,] -1.54909076 -0.86230011  0.77560598  0.450157791
+[19,]  2.37274014 -0.37260865  0.06502225 -0.327138529
+[20,] -1.74564663 -0.42335704  0.15566968 -0.553450589
+[21,]  0.48128007  1.45967706  0.60337172 -0.177793902
+[22,] -2.08725025  0.15383500 -0.38100046  0.101343128
+[23,]  1.67566951  0.62590670 -0.15153200  0.066640316
+[24,] -0.98647919 -2.36973712  0.73336290  0.213342049
+[25,] -0.68978426  0.26070794 -0.37365033  0.223554811
+[26,]  1.17353751 -0.53147851 -0.24440796  0.122498555
+[27,]  1.25291625  0.19200440 -0.17380930  0.015733156
+[28,] -2.84550542  0.76780502 -1.15168793  0.311354436
+[29,]  2.35995585  0.01790055 -0.03648498 -0.032804291
+[30,] -0.17974128  1.43493745  0.75677041  0.240936580
+[31,] -1.96012351 -0.14141308 -0.18184598 -0.336121113
+[32,] -1.66566662  0.81491072  0.63661186 -0.013348844
+[33,] -1.11208808 -2.20561081  0.85489245 -0.944789648
+[34,]  2.96215223 -0.59309738 -0.29824930 -0.251434626
+[35,]  0.22369436  0.73477837  0.03082616  0.469152817
+[36,]  0.30864928  0.28496113  0.01515592  0.010228476
+[37,] -0.05852787  0.53596999 -0.93038718 -0.235390872
+[38,]  0.87948680  0.56536050  0.39660218  0.355452378
+[39,]  0.85509072  1.47698328  1.35617705 -0.607402746
+[40,] -1.30744986 -1.91397297  0.29751723 -0.130145378
+[41,]  1.96779669 -0.81506822 -0.38538073 -0.108470512
+[42,] -0.98969377 -0.85160534 -0.18619262  0.646302674
+[43,] -1.34151838  0.40833518  0.48712332  0.636731051
+[44,]  0.54503180  1.45671524 -0.29077592 -0.081486749
+[45,]  2.77325613 -1.38819435 -0.83280797 -0.143433697
+[46,]  0.09536670 -0.19772785 -0.01159482  0.209246429
+[47,]  0.21472339  0.96037394 -0.61859067 -0.218628161
+[48,]  2.08739306 -1.41052627 -0.10372163  0.130583080
+[49,]  2.05881199  0.60512507  0.13746933  0.182253407
+[50,]  0.62310061 -0.31778662  0.23824049 -0.164976866</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>pcob<span class="sc">$</span>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                       PC1         PC2         PC3          PC4
+Alabama        -0.97566045 -1.12200121  0.43980366  0.154696581
+Alaska         -1.93053788 -1.06242692 -2.01950027 -0.434175454
+Arizona        -1.74544285  0.73845954 -0.05423025 -0.826264240
+Arkansas        0.13999894 -1.10854226 -0.11342217 -0.180973554
+California     -2.49861285  1.52742672 -0.59254100 -0.338559240
+Colorado       -1.49934074  0.97762966 -1.08400162  0.001450164
+Connecticut     1.34499236  1.07798362  0.63679250 -0.117278736
+Delaware       -0.04722981  0.32208890  0.71141032 -0.873113315
+Florida        -2.98275967 -0.03883425  0.57103206 -0.095317042
+Georgia        -1.62280742 -1.26608838  0.33901818  1.065974459
+Hawaii          0.90348448  1.55467609 -0.05027151  0.893733198
+Idaho           1.62331903 -0.20885253 -0.25719021 -0.494087852
+Illinois       -1.36505197  0.67498834  0.67068647 -0.120794916
+Indiana         0.50038122  0.15003926 -0.22576277  0.420397595
+Iowa            2.23099579  0.10300828 -0.16291036  0.017379470
+Kansas          0.78887206  0.26744941 -0.02529648  0.204421034
+Kentucky        0.74331256 -0.94880748  0.02808429  0.663817237
+Louisiana      -1.54909076 -0.86230011  0.77560598  0.450157791
+Maine           2.37274014 -0.37260865  0.06502225 -0.327138529
+Maryland       -1.74564663 -0.42335704  0.15566968 -0.553450589
+Massachusetts   0.48128007  1.45967706  0.60337172 -0.177793902
+Michigan       -2.08725025  0.15383500 -0.38100046  0.101343128
+Minnesota       1.67566951  0.62590670 -0.15153200  0.066640316
+Mississippi    -0.98647919 -2.36973712  0.73336290  0.213342049
+Missouri       -0.68978426  0.26070794 -0.37365033  0.223554811
+Montana         1.17353751 -0.53147851 -0.24440796  0.122498555
+Nebraska        1.25291625  0.19200440 -0.17380930  0.015733156
+Nevada         -2.84550542  0.76780502 -1.15168793  0.311354436
+New Hampshire   2.35995585  0.01790055 -0.03648498 -0.032804291
+New Jersey     -0.17974128  1.43493745  0.75677041  0.240936580
+New Mexico     -1.96012351 -0.14141308 -0.18184598 -0.336121113
+New York       -1.66566662  0.81491072  0.63661186 -0.013348844
+North Carolina -1.11208808 -2.20561081  0.85489245 -0.944789648
+North Dakota    2.96215223 -0.59309738 -0.29824930 -0.251434626
+Ohio            0.22369436  0.73477837  0.03082616  0.469152817
+Oklahoma        0.30864928  0.28496113  0.01515592  0.010228476
+Oregon         -0.05852787  0.53596999 -0.93038718 -0.235390872
+Pennsylvania    0.87948680  0.56536050  0.39660218  0.355452378
+Rhode Island    0.85509072  1.47698328  1.35617705 -0.607402746
+South Carolina -1.30744986 -1.91397297  0.29751723 -0.130145378
+South Dakota    1.96779669 -0.81506822 -0.38538073 -0.108470512
+Tennessee      -0.98969377 -0.85160534 -0.18619262  0.646302674
+Texas          -1.34151838  0.40833518  0.48712332  0.636731051
+Utah            0.54503180  1.45671524 -0.29077592 -0.081486749
+Vermont         2.77325613 -1.38819435 -0.83280797 -0.143433697
+Virginia        0.09536670 -0.19772785 -0.01159482  0.209246429
+Washington      0.21472339  0.96037394 -0.61859067 -0.218628161
+West Virginia   2.08739306 -1.41052627 -0.10372163  0.130583080
+Wisconsin       2.05881199  0.60512507  0.13746933  0.182253407
+Wyoming         0.62310061 -0.31778662  0.23824049 -0.164976866</code></pre>
+</div>
+</div>
+<ul>
+<li>Although <code>prcomp()</code> could be used, <code>svd()</code> is used here for illustration<br>
+</li>
+<li>Randomly remove 20 entries from the 50 × 4 data matrix<br>
+</li>
+<li>Procedure:
+<ul>
+<li>Select 20 rows (states) at random<br>
+</li>
+<li>For each selected row, randomly remove one of the four variables<br>
+</li>
+</ul></li>
+<li>Ensures each row still has at least three observed values</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>nomit <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb43-2"><a href="#cb43-2"></a><span class="fu">set.seed</span>(<span class="dv">15</span>)</span>
+<span id="cb43-3"><a href="#cb43-3"></a>ina <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="dv">50</span>), nomit)</span>
+<span id="cb43-4"><a href="#cb43-4"></a>inb <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, nomit, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb43-5"><a href="#cb43-5"></a>Xna <span class="ot">&lt;-</span> X</span>
+<span id="cb43-6"><a href="#cb43-6"></a>index.na <span class="ot">&lt;-</span> <span class="fu">cbind</span>(ina, inb)</span>
+<span id="cb43-7"><a href="#cb43-7"></a>Xna[index.na] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><p><code>ina</code>: indices of rows (states) with missing values<br>
+</p></li>
+<li><p><code>inb</code>: indices of columns (features) with missing values<br>
+</p></li>
+<li><p><code>index.na</code>: matrix combining row and column indices for missing entries<br>
+</p></li>
+<li><p>Demonstrates indexing a matrix using a matrix of indices</p></li>
+<li><p>Implement Algorithm 12.1 for matrix completion<br>
+</p></li>
+<li><p>Define a function to approximate the matrix using <code>svd()</code><br>
+</p></li>
+<li><p>This function is used in Step 2 of the algorithm<br>
+</p></li>
+<li><p><code>svd()</code> is used instead of <code>prcomp()</code> for illustration purposes</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>fit.svd <span class="ot">&lt;-</span> <span class="cf">function</span>(X, <span class="at">M =</span> <span class="dv">1</span>) {</span>
+<span id="cb44-2"><a href="#cb44-2"></a>   svdob <span class="ot">&lt;-</span> <span class="fu">svd</span>(X)</span>
+<span id="cb44-3"><a href="#cb44-3"></a>   <span class="fu">with</span>(svdob,</span>
+<span id="cb44-4"><a href="#cb44-4"></a>       u[, <span class="dv">1</span><span class="sc">:</span>M, <span class="at">drop =</span> <span class="cn">FALSE</span>] <span class="sc">%*%</span></span>
+<span id="cb44-5"><a href="#cb44-5"></a>       (d[<span class="dv">1</span><span class="sc">:</span>M] <span class="sc">*</span> <span class="fu">t</span>(v[, <span class="dv">1</span><span class="sc">:</span>M, <span class="at">drop =</span> <span class="cn">FALSE</span>]))</span>
+<span id="cb44-6"><a href="#cb44-6"></a>     )</span>
+<span id="cb44-7"><a href="#cb44-7"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>Explicit <code>return()</code> is not needed in R; last computed value is returned automatically<br>
+</li>
+<li><code>with()</code> is used to simplify access to elements of <code>svdob</code><br>
+</li>
+<li>Alternative: directly reference components (e.g., <code>svdob$u</code>, <code>svdob$d</code>, <code>svdob$v</code>) inside the function</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>svdob<span class="sc">$</span>u[, <span class="dv">1</span><span class="sc">:</span>M, drop <span class="ot">=</span> <span class="cn">FALSE</span>] <span class="sc">%*%</span></span>
+<span id="cb45-2"><a href="#cb45-2"></a>  (svdob<span class="sc">$</span>d[<span class="dv">1</span><span class="sc">:</span>M] <span class="sc">*</span> <span class="fu">t</span>(svdob<span class="sc">$</span>v[, <span class="dv">1</span><span class="sc">:</span>M, <span class="at">drop =</span> <span class="cn">FALSE</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>Step 1: initialize <code>Xhat</code> (≈ <span class="math inline">\tilde{\mathbf{X}}</span>)<br>
+</li>
+<li>Replace missing values with column means (computed from non-missing entries)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>Xhat <span class="ot">&lt;-</span> Xna</span>
+<span id="cb46-2"><a href="#cb46-2"></a>xbar <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(Xna, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb46-3"><a href="#cb46-3"></a>Xhat[index.na] <span class="ot">&lt;-</span> xbar[inb]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>Prepare variables to track progress of the iterative algorithm<br>
+</li>
+<li>Initialize error measures and convergence threshold<br>
+</li>
+<li>Set up structures to monitor changes across iterations</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>thresh <span class="ot">&lt;-</span> <span class="fl">1e-7</span></span>
+<span id="cb47-2"><a href="#cb47-2"></a>rel_err <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb47-3"><a href="#cb47-3"></a>iter <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb47-4"><a href="#cb47-4"></a>ismiss <span class="ot">&lt;-</span> <span class="fu">is.na</span>(Xna)</span>
+<span id="cb47-5"><a href="#cb47-5"></a>mssold <span class="ot">&lt;-</span> <span class="fu">mean</span>((<span class="fu">scale</span>(Xna, xbar, <span class="cn">FALSE</span>)[<span class="sc">!</span>ismiss])<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb47-6"><a href="#cb47-6"></a>mss0 <span class="ot">&lt;-</span> <span class="fu">mean</span>(Xna[<span class="sc">!</span>ismiss]<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><p><code>ismiss</code>: logical matrix indicating missing entries (<code>TRUE</code> = missing)<br>
+</p></li>
+<li><p>Allows separation of missing vs non-missing values</p></li>
+<li><p>Error tracking:</p>
+<ul>
+<li><code>mss0</code>: mean squared value of non-missing entries<br>
+</li>
+<li><code>mssold</code>: previous mean squared error<br>
+</li>
+<li><code>mss</code>: current mean squared error</li>
+</ul></li>
+<li><p>Convergence criterion:</p>
+<ul>
+<li>Relative error = <code>(mssold - mss) / mss0</code><br>
+</li>
+<li>Stop when relative error &lt; <code>1e-7</code><br>
+</li>
+<li>Scaling ensures convergence is independent of data magnitude</li>
+</ul></li>
+<li><p>Step 2 (iterative loop):</p>
+<ul>
+<li><ol type="a">
+<li>Approximate matrix using <code>fit.svd()</code> → <code>Xapp</code><br>
+</li>
+</ol></li>
+<li><ol start="2" type="a">
+<li>Update missing values in <code>Xhat</code> using <code>Xapp</code><br>
+</li>
+</ol></li>
+<li><ol start="3" type="a">
+<li>Compute new error and relative error<br>
+</li>
+</ol></li>
+</ul></li>
+<li><p>Implemented using a <code>while()</code> loop</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="cf">while</span>(rel_err <span class="sc">&gt;</span> thresh) {</span>
+<span id="cb48-2"><a href="#cb48-2"></a>    iter <span class="ot">&lt;-</span> iter <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb48-3"><a href="#cb48-3"></a>    <span class="co"># Step 2(a)</span></span>
+<span id="cb48-4"><a href="#cb48-4"></a>    Xapp <span class="ot">&lt;-</span> <span class="fu">fit.svd</span>(Xhat, <span class="at">M =</span> <span class="dv">1</span>)</span>
+<span id="cb48-5"><a href="#cb48-5"></a>    <span class="co"># Step 2(b)</span></span>
+<span id="cb48-6"><a href="#cb48-6"></a>    Xhat[ismiss] <span class="ot">&lt;-</span> Xapp[ismiss]</span>
+<span id="cb48-7"><a href="#cb48-7"></a>    <span class="co"># Step 2(c)</span></span>
+<span id="cb48-8"><a href="#cb48-8"></a>    mss <span class="ot">&lt;-</span> <span class="fu">mean</span>(((Xna <span class="sc">-</span> Xapp)[<span class="sc">!</span>ismiss])<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb48-9"><a href="#cb48-9"></a>    rel_err <span class="ot">&lt;-</span> (mssold <span class="sc">-</span> mss) <span class="sc">/</span> mss0</span>
+<span id="cb48-10"><a href="#cb48-10"></a>    mssold <span class="ot">&lt;-</span> mss</span>
+<span id="cb48-11"><a href="#cb48-11"></a>    <span class="fu">cat</span>(<span class="st">"Iter:"</span>, iter, <span class="st">"MSS:"</span>, mss,</span>
+<span id="cb48-12"><a href="#cb48-12"></a>      <span class="st">"Rel. Err:"</span>, rel_err, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb48-13"><a href="#cb48-13"></a>    }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Iter: 1 MSS: 0.3821695 Rel. Err: 0.6194004 
+Iter: 2 MSS: 0.3705046 Rel. Err: 0.01161265 
+Iter: 3 MSS: 0.3692779 Rel. Err: 0.001221144 
+Iter: 4 MSS: 0.3691229 Rel. Err: 0.0001543015 
+Iter: 5 MSS: 0.3691008 Rel. Err: 2.199233e-05 
+Iter: 6 MSS: 0.3690974 Rel. Err: 3.376005e-06 
+Iter: 7 MSS: 0.3690969 Rel. Err: 5.465067e-07 
+Iter: 8 MSS: 0.3690968 Rel. Err: 9.253082e-08 </code></pre>
+</div>
+</div>
+<ul>
+<li><p>Algorithm converges after ~8 iterations<br>
+</p></li>
+<li><p>Relative error falls below threshold (<code>1e-7</code>)<br>
+</p></li>
+<li><p>Final mean squared error ≈ 0.369 (on non-missing entries)</p></li>
+<li><p>Evaluate performance:</p>
+<ul>
+<li>Compute correlation between imputed values and true values</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">cor</span>(Xapp[ismiss], X[ismiss])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6535043</code></pre>
+</div>
+</div>
+<ul>
+<li>Algorithm 12.1 implemented manually for learning purposes<br>
+</li>
+<li>For real applications, use <code>softImpute</code> package (CRAN)<br>
+</li>
+<li>Provides efficient and scalable matrix completion methods</li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<script src="un_lab5_files/libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
