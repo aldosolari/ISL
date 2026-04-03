@@ -55,6 +55,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
   <li><a href="#labs" id="toc-labs" class="nav-link" data-scroll-target="#labs">Labs</a></li>
   <li><a href="#exam" id="toc-exam" class="nav-link" data-scroll-target="#exam">Exam</a></li>
+  <li><a href="#data-analysis-project" id="toc-data-analysis-project" class="nav-link" data-scroll-target="#data-analysis-project">Data Analysis Project</a></li>
   <li><a href="#office-hours" id="toc-office-hours" class="nav-link" data-scroll-target="#office-hours">Office hours</a></li>
   <li><a href="#acknowledgments" id="toc-acknowledgments" class="nav-link" data-scroll-target="#acknowledgments">Acknowledgments</a></li>
   </ul>
@@ -238,17 +239,29 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="exam" class="level2">
 <h2 class="anchored" data-anchor-id="exam">Exam</h2>
-<p>The final assessment consists of a written test, followed by an oral interview, conditional on successful completion of the written test. The written test is open book and requires students to bring their own laptop. It consists of the submission of a compiled R Markdown PDF file presenting a complete data analysis. Examples of written tests are available on the Ca’ Foscari Moodle e-learning platform.</p>
-<section id="rules" class="level4">
-<h4 class="anchored" data-anchor-id="rules">Rules</h4>
+<p>The exam consists of two parts:</p>
+<ul>
+<li><p><strong>(15 / 30) Data analysis project</strong>, which aims to evaluate your ability to build predictive models. You must submit:</p>
+<ul>
+<li>your predictions, together with the code used to reproduce them;<br>
+</li>
+<li>a report (maximum 4 pages) describing your analysis.</li>
+</ul>
+<p>The data analysis must be uploaded on the course Moodle page at least three days before the exam date and can be submitted only once per academic year.</p></li>
+<li><p><strong>(15 / 30) Oral exam</strong>, which may include a discussion of your data analysis and questions on the topics covered in class, including assigned exercises and programming.</p></li>
+</ul>
+<p>The final grade is the sum of the two parts.</p>
 </section>
-<section id="mock-exam" class="level4">
-<h4 class="anchored" data-anchor-id="mock-exam">Mock exam</h4>
-</section>
+<section id="data-analysis-project" class="level2">
+<h2 class="anchored" data-anchor-id="data-analysis-project">Data Analysis Project</h2>
+<p>The dataset contains ratings from 10,000 users for 99 movies, along with dates of the ratings. The goal is to predict the ratings of 2,931 test users for the movie Miss Congeniality.</p>
+<p>The data are provided in separate files for ratings, dates, and movie information. Ratings range from 1 to 5, with 0 indicating missing values. Dates are measured as days since January 1, 2017, with ‘0000’ indicating missing values.</p>
+<p>The use of external data is not allowed, and only the libraries used in class may be used. Predictions are evaluated using RMSE on the test set.</p>
+<p>Example of submission (to be uploaded in the dedicated section on the Moodle page, using the required format [studentID]_prediction.txt, [studentID]_code.pdf, and [studentID]_report.pdf):</p>
 </section>
 <section id="office-hours" class="level2">
 <h2 class="anchored" data-anchor-id="office-hours">Office hours</h2>
-<p>To schedule a meeting, please write to aldo.solari@unive.it. Office hours is every DAY at HOUR.</p>
+<p>Office hours are held on Fridays at 11:00 AM in office C2.111, San Giobbe Economic Campus. Please book an appointment in advance by email.</p>
 </section>
 <section id="acknowledgments" class="level2">
 <h2 class="anchored" data-anchor-id="acknowledgments">Acknowledgments</h2>

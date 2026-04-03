@@ -90,17 +90,33 @@ The course is delivered in a lecture format, with selected sessions  devoted to 
 
 ## Exam
 
-The final assessment consists of a written test, followed by an oral interview, conditional on successful completion of the written test. The written test is open book and requires students to bring their own laptop. It consists of the submission of a compiled R Markdown PDF file presenting a complete data analysis. Examples of written tests are available on the Ca’ Foscari Moodle e-learning platform.
+The exam consists of two parts: 
 
-#### Rules
+- **(15 / 30) Data analysis project**, which aims to evaluate your ability to build predictive models. You must submit:
 
-#### Mock exam
+  - your predictions, together with the code used to reproduce them;  
+  - a report (maximum 4 pages) describing your analysis.  
 
+  The data analysis must be uploaded on the course Moodle page at least three days before the exam date and can be submitted only once per academic year.
+
+- **(15 / 30) Oral exam**, which may include a discussion of your data analysis and questions on the topics covered in class, including assigned exercises and programming.
+
+The final grade is the sum of the two parts.
+
+## Data Analysis Project
+
+The dataset contains ratings from 10,000 users for 99 movies, along with dates of the ratings. The goal is to predict the ratings of 2,931 test users for the movie Miss Congeniality.
+
+The data are provided in separate files for ratings, dates, and movie information. Ratings range from 1 to 5, with 0 indicating missing values. Dates are measured as days since January 1, 2017, with ‘0000’ indicating missing values.
+
+The use of external data is not allowed, and only the libraries used in class may be used. Predictions are evaluated using RMSE on the test set.
+
+Example of submission (to be uploaded in the dedicated section on the Moodle page, using the required format [studentID]_prediction.txt, [studentID]_code.pdf, and [studentID]_report.pdf):
 
 
 ## Office hours
 
-To schedule a meeting, please write to aldo.solari@unive.it. Office hours is every DAY at HOUR.
+Office hours are held on Fridays at 11:00 AM in office C2.111, San Giobbe Economic Campus. Please book an appointment in advance by email.
 
 ## Acknowledgments
 

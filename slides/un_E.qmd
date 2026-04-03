@@ -1,0 +1,166 @@
+---
+title: "PCA and Matrix Completion"
+subtitle: "Introduction to Statistical Learning - PISE"
+author: "[Aldo Solari]{.orange}"
+institute: "_Ca' Foscari University of Venice_"
+page-layout: full
+execute:
+  cache: false
+filters: 
+  - remove-pause.lua
+format:
+  revealjs:
+    auto-stretch: true
+    center: true
+    html-math-method: katex
+    transition: none
+    output-file: un_C_slides.html
+    slide-number: true
+    callout-appearance: minimal
+    code-line-numbers: true
+    theme: [default, ../template.css] # alternative themes (subset): default, night, dark
+    embed-resources: false
+    echo: false
+    fig-dpi: 200
+    # incremental: true  # Remove comment if you like incremental bullet points
+    logo: img/cf_logo.png
+    footer: "[ISL](https://aldosolari.github.io/ISL)"
+    highlight-style: github
+  html:
+    html-math-method: katex
+    echo: false
+    callout-appearance: minimal
+    theme: [simplex, ../template.css]
+    toc: true
+    toc-title: Table of contents
+    embed-resources: false
+    code-line-numbers: true
+    smooth-scroll: true
+    code-fold: false
+    code-summary: "Show the code"
+    fig-dpi: 150
+    highlight-style: github
+editor: 
+  markdown: 
+    wrap: 72
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+#| warning: false
+#| echo: false
+#| include: false
+#| message: false
+#| purl: false
+```
+
+
+This unit will cover the following [topics]{.orange}:
+
+-   Principal Components Analysis
+-   Matrix Completion
+
+# Unsupervised Learning
+
+- Most of this course focuses on [supervised learning]{.orange} methods such as regression
+- In supervised learning:
+  - We observe features $X_1, X_2, \ldots, X_p$ and a response variable $Y$  
+  - Goal: predict  $Y$ using $X_1, X_2, \ldots, X_p$  
+- In [unsupervised learning]{.orange}:
+  - We observe only features $X_1, X_2, \ldots, X_p$  
+  - No response variable  $Y$ is available  
+  - Goal is not prediction, but discovering structure in the data  
+
+
+# Principal Components Analysis
+
+- PCA produces a low-dimensional representation of a dataset  
+- It finds a sequence of linear combinations of the variables that have maximal variance and are mutually uncorrelated  
+
+- Apart from producing derived variables for use in supervised learning problems, PCA also serves as a tool for data visualization  
+
+
+## Principal Components Analysis: details
+
+- The [first principal component]{.orange} of a set of features $X_1, X_2, ..., X_p$ is the normalized linear combination of the features  
+  $$
+  Z_1 = \phi_{11}X_1 + \phi_{21}X_2 + \cdots + \phi_{p1}X_p
+  $$
+  that has the largest variance. By [normalized]{.orange}, we mean that:
+  $$
+  \sum_{j=1}^{p} \phi_{j1}^2 = 1
+  $$
+
+- We refer to the elements $\phi_{11}, ..., \phi_{p1}$ as the [loadings]{.blue} of the first principal component. Together, the loadings make up the principal component loading vector:
+  $$
+  \phi_1 = (\phi_{11} \ \phi_{21} \ \cdots \ \phi_{p1})^T
+  $$
+
+- We constrain the loadings so that their sum of squares is equal to one. Otherwise, arbitrarily large values would lead to arbitrarily large variance 
+
+## Figure 6.14 ISL
+
+![](img/6_14.png){width="100%"}
+
+The population size (`pop`) and ad spending (`ad`) for 100 different
+cities are shown as purple circles. The green solid line indicates
+the first principal component direction, and the blue dashed
+line indicates the second principal component direction.
+
+
+## Computation of Principal Components
+
+- Suppose we have an $n \times p$ data set $\mathbf{X}$. Since we are only interested in variance, we assume that each of the variables in $\mathbf{X}$ has been centered to have mean zero (that is, the column means of $\mathbf{X}$ are zero)  
+
+- We then look for the linear combination of the sample feature values of the form  
+  $$
+  z_{i1} = \phi_{11}x_{i1} + \phi_{21}x_{i2} + \cdots + \phi_{p1}x_{ip}
+  $$
+  for $i = 1, ..., n$ that has largest sample variance, subject to the constraint that $\sum_{j=1}^{p} \phi_{j1}^2 = 1$
+
+- Since each of the $x_{ij}$ has mean zero, then so does $z_{i1}$ (for any values of $\phi_{j1}$). Hence the sample variance of the $z_{i1}$ can be written as  
+  $$
+  \frac{1}{n} \sum_{i=1}^{n} z_{i1}^2
+  $$
+
+## Required readings from the textbook and course materials
+
+
+- **Chapter 3: Linear Regression**
+  - 3.1 Simple Linear Regression
+    - 3.1.1 Estimating the Coeﬀicients
+    - 3.1.3 Assessing the Accuracy of the Model
+  
+  - 3.2 Multiple Linear Regression
+    - 3.2.1 Estimating the Regression Coeﬀicients
+   
+  - 3.3 Other Considerations in the Regression Model
+    - 3.3.1 Qualitative Predictors
+
+- **Chapter 6: Linear Model Selection
+and Regularization**
+  - 6.1 Subset Selection
+    - 6.1.1 Best Subset Selection
+    - 6.1.2 Stepwise Selection
+    - 6.1.3 Choosing the Optimal Model
+
+## Required readings from the textbook and course materials
+
+[Video SL 3.1 Simple Linear Regression - 13:02](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 3.3 Multiple Linear Regression - 15:38 ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 3.4 Some Important Questions - 14:52 ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 3.5 Extensions of the Linear Model - 14:17](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 6.1 Introduction and Best Subset Selection - 13:45  ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 6.3 Backward Stepwise Selection - 5:27  ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 6.4 Estimating Test Error - 14:07  ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 6.5 Validation and Cross Validation - 8:44  ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
