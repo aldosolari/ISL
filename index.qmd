@@ -103,19 +103,30 @@ The exam consists of two parts:
 
 The final grade is the sum of the two parts.
 
-## Data Analysis Project
+<!-- ## Data Analysis Project -->
 
-The dataset contains ratings from 10,000 users for 99 movies, along with dates of the ratings. The goal is to predict the ratings of 2,931 test users for the movie Miss Congeniality.
+<!-- The dataset contains ratings from 10,000 users for 99 movies, along with dates of the ratings. The goal is to predict the ratings of 2,931 test users for the movie Miss Congeniality. -->
 
-The data are provided in separate files for ratings, dates, and movie information. Ratings range from 1 to 5, with 0 indicating missing values. Dates are measured as days since January 1, 2017, with ‘0000’ indicating missing values.
+<!-- The data are provided in separate files for ratings, dates, and movie information. -->
 
-The use of external data is not allowed, and only the libraries used in class may be used. Predictions are evaluated using RMSE on the test set.
+<!-- - Train_ratings_all.dat: ratings for 99 movies (training set) -->
+<!-- - Test_ratings_all.dat: ratings for 99 movies (test set) -->
+<!-- - Train_dates_all.dat: dates of ratings (training set) -->
+<!-- - Test_dates_all.dat: dates of ratings (test set) -->
+<!-- - Train_y_rating.dat: ratings for Miss Congeniality (training set) -->
+<!-- - Train_y_date.dat: dates of these ratings (training set) -->
+<!-- - Test_y_date.dat: dates for Miss Congeniality (test set) -->
+<!-- - Movie_titles.txt: movie titles and release dates -->
 
-Example of submission (to be uploaded in the dedicated section on the Moodle page, using the required format [studentID]_prediction.txt, [studentID]_code.pdf, and [studentID]_report.pdf):
+<!-- Ratings range from 1 to 5, with 0 indicating missing values. Dates are measured as days since January 1, 2017, with ‘0000’ indicating missing values. -->
 
-[123456_prediction.txt](https://raw.githubusercontent.com/aldosolari/ISL/refs/heads/main/exam/123456_prediction.txt)
+<!-- The use of external data is not allowed, and only the libraries used in class may be used. Predictions are evaluated using RMSE on the test set. -->
 
-[123456_code.pdf](https://raw.githubusercontent.com/aldosolari/ISL/refs/heads/main/exam/123456_code.pdf)
+<!-- Example of submission (to be uploaded in the dedicated section on the Moodle page, using the required format [studentID]_prediction.txt, [studentID]_code.pdf, and [studentID]_report.pdf): -->
+
+<!-- [123456_prediction.txt](https://raw.githubusercontent.com/aldosolari/ISL/refs/heads/main/exam/123456_prediction.txt) -->
+
+<!-- [123456_code.pdf](https://raw.githubusercontent.com/aldosolari/ISL/refs/heads/main/exam/123456_code.pdf) -->
 
 
 ## Office hours
