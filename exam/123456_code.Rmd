@@ -1,0 +1,37 @@
+---
+title: "123456"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+PATH <- "https://raw.githubusercontent.com/aldosolari/ISL/refs/heads/main/data/"
+
+time_taken <- system.time({
+
+  # Load data
+  train <- read.table(paste0(PATH, "Train_ratings_all.dat"))
+  test  <- read.table(paste0(PATH, "Test_ratings_all.dat"))
+  train_y <- read.table(paste0(PATH, "Train_y_rating.dat"))$V1
+
+  # Fit intercept-only model
+  fit <- lm(train_y ~ 1)
+
+  # Predict on test set
+  yhat <- predict(fit, newdata = test)
+})
+
+time_taken
+```
+
+```{r}
+# Save predictions (uncomment when needed)
+# write.table(yhat, "123456_prediction.txt", row.names = FALSE, col.names = FALSE)
+
+# Training RMSE
+rmse_train <- sqrt(mean((train_y - fitted(fit))^2))
+rmse_train
+```

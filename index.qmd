@@ -113,6 +113,10 @@ The use of external data is not allowed, and only the libraries used in class ma
 
 Example of submission (to be uploaded in the dedicated section on the Moodle page, using the required format [studentID]_prediction.txt, [studentID]_code.pdf, and [studentID]_report.pdf):
 
+[123456_prediction.txt](https://raw.githubusercontent.com/aldosolari/ISL/refs/heads/main/exam/123456_prediction.txt)
+
+[123456_code.pdf](https://raw.githubusercontent.com/aldosolari/ISL/refs/heads/main/exam/123456_code.pdf)
+
 
 ## Office hours
 
