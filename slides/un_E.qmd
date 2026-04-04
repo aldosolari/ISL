@@ -125,42 +125,51 @@ line indicates the second principal component direction.
   \frac{1}{n} \sum_{i=1}^{n} z_{i1}^2
   $$
 
-## Required readings from the textbook and course materials
 
+## Computation: continued
 
-- **Chapter 3: Linear Regression**
-  - 3.1 Simple Linear Regression
-    - 3.1.1 Estimating the Coeﬀicients
-    - 3.1.3 Assessing the Accuracy of the Model
+- The first principal component loading vector solves the optimization problem:
   
-  - 3.2 Multiple Linear Regression
-    - 3.2.1 Estimating the Regression Coeﬀicients
-   
-  - 3.3 Other Considerations in the Regression Model
-    - 3.3.1 Qualitative Predictors
+  $$
+  \max_{\phi_{11}, ..., \phi_{p1}}\sum_{i=1}^{n} \left( \sum_{j=1}^{p} \phi_{j1} x_{ij} \right)^2\quad \mathrm{subject\,\,to\,\,}\sum_{j=1}^{p} \phi_{j1}^2 = 1.
+  $$
 
-- **Chapter 6: Linear Model Selection
-and Regularization**
-  - 6.1 Subset Selection
-    - 6.1.1 Best Subset Selection
-    - 6.1.2 Stepwise Selection
-    - 6.1.3 Choosing the Optimal Model
+- This problem can be solved via [singular value decomposition]{.blue} (SVD) of the matrix $\mathbf{X}$, a standard technique in
+linear algebra. 
+
+- We refer to $Z_1$ as the first principal component, with realized values $z_{11}, ..., z_{n1}$  
 
 ## Required readings from the textbook and course materials
 
-[Video SL 3.1 Simple Linear Regression - 13:02](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
 
-[Video SL 3.3 Multiple Linear Regression - 15:38 ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+- **Chapter 12: Unsupervised Learning**
 
-[Video SL 3.4 Some Important Questions - 14:52 ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+  - 12.1 The Challenge of Unsupervised Learning
+  
+  - 12.2 Principal Components Analysis
+      - 12.2.1 What Are Principal Components?
+      - 12.2.2 Another Interpretation of Principal Components
+      - 12.2.3 The Proportion of Variance Explained
+      - 12.2.4 More on PCA
+         - Scaling the Variables
+         - Uniqueness of the Principal Components
+         - Deciding How Many Principal Components to Use
+      - 12.2.5 Other Uses for Principal Components
+      
+      
+  - 12.3 Missing Values and Matrix Completion
+    - Principal Components with Missing Values
+    - Recommender Systems
 
-[Video SL 3.5 Extensions of the Linear Model - 14:17](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
 
-[Video SL 6.1 Introduction and Best Subset Selection - 13:45  ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+## Required readings from the textbook and course materials
 
-[Video SL 6.3 Backward Stepwise Selection - 5:27  ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+[Video SL 12.1 Principal Components - 12:37  ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
 
-[Video SL 6.4 Estimating Test Error - 14:07  ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+[Video SL 12.2 Higher Order Principal Components - 17:40](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
 
-[Video SL 6.5 Validation and Cross Validation - 8:44  ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+[Video SL 12.5 Matrix Completion - 15:52 ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
+[Video SL 12.R.1 Principal Components - 6:29 ](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)
+
 

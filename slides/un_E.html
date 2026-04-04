@@ -97,6 +97,7 @@ window.Quarto = {
   <li><a href="#principal-components-analysis-details" id="toc-principal-components-analysis-details" class="nav-link" data-scroll-target="#principal-components-analysis-details">Principal Components Analysis: details</a></li>
   <li><a href="#figure-6.14-isl" id="toc-figure-6.14-isl" class="nav-link" data-scroll-target="#figure-6.14-isl">Figure 6.14 ISL</a></li>
   <li><a href="#computation-of-principal-components" id="toc-computation-of-principal-components" class="nav-link" data-scroll-target="#computation-of-principal-components">Computation of Principal Components</a></li>
+  <li><a href="#computation-continued" id="toc-computation-continued" class="nav-link" data-scroll-target="#computation-continued">Computation: continued</a></li>
   <li><a href="#required-readings-from-the-textbook-and-course-materials" id="toc-required-readings-from-the-textbook-and-course-materials" class="nav-link" data-scroll-target="#required-readings-from-the-textbook-and-course-materials">Required readings from the textbook and course materials</a></li>
   <li><a href="#required-readings-from-the-textbook-and-course-materials-1" id="toc-required-readings-from-the-textbook-and-course-materials-1" class="nav-link" data-scroll-target="#required-readings-from-the-textbook-and-course-materials-1">Required readings from the textbook and course materials</a></li>
   </ul></li>
@@ -206,46 +207,50 @@ z_{i1} = \phi_{11}x_{i1} + \phi_{21}x_{i2} + \cdots + \phi_{p1}x_{ip}
 </span></p></li>
 </ul>
 </section>
+<section id="computation-continued" class="level2">
+<h2 class="anchored" data-anchor-id="computation-continued">Computation: continued</h2>
+<ul>
+<li><p>The first principal component loading vector solves the optimization problem:</p>
+<p><span class="math display">
+\max_{\phi_{11}, ..., \phi_{p1}}\sum_{i=1}^{n} \left( \sum_{j=1}^{p} \phi_{j1} x_{ij} \right)^2\quad \mathrm{subject\,\,to\,\,}\sum_{j=1}^{p} \phi_{j1}^2 = 1.
+</span></p></li>
+<li><p>This problem can be solved via <span class="blue">singular value decomposition</span> (SVD) of the matrix <span class="math inline">\mathbf{X}</span>, a standard technique in linear algebra.</p></li>
+<li><p>We refer to <span class="math inline">Z_1</span> as the first principal component, with realized values <span class="math inline">z_{11}, ..., z_{n1}</span></p></li>
+</ul>
+</section>
 <section id="required-readings-from-the-textbook-and-course-materials" class="level2">
 <h2 class="anchored" data-anchor-id="required-readings-from-the-textbook-and-course-materials">Required readings from the textbook and course materials</h2>
 <ul>
-<li><strong>Chapter 3: Linear Regression</strong>
+<li><p><strong>Chapter 12: Unsupervised Learning</strong></p>
 <ul>
-<li>3.1 Simple Linear Regression
+<li><p>12.1 The Challenge of Unsupervised Learning</p></li>
+<li><p>12.2 Principal Components Analysis</p>
 <ul>
-<li>3.1.1 Estimating the Coeﬀicients</li>
-<li>3.1.3 Assessing the Accuracy of the Model</li>
+<li>12.2.1 What Are Principal Components?</li>
+<li>12.2.2 Another Interpretation of Principal Components</li>
+<li>12.2.3 The Proportion of Variance Explained</li>
+<li>12.2.4 More on PCA
+<ul>
+<li>Scaling the Variables</li>
+<li>Uniqueness of the Principal Components</li>
+<li>Deciding How Many Principal Components to Use</li>
 </ul></li>
-<li>3.2 Multiple Linear Regression
-<ul>
-<li>3.2.1 Estimating the Regression Coeﬀicients</li>
+<li>12.2.5 Other Uses for Principal Components</li>
 </ul></li>
-<li>3.3 Other Considerations in the Regression Model
+<li><p>12.3 Missing Values and Matrix Completion</p>
 <ul>
-<li>3.3.1 Qualitative Predictors</li>
-</ul></li>
-</ul></li>
-<li><strong>Chapter 6: Linear Model Selection and Regularization</strong>
-<ul>
-<li>6.1 Subset Selection
-<ul>
-<li>6.1.1 Best Subset Selection</li>
-<li>6.1.2 Stepwise Selection</li>
-<li>6.1.3 Choosing the Optimal Model</li>
+<li>Principal Components with Missing Values</li>
+<li>Recommender Systems</li>
 </ul></li>
 </ul></li>
 </ul>
 </section>
 <section id="required-readings-from-the-textbook-and-course-materials-1" class="level2">
 <h2 class="anchored" data-anchor-id="required-readings-from-the-textbook-and-course-materials-1">Required readings from the textbook and course materials</h2>
-<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 3.1 Simple Linear Regression - 13:02</a></p>
-<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 3.3 Multiple Linear Regression - 15:38</a></p>
-<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 3.4 Some Important Questions - 14:52</a></p>
-<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 3.5 Extensions of the Linear Model - 14:17</a></p>
-<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 6.1 Introduction and Best Subset Selection - 13:45</a></p>
-<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 6.3 Backward Stepwise Selection - 5:27</a></p>
-<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 6.4 Estimating Test Error - 14:07</a></p>
-<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 6.5 Validation and Cross Validation - 8:44</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 12.1 Principal Components - 12:37</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 12.2 Higher Order Principal Components - 17:40</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 12.5 Matrix Completion - 15:52</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 12.R.1 Principal Components - 6:29</a></p>
 </section>
 </section>
 
