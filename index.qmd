@@ -92,16 +92,15 @@ The course is delivered in a lecture format, with selected sessions  devoted to 
 
 The exam consists of two parts: 
 
-- **(15 / 30) Data analysis project**, which aims to evaluate your ability to build predictive models. You must submit:
+- **Data analysis project**, which aims to evaluate your ability to build predictive models. You must submit:
 
   - your predictions, together with the code used to reproduce them;  
   - a report (maximum 4 pages) describing your analysis.  
 
   The data analysis must be uploaded on the course Moodle page at least three days before the exam date and can be submitted only once per academic year.
 
-- **(15 / 30) Oral exam**, which may include a discussion of your data analysis and questions on the topics covered in class, including assigned exercises and programming.
+- **Oral exam**, which may include a discussion of your data analysis and questions on the topics covered in class, including assigned exercises and programming.
 
-The final grade is the sum of the two parts.
 
 <!-- ## Data Analysis Project -->
 
