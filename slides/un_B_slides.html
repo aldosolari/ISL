@@ -217,20 +217,20 @@
 <section id="simple-linear-regression" class="slide level2 center">
 <h2>Simple linear regression</h2>
 <ul>
-<li class="fragment"><p>The function <span class="math inline">f(x)</span> is unknown, therefore, it should be estimated.</p></li>
-<li class="fragment"><p>A simple approach is using <span class="blue">simple linear regression</span>: <span class="math display">
+<li><p>The function <span class="math inline">f(x)</span> is unknown, therefore, it should be estimated.</p></li>
+<li><p>A simple approach is using <span class="blue">simple linear regression</span>: <span class="math display">
 f(x; \beta) = \beta_0 + \beta_1 x,
 </span> namely <span class="math inline">f(x)</span> is <span class="orange">approximated</span> with a straight line where <span class="math inline">\beta_0</span> and <span class="math inline">\beta_1</span> are two unknown constants that represent the <span class="blue">intercept</span> and <span class="blue">slope</span>, also known as <span class="orange">coefficients</span> or <span class="orange">parameters</span></p></li>
-<li class="fragment"><p>Giving some <span class="orange">estimates</span> <span class="math inline">\hat{\beta}_0</span> and <span class="math inline">\hat{\beta}_1</span> for the model coefficients, we predict future values using <span class="math display">\hat{y} =  \hat\beta_0 + \hat\beta_1 x</span> where <span class="math inline">\hat{y}</span> indicates a <span class="blue">prediction</span> of <span class="math inline">Y</span> on the basis of <span class="math inline">X=x</span>. The <span class="orange">hat</span> symbol denotes an estimated value.</p></li>
+<li><p>Giving some <span class="orange">estimates</span> <span class="math inline">\hat{\beta}_0</span> and <span class="math inline">\hat{\beta}_1</span> for the model coefficients, we predict future values using <span class="math display">\hat{y} =  \hat\beta_0 + \hat\beta_1 x</span> where <span class="math inline">\hat{y}</span> indicates a <span class="blue">prediction</span> of <span class="math inline">Y</span> on the basis of <span class="math inline">X=x</span>. The <span class="orange">hat</span> symbol denotes an estimated value.</p></li>
 </ul>
 </section>
 <section id="estimation-of-the-parameters-by-least-squares" class="slide level2 center">
 <h2>Estimation of the parameters by least squares</h2>
 <ul>
-<li class="fragment"><p>Let <span class="math inline">\hat y_i = \hat\beta_0 + \hat\beta_1 x_i</span> be the prediction for <span class="math inline">Y</span> based on the <span class="math inline">i</span>th value of <span class="math inline">X</span>. Then <span class="math inline">e_i = y_i - \hat y_i</span> represents the <span class="math inline">i</span>th <span class="blue">residual</span></p></li>
-<li class="fragment"><p>We define the <span class="blue">residual sum of squares</span> (<span class="math inline">\mathrm{RSS}</span>) as <span class="math display">\mathrm{RSS} = e_1^2+e_2^2+\ldots+e_n^2,</span> or equivalently as <span class="math display">\mathrm{RSS} = (y_1 - \hat\beta_0 - \hat\beta_1 x_1)^2+(y_2 - \hat\beta_0 -
+<li><p>Let <span class="math inline">\hat y_i = \hat\beta_0 + \hat\beta_1 x_i</span> be the prediction for <span class="math inline">Y</span> based on the <span class="math inline">i</span>th value of <span class="math inline">X</span>. Then <span class="math inline">e_i = y_i - \hat y_i</span> represents the <span class="math inline">i</span>th <span class="blue">residual</span></p></li>
+<li><p>We define the <span class="blue">residual sum of squares</span> (<span class="math inline">\mathrm{RSS}</span>) as <span class="math display">\mathrm{RSS} = e_1^2+e_2^2+\ldots+e_n^2,</span> or equivalently as <span class="math display">\mathrm{RSS} = (y_1 - \hat\beta_0 - \hat\beta_1 x_1)^2+(y_2 - \hat\beta_0 -
 \hat\beta_1 x_2)^2+\ldots+ (y_n- \hat\beta_0 - \hat\beta_1 x_n)^2.</span></p></li>
-<li class="fragment"><p>The <span class="blue">least squares</span> approach chooses <span class="math inline">\hat{\beta}_0</span> and <span class="math inline">\hat{\beta}_1</span> to minimize the . The minimizing values can be shown to be <span class="math display">
+<li><p>The <span class="blue">least squares</span> approach chooses <span class="math inline">\hat{\beta}_0</span> and <span class="math inline">\hat{\beta}_1</span> to minimize the . The minimizing values can be shown to be <span class="math display">
 \begin{aligned}
 \hat{\beta}_1 &amp;= \frac{\sum_{i=1}^{n}(x_i - \bar x)(y_i - \bar y)}{\sum_{i=1}^{n}(x_i - \bar x)^2}\\
 \hat{\beta}_0 &amp;= \bar y - \beta_1 \bar x
@@ -245,8 +245,8 @@ f(x; \beta) = \beta_0 + \beta_1 x,
 <section id="assessing-the-overall-accuracy-of-the-model" class="slide level2 center">
 <h2>Assessing the Overall Accuracy of the Model</h2>
 <ul>
-<li class="fragment"><p>We compute the <span class="blue">mean squared error</span> (<span class="math inline">\mathrm{MSE}</span>) <span class="math display">\mathrm{MSE} = \frac{1}{n} \sum_{i=1}^{n}(y_i - \hat{y}_i)^2  = \frac{1}{n}\mathrm{RSS}</span></p></li>
-<li class="fragment"><p><span class="blue">R-squared</span> or fraction of variance explained is <span class="math display">R^2 = \frac{\mathrm{TSS} - \mathrm{RSS}}{\mathrm{TSS}} = 1 - \frac{\mathrm{RSS}}{\mathrm{TSS}}</span> where <span class="math inline">\mathrm{TSS} = \sum_{i=1}^{n}(y_i - \bar y)^2</span> is the <span class="blue">total sum of squares</span>.</p></li>
+<li><p>We compute the <span class="blue">mean squared error</span> (<span class="math inline">\mathrm{MSE}</span>) <span class="math display">\mathrm{MSE} = \frac{1}{n} \sum_{i=1}^{n}(y_i - \hat{y}_i)^2  = \frac{1}{n}\mathrm{RSS}</span></p></li>
+<li><p><span class="blue">R-squared</span> or fraction of variance explained is <span class="math display">R^2 = \frac{\mathrm{TSS} - \mathrm{RSS}}{\mathrm{TSS}} = 1 - \frac{\mathrm{RSS}}{\mathrm{TSS}}</span> where <span class="math inline">\mathrm{TSS} = \sum_{i=1}^{n}(y_i - \bar y)^2</span> is the <span class="blue">total sum of squares</span>.</p></li>
 </ul>
 </section>
 <section id="section-1" class="slide level2 center">
@@ -281,11 +281,11 @@ f(x; \beta) = \beta_0 + \beta_1 x,
 <section id="polynomial-regression" class="slide level2 center">
 <h2>Polynomial regression</h2>
 <ul>
-<li class="fragment"><p>The function <span class="math inline">f(x)</span> is unknown, therefore, it should be estimated.</p></li>
-<li class="fragment"><p>A simple approach is using <span class="orange">polynomial regression</span>: <span class="math display">
+<li><p>The function <span class="math inline">f(x)</span> is unknown, therefore, it should be estimated.</p></li>
+<li><p>A simple approach is using <span class="orange">polynomial regression</span>: <span class="math display">
 f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
 </span> namely <span class="math inline">f(x)</span> is <span class="orange">approximated</span> with a polynomial of degree <span class="math inline">d</span></p></li>
-<li class="fragment"><p>This is a <span class="blue">parametric model</span> with coefficient vector <span class="math display">
+<li><p>This is a <span class="blue">parametric model</span> with coefficient vector <span class="math display">
 \beta
 =
 \begin{pmatrix}
@@ -296,8 +296,8 @@ f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
 \end{pmatrix}
 \in \mathbb{R}^{d+1}
 </span></p></li>
-<li class="fragment"><p>How do we choose the <span class="blue">degree of the polynomial</span> <span class="math inline">d</span>? Without clear guidance, in principle, any value of <span class="math inline">d \in \{0,\dots,n-1\}</span> could be appropriate.</p></li>
-<li class="fragment"><p>Let us compare the <span class="blue">mean squared error</span> (MSE) on yesterday’s data (<span class="orange">training</span>) <span class="math display">
+<li><p>How do we choose the <span class="blue">degree of the polynomial</span> <span class="math inline">d</span>? Without clear guidance, in principle, any value of <span class="math inline">d \in \{0,\dots,n-1\}</span> could be appropriate.</p></li>
+<li><p>Let us compare the <span class="blue">mean squared error</span> (MSE) on yesterday’s data (<span class="orange">training</span>) <span class="math display">
 \text{MSE}_{\text{train}} = \frac{1}{n}\sum_{i=1}^n\{y_i -f(x_i; \hat{\beta})\}^2,
 </span> or alternatively <span class="math inline">R^2_\text{train}</span>, for different values of <span class="math inline">d</span>…</p></li>
 </ul>
@@ -426,15 +426,15 @@ f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
 <section id="yesterdays-data-tomorrows-prediction" class="slide level2 center">
 <h2>Yesterday’s data, tomorrow’s prediction</h2>
 <ul>
-<li class="fragment"><p>The <span class="blue">MSE</span> decreases as the number of parameter increases; similarly, the <span class="blue"><span class="math inline">R^2</span></span> increases as a function of <span class="math inline">d</span>. It can be <span class="orange">proved</span> that this <span class="orange">always happens</span> using ordinary least squares.</p></li>
-<li class="fragment"><p>One might be tempted to let <span class="math inline">d</span> as large as possible to make the model more flexible…</p></li>
-<li class="fragment"><p>Taking this reasoning to the extreme would lead to the choice <span class="math inline">d = n-1</span>, so that <span class="math display">
+<li><p>The <span class="blue">MSE</span> decreases as the number of parameter increases; similarly, the <span class="blue"><span class="math inline">R^2</span></span> increases as a function of <span class="math inline">d</span>. It can be <span class="orange">proved</span> that this <span class="orange">always happens</span> using ordinary least squares.</p></li>
+<li><p>One might be tempted to let <span class="math inline">d</span> as large as possible to make the model more flexible…</p></li>
+<li><p>Taking this reasoning to the extreme would lead to the choice <span class="math inline">d = n-1</span>, so that <span class="math display">
 \text{MSE}_\text{train} = 0, \qquad R^2_\text{train} = 1,
 </span> i.e., a perfect fit. This procedure is called <span class="blue">interpolation</span>.</p></li>
-<li class="fragment"><p>However, we are <span class="orange">not</span> interested in predicting <span class="orange">yesterday</span> data. Our goal is to predict <span class="blue">tomorrow</span>’s data, i.e.&nbsp;a <span class="blue">new set</span> of <span class="math inline">n = 30</span> points: <span class="math display">
+<li><p>However, we are <span class="orange">not</span> interested in predicting <span class="orange">yesterday</span> data. Our goal is to predict <span class="blue">tomorrow</span>’s data, i.e.&nbsp;a <span class="blue">new set</span> of <span class="math inline">n = 30</span> points: <span class="math display">
 (x_1, \tilde{y}_1), \dots, (x_n, \tilde{y}_n),
 </span> using <span class="math inline">\hat{y}_i = f(x_i; \hat{\beta})</span>, where <span class="math inline">\hat{\beta}</span> is obtained using yesterday’s data.</p></li>
-<li class="fragment"><p><span class="orange">Remark</span>. Tomorrow’s r.v. <span class="math inline">\tilde{Y}_1,\dots, \tilde{Y}_n</span> follow the same scheme as yesterday’s data.</p></li>
+<li><p><span class="orange">Remark</span>. Tomorrow’s r.v. <span class="math inline">\tilde{Y}_1,\dots, \tilde{Y}_n</span> follow the same scheme as yesterday’s data.</p></li>
 </ul>
 </section>
 <section id="tomorrows-data-polynomial-regression" class="slide level2 center">
@@ -473,16 +473,16 @@ f(x; \beta) = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^{d},
 <section id="comments-and-remarks" class="slide level2 center">
 <h2>Comments and remarks</h2>
 <ul>
-<li class="fragment"><p>The mean squared error on tomorrow’s data (<span class="blue">test</span>) is defined as <span class="math display">
+<li><p>The mean squared error on tomorrow’s data (<span class="blue">test</span>) is defined as <span class="math display">
 \text{MSE}_{\text{test}} = \frac{1}{n}\sum_{i=1}^n\{\tilde{y}_i -f(x_i; \hat{\beta})\}^2,
 </span> and similarly the <span class="math inline">R^2_\text{test}</span>. We would like the <span class="math inline">\text{MSE}_{\text{test}}</span> to be <span class="orange">as small as possible</span>.</p></li>
-<li class="fragment"><p>For <span class="blue">small values</span> of <span class="math inline">d</span>, an increase in the degree of the polynomial <span class="blue">improves the fit</span>. In other words, at the beginning, both the <span class="math inline">\text{MSE}_{\text{train}}</span> and the <span class="math inline">\text{MSE}_{\text{test}}</span> decrease.</p></li>
-<li class="fragment"><p>For <span class="orange">larger values</span> of <span class="math inline">d</span>, the improvement gradually ceases, and the polynomial follows <span class="orange">random fluctuations</span> in yesterday’s data, which are <span class="blue">not observed</span> in the <span class="blue">new sample</span>.</p></li>
-<li class="fragment"><p>An over-adaptation to yesterday’s data is called <span class="orange">overfitting</span>, which occurs when the training <span class="math inline">\text{MSE}_{\text{train}}</span> is low but the test <span class="math inline">\text{MSE}_{\text{test}}</span> is high.</p></li>
-<li class="fragment"><p>Yesterday’s dataset is available from the website of the textbook Azzalini and Scarpa. (2013):</p>
+<li><p>For <span class="blue">small values</span> of <span class="math inline">d</span>, an increase in the degree of the polynomial <span class="blue">improves the fit</span>. In other words, at the beginning, both the <span class="math inline">\text{MSE}_{\text{train}}</span> and the <span class="math inline">\text{MSE}_{\text{test}}</span> decrease.</p></li>
+<li><p>For <span class="orange">larger values</span> of <span class="math inline">d</span>, the improvement gradually ceases, and the polynomial follows <span class="orange">random fluctuations</span> in yesterday’s data, which are <span class="blue">not observed</span> in the <span class="blue">new sample</span>.</p></li>
+<li><p>An over-adaptation to yesterday’s data is called <span class="orange">overfitting</span>, which occurs when the training <span class="math inline">\text{MSE}_{\text{train}}</span> is low but the test <span class="math inline">\text{MSE}_{\text{test}}</span> is high.</p></li>
+<li><p>Yesterday’s dataset is available from the website of the textbook Azzalini and Scarpa. (2013):</p>
 <ul>
-<li class="fragment">Dataset <a href="http://azzalini.stat.unipd.it/Book-DM/yesterday.dat" class="uri">http://azzalini.stat.unipd.it/Book-DM/yesterday.dat</a></li>
-<li class="fragment">True <span class="math inline">f(\bm{x})</span> <a href="http://azzalini.stat.unipd.it/Book-DM/f_true.R" class="uri">http://azzalini.stat.unipd.it/Book-DM/f_true.R</a></li>
+<li>Dataset <a href="http://azzalini.stat.unipd.it/Book-DM/yesterday.dat" class="uri">http://azzalini.stat.unipd.it/Book-DM/yesterday.dat</a></li>
+<li>True <span class="math inline">f(\bm{x})</span> <a href="http://azzalini.stat.unipd.it/Book-DM/f_true.R" class="uri">http://azzalini.stat.unipd.it/Book-DM/f_true.R</a></li>
 </ul></li>
 </ul>
 </section></section>

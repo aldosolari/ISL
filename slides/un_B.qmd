@@ -168,7 +168,6 @@ ggplot(data = dataset, aes(x = x, y = y.yesterday)) +
 
 ## Simple linear regression
 
-::: incremental
 -   The function $f(x)$ is unknown, therefore, it should be estimated.
 
 -   A simple approach is using [simple linear regression]{.blue}: $$
@@ -181,12 +180,11 @@ the [intercept]{.blue} and [slope]{.blue}, also known as [coefficients]{.orange}
 -   Giving some [estimates]{.orange} $\hat{\beta}_0$ and $\hat{\beta}_1$ for the model coefficients, we predict future values using 
     $$\hat{y} =  \hat\beta_0 + \hat\beta_1 x$$
     where $\hat{y}$ indicates a [prediction]{.blue} of $Y$ on the basis of $X=x$. The [hat]{.orange} symbol denotes an estimated value.
-:::
+
 
 
 ## Estimation of the parameters by least squares
 
-::: incremental
 - Let $\hat y_i = \hat\beta_0 + \hat\beta_1 x_i$ be the prediction for $Y$
 based on the $i$th value of $X$. Then $e_i = y_i - \hat y_i$ represents the 
 $i$th [residual]{.blue} 
@@ -205,7 +203,7 @@ $$
 \end{aligned}
 $$
 where $\bar y = \frac{1}{n}\sum_{i=1}^n y_i$ and $\bar x = \frac{1}{n}\sum_{i=1}^n x_i$ are the sample means.
-:::
+
 
 ## Least squares fit : $\hat y = 0.520627 - 0.003 x$
 
@@ -237,14 +235,13 @@ geom_segment(
 
 ## Assessing the Overall Accuracy of the Model
 
-::: incremental
 - We compute the [mean squared error]{.blue} ($\mathrm{MSE}$)
 $$\mathrm{MSE} = \frac{1}{n} \sum_{i=1}^{n}(y_i - \hat{y}_i)^2  = \frac{1}{n}\mathrm{RSS}$$
 
 - [R-squared]{.blue} or fraction of variance explained is
 $$R^2 = \frac{\mathrm{TSS} - \mathrm{RSS}}{\mathrm{TSS}} = 1 - \frac{\mathrm{RSS}}{\mathrm{TSS}}$$
 where $\mathrm{TSS} = \sum_{i=1}^{n}(y_i - \bar y)^2$ is the [total sum of squares]{.blue}.
-:::
+
 
 ## 
 
@@ -257,7 +254,6 @@ where $\mathrm{TSS} = \sum_{i=1}^{n}(y_i - \bar y)^2$ is the [total sum of squar
 
 ## Polynomial regression
 
-::: incremental
 -   The function $f(x)$ is unknown, therefore, it should be estimated.
 
 -   A simple approach is using [polynomial regression]{.orange}: $$
@@ -287,7 +283,6 @@ $$
     \text{MSE}_{\text{train}} = \frac{1}{n}\sum_{i=1}^n\{y_i -f(x_i; \hat{\beta})\}^2,
     $$ or alternatively $R^2_\text{train}$, for different values of
     $d$...
-:::
 
 ## Estimating polynomial regression
 
@@ -528,7 +523,7 @@ curve(f(x), n = 300, add = TRUE)
 
 ## Yesterday's data, tomorrow's prediction
 
-::: incremental
+
 -   The [MSE]{.blue} decreases as the number of parameter increases;
     similarly, the [$R^2$]{.blue} increases as a function of $d$. It can
     be [proved]{.orange} that this [always happens]{.orange} using
@@ -553,7 +548,7 @@ curve(f(x), n = 300, add = TRUE)
 
 -   [Remark]{.orange}. Tomorrow's r.v. $\tilde{Y}_1,\dots, \tilde{Y}_n$
     follow the same scheme as yesterday's data.
-:::
+
 
 ## Tomorrow's data, polynomial regression
 
@@ -636,7 +631,6 @@ ggplot(data = data_bv, aes(x = p, y = value, col = `Error term`)) +
 
 ## Comments and remarks
 
-::: incremental
 -   The mean squared error on tomorrow's data ([test]{.blue}) is defined
     as $$
     \text{MSE}_{\text{test}} = \frac{1}{n}\sum_{i=1}^n\{\tilde{y}_i -f(x_i; \hat{\beta})\}^2,
@@ -663,7 +657,6 @@ ggplot(data = data_bv, aes(x = p, y = value, col = `Error term`)) +
     -   Dataset <http://azzalini.stat.unipd.it/Book-DM/yesterday.dat>
     -   True $f(\bm{x})$
         <http://azzalini.stat.unipd.it/Book-DM/f_true.R>
-:::
 
 
 
