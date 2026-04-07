@@ -129,7 +129,7 @@ ggscatter(deliveries,
 
 ## Regression function
 
-- A machine learning model has a defined mathematical prediction equation, called [regression function]{.orange} $f(\cdot)$, defining exactly how the predictors $X_1,\ldots,X_n$ relate to the outcome $Y$:
+- A machine learning model has a defined mathematical prediction equation, called [regression function]{.orange} $f(\cdot)$, defining exactly how the predictors $X_1,\ldots,X_p$ relate to the outcome $Y$:
 $$Y \approx f(X_1,\ldots,X_p)$$
 
 - Here is a simple example of regression function: the [linear model]{.blue} with a single predictor (the distance $X_1$) and two unknown [parameters]{.orange} $\beta_0$ and $\beta_1$ that have been estimated:
@@ -612,7 +612,7 @@ blood pressure).
 unordered set (survived/died, digit 0-9, cancer class of
 tissue sample).
 
-* We have [training data]{.orange} $$(x_1, y_1), \ldots , (x_N , y_N ).$$ These are observations (examples, instances) of these measurements.
+* We have [training data]{.orange} $$(x_1, y_1), \ldots , (x_n , y_n ).$$ These are observations (examples, instances) of these measurements.
 
 ## Objectives
 
