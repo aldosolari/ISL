@@ -479,7 +479,7 @@ kable(heptathlon, format = "html") %>%
 Determine a score to assign to each athlete that summarizes the performances across the seven events in order to obtain the final ranking, that is, to reduce the dimensionality from 7 to 1.
 
 
-$$\underset{25 \times 7}{X} \mapsto \color{red}{\underset{25 \times 1}{y}}$$
+$$\underset{25 \times 7}{\mathbf{X}} \mapsto \color{red}{\underset{25 \times 1}{\mathbf{y}}}$$
 
 ## 
 
@@ -494,11 +494,11 @@ image(t(mat), col=gray(0:255/255), asp=p/n, xaxt="n", yaxt="n", frame.plot=F)
 #image(X, col=gray(0:255/255), asp=p/n, xaxt="n", yaxt="n")
 ```
 
-$$\underset{243 \times 220}{X}$$ 
+$$\underset{243 \times 220}{\mathbf{X}}$$ 
 
 ## Image = data
 
-* An image (in black and white) can be represented as a data matrix ($n$ rows $\times$ $p$ columns): $$\underset{n \times p}{X}$$ 
+* An image (in black and white) can be represented as a data matrix ($n$ rows $\times$ $p$ columns): $$\underset{n \times p}{\mathbf{X}}$$ 
 where the grayscale intensity of each pixel is represented in the corresponding cell of the matrix.
 
 * Lighter colors are associated with higher values, while darker colors are associated with lower values (in the range [0,1])
