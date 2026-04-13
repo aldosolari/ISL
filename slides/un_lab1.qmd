@@ -90,8 +90,7 @@ y = c(1, 4, 3)
 - Use the *up* arrow to recall and edit previous commands  
 - Type `?funcname` to open the help page for a function  
 
-- R adds vectors *element-wise*  
-- Vectors should have the same length  
+- R sums vectors *element-wise*. Vectors should have the same length  
 - Check length using `length()`  
 
 ```{r}
