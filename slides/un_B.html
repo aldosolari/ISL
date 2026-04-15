@@ -260,7 +260,7 @@ f(x; \beta) = \beta_0 + \beta_1 x,
 <li><p>Let <span class="math inline">\hat y_i = \hat\beta_0 + \hat\beta_1 x_i</span> be the prediction for <span class="math inline">Y</span> based on the <span class="math inline">i</span>th value of <span class="math inline">X</span>. Then <span class="math inline">e_i = y_i - \hat y_i</span> represents the <span class="math inline">i</span>th <span class="blue">residual</span></p></li>
 <li><p>We define the <span class="blue">residual sum of squares</span> (<span class="math inline">\mathrm{RSS}</span>) as <span class="math display">\mathrm{RSS} = e_1^2+e_2^2+\ldots+e_n^2,</span> or equivalently as <span class="math display">\mathrm{RSS} = (y_1 - \hat\beta_0 - \hat\beta_1 x_1)^2+(y_2 - \hat\beta_0 -
 \hat\beta_1 x_2)^2+\ldots+ (y_n- \hat\beta_0 - \hat\beta_1 x_n)^2.</span></p></li>
-<li><p>The <span class="blue">least squares</span> approach chooses <span class="math inline">\hat{\beta}_0</span> and <span class="math inline">\hat{\beta}_1</span> to minimize the . The minimizing values can be shown to be <span class="math display">
+<li><p>The <span class="blue">least squares</span> approach chooses <span class="math inline">\hat{\beta}_0</span> and <span class="math inline">\hat{\beta}_1</span> to minimize the <span class="math inline">\mathrm{RSS}</span>. The minimizing values can be shown to be <span class="math display">
 \begin{aligned}
 \hat{\beta}_1 &amp;= \frac{\sum_{i=1}^{n}(x_i - \bar x)(y_i - \bar y)}{\sum_{i=1}^{n}(x_i - \bar x)^2}\\
 \hat{\beta}_0 &amp;= \bar y - \beta_1 \bar x
@@ -686,7 +686,7 @@ the prediction error can still be large if the model is highly variable.</p></li
 <h2 class="anchored" data-anchor-id="validation-set-approach">Validation-set approach</h2>
 <ul>
 <li><p>Estimate the test error by <span class="orange">holding out</span> a subset of the training observations from the fitting process</p></li>
-<li><p>Here we randomly divide the available set of samples into two parts: a [training set]]{.blue} and a <span class="orange">validation set</span>.</p></li>
+<li><p>Here we randomly divide the available set of samples into two parts: a <span class="blue">training set</span> and a <span class="orange">validation set</span>.</p></li>
 <li><p>The model is fit on the training set, and the fitted model is used to predict the responses for the observations in the validation set.</p></li>
 <li><p>The resulting validation-set error provides an estimate of the test error.</p></li>
 </ul>
@@ -699,7 +699,7 @@ the prediction error can still be large if the model is highly variable.</p></li
 <section id="example-yesterday-tomorrow-data" class="level2">
 <h2 class="anchored" data-anchor-id="example-yesterday-tomorrow-data">Example: yesterday-tomorrow data</h2>
 <ul>
-<li><p>We randomly split the 30 observations into two sets: a [training set]]{.blue} with 15 data points and a [validation set]]{.orange} with the remaining 15 observations.</p></li>
+<li><p>We randomly split the 30 observations into two sets: a <span class="blue">training set</span> with 15 data points and a <span class="orange">validation set</span> with the remaining 15 observations.</p></li>
 <li><p>We fit the polynomial regression model on the training set and compute the <strong>MSE</strong> on the validation set.</p></li>
 </ul>
 <div class="cell" data-layout-align="center">

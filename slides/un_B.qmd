@@ -195,7 +195,7 @@ or equivalently as
 $$\mathrm{RSS} = (y_1 - \hat\beta_0 - \hat\beta_1 x_1)^2+(y_2 - \hat\beta_0 - 
 \hat\beta_1 x_2)^2+\ldots+ (y_n- \hat\beta_0 - \hat\beta_1 x_n)^2.$$
 
-- The [least squares]{.blue} approach chooses $\hat{\beta}_0$ and $\hat{\beta}_1$ to minimize the \mathrm{RSS}. The minimizing values can be shown to be
+- The [least squares]{.blue} approach chooses $\hat{\beta}_0$ and $\hat{\beta}_1$ to minimize the $\mathrm{RSS}$. The minimizing values can be shown to be
 $$
 \begin{aligned}
 \hat{\beta}_1 &= \frac{\sum_{i=1}^{n}(x_i - \bar x)(y_i - \bar y)}{\sum_{i=1}^{n}(x_i - \bar x)^2}\\
@@ -1127,7 +1127,7 @@ Figure from the book [The Elements of Statistical Learning: Data Mining, Inferen
 the test error by [holding out]{.orange} a subset of the training observations from the fitting process
 
 - Here we randomly divide the available set of samples into
-two parts: a [training set]]{.blue} and a [validation set]{.orange}.
+two parts: a [training set]{.blue} and a [validation set]{.orange}.
 
 - The model is fit on the training set, and the fitted model is
 used to predict the responses for the observations in the
@@ -1146,7 +1146,7 @@ right part is validation set
 
 ## Example: yesterday-tomorrow data 
 
-- We randomly split the 30 observations into two sets: a [training set]]{.blue} with 15 data points and a [validation set]]{.orange} with the remaining 15 observations.
+- We randomly split the 30 observations into two sets: a [training set]{.blue} with 15 data points and a [validation set]{.orange} with the remaining 15 observations.
 
 - We fit the polynomial regression model on the training set and compute the **MSE** on the validation set.
 
