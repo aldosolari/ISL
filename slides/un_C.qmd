@@ -828,7 +828,7 @@ Right: with an interaction term between `Income` and `Student`.
 
 # Subset Selection
 
-- The most direct approach is called [best
+- For deciding on the important variables, the most direct approach is called [best
 subsets regression]{.orange}: we compute the least squares fit for all
 possible subsets and then choose between them based on
 some criterion that balances training error with model size.

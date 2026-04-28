@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Aldo Solari">
+
+<title>Tree-based Methods</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="un_D_files/libs/clipboard/clipboard.min.js"></script>
+<script src="un_D_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="un_D_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="un_D_files/libs/quarto-html/popper.min.js"></script>
+<script src="un_D_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="un_D_files/libs/quarto-html/anchor.min.js"></script>
+<link href="un_D_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="un_D_files/libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="un_D_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="un_D_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="un_D_files/libs/bootstrap/bootstrap-721140556699abb0ff907dddd6c78b98.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-full">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#regression-trees" id="toc-regression-trees" class="nav-link active" data-scroll-target="#regression-trees">Regression Trees</a></li>
+  <li><a href="#pros-and-cons" id="toc-pros-and-cons" class="nav-link" data-scroll-target="#pros-and-cons">Pros and Cons</a></li>
+  <li><a href="#baseball-salary-data-how-would-you-stratify-it" id="toc-baseball-salary-data-how-would-you-stratify-it" class="nav-link" data-scroll-target="#baseball-salary-data-how-would-you-stratify-it">Baseball salary data: how would you stratify it?</a></li>
+  <li><a href="#decision-tree-for-these-data-isl-figure-8.1" id="toc-decision-tree-for-these-data-isl-figure-8.1" class="nav-link" data-scroll-target="#decision-tree-for-these-data-isl-figure-8.1">Decision tree for these data (ISL Figure 8.1)</a></li>
+  <li><a href="#details-of-previous-figure" id="toc-details-of-previous-figure" class="nav-link" data-scroll-target="#details-of-previous-figure">Details of previous figure</a></li>
+  <li><a href="#results-isl-figure-8.2" id="toc-results-isl-figure-8.2" class="nav-link" data-scroll-target="#results-isl-figure-8.2">Results (ISL Figure 8.2)</a></li>
+  <li><a href="#terminology-for-trees" id="toc-terminology-for-trees" class="nav-link" data-scroll-target="#terminology-for-trees">Terminology for Trees</a></li>
+  <li><a href="#interpretation-of-results" id="toc-interpretation-of-results" class="nav-link" data-scroll-target="#interpretation-of-results">Interpretation of Results</a></li>
+  <li><a href="#details-of-the-tree-building-process" id="toc-details-of-the-tree-building-process" class="nav-link" data-scroll-target="#details-of-the-tree-building-process">Details of the tree-building process</a></li>
+  <li><a href="#more-details-of-the-tree-building-process" id="toc-more-details-of-the-tree-building-process" class="nav-link" data-scroll-target="#more-details-of-the-tree-building-process">More details of the tree-building process</a></li>
+  <li><a href="#more-details-of-the-tree-building-process-1" id="toc-more-details-of-the-tree-building-process-1" class="nav-link" data-scroll-target="#more-details-of-the-tree-building-process-1">More details of the tree-building process</a></li>
+  <li><a href="#details-continued" id="toc-details-continued" class="nav-link" data-scroll-target="#details-continued">Details — Continued</a></li>
+  <li><a href="#details-continued-1" id="toc-details-continued-1" class="nav-link" data-scroll-target="#details-continued-1">Details — Continued</a></li>
+  <li><a href="#details-continued-2" id="toc-details-continued-2" class="nav-link" data-scroll-target="#details-continued-2">Details — Continued</a></li>
+  <li><a href="#predictions" id="toc-predictions" class="nav-link" data-scroll-target="#predictions">Predictions</a></li>
+  <li><a href="#isl-figure-8.3" id="toc-isl-figure-8.3" class="nav-link" data-scroll-target="#isl-figure-8.3">ISL Figure 8.3</a></li>
+  <li><a href="#details-of-previous-figure-1" id="toc-details-of-previous-figure-1" class="nav-link" data-scroll-target="#details-of-previous-figure-1">Details of previous figure</a></li>
+  <li><a href="#baseball-example" id="toc-baseball-example" class="nav-link" data-scroll-target="#baseball-example">Baseball example</a></li>
+  <li><a href="#baseball-example-continued" id="toc-baseball-example-continued" class="nav-link" data-scroll-target="#baseball-example-continued">Baseball example continued</a></li>
+  <li><a href="#baseball-example-continued-1" id="toc-baseball-example-continued-1" class="nav-link" data-scroll-target="#baseball-example-continued-1">Baseball example continued</a></li>
+  <li><a href="#baseball-example-continued-2" id="toc-baseball-example-continued-2" class="nav-link" data-scroll-target="#baseball-example-continued-2">Baseball example continued</a></li>
+  <li><a href="#baseball-example-continued-3" id="toc-baseball-example-continued-3" class="nav-link" data-scroll-target="#baseball-example-continued-3">Baseball example continued</a></li>
+  <li><a href="#pruning-a-tree" id="toc-pruning-a-tree" class="nav-link" data-scroll-target="#pruning-a-tree">Pruning a tree</a></li>
+  <li><a href="#pruning-a-tree---continued" id="toc-pruning-a-tree---continued" class="nav-link" data-scroll-target="#pruning-a-tree---continued">Pruning a tree - continued</a></li>
+  <li><a href="#choosing-the-best-subtree" id="toc-choosing-the-best-subtree" class="nav-link" data-scroll-target="#choosing-the-best-subtree">Choosing the best subtree</a></li>
+  <li><a href="#summary-tree-algorithm" id="toc-summary-tree-algorithm" class="nav-link" data-scroll-target="#summary-tree-algorithm">Summary: tree algorithm</a></li>
+  <li><a href="#baseball-example-continued-4" id="toc-baseball-example-continued-4" class="nav-link" data-scroll-target="#baseball-example-continued-4">Baseball example continued</a></li>
+  <li><a href="#baseball-example-continued-isl-figure-8.4" id="toc-baseball-example-continued-isl-figure-8.4" class="nav-link" data-scroll-target="#baseball-example-continued-isl-figure-8.4">Baseball example continued (ISL Figure 8.4)</a></li>
+  <li><a href="#baseball-example-continued-isl-figure-8.5" id="toc-baseball-example-continued-isl-figure-8.5" class="nav-link" data-scroll-target="#baseball-example-continued-isl-figure-8.5">Baseball example continued (ISL Figure 8.5)</a></li>
+  <li><a href="#advantages-and-disadvantages-of-trees" id="toc-advantages-and-disadvantages-of-trees" class="nav-link" data-scroll-target="#advantages-and-disadvantages-of-trees">Advantages and Disadvantages of Trees</a></li>
+  <li><a href="#bagging" id="toc-bagging" class="nav-link" data-scroll-target="#bagging">Bagging</a></li>
+  <li><a href="#bagging---continued" id="toc-bagging---continued" class="nav-link" data-scroll-target="#bagging---continued">Bagging - continued</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="un_C_slides.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
+</div>
+<main class="content column-page-left" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Tree-based Methods</h1>
+<p class="subtitle lead">Introduction to Statistical Learning - PISE</p>
+</div>
+
+
+<div class="quarto-title-meta-author column-page-left">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><span class="orange">Aldo Solari</span> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <em>Ca’ Foscari University of Venice</em>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta column-page-left">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This unit will cover the following <span class="orange">topics</span>:</p>
+<ul>
+<li>Regression Trees</li>
+<li>Bagging</li>
+<li>Random Forests</li>
+<li>Boosting</li>
+</ul>
+<section id="regression-trees" class="level2">
+<h2 class="anchored" data-anchor-id="regression-trees">Regression Trees</h2>
+<ul>
+<li><p>Tree-based methods involve <span class="orange">stratifying</span> or <span class="orange">segmenting</span> the predictor space into a number of simple regions.</p></li>
+<li><p>Since the set of splitting rules used to segment the predictor space can be summarized in a tree, these types of approaches are known as <span class="orange">decision-tree</span> methods.</p></li>
+</ul>
+</section>
+<section id="pros-and-cons" class="level2">
+<h2 class="anchored" data-anchor-id="pros-and-cons">Pros and Cons</h2>
+<ul>
+<li><p>Tree-based methods are simple and useful for interpretation.</p></li>
+<li><p>However they typically are not competitive with the best supervised learning approaches in terms of prediction accuracy.</p></li>
+<li><p>Hence we also discuss <span class="blue">bagging</span>, <span class="blue">random forests</span>, and <span class="blue">boosting</span>. These methods grow multiple trees which are then combined to yield a single consensus prediction.</p></li>
+<li><p>Combining a large number of trees can often result in dramatic improvements in prediction accuracy, at the expense of some loss interpretation.</p></li>
+</ul>
+</section>
+<section id="baseball-salary-data-how-would-you-stratify-it" class="level2">
+<h2 class="anchored" data-anchor-id="baseball-salary-data-how-would-you-stratify-it">Baseball salary data: how would you stratify it?</h2>
+<p>Salary is color-coded from low (blue, green) to high (yellow,red)</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_D_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="750"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="decision-tree-for-these-data-isl-figure-8.1" class="level2">
+<h2 class="anchored" data-anchor-id="decision-tree-for-these-data-isl-figure-8.1">Decision tree for these data (ISL Figure 8.1)</h2>
+<p><img src="img/8_1.png" class="img-fluid" style="width:50.0%"></p>
+</section>
+<section id="details-of-previous-figure" class="level2">
+<h2 class="anchored" data-anchor-id="details-of-previous-figure">Details of previous figure</h2>
+<ul>
+<li><p>For the Hitters data, a regression tree for predicting the log salary of a baseball player, based on the number of years that he has played in the major leagues and the number of hits that he made in the previous year.</p></li>
+<li><p>At a given internal node, the label (of the form <span class="math inline">X_j &lt; t_k</span> ) indicates the left-hand branch emanating from that split, and the right-hand branch corresponds to <span class="math inline">X_j \geq t_k</span> . For instance, the split at the top of the tree results in two large branches. The left-hand branch corresponds to <code>Years</code>&lt;4.5, and the right-hand branch corresponds to <code>Years</code>&gt;=4.5.</p></li>
+<li><p>The tree has two internal nodes and three terminal nodes, or leaves. The number in each leaf is the mean of the response for the observations that fall there.</p></li>
+</ul>
+</section>
+<section id="results-isl-figure-8.2" class="level2">
+<h2 class="anchored" data-anchor-id="results-isl-figure-8.2">Results (ISL Figure 8.2)</h2>
+<p>Overall, the tree stratifies or segments the players into three regions of predictor space: <span class="math inline">R_1 =\{X |</span> <code>Years</code>&lt;4.5 <span class="math inline">\}</span>, <span class="math inline">R_2 =\{X |</span> <code>Years</code>&gt;=4.5, <code>Hits</code>&lt;117.5 <span class="math inline">\}</span>, and <span class="math inline">R_3 =\{X |</span> <code>Years</code>&gt;=4.5, <code>Hits</code>&gt;=117.5 <span class="math inline">\}</span>.</p>
+<p><img src="img/8_2.png" class="img-fluid" style="width:80.0%"></p>
+</section>
+<section id="terminology-for-trees" class="level2">
+<h2 class="anchored" data-anchor-id="terminology-for-trees">Terminology for Trees</h2>
+<ul>
+<li><p>In keeping with the tree analogy, the regions <span class="math inline">R_1</span>, <span class="math inline">R_2</span>, and <span class="math inline">R_3</span> are known as <span class="orange">terminal nodes</span></p></li>
+<li><p>Decision trees are typically drawn <span class="blue">upside down</span>, in the sense that the leaves are at the bottom of the tree.</p></li>
+<li><p>The points along the tree where the predictor space is split are referred to as <span class="orange">internal nodes</span></p></li>
+<li><p>In the hitters tree, the two internal nodes are indicated by the text <code>Years</code>&lt;4.5 and <code>Hits</code>&lt;117.5.</p></li>
+</ul>
+</section>
+<section id="interpretation-of-results" class="level2">
+<h2 class="anchored" data-anchor-id="interpretation-of-results">Interpretation of Results</h2>
+<ul>
+<li><p><code>Years</code> is the most important factor in determining <code>Salary</code>, and players with less experience earn lower salaries than more experienced players.</p></li>
+<li><p>Given that a player is less experienced, the number of <code>Hits</code> that he made in the previous year seems to play little role in his Salary.</p></li>
+<li><p>But among players who have been in the major leagues for five or more years, the number of <code>Hits</code> made in the previous year does affect <code>Salary</code>, and players who made more <code>Hits</code> last year tend to have higher salaries.</p></li>
+<li><p>Surely an over-simplification, but compared to a regression model, it is easy to display, interpret and explain</p></li>
+</ul>
+</section>
+<section id="details-of-the-tree-building-process" class="level2">
+<h2 class="anchored" data-anchor-id="details-of-the-tree-building-process">Details of the tree-building process</h2>
+<ol type="1">
+<li><p>We divide the predictor space — that is, the set of possible values for <span class="math inline">X_1,X_2,\ldots,X_p</span> — into <span class="math inline">J</span> distinct and non-overlapping regions, <span class="math inline">R_1</span>,<span class="math inline">R_2</span>,…,<span class="math inline">R_J</span>.</p></li>
+<li><p>For every observation that falls into the region <span class="math inline">R_j</span>, we make the same prediction, which is simply the mean of the response values for the training observations in <span class="math inline">R_j</span>.</p></li>
+</ol>
+</section>
+<section id="more-details-of-the-tree-building-process" class="level2">
+<h2 class="anchored" data-anchor-id="more-details-of-the-tree-building-process">More details of the tree-building process</h2>
+<ul>
+<li><p>In theory, the regions could have any shape. However, we choose to divide the predictor space into high-dimensional rectangles, or boxes, for simplicity and for ease of interpretation of the resulting predictive model.</p></li>
+<li><p>The goal is to find boxes <span class="math inline">R_1</span>,…,<span class="math inline">R_J</span> that minimize the RSS, given by <span class="math display">\sum_{j \in J} \sum_{i \in R_j}(y_i - \hat y_{R_j})^2</span> where <span class="math inline">y_{R_j}</span> is the mean response for the training observations within the <span class="math inline">j</span>th box.</p></li>
+</ul>
+</section>
+<section id="more-details-of-the-tree-building-process-1" class="level2">
+<h2 class="anchored" data-anchor-id="more-details-of-the-tree-building-process-1">More details of the tree-building process</h2>
+<ul>
+<li><p>Unfortunately, it is computationally infeasible to consider every possible partition of the feature space into <span class="math inline">J</span> boxes.</p></li>
+<li><p>For this reason, we take a <span class="orange">top-down</span>, <span class="orange">greedy</span> approach that is known as <span class="blue">recursive binary splitting</span>.</p></li>
+<li><p>The approach is <span class="orange">top-down</span> because it begins at the top of the tree and then successively splits the predictor space; each split is indicated via two new branches further down on the tree.</p></li>
+<li><p>It is <span class="orange">greedy</span> because at each step of the tree-building process, the best split is made at that particular step, rather than looking ahead and picking a split that will lead to a better tree in some future step.</p></li>
+</ul>
+</section>
+<section id="details-continued" class="level2">
+<h2 class="anchored" data-anchor-id="details-continued">Details — Continued</h2>
+<ul>
+<li><p>We first select the predictor <span class="math inline">X_j</span> and the cutpoint <span class="math inline">s</span> such that splitting the predictor space into the regions <span class="math inline">\{X|X_j &lt;s \}</span> and <span class="math inline">\{X|X_j \geq s \}</span> leads to the greatest possible reduction in RSS.</p></li>
+<li><p>Next, we repeat the process, looking for the best predictor and best cutpoint in order to split the data further so as to minimize the RSS within each of the resulting regions.</p></li>
+<li><p>However, this time, instead of splitting the entire predictor space, we split one of the two previously identified regions. We now have three regions.</p></li>
+<li><p>Again, we look to split one of these three regions further, so as to minimize the RSS. The process continues until a stopping criterion is reached; for instance, we may continue until no region contains more than five observations.</p></li>
+</ul>
+</section>
+<section id="details-continued-1" class="level2">
+<h2 class="anchored" data-anchor-id="details-continued-1">Details — Continued</h2>
+<ul>
+<li><p>In greater detail, for any <span class="math inline">j</span> and <span class="math inline">s</span>, we define the pair of half-planes <span class="math display">
+R_1(j, s) = \{X \mid X_j &lt; s\}, \quad R_2(j, s) = \{X \mid X_j \ge s\}.
+</span></p></li>
+<li><p>We then seek the pair <span class="math inline">(j,s)</span> that minimizes the residual sum of squares (RSS): <span class="math display">\sum_{i: x_i \in R_1(j,s)} (y_i - \hat{y}_{R_1})^2 \;+\;\sum_{i: x_i \in R_2(j,s)} (y_i - \hat{y}_{R_2})^2,</span> where <span class="math inline">\hat{y}_{R_1}</span> and <span class="math inline">\hat{y}_{R_2}</span> are the mean responses of the training observations in regions <span class="math inline">R_1(j,s)</span> and <span class="math inline">R_2(j,s)</span>, respectively.</p></li>
+<li><p>In practice, this optimization is computationally efficient: for each predictor <span class="math inline">X_j</span>, we sort its values and evaluate candidate split points (typically between consecutive observations). As long as the number of predictors <span class="math inline">p</span> is not too large, the optimal split can be found quickly.</p></li>
+</ul>
+</section>
+<section id="details-continued-2" class="level2">
+<h2 class="anchored" data-anchor-id="details-continued-2">Details — Continued</h2>
+<ul>
+<li><p>After obtaining the first split, we have two regions <span class="math inline">R_1</span> and <span class="math inline">R_2</span>. Instead of splitting the entire predictor space again, we consider splitting one of these regions further.</p></li>
+<li><p>For any region <span class="math inline">R \in \{R_1, R_2\}</span>, predictor <span class="math inline">X_j</span>, and split point <span class="math inline">s</span>, we define: <span class="math display">
+R_{L}(j, s; R) = \{X \in R \mid X_j &lt; s\}, \quad
+R_{R}(j, s; R) = \{X \in R \mid X_j \ge s\}.
+</span></p></li>
+<li><p>We then seek the region <span class="math inline">R</span>, predictor <span class="math inline">j</span>, and split point <span class="math inline">s</span> that minimize the total residual sum of squares (RSS) after the second split: <span class="math display">
+\sum_{i: x_i \in R_{L}(j,s;R)} (y_i - \hat{y}_{L})^2
+\;+\;
+\sum_{i: x_i \in R_{R}(j,s;R)} (y_i - \hat{y}_{R})^2
+\;+\;
+\sum_{i: x_i \in R^{c}} (y_i - \hat{y}_{R^{c}})^2,
+</span> where <span class="math inline">R^{c}</span> denotes the region not being split, and <span class="math inline">\hat{y}_{L}</span>, <span class="math inline">\hat{y}_{R}</span>, and <span class="math inline">\hat{y}_{R^{c}}</span> are the mean responses in the corresponding regions.</p></li>
+<li><p>Etc.</p></li>
+</ul>
+</section>
+<section id="predictions" class="level2">
+<h2 class="anchored" data-anchor-id="predictions">Predictions</h2>
+<ul>
+<li><p>We predict the response for a given test observation using the mean of the training observations in the region to which that test observation belongs.</p></li>
+<li><p>A five-region example of this approach is shown in the next slide.</p></li>
+</ul>
+</section>
+<section id="isl-figure-8.3" class="level2">
+<h2 class="anchored" data-anchor-id="isl-figure-8.3">ISL Figure 8.3</h2>
+<p><img src="img/8_3.png" class="img-fluid" style="width:80.0%"></p>
+</section>
+<section id="details-of-previous-figure-1" class="level2">
+<h2 class="anchored" data-anchor-id="details-of-previous-figure-1">Details of previous figure</h2>
+<ul>
+<li><p><span class="orange">Top Left</span>: A partition of two-dimensional feature space that could not result from recursive binary splitting.</p></li>
+<li><p><span class="orange">Top Right</span>: The output of recursive binary splitting on a two-dimensional example.</p></li>
+<li><p><span class="orange">Bottom Left</span>: A tree corresponding to the partition in the top right panel.</p></li>
+<li><p><span class="orange">Bottom Right</span>: A perspective plot of the prediction surface corresponding to that tree.</p></li>
+</ul>
+</section>
+<section id="baseball-example" class="level2">
+<h2 class="anchored" data-anchor-id="baseball-example">Baseball example</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>   split      RSS
+1    1.5 50776870
+2    2.5 50776870
+3    3.5 50776870
+4    4.5 51352898
+5    5.5 51352898
+6    6.5 51352898
+7    7.5 51352898
+8    8.5 51352898
+9    9.5 51352898
+10  10.5 51352898
+11  11.5 51352898
+12  12.5 51352898
+13  13.5 51352898
+14  14.5 51352898
+15  15.5 51352898
+16  16.5 51352898
+17  17.5 51352898
+18  18.5 51352898
+19  19.5 51352898
+20  22.0 51352898</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   split      RSS
+1    1.5 50607227
+2    2.5 47908697
+3    3.5 43120878
+4    4.5 40162624
+5    5.5 42045385
+6    6.5 44051490
+7    7.5 45812134
+8    8.5 46567073
+9    9.5 48443416
+10  10.5 49171341
+11  11.5 50175619
+12  12.5 50023227
+13  13.5 52385589
+14  14.5 53194949
+15  15.5 53230954
+16  16.5 53232002
+17  17.5 53277580
+18  18.5 53308319
+19  19.5 53309336
+20  22.0 53273110</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Best split on Years = 4.5 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Minimum RSS = 40162624 </code></pre>
+</div>
+</div>
+</section>
+<section id="baseball-example-continued" class="level2">
+<h2 class="anchored" data-anchor-id="baseball-example-continued">Baseball example continued</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_D_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="750"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="baseball-example-continued-1" class="level2">
+<h2 class="anchored" data-anchor-id="baseball-example-continued-1">Baseball example continued</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Left region (Years &lt; 4.50): n = 90, mean Salary = 225.83</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Right region (Years &gt;= 4.50): n = 173, mean Salary = 697.25</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Interpretation:</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The left region contains 90 players with Years &lt; 4.5 and average Salary = 225.83 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The right region contains 173 players with Years &gt;= 4.5 and average Salary = 697.25 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>These means are the predicted Salary values assigned to each region after the split.</code></pre>
+</div>
+</div>
+</section>
+<section id="baseball-example-continued-2" class="level2">
+<h2 class="anchored" data-anchor-id="baseball-example-continued-2">Baseball example continued</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_D_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="750"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="baseball-example-continued-3" class="level2">
+<h2 class="anchored" data-anchor-id="baseball-example-continued-3">Baseball example continued</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>    region variable split region_RSS total_RSS
+1     Left    Years   1.5    6647525  40040977
+2     Left    Years   2.5    6669573  40063025
+3     Left    Years   3.5    6375188  39768640
+4     Left     Hits   2.5    3112837  36506290
+5     Left     Hits  15.5    3323857  36717310
+6     Left     Hits  32.0    4509594  37903047
+7     Left     Hits  38.0    5257158  38650610
+8     Left     Hits  39.5    5694084  39087536
+9     Left     Hits  40.5    5968610  39362062
+10    Left     Hits  42.0    6310631  39704084
+11    Left     Hits  44.5    6402938  39796390
+12    Left     Hits  48.5    6452966  39846418
+13    Left     Hits  52.0    6529673  39923125
+14    Left     Hits  53.5    6644674  40038126
+15    Left     Hits  55.0    6706979  40100431
+16    Left     Hits  56.5    6727691  40121143
+17    Left     Hits  57.5    6737680  40131132
+18    Left     Hits  59.0    6741962  40135414
+19    Left     Hits  62.0    6758007  40151460
+20    Left     Hits  65.0    6764512  40157964
+21    Left     Hits  67.0    6767916  40161368
+22    Left     Hits  68.5    6769170  40162622
+23    Left     Hits  69.5    6769058  40162510
+24    Left     Hits  70.5    6768913  40162366
+25    Left     Hits  72.0    6769016  40162468
+26    Left     Hits  74.0    6764833  40158285
+27    Left     Hits  75.5    6762067  40155519
+28    Left     Hits  77.0    6760044  40153496
+29    Left     Hits  79.5    6752605  40146057
+30    Left     Hits  81.5    6743400  40136852
+31    Left     Hits  84.0    6735075  40128527
+32    Left     Hits  86.5    6728025  40121477
+33    Left     Hits  89.0    6715910  40109362
+34    Left     Hits  91.5    6705865  40099317
+35    Left     Hits  92.5    6682458  40075910
+36    Left     Hits  94.5    6672920  40066372
+37    Left     Hits  96.5    6669400  40062852
+38    Left     Hits  98.0    6667129  40060581
+39    Left     Hits 100.0    6647325  40040777
+40    Left     Hits 102.0    6621545  40014997
+41    Left     Hits 105.5    6576283  39969735
+42    Left     Hits 108.5    6548230  39941682
+43    Left     Hits 110.5    6522835  39916288
+44    Left     Hits 112.5    6500018  39893470
+45    Left     Hits 113.5    6534922  39928375
+46    Left     Hits 114.5    6582306  39975758
+47    Left     Hits 116.0    6593473  39986926
+48    Left     Hits 117.5    6569638  39963091
+49    Left     Hits 119.0    6551041  39944493
+50    Left     Hits 121.0    6520809  39914261
+51    Left     Hits 122.5    6543468  39936920
+52    Left     Hits 125.0    6709530  40102982
+53    Left     Hits 128.5    6705042  40098494
+54    Left     Hits 131.0    6731272  40124724
+55    Left     Hits 133.5    6728967  40122420
+56    Left     Hits 136.0    6721806  40115258
+57    Left     Hits 137.5    6714021  40107473
+58    Left     Hits 138.5    6688320  40081772
+59    Left     Hits 139.5    6673531  40066983
+60    Left     Hits 141.0    6663826  40057278
+61    Left     Hits 143.0    6633094  40026546
+62    Left     Hits 144.5    6610323  40003775
+63    Left     Hits 147.0    6580704  39974156
+64    Left     Hits 150.5    6540519  39933972
+65    Left     Hits 154.5    6482991  39876444
+66    Left     Hits 159.0    6600636  39994088
+67    Left     Hits 162.0    6691264  40084716
+68    Left     Hits 165.0    6759757  40153210
+69    Left     Hits 169.5    6755729  40149181
+70    Left     Hits 186.0    6740668  40134120
+71    Left     Hits 206.5    6733710  40127162
+72    Left     Hits 218.0    6749586  40143038
+73   Right    Years   5.5   32893956  39663128
+74   Right    Years   6.5   32615377  39384548
+75   Right    Years   7.5   32692681  39461852
+76   Right    Years   8.5   32672489  39441661
+77   Right    Years   9.5   33042422  39811593
+78   Right    Years  10.5   33044862  39814033
+79   Right    Years  11.5   33209508  39978679
+80   Right    Years  12.5   32994115  39763286
+81   Right    Years  13.5   33384126  40153297
+82   Right    Years  14.5   33133697  39902869
+83   Right    Years  15.5   33216785  39985956
+84   Right    Years  16.5   33284512  40053683
+85   Right    Years  17.5   33308559  40077730
+86   Right    Years  18.5   33207905  39977076
+87   Right    Years  19.5   33248258  40017429
+88   Right    Years  22.0   33390653  40159824
+89   Right     Hits  35.5   33101664  39870835
+90   Right     Hits  40.0   32650379  39419550
+91   Right     Hits  41.5   32449185  39218357
+92   Right     Hits  42.5   32744667  39513838
+93   Right     Hits  43.5   32361303  39130475
+94   Right     Hits  45.0   32171721  38940893
+95   Right     Hits  46.5   31900293  38669464
+96   Right     Hits  48.0   31620013  38389185
+97   Right     Hits  50.5   31316310  38085482
+98   Right     Hits  52.5   31163639  37932811
+99   Right     Hits  53.5   31137864  37907035
+100  Right     Hits  54.5   30948156  37717327
+101  Right     Hits  55.5   31473000  38242172
+102  Right     Hits  56.5   30997604  37766775
+103  Right     Hits  58.5   30770414  37539585
+104  Right     Hits  60.5   30864763  37633934
+105  Right     Hits  62.0   30627002  37396173
+106  Right     Hits  64.0   30461979  37231150
+107  Right     Hits  65.5   30517746  37286917
+108  Right     Hits  67.0   30284267  37053438
+109  Right     Hits  69.0   29551514  36320686
+110  Right     Hits  71.0   29171762  35940934
+111  Right     Hits  72.5   28817603  35586775
+112  Right     Hits  73.5   28910206  35679377
+113  Right     Hits  75.0   29019835  35789007
+114  Right     Hits  76.5   28392178  35161349
+115  Right     Hits  77.5   28084135  34853307
+116  Right     Hits  79.0   27845378  34614549
+117  Right     Hits  80.5   27914297  34683468
+118  Right     Hits  81.5   27493061  34262232
+119  Right     Hits  82.5   27335771  34104943
+120  Right     Hits  83.5   27017425  33786596
+121  Right     Hits  84.5   26968334  33737505
+122  Right     Hits  87.5   26468543  33237714
+123  Right     Hits  90.5   26311752  33080924
+124  Right     Hits  91.5   26467453  33236625
+125  Right     Hits  92.5   26560768  33329940
+126  Right     Hits  93.5   26315163  33084334
+127  Right     Hits  94.5   26360456  33129627
+128  Right     Hits  95.5   25895528  32664700
+129  Right     Hits  98.5   25652587  32421758
+130  Right     Hits 101.5   25688607  32457779
+131  Right     Hits 102.5   24951695  31720867
+132  Right     Hits 103.5   24090300  30859472
+133  Right     Hits 105.0   24154209  30923381
+134  Right     Hits 108.0   24307350  31076522
+135  Right     Hits 111.0   24106495  30875666
+136  Right     Hits 112.5   24157798  30926969
+137  Right     Hits 114.5   23941950  30711121
+138  Right     Hits 116.5   23845691  30614862
+139  Right     Hits 117.5   23267845  30037016
+140  Right     Hits 118.5   23832964  30602135
+141  Right     Hits 119.5   24001373  30770545
+142  Right     Hits 121.0   23889699  30658871
+143  Right     Hits 122.5   23712718  30481889
+144  Right     Hits 123.5   24216204  30985375
+145  Right     Hits 124.5   24051149  30820320
+146  Right     Hits 125.5   25140680  31909851
+147  Right     Hits 126.5   24835707  31604878
+148  Right     Hits 127.5   25201312  31970484
+149  Right     Hits 128.5   25729885  32499056
+150  Right     Hits 130.0   25734520  32503691
+151  Right     Hits 131.5   25673613  32442785
+152  Right     Hits 132.5   25893991  32663162
+153  Right     Hits 134.0   25907841  32677012
+154  Right     Hits 135.5   25899090  32668261
+155  Right     Hits 136.5   26033456  32802628
+156  Right     Hits 138.0   26286199  33055370
+157  Right     Hits 140.0   26107483  32876654
+158  Right     Hits 141.5   25738373  32507544
+159  Right     Hits 143.0   26335514  33104685
+160  Right     Hits 144.5   27468898  34238069
+161  Right     Hits 145.5   27224532  33993704
+162  Right     Hits 146.5   27240990  34010161
+163  Right     Hits 147.5   27526855  34296026
+164  Right     Hits 148.5   28317566  35086737
+165  Right     Hits 149.5   28303490  35072661
+166  Right     Hits 150.5   28459678  35228850
+167  Right     Hits 151.5   29714011  36483182
+168  Right     Hits 153.0   29690222  36459393
+169  Right     Hits 155.5   29480135  36249307
+170  Right     Hits 157.5   29172788  35941960
+171  Right     Hits 158.5   28999584  35768756
+172  Right     Hits 159.5   28578626  35347797
+173  Right     Hits 161.5   29300567  36069738
+174  Right     Hits 165.5   30231961  37001133
+175  Right     Hits 168.5   30274098  37043270
+176  Right     Hits 169.5   29953537  36722709
+177  Right     Hits 170.5   30388752  37157924
+178  Right     Hits 172.5   31210593  37979764
+179  Right     Hits 175.5   31158831  37928003
+180  Right     Hits 177.5   31562507  38331678
+181  Right     Hits 178.5   31430986  38200158
+182  Right     Hits 181.0   31101254  37870425
+183  Right     Hits 183.5   30919695  37688866
+184  Right     Hits 185.0   30495666  37264837
+185  Right     Hits 192.0   30888469  37657640
+186  Right     Hits 199.0   31107929  37877101
+187  Right     Hits 203.5   32725125  39494296
+188  Right     Hits 208.5   33220880  39990051
+189  Right     Hits 210.5   32511386  39280557
+190  Right     Hits 224.5   31751306  38520478</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Best second split:</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Region = Right </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Variable = Hits </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Split = 117.5 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total RSS = 30037016 </code></pre>
+</div>
+</div>
+</section>
+<section id="pruning-a-tree" class="level2">
+<h2 class="anchored" data-anchor-id="pruning-a-tree">Pruning a tree</h2>
+<ul>
+<li><p>The process described above may produce good predictions on the training set, but is likely to <span class="blue">overfit</span> the data, leading to poor test set performance. <span class="blue">Why?</span></p></li>
+<li><p>A smaller tree with fewer splits (that is, fewer regions <span class="math inline">R_1,\ldots,R_J</span> ) might lead to lower variance and better interpretation at the cost of a little bias.</p></li>
+<li><p>One possible alternative to the process described above is to grow the tree only so long as the decrease in the RSS due to each split exceeds some (high) threshold.</p></li>
+<li><p>This strategy will result in smaller trees, but is too <span class="blue">short-sighted</span>: a seemingly worthless split early on in the tree might be followed by a very good split — that is, a split that leads to a large reduction in RSS later on.</p></li>
+</ul>
+</section>
+<section id="pruning-a-tree---continued" class="level2">
+<h2 class="anchored" data-anchor-id="pruning-a-tree---continued">Pruning a tree - continued</h2>
+<ul>
+<li><p>A better strategy is to grow a very large tree <span class="math inline">T_0</span>, and then <span class="orange">prune</span> it back in order to obtain a <span class="orange">subtree</span></p></li>
+<li><p><span class="orange">Cost complexity pruning</span> — also known as <span class="orange">weakest link pruning</span> — is used to do this</p></li>
+<li><p>we consider a sequence of trees indexed by a nonnegative tuning parameter <span class="math inline">\alpha</span>. For each value of <span class="math inline">\alpha</span> there corresponds a subtree <span class="math inline">T \subset T_0</span> such that <span class="math display">\sum_{m=1}^{|T|} \sum_{i: x_i \in R_m}(y_i - \hat{y}_{R_m})^2 + \alpha |T|</span> is as small as possible. Here <span class="math inline">|T|</span> indicates the number of terminal nodes of the tree <span class="math inline">T</span>, <span class="math inline">R_m</span> is the rectangle (i.e.&nbsp;the subset of predictor space) corresponding to the <span class="math inline">m</span>th terminal node, and <span class="math inline">\hat{y}_{R_m}</span> is the mean of the training observations in <span class="math inline">R_m</span>.</p></li>
+</ul>
+</section>
+<section id="choosing-the-best-subtree" class="level2">
+<h2 class="anchored" data-anchor-id="choosing-the-best-subtree">Choosing the best subtree</h2>
+<ul>
+<li><p>The tuning parameter <span class="math inline">\alpha</span> controls a trade-oﬀ between the subtree’s complexity and its fit to the training data.</p></li>
+<li><p>We select an optimal value <span class="math inline">\hat \alpha</span> using cross-validation.</p></li>
+<li><p>We then return to the full data set and obtain the subtree corresponding to <span class="math inline">\hat \alpha</span></p></li>
+</ul>
+</section>
+<section id="summary-tree-algorithm" class="level2">
+<h2 class="anchored" data-anchor-id="summary-tree-algorithm">Summary: tree algorithm</h2>
+<ol type="1">
+<li><p>Use recursive binary splitting to grow a large tree on the training data, stopping only when each terminal node has fewer than some minimum number of observations.</p></li>
+<li><p>Apply cost complexity pruning to the large tree in order to obtain a sequence of best subtrees, as a function of <span class="math inline">\alpha</span>.</p></li>
+<li><p>Use <span class="math inline">K</span>-fold cross-validation to choose <span class="math inline">\alpha</span>. For each <span class="math inline">k= 1,\ldots,K</span>:</p>
+<p>3.1 Repeat Steps 1 and 2 on the <span class="math inline">\frac{K−1}{K}</span> th fraction of the training data, excluding the <span class="math inline">k</span>th fold.</p>
+<p>3.2 Evaluate the mean squared prediction error on the data in the left-out kth fold, as a function of <span class="math inline">\alpha</span>. Average the results, and pick <span class="math inline">\alpha</span> to minimize the average error.</p></li>
+</ol>
+</section>
+<section id="baseball-example-continued-4" class="level2">
+<h2 class="anchored" data-anchor-id="baseball-example-continued-4">Baseball example continued</h2>
+<ul>
+<li><p>First, we randomly divided the data set in half, yielding 132 observations in the training set and 131 observations in the test set.</p></li>
+<li><p>We then built a large regression tree on the training data and varied <span class="math inline">\alpha</span> in in order to create subtrees with diﬀerent numbers of terminal nodes.</p></li>
+<li><p>Finally, we performed six-fold cross-validation in order to estimate the cross-validated MSE of the trees as a function of <span class="math inline">\alpha</span>.</p></li>
+</ul>
+<ol start="4" type="1">
+<li>Return the subtree from Step 2 that corresponds to the chosen value of <span class="math inline">\alpha</span>.</li>
+</ol>
+</section>
+<section id="baseball-example-continued-isl-figure-8.4" class="level2">
+<h2 class="anchored" data-anchor-id="baseball-example-continued-isl-figure-8.4">Baseball example continued (ISL Figure 8.4)</h2>
+<p><img src="img/8_4.png" class="img-fluid" style="width:80.0%"></p>
+</section>
+<section id="baseball-example-continued-isl-figure-8.5" class="level2">
+<h2 class="anchored" data-anchor-id="baseball-example-continued-isl-figure-8.5">Baseball example continued (ISL Figure 8.5)</h2>
+<p><img src="img/8_5.png" class="img-fluid" style="width:80.0%"></p>
+</section>
+<section id="advantages-and-disadvantages-of-trees" class="level2">
+<h2 class="anchored" data-anchor-id="advantages-and-disadvantages-of-trees">Advantages and Disadvantages of Trees</h2>
+<ul>
+<li><p>Trees are very easy to explain to people. In fact, they are even easier to explain than linear regression!</p></li>
+<li><p>Some people believe that decision trees more closely mirror human decision-making than do the regression approach seen in previous chapters.</p></li>
+<li><p>Trees can be displayed graphically, and are easily interpreted even by a non-expert (especially if they are small).</p></li>
+<li><p>Trees can easily handle qualitative predictors without the need to create dummy variables.</p></li>
+<li><p>Unfortunately, trees generally do not have the same level of predictive accuracy as some of the other regression and classification approaches seen in this book.</p></li>
+</ul>
+<p>However, by aggregating many decision trees, the predictive performance of trees can be substantially improved. We introduce these concepts next.</p>
+</section>
+<section id="bagging" class="level2">
+<h2 class="anchored" data-anchor-id="bagging">Bagging</h2>
+<ul>
+<li><p><span class="orange">Bootstrap aggregation</span>, or <span class="orange">bagging</span>, is a general-purpose procedure for reducing the variance of a statistical learning method; we introduce it here because it is particularly useful and frequently used in the context of decision trees.</p></li>
+<li><p>Recall that given a set of <span class="math inline">n</span> independent observations <span class="math inline">Z_1,...,Z_n</span>, each with variance <span class="math inline">\sigma^2</span>, the variance of the mean <span class="math inline">Z</span> of the observations is given by <span class="math inline">\sigma^2/n</span>.</p></li>
+<li><p>In other words, <span class="blue">averaging a set of observations reduces variance</span>. Of course, this is not practical because we generally do not have access to multiple training sets.</p></li>
+</ul>
+</section>
+<section id="bagging---continued" class="level2">
+<h2 class="anchored" data-anchor-id="bagging---continued">Bagging - continued</h2>
+<ul>
+<li><p>Instead, we can bootstrap, by taking repeated samples from the (single) training data set.</p></li>
+<li><p>In this approach we generate <span class="math inline">B</span> diﬀerent bootstrapped training data sets. We then train our method on the <span class="math inline">b</span>th bootstrapped training set in order to get <span class="math inline">\hat f^{*_b}(x)</span>, the prediction at a point <span class="math inline">x</span>. We then average all the predictions to obtain <span class="math display">\hat f_{bag}(x) = \frac{1}{B} \sum_{b=1}^{B} \hat f^{*_b}(x).</span> This is called <span class="orange">bagging</span>.</p></li>
+</ul>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<script src="un_D_files/libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

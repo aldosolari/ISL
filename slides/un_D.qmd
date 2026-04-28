@@ -1,0 +1,641 @@
+---
+title: "Tree-based Methods"
+subtitle: "Introduction to Statistical Learning - PISE"
+author: "[Aldo Solari]{.orange}"
+institute: "_Ca' Foscari University of Venice_"
+page-layout: full
+execute:
+  cache: false
+filters: 
+  - remove-pause.lua
+format:
+  revealjs:
+    auto-stretch: true
+    center: true
+    html-math-method: katex
+    transition: none
+    output-file: un_C_slides.html
+    slide-number: true
+    callout-appearance: minimal
+    code-line-numbers: true
+    theme: [default, ../template.css] # alternative themes (subset): default, night, dark
+    embed-resources: false
+    echo: false
+    fig-dpi: 200
+    # incremental: true  # Remove comment if you like incremental bullet points
+    logo: img/cf_logo.png
+    footer: "[ISL](https://aldosolari.github.io/ISL)"
+    highlight-style: github
+  html:
+    html-math-method: katex
+    echo: false
+    callout-appearance: minimal
+    theme: [simplex, ../template.css]
+    toc: true
+    toc-title: Table of contents
+    embed-resources: false
+    code-line-numbers: true
+    smooth-scroll: true
+    code-fold: false
+    code-summary: "Show the code"
+    fig-dpi: 150
+    highlight-style: github
+editor: 
+  markdown: 
+    wrap: 72
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+#| warning: false
+#| echo: false
+#| include: false
+#| message: false
+#| purl: false
+```
+
+
+This unit will cover the following [topics]{.orange}:
+
+-   Regression Trees
+-   Bagging
+-   Random Forests
+-   Boosting
+
+## Regression Trees
+
+-  Tree-based methods involve [stratifying]{.orange} or [segmenting]{.orange} the predictor space into a number of simple regions.
+
+- Since the set of splitting rules used to segment the
+predictor space can be summarized in a tree, these types of
+approaches are known as [decision-tree]{.orange} methods.
+
+## Pros and Cons
+
+- Tree-based methods are simple and useful for
+interpretation.
+
+-  However they typically are not competitive with the best
+supervised learning approaches in terms of prediction
+accuracy.
+
+-  Hence we also discuss [bagging]{.blue}, [random forests]{.blue}, and
+[boosting]{.blue}. These methods grow multiple trees which are
+then combined to yield a single consensus prediction.
+
+-  Combining a large number of trees can often result in
+dramatic improvements in prediction accuracy, at the
+expense of some loss interpretation.
+
+## Baseball salary data: how would you stratify it?
+
+Salary is color-coded from low (blue, green) to high (yellow,red)
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 5
+#| fig-height: 4.5
+library(ISLR2)
+library(ggpubr)
+Hitters <- na.omit(Hitters)
+ggscatter(Hitters,
+          x = "Years",
+          y = "Hits",
+          color = "Salary",
+          palette = c("blue", "green", "yellow", "red"),
+          size = 2,
+          xlab = "Years",
+          ylab = "Hits") +
+  scale_color_gradientn(colors = c("blue", "green", "yellow", "red"))
+```
+
+
+## Decision tree for these data (ISL Figure 8.1)
+
+![](img/8_1.png){width="50%"}
+
+## Details of previous figure
+
+- For the Hitters data, a regression tree for predicting the log
+salary of a baseball player, based on the number of years that he
+has played in the major leagues and the number of hits that he
+made in the previous year.
+
+- At a given internal node, the label (of the form $X_j < t_k$ )
+indicates the left-hand branch emanating from that split, and
+the right-hand branch corresponds to $X_j \geq t_k$ . For instance, the
+split at the top of the tree results in two large branches. The
+left-hand branch corresponds to `Years`<4.5, and the right-hand
+branch corresponds to `Years`>=4.5.
+
+-  The tree has two internal nodes and three terminal nodes, or
+leaves. The number in each leaf is the mean of the response for
+the observations that fall there.
+
+## Results (ISL Figure 8.2)
+
+Overall, the tree stratifies or segments the players into
+three regions of predictor space: $R_1 =\{X |$ `Years`<4.5 $\}$,
+$R_2 =\{X |$ `Years`>=4.5, `Hits`<117.5 $\}$, and $R_3 =\{X |
+$ `Years`>=4.5, `Hits`>=117.5 $\}$.
+
+![](img/8_2.png){width="80%"}
+
+## Terminology for Trees
+
+- In keeping with the tree analogy, the regions $R_1$, $R_2$, and
+$R_3$ are known as [terminal nodes]{.orange}
+
+-  Decision trees are typically drawn [upside down]{.blue}, in the
+sense that the leaves are at the bottom of the tree.
+
+-  The points along the tree where the predictor space is split
+are referred to as [internal nodes]{.orange}
+
+- In the hitters tree, the two internal nodes are indicated by
+the text `Years`<4.5 and `Hits`<117.5.
+
+## Interpretation of Results
+
+- `Years` is the most important factor in determining `Salary`,
+and players with less experience earn lower salaries than
+more experienced players.
+
+- Given that a player is less experienced, the number of `Hits`
+that he made in the previous year seems to play little role
+in his Salary.
+
+- But among players who have been in the major leagues for
+five or more years, the number of `Hits` made in the
+previous year does affect `Salary`, and players who made
+more `Hits` last year tend to have higher salaries.
+
+- Surely an over-simplification, but compared to a regression
+model, it is easy to display, interpret and explain
+
+
+## Details of the tree-building process
+
+1. We divide the predictor space — that is, the set of possible
+values for $X_1,X_2,\ldots,X_p$ — into $J$ distinct and
+non-overlapping regions, $R_1$,$R_2$,...,$R_J$.
+
+2. For every observation that falls into the region $R_j$, we
+make the same prediction, which is simply the mean of the
+response values for the training observations in $R_j$.
+
+## More details of the tree-building process
+
+- In theory, the regions could have any shape. However, we
+choose to divide the predictor space into high-dimensional
+rectangles, or boxes, for simplicity and for ease of
+interpretation of the resulting predictive model.
+
+- The goal is to find boxes $R_1$,...,$R_J$ that minimize the
+RSS, given by
+$$\sum_{j \in J} \sum_{i \in R_j}(y_i - \hat y_{R_j})^2$$
+where $y_{R_j}$ is the mean response for the training
+observations within the $j$th box.
+
+## More details of the tree-building process
+
+- Unfortunately, it is computationally infeasible to consider
+every possible partition of the feature space into $J$ boxes.
+
+- For this reason, we take a [top-down]{.orange}, [greedy]{.orange} approach that is known as [recursive binary splitting]{.blue}.
+
+- The approach is [top-down]{.orange} because it begins at the top of
+the tree and then successively splits the predictor space;
+each split is indicated via two new branches further down
+on the tree.
+
+- It is [greedy]{.orange} because at each step of the tree-building
+process, the best split is made at that particular step,
+rather than looking ahead and picking a split that will lead
+to a better tree in some future step.
+
+## Details — Continued
+
+- We first select the predictor $X_j$ and the cutpoint $s$ such
+that splitting the predictor space into the regions
+$\{X|X_j <s \}$ and $\{X|X_j \geq s \}$ leads to the greatest possible
+reduction in RSS.
+
+- Next, we repeat the process, looking for the best predictor
+and best cutpoint in order to split the data further so as to
+minimize the RSS within each of the resulting regions.
+
+- However, this time, instead of splitting the entire predictor
+space, we split one of the two previously identified regions.
+We now have three regions.
+
+- Again, we look to split one of these three regions further,
+so as to minimize the RSS. The process continues until a
+stopping criterion is reached; for instance, we may continue
+until no region contains more than five observations.
+
+## Details — Continued
+
+- In greater detail, for any $j$ and $s$, we define the pair of half-planes
+$$
+R_1(j, s) = \{X \mid X_j < s\}, \quad R_2(j, s) = \{X \mid X_j \ge s\}.
+$$
+- We then seek the pair $(j,s)$ that minimizes the residual sum of squares (RSS):
+$$\sum_{i: x_i \in R_1(j,s)} (y_i - \hat{y}_{R_1})^2 \;+\;\sum_{i: x_i \in R_2(j,s)} (y_i - \hat{y}_{R_2})^2,$$
+where $\hat{y}_{R_1}$ and $\hat{y}_{R_2}$ are the mean responses of the training observations in regions $R_1(j,s)$ and $R_2(j,s)$, respectively.
+
+- In practice, this optimization is computationally efficient: for each predictor $X_j$, we sort its values and evaluate candidate split points (typically between consecutive observations). As long as the number of predictors $p$ is not too large, the optimal split can be found quickly.
+
+## Details — Continued
+
+- After obtaining the first split, we have two regions $R_1$ and $R_2$. Instead of splitting the entire predictor space again, we consider splitting one of these regions further.
+
+- For any region $R \in \{R_1, R_2\}$, predictor $X_j$, and split point $s$, we define:
+$$
+R_{L}(j, s; R) = \{X \in R \mid X_j < s\}, \quad
+R_{R}(j, s; R) = \{X \in R \mid X_j \ge s\}.
+$$
+
+- We then seek the region $R$, predictor $j$, and split point $s$ that minimize the total residual sum of squares (RSS) after the second split:
+$$
+\sum_{i: x_i \in R_{L}(j,s;R)} (y_i - \hat{y}_{L})^2
+\;+\;
+\sum_{i: x_i \in R_{R}(j,s;R)} (y_i - \hat{y}_{R})^2
+\;+\;
+\sum_{i: x_i \in R^{c}} (y_i - \hat{y}_{R^{c}})^2,
+$$
+where $R^{c}$ denotes the region not being split, and $\hat{y}_{L}$, $\hat{y}_{R}$, and $\hat{y}_{R^{c}}$ are the mean responses in the corresponding regions.
+
+- Etc.
+
+## Predictions
+
+- We predict the response for a given test observation using
+the mean of the training observations in the region to
+which that test observation belongs.
+
+- A five-region example of this approach is shown in the next
+slide.
+
+## ISL Figure 8.3
+
+![](img/8_3.png){width="80%"}
+
+## Details of previous figure
+
+- [Top Left]{.orange}: A partition of two-dimensional feature space that
+could not result from recursive binary splitting.
+
+- [Top Right]{.orange}: The output of recursive binary splitting on a
+two-dimensional example.
+
+- [Bottom Left]{.orange}: A tree corresponding to the partition in the top
+right panel.
+
+- [Bottom Right]{.orange}: A perspective plot of the prediction surface
+corresponding to that tree.
+
+## Baseball example 
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 5
+#| fig-height: 4.5
+# Keep only variables of interest
+df <- Hitters[, c("Years", "Hits", "Salary")]
+
+# Candidate split points:
+# midpoints between consecutive unique sorted Years values
+u <- sort(unique(df$Years))
+splits <- (u[-1] + u[-length(u)]) / 2
+
+# Function to compute RSS for one split s
+rss_split <- function(s, x, y) {
+  left <- y[x < s]
+  right <- y[x >= s]
+  
+  # skip invalid splits
+  if (length(left) == 0 || length(right) == 0) return(Inf)
+  
+  rss_left <- sum((left - mean(left))^2)
+  rss_right <- sum((right - mean(right))^2)
+  
+  rss_left + rss_right
+}
+
+# Compute RSS for every candidate split on Hits, predicting Salary
+rss_vals <- sapply(splits, rss_split, x = df$Hits, y = df$Salary)
+
+# Show all candidate splits and RSS values
+results <- data.frame(split = splits, RSS = rss_vals)
+results
+
+# Compute RSS for every candidate split on Years, predicting Salary
+rss_vals <- sapply(splits, rss_split, x = df$Years, y = df$Salary)
+
+# Show all candidate splits and RSS values
+results <- data.frame(split = splits, RSS = rss_vals)
+results
+
+# Best split
+best_idx <- which.min(rss_vals)
+best_s <- splits[best_idx]
+best_rss <- rss_vals[best_idx]
+
+cat("Best split on Years =", best_s, "\n")
+cat("Minimum RSS =", best_rss, "\n")
+
+```
+
+
+## Baseball example continued
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 5
+#| fig-height: 4.5
+plot(splits, rss_vals, type = "b",
+     xlab = "Split s for Years",
+     ylab = "RSS",
+     main = "RSS for candidate splits of Years")
+abline(v = best_s, col = "red", lwd = 2, lty = 2)
+```
+
+## Baseball example continued
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 5
+#| fig-height: 4.5
+left <- df$Years < best_s
+right <- df$Years >= best_s
+
+left_mean <- mean(df$Salary[left])
+right_mean <- mean(df$Salary[right])
+
+n_left <- sum(left)
+n_right <- sum(right)
+
+cat(sprintf("Left region (Years < %.2f): n = %d, mean Salary = %.2f\n",
+            best_s, n_left, left_mean))
+
+cat(sprintf("Right region (Years >= %.2f): n = %d, mean Salary = %.2f\n",
+            best_s, n_right, right_mean))
+
+cat("\nInterpretation:\n")
+cat("The left region contains", n_left, "players with Years <", best_s,
+    "and average Salary =", round(left_mean, 2), "\n")
+
+cat("The right region contains", n_right, "players with Years >=", best_s,
+    "and average Salary =", round(right_mean, 2), "\n")
+
+cat("These means are the predicted Salary values assigned to each region after the split.\n")
+```
+
+## Baseball example continued
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 5
+#| fig-height: 4.5
+cols <- ifelse(df$Years < best_s, "blue", "darkgreen")
+
+plot(df$Years, df$Salary,
+     col = cols,
+     pch = 19,
+     xlab = "Years",
+     ylab = "Salary",
+     main = paste("Best split at Years =", round(best_s, 2)))
+
+abline(v = best_s, col = "red", lwd = 2, lty = 2)
+
+segments(min(df$Years), left_mean, best_s, left_mean,
+         col = "blue", lwd = 3)
+segments(best_s, right_mean, max(df$Years), right_mean,
+         col = "darkgreen", lwd = 3)
+```
+
+## Baseball example continued
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+
+# Create regions from first split (on Years)
+R1 <- df[df$Years < best_s, ]
+R2 <- df[df$Years >= best_s, ]
+
+# RSS of a whole region
+region_rss <- function(y) {
+  sum((y - mean(y))^2)
+}
+
+# Function to compute all candidate splits within a region
+get_splits_region <- function(data, region_name) {
+  out <- NULL
+  
+  for (var in c("Years", "Hits")) {
+    x <- data[[var]]
+    y <- data$Salary
+    
+    u <- sort(unique(x))
+    if (length(u) < 2) next
+    
+    splits <- (u[-1] + u[-length(u)]) / 2
+    rss_vals <- sapply(splits, rss_split, x = x, y = y)
+    
+    tmp <- data.frame(
+      region = region_name,
+      variable = var,
+      split = splits,
+      region_RSS = rss_vals
+    )
+    
+    out <- rbind(out, tmp)
+  }
+  
+  out
+}
+
+# All candidate second splits
+res_R1 <- get_splits_region(R1, "Left")
+res_R2 <- get_splits_region(R2, "Right")
+
+results_second <- rbind(res_R1, res_R2)
+
+# Compute TOTAL RSS (true objective)
+results_second$total_RSS <- NA
+
+results_second$total_RSS[results_second$region == "Left"] <-
+  results_second$region_RSS[results_second$region == "Left"] +
+  region_rss(R2$Salary)
+
+results_second$total_RSS[results_second$region == "Right"] <-
+  results_second$region_RSS[results_second$region == "Right"] +
+  region_rss(R1$Salary)
+
+# Show ALL second split RSS values
+results_second
+
+# Best second split
+results_second <- results_second[order(results_second$total_RSS), ]
+best_second <- results_second[1, ]
+
+cat("\nBest second split:\n")
+cat("Region =", best_second$region, "\n")
+cat("Variable =", best_second$variable, "\n")
+cat("Split =", best_second$split, "\n")
+cat("Total RSS =", best_second$total_RSS, "\n")
+```
+
+
+
+
+## Pruning a tree
+
+- The process described above may produce good predictions
+on the training set, but is likely to [overfit]{.blue} the data, leading
+to poor test set performance. [Why?]{.blue}
+
+- A smaller tree with fewer splits (that is, fewer regions
+$R_1,\ldots,R_J$ ) might lead to lower variance and better
+interpretation at the cost of a little bias.
+
+- One possible alternative to the process described above is
+to grow the tree only so long as the decrease in the RSS
+due to each split exceeds some (high) threshold.
+
+- This strategy will result in smaller trees, but is too
+[short-sighted]{.blue}: a seemingly worthless split early on in the
+tree might be followed by a very good split — that is, a
+split that leads to a large reduction in RSS later on.
+
+## Pruning a tree - continued
+
+- A better strategy is to grow a very large tree $T_0$, and then
+[prune]{.orange} it back in order to obtain a [subtree]{.orange}
+
+- [Cost complexity pruning]{.orange} — also known as [weakest link pruning]{.orange} — is used to do this
+
+- we consider a sequence of trees indexed by a nonnegative
+tuning parameter $\alpha$. For each value of $\alpha$ there corresponds
+a subtree $T \subset T_0$ such that
+$$\sum_{m=1}^{|T|} \sum_{i: x_i \in R_m}(y_i - \hat{y}_{R_m})^2 + \alpha |T|$$
+is as small as possible. Here $|T|$ indicates the number of
+terminal nodes of the tree $T$, $R_m$ is the rectangle (i.e. the
+subset of predictor space) corresponding to the $m$th
+terminal node, and $\hat{y}_{R_m}$ is the mean of the training
+observations in $R_m$.
+
+## Choosing the best subtree
+
+- The tuning parameter $\alpha$ controls a trade-oﬀ between the
+subtree’s complexity and its fit to the training data.
+
+- We select an optimal value $\hat \alpha$ using cross-validation.
+
+- We then return to the full data set and obtain the subtree
+corresponding to $\hat \alpha$
+
+## Summary: tree algorithm
+
+1. Use recursive binary splitting to grow a large tree on the
+training data, stopping only when each terminal node has
+fewer than some minimum number of observations.
+
+2. Apply cost complexity pruning to the large tree in order to
+obtain a sequence of best subtrees, as a function of $\alpha$.
+
+3. Use $K$-fold cross-validation to choose $\alpha$. For each
+$k= 1,\ldots,K$:
+
+   3.1 Repeat Steps 1 and 2 on the $\frac{K−1}{K}$ th fraction of the training data, excluding the $k$th fold.
+
+   3.2 Evaluate the mean squared prediction error on the data in
+the left-out kth fold, as a function of $\alpha$.
+Average the results, and pick $\alpha$ to minimize the average
+error.
+
+## Baseball example continued
+
+- First, we randomly divided the data set in half, yielding
+132 observations in the training set and 131 observations in
+the test set.
+
+-  We then built a large regression tree on the training data
+and varied $\alpha$ in in order to create subtrees with diﬀerent
+numbers of terminal nodes.
+
+- Finally, we performed six-fold cross-validation in order to
+estimate the cross-validated MSE of the trees as a function
+of $\alpha$.
+
+4. Return the subtree from Step 2 that corresponds to the
+chosen value of $\alpha$.
+
+## Baseball example continued (ISL Figure 8.4)
+
+![](img/8_4.png){width="80%"}
+
+## Baseball example continued (ISL Figure 8.5)
+
+![](img/8_5.png){width="80%"}
+
+## Advantages and Disadvantages of Trees
+
+-  Trees are very easy to explain to people. In fact, they are
+even easier to explain than linear regression!
+
+- Some people believe that decision trees more closely mirror
+human decision-making than do the regression approach seen in previous chapters.
+
+-  Trees can be displayed graphically, and are easily
+interpreted even by a non-expert (especially if they are
+small).
+
+- Trees can easily handle qualitative predictors without the
+need to create dummy variables.
+
+- Unfortunately, trees generally do not have the same level of
+predictive accuracy as some of the other regression and
+classification approaches seen in this book.
+
+However, by aggregating many decision trees, the predictive
+performance of trees can be substantially improved. We
+introduce these concepts next.
+
+## Bagging
+
+- [Bootstrap aggregation]{.orange}, or [bagging]{.orange}, is a general-purpose
+procedure for reducing the variance of a statistical learning
+method; we introduce it here because it is particularly
+useful and frequently used in the context of decision trees.
+
+- Recall that given a set of $n$ independent observations
+$Z_1,...,Z_n$, each with variance $\sigma^2$, the variance of the mean $Z$ of the observations is given by $\sigma^2/n$.
+
+- In other words, [averaging a set of observations reduces
+variance]{.blue}. Of course, this is not practical because we
+generally do not have access to multiple training sets.
+
+## Bagging - continued
+
+- Instead, we can bootstrap, by taking repeated samples
+from the (single) training data set.
+
+- In this approach we generate $B$ diﬀerent bootstrapped
+training data sets. We then train our method on the $b$th
+bootstrapped training set in order to get $\hat f^{*_b}(x)$, the
+prediction at a point $x$. We then average all the predictions
+to obtain
+$$\hat f_{bag}(x) = \frac{1}{B} \sum_{b=1}^{B} \hat f^{*_b}(x).$$
+This is called [bagging]{.orange}.
