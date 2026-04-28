@@ -701,7 +701,7 @@ library(randomForest)
 
 set.seed(123)
 
-ntree <- 20
+ntree <- 50
 p <- ncol(train_data) - 1
 
 # -----------------------------
@@ -884,7 +884,7 @@ of the 369 for the ALS data).
 
 set.seed(123)
 
-ntree <- 20
+ntree <- 50
 p <- ncol(train_data) - 1
 m_rf <- floor(sqrt(p))
 
