@@ -44,6 +44,9 @@ Bachelor’s Degree Programme in Philosophy, International and Economic Studies,
 
 ### Slides and lecture notes
 
+Slides and lecture notes are based on the textbook (both required and optional) and on the resources for ISL with R, 2nd Edition, available at [https://www.statlearning.com/resources-second-edition](https://www.statlearning.com/resources-second-edition)
+.
+
 The slides are meant to be used in HTML. However, if you *really* want
 to convert the HTML slides into pdf files, you can [follow the
 instruction of the quarto

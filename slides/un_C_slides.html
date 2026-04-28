@@ -28,6 +28,72 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #24292e;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #24292e; } /* Normal */
+    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
+    code span.an { color: #6a737d; } /* Annotation */
+    code span.at { color: #d73a49; } /* Attribute */
+    code span.bn { color: #005cc5; } /* BaseN */
+    code span.bu { color: #d73a49; } /* BuiltIn */
+    code span.cf { color: #d73a49; } /* ControlFlow */
+    code span.ch { color: #032f62; } /* Char */
+    code span.cn { color: #005cc5; } /* Constant */
+    code span.co { color: #6a737d; } /* Comment */
+    code span.cv { color: #6a737d; } /* CommentVar */
+    code span.do { color: #6a737d; } /* Documentation */
+    code span.dt { color: #d73a49; } /* DataType */
+    code span.dv { color: #005cc5; } /* DecVal */
+    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
+    code span.ex { color: #d73a49; font-weight: bold; } /* Extension */
+    code span.fl { color: #005cc5; } /* Float */
+    code span.fu { color: #6f42c1; } /* Function */
+    code span.im { color: #032f62; } /* Import */
+    code span.in { color: #6a737d; } /* Information */
+    code span.kw { color: #d73a49; } /* Keyword */
+    code span.op { color: #24292e; } /* Operator */
+    code span.ot { color: #6f42c1; } /* Other */
+    code span.pp { color: #d73a49; } /* Preprocessor */
+    code span.re { color: #6a737d; } /* RegionMarker */
+    code span.sc { color: #005cc5; } /* SpecialChar */
+    code span.ss { color: #032f62; } /* SpecialString */
+    code span.st { color: #032f62; } /* String */
+    code span.va { color: #e36209; } /* Variable */
+    code span.vs { color: #032f62; } /* VerbatimString */
+    code span.wa { color: #ff5555; } /* Warning */
   </style>
   <link rel="stylesheet" href="un_D_files/libs/revealjs/dist/theme/quarto-52f9c9ea99cef3131c4880afbe91edc6.css">
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
@@ -186,7 +252,7 @@
 </section>
 <section id="baseball-salary-data-how-would-you-stratify-it" class="slide level2 center">
 <h2>Baseball salary data: how would you stratify it?</h2>
-<p>Salary is color-coded from low (blue, green) to high (yellow,red)</p>
+<p>Log Salary is color-coded from low (blue, green) to high (yellow,red)</p>
 
 <img data-src="un_D_files/figure-revealjs/unnamed-chunk-2-1.png" width="1000" class="r-stretch"></section>
 <section id="decision-tree-for-these-data-isl-figure-8.1" class="slide level2 center">
@@ -226,68 +292,482 @@
 </section>
 <section id="details-of-the-tree-building-process" class="slide level2 center">
 <h2>Details of the tree-building process</h2>
-<ol type="1">
-<li><p>We divide the predictor space — that is, the set of possible values for <span class="math inline">X_1,X_2,\ldots,X_p</span> — into <span class="math inline">J</span> distinct and non-overlapping regions, <span class="math inline">R_1</span>,<span class="math inline">R_2</span>,…,<span class="math inline">R_J</span>.</p></li>
-<li><p>For every observation that falls into the region <span class="math inline">R_j</span>, we make the same prediction, which is simply the mean of the response values for the training observations in <span class="math inline">R_j</span>.</p></li>
-</ol>
-</section>
-<section id="more-details-of-the-tree-building-process" class="slide level2 center">
-<h2>More details of the tree-building process</h2>
 <ul>
-<li><p>In theory, the regions could have any shape. However, we choose to divide the predictor space into high-dimensional rectangles, or boxes, for simplicity and for ease of interpretation of the resulting predictive model.</p></li>
-<li><p>The goal is to find boxes <span class="math inline">R_1</span>,…,<span class="math inline">R_J</span> that minimize the RSS, given by <span class="math display">\sum_{j \in J} \sum_{i \in R_j}(y_i - \hat y_{R_j})^2</span> where <span class="math inline">y_{R_j}</span> is the mean response for the training observations within the <span class="math inline">j</span>th box.</p></li>
-</ul>
-</section>
-<section id="more-details-of-the-tree-building-process-1" class="slide level2 center">
-<h2>More details of the tree-building process</h2>
-<ul>
-<li><p>Unfortunately, it is computationally infeasible to consider every possible partition of the feature space into <span class="math inline">J</span> boxes.</p></li>
-<li><p>For this reason, we take a <span class="orange">top-down</span>, <span class="orange">greedy</span> approach that is known as <span class="blue">recursive binary splitting</span>.</p></li>
-<li><p>The approach is <span class="orange">top-down</span> because it begins at the top of the tree and then successively splits the predictor space; each split is indicated via two new branches further down on the tree.</p></li>
-<li><p>It is <span class="orange">greedy</span> because at each step of the tree-building process, the best split is made at that particular step, rather than looking ahead and picking a split that will lead to a better tree in some future step.</p></li>
-</ul>
-</section>
-<section id="details-continued" class="slide level2 center">
-<h2>Details — Continued</h2>
-<ul>
-<li><p>We first select the predictor <span class="math inline">X_j</span> and the cutpoint <span class="math inline">s</span> such that splitting the predictor space into the regions <span class="math inline">\{X|X_j &lt;s \}</span> and <span class="math inline">\{X|X_j \geq s \}</span> leads to the greatest possible reduction in RSS.</p></li>
-<li><p>Next, we repeat the process, looking for the best predictor and best cutpoint in order to split the data further so as to minimize the RSS within each of the resulting regions.</p></li>
-<li><p>However, this time, instead of splitting the entire predictor space, we split one of the two previously identified regions. We now have three regions.</p></li>
-<li><p>Again, we look to split one of these three regions further, so as to minimize the RSS. The process continues until a stopping criterion is reached; for instance, we may continue until no region contains more than five observations.</p></li>
-</ul>
-</section>
-<section id="details-continued-1" class="slide level2 center">
-<h2>Details — Continued</h2>
-<ul>
-<li><p>In greater detail, for any <span class="math inline">j</span> and <span class="math inline">s</span>, we define the pair of half-planes <span class="math display">
-R_1(j, s) = \{X \mid X_j &lt; s\}, \quad R_2(j, s) = \{X \mid X_j \ge s\}.
+<li><p>Partition the predictor space (all values of <span class="math inline">X_1,\ldots,X_p</span>) into <span class="math inline">J</span> disjoint regions <span class="math inline">R_1,\ldots,R_J</span>.</p></li>
+<li><p>In each region <span class="math inline">R_j</span>, predict with a constant: <span class="math display">
+\hat{y}_{R_j} = \frac{1}{|R_j|} \sum_{i \in R_j} y_i
 </span></p></li>
-<li><p>We then seek the pair <span class="math inline">(j,s)</span> that minimizes the residual sum of squares (RSS): <span class="math display">\sum_{i: x_i \in R_1(j,s)} (y_i - \hat{y}_{R_1})^2 \;+\;\sum_{i: x_i \in R_2(j,s)} (y_i - \hat{y}_{R_2})^2,</span> where <span class="math inline">\hat{y}_{R_1}</span> and <span class="math inline">\hat{y}_{R_2}</span> are the mean responses of the training observations in regions <span class="math inline">R_1(j,s)</span> and <span class="math inline">R_2(j,s)</span>, respectively.</p></li>
-<li><p>In practice, this optimization is computationally efficient: for each predictor <span class="math inline">X_j</span>, we sort its values and evaluate candidate split points (typically between consecutive observations). As long as the number of predictors <span class="math inline">p</span> is not too large, the optimal split can be found quickly.</p></li>
+<li><p>Choose the regions to minimize the residual sum of squares (RSS): <span class="math display">
+\sum_{j=1}^{J} \sum_{i \in R_j} (y_i - \hat{y}_{R_j})^2
+</span></p></li>
+<li><p>In practice, exhaustively searching over all possible partitions is computationally infeasible. Instead,</p>
+<ul>
+<li>restrict regions to <span class="blue">axis-aligned rectangles</span></li>
+<li>build the partition using <span class="orange">recursive binary splitting</span> (top-down, greedy)</li>
+</ul></li>
+<li><p>Interpretation:</p>
+<ul>
+<li>each region = a group of similar observations<br>
+</li>
+<li>prediction = average response within that group</li>
+</ul></li>
 </ul>
 </section>
-<section id="details-continued-2" class="slide level2 center">
-<h2>Details — Continued</h2>
+<section id="recursive-binary-splitting" class="slide level2 center">
+<h2>Recursive binary splitting</h2>
 <ul>
-<li><p>After obtaining the first split, we have two regions <span class="math inline">R_1</span> and <span class="math inline">R_2</span>. Instead of splitting the entire predictor space again, we consider splitting one of these regions further.</p></li>
-<li><p>For any region <span class="math inline">R \in \{R_1, R_2\}</span>, predictor <span class="math inline">X_j</span>, and split point <span class="math inline">s</span>, we define: <span class="math display">
-R_{L}(j, s; R) = \{X \in R \mid X_j &lt; s\}, \quad
-R_{R}(j, s; R) = \{X \in R \mid X_j \ge s\}.
+<li><p><span class="orange">Top-down</span>: start with the full dataset and successively split it into smaller regions.</p></li>
+<li><p><span class="orange">Greedy</span>: at each step, choose the split that gives the largest immediate reduction in RSS.</p></li>
+<li><p>At each step, select a predictor <span class="math inline">X_j</span> and split point <span class="math inline">s</span> that divides a region into: <span class="math display">
+R_1(j,s) = \{X \mid X_j &lt; s\}, \quad
+R_2(j,s) = \{X \mid X_j \ge s\}.
 </span></p></li>
-<li><p>We then seek the region <span class="math inline">R</span>, predictor <span class="math inline">j</span>, and split point <span class="math inline">s</span> that minimize the total residual sum of squares (RSS) after the second split: <span class="math display">
-\sum_{i: x_i \in R_{L}(j,s;R)} (y_i - \hat{y}_{L})^2
-\;+\;
-\sum_{i: x_i \in R_{R}(j,s;R)} (y_i - \hat{y}_{R})^2
-\;+\;
-\sum_{i: x_i \in R^{c}} (y_i - \hat{y}_{R^{c}})^2,
-</span> where <span class="math inline">R^{c}</span> denotes the region not being split, and <span class="math inline">\hat{y}_{L}</span>, <span class="math inline">\hat{y}_{R}</span>, and <span class="math inline">\hat{y}_{R^{c}}</span> are the mean responses in the corresponding regions.</p></li>
-<li><p>Etc.</p></li>
+<li><p>Choose <span class="math inline">(j,s)</span> to minimize: <span class="math display">
+\text{RSS}(j,s) =
+\sum_{i \in R_1(j,s)} (y_i - \hat{y}_{R_1})^2 +
+\sum_{i \in R_2(j,s)} (y_i - \hat{y}_{R_2})^2.
+</span></p></li>
+<li><p>In practice:</p>
+<ul>
+<li>sort each predictor</li>
+<li>evaluate splits at <span class="blue">midpoints between consecutive values</span></li>
+<li>select the split with smallest RSS</li>
+</ul></li>
 </ul>
+</section>
+<section id="recursive-binary-splitting-continued" class="slide level2 center">
+<h2>Recursive binary splitting — continued</h2>
+<ul>
+<li><p>After the first split, we obtain two regions <span class="math inline">R_1</span> and <span class="math inline">R_2</span>.</p></li>
+<li><p>Next, we split <span class="blue">one of these regions</span> further.</p></li>
+<li><p>For <span class="math inline">R \in \{R_1, R_2\}</span>, define: <span class="math display">
+R_L(j,s;R) = \{X \in R \mid X_j &lt; s\}, \quad
+R_R(j,s;R) = \{X \in R \mid X_j \ge s\}.
+</span></p></li>
+<li><p>Choose <span class="math inline">R</span>, <span class="math inline">j</span>, and <span class="math inline">s</span> to minimize the <span class="orange">total RSS after the split</span>:</p></li>
+</ul>
+<p><span class="math display">\sum_{i \in R_L(j,s;R)} (y_i - \hat{y}_L)^2
++
+\sum_{i \in R_R(j,s;R)} (y_i - \hat{y}_R)^2
++
+\sum_{i \in R^c} (y_i - \hat{y}_{R^c})^2,</span> where <span class="math inline">R^c</span> is the region not split.</p>
+<ul>
+<li>Repeat until a stopping rule is met (e.g., minimum node size).</li>
+</ul>
+</section>
+<section id="baseball-example" class="slide level2 center">
+<h2>Baseball example</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>    predictor split      RSS
+1       Years   1.5 5.371093
+2       Years   2.5 4.396926
+3       Years   3.5 3.459744
+4       Years   4.5 3.397360
+5       Years   5.5 3.998963
+6       Years   6.5 4.528329
+7       Years   7.5 5.015692
+8       Years   8.5 5.160630
+9       Years   9.5 5.441011
+10      Years  10.5 5.549537
+11      Years  11.5 5.717716
+12      Years  12.5 5.779519
+13      Years  13.5 6.017264
+14      Years  14.5 6.180344
+15      Years  15.5 6.228585
+16      Years  16.5 6.238226
+17      Years  17.5 6.263735
+18      Years  18.5 6.295138
+19      Years  19.5 6.297833
+20      Years  22.0 6.284817
+21       Hits   2.5 6.227453
+22       Hits  15.5 6.210460
+23       Hits  29.5 6.267218
+24       Hits  34.5 6.292269
+25       Hits  38.0 6.296987
+26       Hits  39.5 6.258108
+27       Hits  40.5 6.221868
+28       Hits  41.5 6.117778
+29       Hits  42.5 6.162232
+30       Hits  43.5 6.127846
+31       Hits  45.0 6.128328
+32       Hits  46.5 6.095667
+33       Hits  48.0 6.108631
+34       Hits  50.0 6.120371
+35       Hits  51.5 6.066072
+36       Hits  52.5 6.105733
+37       Hits  53.5 6.011732
+38       Hits  54.5 5.894460
+39       Hits  55.5 5.948283
+40       Hits  56.5 5.871224
+41       Hits  57.5 5.836472
+42       Hits  59.0 5.790090
+43       Hits  60.5 5.740105
+44       Hits  62.0 5.732392
+45       Hits  63.5 5.740384
+46       Hits  64.5 5.675512
+47       Hits  65.5 5.709179
+48       Hits  67.0 5.648360
+49       Hits  68.5 5.593724
+50       Hits  69.5 5.592256
+51       Hits  70.5 5.654370
+52       Hits  71.5 5.605030
+53       Hits  72.5 5.567728
+54       Hits  73.5 5.504112
+55       Hits  74.5 5.540488
+56       Hits  75.5 5.505728
+57       Hits  76.5 5.473642
+58       Hits  77.5 5.534621
+59       Hits  79.0 5.495257
+60       Hits  80.5 5.526392
+61       Hits  81.5 5.497471
+62       Hits  82.5 5.462044
+63       Hits  83.5 5.512501
+64       Hits  84.5 5.554221
+65       Hits  85.5 5.556012
+66       Hits  86.5 5.499711
+67       Hits  88.5 5.442760
+68       Hits  90.5 5.455674
+69       Hits  91.5 5.448321
+70       Hits  92.5 5.399763
+71       Hits  93.5 5.367207
+72       Hits  94.5 5.445048
+73       Hits  95.5 5.390645
+74       Hits  96.5 5.372025
+75       Hits  98.0 5.351532
+76       Hits 100.0 5.286660
+77       Hits 101.5 5.280756
+78       Hits 102.5 5.215843
+79       Hits 103.5 5.095537
+80       Hits 105.0 5.128264
+81       Hits 107.0 5.165339
+82       Hits 108.5 5.082224
+83       Hits 109.5 5.023407
+84       Hits 111.0 5.093273
+85       Hits 112.5 5.075512
+86       Hits 113.5 5.058192
+87       Hits 114.5 5.070028
+88       Hits 115.5 5.060329
+89       Hits 116.5 5.082123
+90       Hits 117.5 4.951691
+91       Hits 118.5 4.960297
+92       Hits 119.5 5.055826
+93       Hits 121.0 5.000380
+94       Hits 122.5 5.011493
+95       Hits 123.5 5.112514
+96       Hits 124.5 5.128384
+97       Hits 125.5 5.193194
+98       Hits 126.5 5.220114
+99       Hits 127.5 5.258931
+100      Hits 128.5 5.328320
+101      Hits 129.5 5.354354
+102      Hits 130.5 5.362508
+103      Hits 131.5 5.432370
+104      Hits 132.5 5.441132
+105      Hits 134.0 5.466626
+106      Hits 135.5 5.453692
+107      Hits 136.5 5.533691
+108      Hits 137.5 5.558262
+109      Hits 138.5 5.470874
+110      Hits 139.5 5.458108
+111      Hits 140.5 5.424153
+112      Hits 141.5 5.472159
+113      Hits 143.0 5.451446
+114      Hits 144.5 5.497305
+115      Hits 145.5 5.453744
+116      Hits 146.5 5.480040
+117      Hits 147.5 5.542276
+118      Hits 148.5 5.616462
+119      Hits 149.5 5.585710
+120      Hits 150.5 5.618275
+121      Hits 151.5 5.681251
+122      Hits 153.0 5.655225
+123      Hits 155.5 5.686073
+124      Hits 157.5 5.696370
+125      Hits 158.5 5.732919
+126      Hits 159.5 5.771076
+127      Hits 160.5 5.819672
+128      Hits 162.0 5.831730
+129      Hits 165.0 5.913516
+130      Hits 167.5 5.878046
+131      Hits 168.5 5.943581
+132      Hits 169.5 5.992036
+133      Hits 170.5 6.054076
+134      Hits 171.5 6.120273
+135      Hits 173.0 6.079299
+136      Hits 175.5 6.118865
+137      Hits 177.5 6.153522
+138      Hits 178.5 6.168823
+139      Hits 181.0 6.175956
+140      Hits 183.5 6.192442
+141      Hits 185.0 6.202358
+142      Hits 192.0 6.232277
+143      Hits 199.0 6.256697
+144      Hits 203.5 6.278593
+145      Hits 208.5 6.296776
+146      Hits 210.5 6.261997
+147      Hits 212.0 6.276003
+148      Hits 218.0 6.264215
+149      Hits 230.5 6.232610</code></pre>
+</div>
+</div>
+</section>
+<section id="baseball-example-continued" class="slide level2 center">
+<h2>Baseball example continued</h2>
+
+<img data-src="un_D_files/figure-revealjs/unnamed-chunk-4-1.png" width="1000" class="r-stretch"></section>
+<section id="baseball-example-continued-1" class="slide level2 center">
+<h2>Baseball example continued</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Left region (Years &lt; 4.50): n = 90, mean log-Salary = 1.622</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Right region (Years &gt;= 4.50): n = 173, mean log-Salary = 1.844</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Interpretation:</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The split at Years = 4.50 creates two regions.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The left region contains 90 players and is assigned the prediction 1.622.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The right region contains 173 players and is assigned the prediction 1.844.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Because the response is log(Salary), these are predicted mean log-salaries in the two regions.</code></pre>
+</div>
+</div>
+</section>
+<section id="baseball-example-continued-2" class="slide level2 center">
+<h2>Baseball example continued</h2>
+
+<img data-src="un_D_files/figure-revealjs/unnamed-chunk-6-1.png" width="1000" class="r-stretch"></section>
+<section id="baseball-example-continued-3" class="slide level2 center">
+<h2>Baseball example continued</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>    region predictor split region_RSS total_RSS
+1     Left     Years   1.5   1.319332  3.261867
+2     Left     Years   2.5   1.207432  3.149967
+3     Left     Years   3.5   1.112303  3.054837
+4     Left      Hits   2.5   1.281382  3.223916
+5     Left      Hits  15.5   1.195274  3.137809
+6     Left      Hits  32.0   1.261950  3.204485
+7     Left      Hits  38.0   1.369151  3.311686
+8     Left      Hits  39.5   1.418755  3.361290
+9     Left      Hits  40.5   1.439334  3.381869
+10    Left      Hits  42.0   1.454823  3.397358
+11    Left      Hits  44.5   1.454490  3.397025
+12    Left      Hits  48.5   1.454743  3.397278
+13    Left      Hits  52.0   1.450571  3.393106
+14    Left      Hits  53.5   1.436085  3.378620
+15    Left      Hits  55.0   1.404618  3.347153
+16    Left      Hits  56.5   1.403503  3.346038
+17    Left      Hits  57.5   1.402668  3.345203
+18    Left      Hits  59.0   1.407750  3.350285
+19    Left      Hits  62.0   1.394341  3.336875
+20    Left      Hits  65.0   1.376087  3.318622
+21    Left      Hits  67.0   1.361891  3.304426
+22    Left      Hits  68.5   1.337789  3.280323
+23    Left      Hits  69.5   1.356119  3.298653
+24    Left      Hits  70.5   1.369962  3.312497
+25    Left      Hits  72.0   1.358715  3.301249
+26    Left      Hits  74.0   1.337515  3.280050
+27    Left      Hits  75.5   1.335522  3.278057
+28    Left      Hits  77.0   1.349370  3.291905
+29    Left      Hits  79.5   1.324547  3.267081
+30    Left      Hits  81.5   1.299983  3.242518
+31    Left      Hits  84.0   1.288557  3.231092
+32    Left      Hits  86.5   1.292939  3.235474
+33    Left      Hits  89.0   1.273747  3.216282
+34    Left      Hits  91.5   1.265881  3.208416
+35    Left      Hits  92.5   1.245869  3.188403
+36    Left      Hits  94.5   1.244122  3.186657
+37    Left      Hits  96.5   1.261724  3.204258
+38    Left      Hits  98.0   1.271392  3.213927
+39    Left      Hits 100.0   1.247694  3.190229
+40    Left      Hits 102.0   1.234213  3.176748
+41    Left      Hits 105.5   1.193858  3.136392
+42    Left      Hits 108.5   1.186047  3.128582
+43    Left      Hits 110.5   1.168522  3.111057
+44    Left      Hits 112.5   1.157854  3.100388
+45    Left      Hits 113.5   1.174403  3.116938
+46    Left      Hits 114.5   1.214848  3.157383
+47    Left      Hits 116.0   1.236536  3.179071
+48    Left      Hits 117.5   1.220602  3.163136
+49    Left      Hits 119.0   1.215231  3.157766
+50    Left      Hits 121.0   1.216359  3.158894
+51    Left      Hits 122.5   1.243324  3.185859
+52    Left      Hits 125.0   1.306566  3.249101
+53    Left      Hits 128.5   1.311264  3.253799
+54    Left      Hits 131.0   1.341955  3.284490
+55    Left      Hits 133.5   1.348074  3.290609
+56    Left      Hits 136.0   1.347069  3.289604
+57    Left      Hits 137.5   1.346365  3.288900
+58    Left      Hits 138.5   1.334082  3.276617
+59    Left      Hits 139.5   1.328692  3.271226
+60    Left      Hits 141.0   1.331225  3.273760
+61    Left      Hits 143.0   1.305769  3.248304
+62    Left      Hits 144.5   1.298338  3.240873
+63    Left      Hits 147.0   1.286423  3.228958
+64    Left      Hits 150.5   1.266658  3.209193
+65    Left      Hits 154.5   1.263775  3.206310
+66    Left      Hits 159.0   1.317537  3.260071
+67    Left      Hits 162.0   1.365265  3.307800
+68    Left      Hits 165.0   1.412458  3.354992
+69    Left      Hits 169.5   1.414429  3.356963
+70    Left      Hits 186.0   1.403780  3.346315
+71    Left      Hits 206.5   1.409318  3.351853
+72    Left      Hits 218.0   1.431238  3.373773
+73   Right     Years   5.5   1.890172  3.344997
+74   Right     Years   6.5   1.862262  3.317088
+75   Right     Years   7.5   1.899725  3.354551
+76   Right     Years   8.5   1.894117  3.348943
+77   Right     Years   9.5   1.918929  3.373755
+78   Right     Years  10.5   1.910833  3.365658
+79   Right     Years  11.5   1.926658  3.381484
+80   Right     Years  12.5   1.917794  3.372620
+81   Right     Years  13.5   1.941244  3.396070
+82   Right     Years  14.5   1.939608  3.394433
+83   Right     Years  15.5   1.937982  3.392808
+84   Right     Years  16.5   1.940613  3.395439
+85   Right     Years  17.5   1.940793  3.395619
+86   Right     Years  18.5   1.935372  3.390198
+87   Right     Years  19.5   1.934844  3.389670
+88   Right     Years  22.0   1.940362  3.395188
+89   Right      Hits  35.5   1.905647  3.360472
+90   Right      Hits  40.0   1.853547  3.308372
+91   Right      Hits  41.5   1.836484  3.291309
+92   Right      Hits  42.5   1.870942  3.325768
+93   Right      Hits  43.5   1.837118  3.291943
+94   Right      Hits  45.0   1.821850  3.276676
+95   Right      Hits  46.5   1.785473  3.240298
+96   Right      Hits  48.0   1.769784  3.224610
+97   Right      Hits  50.5   1.754470  3.209296
+98   Right      Hits  52.5   1.756907  3.211732
+99   Right      Hits  53.5   1.763409  3.218234
+100  Right      Hits  54.5   1.750200  3.205025
+101  Right      Hits  55.5   1.783477  3.238302
+102  Right      Hits  56.5   1.734586  3.189412
+103  Right      Hits  58.5   1.713946  3.168771
+104  Right      Hits  60.5   1.729375  3.184200
+105  Right      Hits  62.0   1.706809  3.161635
+106  Right      Hits  64.0   1.697793  3.152618
+107  Right      Hits  65.5   1.710242  3.165068
+108  Right      Hits  67.0   1.689751  3.144577
+109  Right      Hits  69.0   1.638327  3.093153
+110  Right      Hits  71.0   1.619347  3.074173
+111  Right      Hits  72.5   1.569242  3.024068
+112  Right      Hits  73.5   1.584380  3.039205
+113  Right      Hits  75.0   1.600044  3.054870
+114  Right      Hits  76.5   1.559086  3.013912
+115  Right      Hits  77.5   1.550198  3.005024
+116  Right      Hits  79.0   1.546833  3.001659
+117  Right      Hits  80.5   1.559109  3.013935
+118  Right      Hits  81.5   1.546203  3.001029
+119  Right      Hits  82.5   1.541340  2.996165
+120  Right      Hits  83.5   1.539928  2.994753
+121  Right      Hits  84.5   1.547334  3.002160
+122  Right      Hits  87.5   1.518498  2.973323
+123  Right      Hits  90.5   1.514591  2.969416
+124  Right      Hits  91.5   1.529982  2.984807
+125  Right      Hits  92.5   1.535315  2.990141
+126  Right      Hits  93.5   1.522493  2.977319
+127  Right      Hits  94.5   1.544159  2.998985
+128  Right      Hits  95.5   1.481903  2.936729
+129  Right      Hits  98.5   1.473359  2.928185
+130  Right      Hits 101.5   1.494732  2.949557
+131  Right      Hits 102.5   1.408901  2.863727
+132  Right      Hits 103.5   1.362936  2.817762
+133  Right      Hits 105.0   1.374593  2.829419
+134  Right      Hits 108.0   1.390211  2.845036
+135  Right      Hits 111.0   1.399984  2.854809
+136  Right      Hits 112.5   1.410489  2.865315
+137  Right      Hits 114.5   1.410618  2.865444
+138  Right      Hits 116.5   1.413036  2.867861
+139  Right      Hits 117.5   1.340177  2.795003
+140  Right      Hits 118.5   1.369027  2.823853
+141  Right      Hits 119.5   1.399491  2.854316
+142  Right      Hits 121.0   1.401063  2.855888
+143  Right      Hits 122.5   1.398414  2.853239
+144  Right      Hits 123.5   1.424181  2.879007
+145  Right      Hits 124.5   1.422297  2.877122
+146  Right      Hits 125.5   1.459717  2.914542
+147  Right      Hits 126.5   1.452736  2.907561
+148  Right      Hits 127.5   1.480455  2.935281
+149  Right      Hits 128.5   1.508295  2.963120
+150  Right      Hits 130.0   1.515504  2.970330
+151  Right      Hits 131.5   1.531565  2.986390
+152  Right      Hits 132.5   1.546970  3.001796
+153  Right      Hits 134.0   1.554371  3.009197
+154  Right      Hits 135.5   1.560725  3.015551
+155  Right      Hits 136.5   1.586109  3.040935
+156  Right      Hits 138.0   1.608953  3.063779
+157  Right      Hits 140.0   1.607801  3.062627
+158  Right      Hits 141.5   1.606954  3.061780
+159  Right      Hits 143.0   1.630102  3.084927
+160  Right      Hits 144.5   1.670967  3.125793
+161  Right      Hits 145.5   1.664383  3.119209
+162  Right      Hits 146.5   1.671245  3.126071
+163  Right      Hits 147.5   1.681078  3.135903
+164  Right      Hits 148.5   1.710290  3.165116
+165  Right      Hits 149.5   1.715615  3.170440
+166  Right      Hits 150.5   1.726839  3.181665
+167  Right      Hits 151.5   1.757708  3.212534
+168  Right      Hits 153.0   1.766136  3.220962
+169  Right      Hits 155.5   1.767103  3.221928
+170  Right      Hits 157.5   1.755593  3.210419
+171  Right      Hits 158.5   1.759961  3.214787
+172  Right      Hits 159.5   1.755237  3.210062
+173  Right      Hits 161.5   1.778057  3.232882
+174  Right      Hits 165.5   1.815637  3.270463
+175  Right      Hits 168.5   1.830561  3.285387
+176  Right      Hits 169.5   1.835031  3.289856
+177  Right      Hits 170.5   1.857940  3.312766
+178  Right      Hits 172.5   1.884522  3.339348
+179  Right      Hits 175.5   1.893130  3.347956
+180  Right      Hits 177.5   1.906263  3.361089
+181  Right      Hits 178.5   1.908438  3.363264
+182  Right      Hits 181.0   1.905610  3.360435
+183  Right      Hits 183.5   1.908464  3.363290
+184  Right      Hits 185.0   1.906777  3.361603
+185  Right      Hits 192.0   1.919686  3.374512
+186  Right      Hits 199.0   1.929488  3.384314
+187  Right      Hits 203.5   1.942069  3.396894
+188  Right      Hits 208.5   1.938267  3.393093
+189  Right      Hits 210.5   1.916370  3.371196
+190  Right      Hits 224.5   1.908858  3.363683</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Best second split:</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Split the Right region</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Predictor: Hits</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Split point: 117.50</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Region RSS after split: 1.340</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Total RSS after second split: 2.795</code></pre>
+</div>
+</div>
 </section>
 <section id="predictions" class="slide level2 center">
 <h2>Predictions</h2>
 <ul>
-<li><p>We predict the response for a given test observation using the mean of the training observations in the region to which that test observation belongs.</p></li>
+<li><p>For a new observation, predict using the <span class="blue">mean response in its region</span>.</p></li>
+<li><p>The model is a <span class="blue">piecewise-constant function</span> over the predictor space.</p></li>
 <li><p>A five-region example of this approach is shown in the next slide.</p></li>
 </ul>
 </section>
@@ -303,309 +783,6 @@ R_{R}(j, s; R) = \{X \in R \mid X_j \ge s\}.
 <li><p><span class="orange">Bottom Left</span>: A tree corresponding to the partition in the top right panel.</p></li>
 <li><p><span class="orange">Bottom Right</span>: A perspective plot of the prediction surface corresponding to that tree.</p></li>
 </ul>
-</section>
-<section id="baseball-example" class="slide level2 center">
-<h2>Baseball example</h2>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>   split      RSS
-1    1.5 50776870
-2    2.5 50776870
-3    3.5 50776870
-4    4.5 51352898
-5    5.5 51352898
-6    6.5 51352898
-7    7.5 51352898
-8    8.5 51352898
-9    9.5 51352898
-10  10.5 51352898
-11  11.5 51352898
-12  12.5 51352898
-13  13.5 51352898
-14  14.5 51352898
-15  15.5 51352898
-16  16.5 51352898
-17  17.5 51352898
-18  18.5 51352898
-19  19.5 51352898
-20  22.0 51352898</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   split      RSS
-1    1.5 50607227
-2    2.5 47908697
-3    3.5 43120878
-4    4.5 40162624
-5    5.5 42045385
-6    6.5 44051490
-7    7.5 45812134
-8    8.5 46567073
-9    9.5 48443416
-10  10.5 49171341
-11  11.5 50175619
-12  12.5 50023227
-13  13.5 52385589
-14  14.5 53194949
-15  15.5 53230954
-16  16.5 53232002
-17  17.5 53277580
-18  18.5 53308319
-19  19.5 53309336
-20  22.0 53273110</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Best split on Years = 4.5 </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Minimum RSS = 40162624 </code></pre>
-</div>
-</div>
-</section>
-<section id="baseball-example-continued" class="slide level2 center">
-<h2>Baseball example continued</h2>
-
-<img data-src="un_D_files/figure-revealjs/unnamed-chunk-4-1.png" width="1000" class="r-stretch"></section>
-<section id="baseball-example-continued-1" class="slide level2 center">
-<h2>Baseball example continued</h2>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Left region (Years &lt; 4.50): n = 90, mean Salary = 225.83</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Right region (Years &gt;= 4.50): n = 173, mean Salary = 697.25</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Interpretation:</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>The left region contains 90 players with Years &lt; 4.5 and average Salary = 225.83 </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>The right region contains 173 players with Years &gt;= 4.5 and average Salary = 697.25 </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>These means are the predicted Salary values assigned to each region after the split.</code></pre>
-</div>
-</div>
-</section>
-<section id="baseball-example-continued-2" class="slide level2 center">
-<h2>Baseball example continued</h2>
-
-<img data-src="un_D_files/figure-revealjs/unnamed-chunk-6-1.png" width="1000" class="r-stretch"></section>
-<section id="baseball-example-continued-3" class="slide level2 center">
-<h2>Baseball example continued</h2>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>    region variable split region_RSS total_RSS
-1     Left    Years   1.5    6647525  40040977
-2     Left    Years   2.5    6669573  40063025
-3     Left    Years   3.5    6375188  39768640
-4     Left     Hits   2.5    3112837  36506290
-5     Left     Hits  15.5    3323857  36717310
-6     Left     Hits  32.0    4509594  37903047
-7     Left     Hits  38.0    5257158  38650610
-8     Left     Hits  39.5    5694084  39087536
-9     Left     Hits  40.5    5968610  39362062
-10    Left     Hits  42.0    6310631  39704084
-11    Left     Hits  44.5    6402938  39796390
-12    Left     Hits  48.5    6452966  39846418
-13    Left     Hits  52.0    6529673  39923125
-14    Left     Hits  53.5    6644674  40038126
-15    Left     Hits  55.0    6706979  40100431
-16    Left     Hits  56.5    6727691  40121143
-17    Left     Hits  57.5    6737680  40131132
-18    Left     Hits  59.0    6741962  40135414
-19    Left     Hits  62.0    6758007  40151460
-20    Left     Hits  65.0    6764512  40157964
-21    Left     Hits  67.0    6767916  40161368
-22    Left     Hits  68.5    6769170  40162622
-23    Left     Hits  69.5    6769058  40162510
-24    Left     Hits  70.5    6768913  40162366
-25    Left     Hits  72.0    6769016  40162468
-26    Left     Hits  74.0    6764833  40158285
-27    Left     Hits  75.5    6762067  40155519
-28    Left     Hits  77.0    6760044  40153496
-29    Left     Hits  79.5    6752605  40146057
-30    Left     Hits  81.5    6743400  40136852
-31    Left     Hits  84.0    6735075  40128527
-32    Left     Hits  86.5    6728025  40121477
-33    Left     Hits  89.0    6715910  40109362
-34    Left     Hits  91.5    6705865  40099317
-35    Left     Hits  92.5    6682458  40075910
-36    Left     Hits  94.5    6672920  40066372
-37    Left     Hits  96.5    6669400  40062852
-38    Left     Hits  98.0    6667129  40060581
-39    Left     Hits 100.0    6647325  40040777
-40    Left     Hits 102.0    6621545  40014997
-41    Left     Hits 105.5    6576283  39969735
-42    Left     Hits 108.5    6548230  39941682
-43    Left     Hits 110.5    6522835  39916288
-44    Left     Hits 112.5    6500018  39893470
-45    Left     Hits 113.5    6534922  39928375
-46    Left     Hits 114.5    6582306  39975758
-47    Left     Hits 116.0    6593473  39986926
-48    Left     Hits 117.5    6569638  39963091
-49    Left     Hits 119.0    6551041  39944493
-50    Left     Hits 121.0    6520809  39914261
-51    Left     Hits 122.5    6543468  39936920
-52    Left     Hits 125.0    6709530  40102982
-53    Left     Hits 128.5    6705042  40098494
-54    Left     Hits 131.0    6731272  40124724
-55    Left     Hits 133.5    6728967  40122420
-56    Left     Hits 136.0    6721806  40115258
-57    Left     Hits 137.5    6714021  40107473
-58    Left     Hits 138.5    6688320  40081772
-59    Left     Hits 139.5    6673531  40066983
-60    Left     Hits 141.0    6663826  40057278
-61    Left     Hits 143.0    6633094  40026546
-62    Left     Hits 144.5    6610323  40003775
-63    Left     Hits 147.0    6580704  39974156
-64    Left     Hits 150.5    6540519  39933972
-65    Left     Hits 154.5    6482991  39876444
-66    Left     Hits 159.0    6600636  39994088
-67    Left     Hits 162.0    6691264  40084716
-68    Left     Hits 165.0    6759757  40153210
-69    Left     Hits 169.5    6755729  40149181
-70    Left     Hits 186.0    6740668  40134120
-71    Left     Hits 206.5    6733710  40127162
-72    Left     Hits 218.0    6749586  40143038
-73   Right    Years   5.5   32893956  39663128
-74   Right    Years   6.5   32615377  39384548
-75   Right    Years   7.5   32692681  39461852
-76   Right    Years   8.5   32672489  39441661
-77   Right    Years   9.5   33042422  39811593
-78   Right    Years  10.5   33044862  39814033
-79   Right    Years  11.5   33209508  39978679
-80   Right    Years  12.5   32994115  39763286
-81   Right    Years  13.5   33384126  40153297
-82   Right    Years  14.5   33133697  39902869
-83   Right    Years  15.5   33216785  39985956
-84   Right    Years  16.5   33284512  40053683
-85   Right    Years  17.5   33308559  40077730
-86   Right    Years  18.5   33207905  39977076
-87   Right    Years  19.5   33248258  40017429
-88   Right    Years  22.0   33390653  40159824
-89   Right     Hits  35.5   33101664  39870835
-90   Right     Hits  40.0   32650379  39419550
-91   Right     Hits  41.5   32449185  39218357
-92   Right     Hits  42.5   32744667  39513838
-93   Right     Hits  43.5   32361303  39130475
-94   Right     Hits  45.0   32171721  38940893
-95   Right     Hits  46.5   31900293  38669464
-96   Right     Hits  48.0   31620013  38389185
-97   Right     Hits  50.5   31316310  38085482
-98   Right     Hits  52.5   31163639  37932811
-99   Right     Hits  53.5   31137864  37907035
-100  Right     Hits  54.5   30948156  37717327
-101  Right     Hits  55.5   31473000  38242172
-102  Right     Hits  56.5   30997604  37766775
-103  Right     Hits  58.5   30770414  37539585
-104  Right     Hits  60.5   30864763  37633934
-105  Right     Hits  62.0   30627002  37396173
-106  Right     Hits  64.0   30461979  37231150
-107  Right     Hits  65.5   30517746  37286917
-108  Right     Hits  67.0   30284267  37053438
-109  Right     Hits  69.0   29551514  36320686
-110  Right     Hits  71.0   29171762  35940934
-111  Right     Hits  72.5   28817603  35586775
-112  Right     Hits  73.5   28910206  35679377
-113  Right     Hits  75.0   29019835  35789007
-114  Right     Hits  76.5   28392178  35161349
-115  Right     Hits  77.5   28084135  34853307
-116  Right     Hits  79.0   27845378  34614549
-117  Right     Hits  80.5   27914297  34683468
-118  Right     Hits  81.5   27493061  34262232
-119  Right     Hits  82.5   27335771  34104943
-120  Right     Hits  83.5   27017425  33786596
-121  Right     Hits  84.5   26968334  33737505
-122  Right     Hits  87.5   26468543  33237714
-123  Right     Hits  90.5   26311752  33080924
-124  Right     Hits  91.5   26467453  33236625
-125  Right     Hits  92.5   26560768  33329940
-126  Right     Hits  93.5   26315163  33084334
-127  Right     Hits  94.5   26360456  33129627
-128  Right     Hits  95.5   25895528  32664700
-129  Right     Hits  98.5   25652587  32421758
-130  Right     Hits 101.5   25688607  32457779
-131  Right     Hits 102.5   24951695  31720867
-132  Right     Hits 103.5   24090300  30859472
-133  Right     Hits 105.0   24154209  30923381
-134  Right     Hits 108.0   24307350  31076522
-135  Right     Hits 111.0   24106495  30875666
-136  Right     Hits 112.5   24157798  30926969
-137  Right     Hits 114.5   23941950  30711121
-138  Right     Hits 116.5   23845691  30614862
-139  Right     Hits 117.5   23267845  30037016
-140  Right     Hits 118.5   23832964  30602135
-141  Right     Hits 119.5   24001373  30770545
-142  Right     Hits 121.0   23889699  30658871
-143  Right     Hits 122.5   23712718  30481889
-144  Right     Hits 123.5   24216204  30985375
-145  Right     Hits 124.5   24051149  30820320
-146  Right     Hits 125.5   25140680  31909851
-147  Right     Hits 126.5   24835707  31604878
-148  Right     Hits 127.5   25201312  31970484
-149  Right     Hits 128.5   25729885  32499056
-150  Right     Hits 130.0   25734520  32503691
-151  Right     Hits 131.5   25673613  32442785
-152  Right     Hits 132.5   25893991  32663162
-153  Right     Hits 134.0   25907841  32677012
-154  Right     Hits 135.5   25899090  32668261
-155  Right     Hits 136.5   26033456  32802628
-156  Right     Hits 138.0   26286199  33055370
-157  Right     Hits 140.0   26107483  32876654
-158  Right     Hits 141.5   25738373  32507544
-159  Right     Hits 143.0   26335514  33104685
-160  Right     Hits 144.5   27468898  34238069
-161  Right     Hits 145.5   27224532  33993704
-162  Right     Hits 146.5   27240990  34010161
-163  Right     Hits 147.5   27526855  34296026
-164  Right     Hits 148.5   28317566  35086737
-165  Right     Hits 149.5   28303490  35072661
-166  Right     Hits 150.5   28459678  35228850
-167  Right     Hits 151.5   29714011  36483182
-168  Right     Hits 153.0   29690222  36459393
-169  Right     Hits 155.5   29480135  36249307
-170  Right     Hits 157.5   29172788  35941960
-171  Right     Hits 158.5   28999584  35768756
-172  Right     Hits 159.5   28578626  35347797
-173  Right     Hits 161.5   29300567  36069738
-174  Right     Hits 165.5   30231961  37001133
-175  Right     Hits 168.5   30274098  37043270
-176  Right     Hits 169.5   29953537  36722709
-177  Right     Hits 170.5   30388752  37157924
-178  Right     Hits 172.5   31210593  37979764
-179  Right     Hits 175.5   31158831  37928003
-180  Right     Hits 177.5   31562507  38331678
-181  Right     Hits 178.5   31430986  38200158
-182  Right     Hits 181.0   31101254  37870425
-183  Right     Hits 183.5   30919695  37688866
-184  Right     Hits 185.0   30495666  37264837
-185  Right     Hits 192.0   30888469  37657640
-186  Right     Hits 199.0   31107929  37877101
-187  Right     Hits 203.5   32725125  39494296
-188  Right     Hits 208.5   33220880  39990051
-189  Right     Hits 210.5   32511386  39280557
-190  Right     Hits 224.5   31751306  38520478</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Best second split:</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Region = Right </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Variable = Hits </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Split = 117.5 </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Total RSS = 30037016 </code></pre>
-</div>
-</div>
 </section>
 <section id="pruning-a-tree" class="slide level2 center">
 <h2>Pruning a tree</h2>
@@ -672,6 +849,53 @@ Best second split:</code></pre>
 </ul>
 <p>However, by aggregating many decision trees, the predictive performance of trees can be substantially improved. We introduce these concepts next.</p>
 </section>
+<section id="als-data" class="slide level2 center">
+<h2>ALS data</h2>
+<ul>
+<li><p>These data concern amyotrophic lateral sclerosis (Lou Gerig’s disease). There are 1822 observations (<span class="math inline">n=1197</span> training set and <span class="math inline">625</span> test set) on individuals with ALS. See <a href="https://lmackey.github.io/papers/als-nbt14.pdf">Kuffner et al.&nbsp;Nature Biotechnol. 33, 51–57; 2015</a></p></li>
+<li><p>The goal is to predict the rate of progression <code>dFRS</code> of a functional rating score, using <span class="math inline">p=369</span> predictors based on measurements (and derivatives of these) obtained from patient visits.</p></li>
+<li><p>These data can be read directly into R via the command</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>als <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"http://hastie.su.domains/CASI_files/DATA/ALS.txt"</span>,<span class="at">header=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section" class="slide level2 center">
+<h2></h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_D_files/figure-revealjs/unnamed-chunk-9-1.png" width="1200"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_D_files/figure-revealjs/unnamed-chunk-9-2.png" width="1200"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_D_files/figure-revealjs/unnamed-chunk-9-3.png" width="1200"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="un_D_files/figure-revealjs/unnamed-chunk-9-4.png" width="1200"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Test set MSE : 0.2788"</code></pre>
+</div>
+</div>
+</section>
 <section id="bagging" class="slide level2 center">
 <h2>Bagging</h2>
 <ul>
@@ -686,6 +910,156 @@ Best second split:</code></pre>
 <li><p>Instead, we can bootstrap, by taking repeated samples from the (single) training data set.</p></li>
 <li><p>In this approach we generate <span class="math inline">B</span> diﬀerent bootstrapped training data sets. We then train our method on the <span class="math inline">b</span>th bootstrapped training set in order to get <span class="math inline">\hat f^{*_b}(x)</span>, the prediction at a point <span class="math inline">x</span>. We then average all the predictions to obtain <span class="math display">\hat f_{bag}(x) = \frac{1}{B} \sum_{b=1}^{B} \hat f^{*_b}(x).</span> This is called <span class="orange">bagging</span>.</p></li>
 </ul>
+</section>
+<section id="bagging-the-als-data" class="slide level2 center">
+<h2>Bagging the ALS data</h2>
+
+<img data-src="un_D_files/figure-revealjs/unnamed-chunk-10-1.png" width="1200" class="r-stretch"></section>
+<section id="details-of-previous-figure-2" class="slide level2 center">
+<h2>Details of previous figure</h2>
+<p>Bagging results for the ALS data.</p>
+<ul>
+<li><p>The test error (black) is shown as a function of <span class="math inline">B</span>, the number of bootstrapped training sets used.</p></li>
+<li><p>The dashed line indicates the test error resulting from a single classification tree.</p></li>
+<li><p>The blue traces show the OOB error, which in this case is considerably higher</p></li>
+</ul>
+</section>
+<section id="out-of-bag-error-estimation" class="slide level2 center">
+<h2>Out-of-Bag Error Estimation</h2>
+<p>It turns out that there is a very straightforward way to estimate the test error of a bagged model.</p>
+<ul>
+<li><p>Recall that the key to bagging is that trees are repeatedly fit to bootstrapped subsets of the observations. One can show that on average, each bagged tree makes use of around two-thirds of the observations.</p></li>
+<li><p>The remaining one-third of the observations not used to fit a given bagged tree are referred to as the out-of-bag (OOB) observations.</p></li>
+<li><p>We can predict the response for the ith observation using each of the trees in which that observation was OOB. This will yield around <span class="math inline">B/3</span> predictions for the ith observation, which we average.</p></li>
+<li><p>This estimate is essentially the LOO cross-validation error for bagging, if <span class="math inline">B</span> is large.</p></li>
+</ul>
+</section>
+<section id="boostrap-sample" class="slide level2 center">
+<h2>Boostrap Sample</h2>
+<ul>
+<li><p>A bootstrap sample of size <span class="math inline">n</span> drawn from the training data is <span class="math display">(\tilde x_1, \tilde y_1), \ldots, (\tilde x_n, \tilde y_n),</span> where each pair <span class="math inline">(\tilde x_i, \tilde y_i)</span> is selected independently and with replacement, uniformly at random from the original dataset <span class="math display">(x_1, y_1), \ldots, (x_n, y_n),</span></p></li>
+<li><p>In a bootstrap sample of size <span class="math inline">n</span>, some observations appear multiple times, while others are not selected. For a single draw, the probability that a specific observation is not chosen is <span class="math display">1-\frac{1}{n}</span></p></li>
+<li><p>After <span class="math inline">n</span> draws (i.e., one bootstrap sample), the probability that a given observation is never selected is <span class="math display">\Big(1-\frac{1}{n}\Big)^n \approx \frac{1}{e} \approx 0.368</span> for large <span class="math inline">n</span>. Thus, about 1/3 of the training observations are left out of a given bootstrap sample</p></li>
+</ul>
+</section>
+<section id="variable-importance" class="slide level2 center">
+<h2>Variable Importance</h2>
+<ul>
+<li><p>How can we measure variable importance?</p></li>
+<li><p>In bagging, and more generally random forests, a common approach is based on <span class="blue">permuting predictors</span> using the out-of-bag (OOB) data.</p></li>
+<li><p>For each tree, the prediction error on its OOB sample is computed (OOB MSE). Then, for a given predictor, its values are randomly permuted in the OOB data and the prediction error is recomputed.</p></li>
+<li><p>The increase in prediction error due to this permutation is averaged over all trees, and often normalized by the standard deviation of these increases.</p></li>
+<li><p>This measures how much worse the model performs when the information in a variable is destroyed, i.e., it compares the model’s performance using the original variable versus a randomized version of it.</p></li>
+</ul>
+
+<img data-src="un_D_files/figure-revealjs/unnamed-chunk-11-1.png" width="1200" class="r-stretch"></section>
+<section id="random-forests" class="slide level2 center">
+<h2>Random Forests</h2>
+<p><span class="orange">Random forests</span> provide an improvement over bagged trees by way of a small tweak that <span class="blue">decorrelates</span> the trees. This reduces the variance when we average the trees.</p>
+<ul>
+<li><p>As in bagging, we build a number of decision trees on bootstrapped training samples.</p></li>
+<li><p>But when building these decision trees, each time a split in a tree is considered, <span class="blue">a random selection of <span class="math inline">m</span> predictors</span> is chosen as split candidates from the full set of <span class="math inline">p</span> predictors. The split is allowed to use only one of those <span class="math inline">m</span> predictors.</p></li>
+<li><p>A fresh selection of <span class="math inline">m</span> predictors is taken at each split, and typically we choose <span class="math inline">m \approx \sqrt{p}</span> — that is, the number of predictors considered at each split is approximately equal to the square root of the total number of predictors (19 out of the 369 for the ALS data).</p></li>
+</ul>
+</section>
+<section id="section-1" class="slide level2 center">
+<h2></h2>
+
+<img data-src="un_D_files/figure-revealjs/unnamed-chunk-12-1.png" width="1200" class="r-stretch"></section>
+<section id="boosting" class="slide level2 center">
+<h2>Boosting</h2>
+<ul>
+<li><p>Recall that bagging involves creating multiple copies of the original training data set using the bootstrap, fitting a separate decision tree to each copy, and then combining all of the trees in order to create a single predictive model.</p></li>
+<li><p>Notably, each tree is built on a bootstrap data set, independent of the other trees.</p></li>
+<li><p>Boosting works in a similar way, except that the trees are grown <span class="blue">sequentially</span>: each tree is grown using information from previously grown trees.</p></li>
+</ul>
+</section>
+<section id="boosting-algorithm-for-regression-trees" class="slide level2 center">
+<h2>Boosting algorithm for regression trees</h2>
+<ol type="1">
+<li><p>Set <span class="math inline">\hat f(x) = 0</span> and <span class="math inline">r_i = y_i</span> for all <span class="math inline">i</span> iin the training set</p></li>
+<li><p>For <span class="math inline">b=1,\ldot,B</span>, repeat:</p>
+<p>2.1 Ft a tree <span class="math inline">\hat f^b</span> with <span class="math inline">d</span> splits (<span class="math inline">d+1</span> terminal nodes) to the training data <span class="math inline">(X,r)</span></p>
+<p>2.2 Update <span class="math inline">\hat f</span> by adding in a shrunken version of the new tree:</p>
+<p><span class="math display">\hat f(x) \leftarrow \hat f(x) + \lambda \hat f^b(x)</span> 2.3 Update the residuals</p>
+<p><span class="math display">r_i \leftarrow r_i - \lambda \hat f^b(x_i)</span></p></li>
+<li><p>Output the boosted model,</p></li>
+</ol>
+<p><span class="math display">\hat f(x) = \sum_{b=1}^{B} \lambda \hat f^b(x)</span></p>
+</section>
+<section id="toy-example-b50-d1-lambda-0.01" class="slide level2 center">
+<h2>Toy Example (<span class="math inline">B=50, d=1, \lambda =0.01</span>)</h2>
+
+<img data-src="img/boosting_animation.gif" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"></section>
+<section id="what-is-the-idea-behind-this-procedure" class="slide level2 center">
+<h2>What is the idea behind this procedure?</h2>
+<p>Unlike fitting a single large decision tree to the data, which amounts to <span class="blue">fitting the data hard</span> and potentially overfitting, the boosting approach instead <span class="blue">learns slowly</span>.</p>
+<ul>
+<li><p>Given the current model, we fit a decision tree to the residuals from the model. We then add this new decision tree into the fitted function in order to update the residuals.</p></li>
+<li><p>Each of these trees can be rather small, with just a few terminal nodes, determined by the parameter d in the algorithm.</p></li>
+<li><p>By fitting small trees to the residuals, we slowly improve <span class="math inline">\hat f</span> in areas where it does not perform well. The shrinkage parameter <span class="math inline">\lambda</span> slows the process down even further, allowing more and different shaped trees to attack the residuals.</p></li>
+</ul>
+</section>
+<section id="tuning-parameters-for-boosting" class="slide level2 center">
+<h2>Tuning parameters for boosting</h2>
+<ol type="1">
+<li><p>The <span class="orange">number of trees</span> <span class="math inline">B</span>. Unlike bagging and random forests, boosting can overfit if <span class="math inline">B</span> is too large, although this overfitting tends to occur slowly if at all. We use cross-validation to select <span class="math inline">B</span>.</p></li>
+<li><p>The <span class="orange">shrinkage parameter</span> <span class="math inline">\lambda</span>, a small positive number. This controls the rate at which boosting learns. Typical values are 0.01 or 0.001, and the right choice can depend on the problem. Very small <span class="math inline">\lambda</span> can require using a very large value of <span class="math inline">B</span> in order to achieve good performance.</p></li>
+<li><p>The <span class="orange">number of splits</span> <span class="math inline">d</span> in each tree, which controls the complexity of the boosted ensemble. Often <span class="math inline">d= 1</span> works well, in which case each tree is a <span class="blue">stump</span>, consisting of a single split and resulting in an additive model. More generally <span class="math inline">d</span> is the <span class="blue">interaction depth</span>, and controls the interaction order of the boosted model, since <span class="math inline">d</span> splits can involve at most <span class="math inline">d</span> variables.</p></li>
+</ol>
+</section>
+<section id="casi-figure-17.6" class="slide level2 center">
+<h2>CASI, Figure 17.6</h2>
+<p>Efron and Hastie, 2016, Computer Age Statistical Inference, Cambridge University Press.</p>
+
+<img data-src="img/Fig17_6.png" style="width:80.0%" class="r-stretch"><p><strong>Figure 17.6.</strong> Test performance of a boosted regression-tree model fit to the ALS training data, with <span class="math inline">n = 1197</span> and <span class="math inline">p = 369</span>. Shown is the mean squared error (MSE) on the 625 designated test observations as a function of the number of trees. The model uses tree depth <span class="math inline">d = 4</span> and shrinkage parameter <span class="math inline">\lambda = 0.02</span>.</p>
+<p>Boosting achieves a lower test MSE than a random forest. However, as the number of trees <span class="math inline">B</span> becomes large, the test error for boosting begins to increase, indicating overfitting. In contrast, the random forest does not exhibit overfitting. The dotted blue horizontal line represents the best performance of a linear model fitted using the lasso. Note that the differences are less dramatic than they appear, since the vertical axis does not extend to zero.</p>
+</section>
+<section id="casi-figure-17.8" class="slide level2 center">
+<h2>CASI Figure 17.8</h2>
+
+<img data-src="img/Fig17_8.png" style="width:80.0%" class="r-stretch"><p><strong>Figure 17.8.</strong> ALS test error for boosted models with different tree depths <span class="math inline">d</span>, all using the same shrinkage parameter <span class="math inline">\lambda 00.02</span>.</p>
+<p>The model with <span class="math inline">d = 1</span> performs worse than the others, while ( d = 4 ) appears to perform best overall. For <span class="math inline">d = 7</span>, overfitting begins at around 200 trees; for <span class="math inline">d = 4</span>, it begins around 300 trees. The remaining models show no clear evidence of overfitting even up to 500 trees.</p>
+</section>
+<section id="casi-figure-17.6-1" class="slide level2 center">
+<h2>CASI Figure 17.6</h2>
+
+<img data-src="img/Fig17_10.png" style="width:80.0%" class="r-stretch"><p><strong>Figure 17.10.</strong> Boosted models with depth <span class="math inline">d = 3</span> and different shrinkage parameters, fitted to a subset of the ALS data. Solid curves show validation error, and dashed curves show training error. Red corresponds to <span class="math inline">\lambda = 0.5</span>, and blue to <span class="math inline">\lambda = 0.02</span>.</p>
+<p>With <span class="math inline">\lambda = 0.5</span>, the training error decreases rapidly as the number of trees increases, but the validation error rises quickly after an initial decline, indicating overfitting. With <span class="math inline">\lambda = 0.02</span> (25 times smaller), both training and validation errors decrease more gradually. However, the validation error reaches a lower minimum (indicated by the horizontal dotted line) than in the <span class="math inline">\lambda = 0.5</span> case. In this setting, slower learning leads to better generalization.</p>
+</section>
+<section id="summary" class="slide level2 center">
+<h2>Summary</h2>
+<ul>
+<li><p>Decision trees are simple and interpretable models for regression</p></li>
+<li><p>However they are often not competitive with other methods in terms of prediction accuracy</p></li>
+<li><p>Bagging, random forests and boosting are good methods for improving the prediction accuracy of trees. They work by growing many trees on the training data and then combining the predictions of the resulting ensemble of trees.</p></li>
+<li><p>The latter two methods— random forests and boosting— are among the state-of-the-art methods for supervised learning. However their results can be diﬃcult to interpret.</p></li>
+</ul>
+</section>
+<section id="required-readings-from-the-textbook-and-course-materials" class="slide level2 center">
+<h2>Required readings from the textbook and course materials</h2>
+<ul>
+<li><strong>Chapter 8: Tree-Based Methods</strong>
+<ul>
+<li>8.1 The Basics of Decision Trees
+<ul>
+<li>8.1.1 Regression Trees</li>
+<li>8.1.3 Trees Versus Linear Models</li>
+<li>8.1.4 Advantages and Disadvantages of Trees</li>
+</ul></li>
+<li>8.2 Bagging, Random Forests, Boosting
+<ul>
+<li>8.2.1 Bagging</li>
+<li>8.2.2 Random Forests</li>
+<li>8.2.3 Boosting</li>
+<li>8.2.5 Summary of Tree Ensemble Methods . . . . . . . . 351</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 8.1 Tree-Based Methods - 14:38</a><br>
+<a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 8.2 More Details on Trees - 11:46</a><br>
+<a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 8.4 Bagging - 13:46</a><br>
+<a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 8.5 Boosting - 12:03</a></p>
 
 </section>
     </div>
