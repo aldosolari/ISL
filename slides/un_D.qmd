@@ -977,7 +977,7 @@ from previously grown trees.
 
 1. Set $\hat f(x) = 0$ and $r_i = y_i$ for all $i$ iin the training set
 
-2. For $b=1,\ldot,B$, repeat:
+2. For $b=1,\ldots,B$, repeat:
 
    2.1 Ft a tree $\hat f^b$ with $d$ splits ($d+1$ terminal nodes) to the training data $(X,r)$
    

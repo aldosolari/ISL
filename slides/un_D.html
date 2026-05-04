@@ -1011,7 +1011,7 @@ Interpretation:</code></pre>
 <h2 class="anchored" data-anchor-id="boosting-algorithm-for-regression-trees">Boosting algorithm for regression trees</h2>
 <ol type="1">
 <li><p>Set <span class="math inline">\hat f(x) = 0</span> and <span class="math inline">r_i = y_i</span> for all <span class="math inline">i</span> iin the training set</p></li>
-<li><p>For <span class="math inline">b=1,\ldot,B</span>, repeat:</p>
+<li><p>For <span class="math inline">b=1,\ldots,B</span>, repeat:</p>
 <p>2.1 Ft a tree <span class="math inline">\hat f^b</span> with <span class="math inline">d</span> splits (<span class="math inline">d+1</span> terminal nodes) to the training data <span class="math inline">(X,r)</span></p>
 <p>2.2 Update <span class="math inline">\hat f</span> by adding in a shrunken version of the new tree:</p>
 <p><span class="math display">\hat f(x) \leftarrow \hat f(x) + \lambda \hat f^b(x)</span> 2.3 Update the residuals</p>

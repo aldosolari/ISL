@@ -62,7 +62,7 @@ This unit will cover the following [topics]{.orange}:
 -   Principal Components Analysis
 -   Matrix Completion
 
-# Unsupervised Learning
+## Unsupervised Learning
 
 - Most of this course focuses on [supervised learning]{.orange} methods such as regression
 - In supervised learning:
@@ -74,12 +74,29 @@ This unit will cover the following [topics]{.orange}:
   - Goal is not prediction, but discovering structure in the data  
 
 
-# Principal Components Analysis
+## Data Marks
+
+Data on 88 students who took examinations in 5 subjects. Some where with open book and other with closed book.
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+library(bootstrap)
+data(scor, package = "bootstrap")
+X <- scor
+colnames(X) <- c("Mechanics", "Vectors", "Algebra", "Analysis", "Statistics")
+head(X)
+```
+
+## Principal Components Analysis
 
 - PCA produces a low-dimensional representation of a dataset  
+
 - It finds a sequence of linear combinations of the variables that have maximal variance and are mutually uncorrelated  
 
-- Apart from producing derived variables for use in supervised learning problems, PCA also serves as a tool for data visualization  
+- Apart from producing derived variables for use in supervised learning problems, PCA also serves as a tool for data visualization 
 
 
 ## Principal Components Analysis: details
@@ -137,7 +154,187 @@ line indicates the second principal component direction.
 - This problem can be solved via [singular value decomposition]{.blue} (SVD) of the matrix $\mathbf{X}$, a standard technique in
 linear algebra. 
 
-- We refer to $Z_1$ as the first principal component, with realized values $z_{11}, ..., z_{n1}$  
+- We refer to $Z_1$ as the first principal component, with realized values $z_{11}, \ldots, z_{n1}$  
+
+
+## Geometry of PCA
+
+* The loading vector $\phi_1$ with elements $\phi_{11},\phi_{21}, \ldots, \phi_{p1}$ defines a direction in feature space along which the data
+vary the most.
+
+* If we project the $n$ data points $x_1,\ldots,x_n$ onto this
+direction, the projected values are the principal component
+scores $z_{11},z_{21},\ldots,z_{n1}$ themselves.
+
+## Further principal components
+
+* The second principal component is the linear combination
+of $X_1,...,X_p$ that has maximal variance among all linear
+combinations that are uncorrelated with $Z_1$.
+
+* The second principal component scores
+$z_{12},z_{22},\ldots,z_{n2}$ take the form
+  $$
+  z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
+  $$
+where $\phi_2$ is the second principal component loading vector,
+with elements, with elements $\phi_{12},\phi_{22}, \ldots, \phi_{p2}$.
+
+## Further principal components: continued
+
+* The principal component directions $\phi_1, \phi_2, \phi_3, \ldots$ are the
+ordered sequence of [right singular vectors]{.blue} of the matrix $\textbf X$,
+and the variances of the components are $1/n$ times the
+squares of the [singular values]{.blue}. There are at most
+$\min(n−1,p)$ principal components.
+
+* Let 
+$$\mathbf{Z} = ( \mathbf{z}_1 \,\, \mathbf{z}_2 \,\, \ldots \,\, \mathbf{z}_p )$$ 
+denote the matrix of principal component scores, and let 
+$$\mathbf{\Phi} = ( \phi_1 \,\, \phi_2 \,\, \ldots \,\, \phi_p )$$ 
+denote the matrix of loading vectors
+
+
+## Singular Value Decomposition
+
+The Singular Value Decomposition expresses any matrix, such as an $n \times p$ matrix $\mathbf{X}$, as the product of three other matrices:
+
+$$
+\mathbf{X = U D V^\mathsf{T}}
+$$
+
+where:
+
+- $\mathbf{U}$ is a $n \times p$ column _orthonormal_ matrix containing the 
+__left singular vectors__.
+
+- $\mathbf{D}$ is a $p \times p$ _diagonal_ matrix containing the __singular 
+values__ of $\mathbf{X}$.
+
+- $\mathbf{V}$ is a $p \times p$ column _orthonormal_ matrix containing the 
+__right singular vectors__.
+
+In terms of the shapes of the matrices, the SVD decomposition has this form:
+
+$$
+\begin{bmatrix} 
+ &   & \\
+ &   & \\
+ & \mathbf{X} & \\
+ &   & \\
+ &   & \\
+\end{bmatrix}
+= 
+\
+\begin{bmatrix} 
+ &   & \\
+ &   & \\
+ & \mathbf{U} & \\
+ &   & \\
+ &   & \\
+\end{bmatrix}
+\
+\begin{bmatrix} 
+ &   & \\
+ & \mathbf{D} & \\
+ &   & \\
+\end{bmatrix}
+\
+\begin{bmatrix} 
+ &   & \\
+ & \mathbf{V}^\mathsf{T} & \\
+ &   & \\
+\end{bmatrix}
+$$
+
+
+If we assume that each of
+the variables in $\mathbf{X}$ has been centered to have mean zero (that is, the column means of $\mathbf{X}$ are zero), then 
+$$
+\mathbf{X} = \mathbf{Z} \mathbf{\Phi}^\mathsf{T}
+$$
+where $\mathbf{Z} = \mathbf{UD}$ and $\mathbf{\Phi}=\mathbf{V}$.
+
+## SVD Rank-Reduction Theorem
+
+* The Eckart–Young theorem (1936) addresses the problem of approximating a matrix by one of lower rank.
+
+* Let $\mathbf{X}$ be an 
+$n \times p$ rectangular matrix. The best $M$-dimensional approximation 
+$\hat{\mathbf{X}}$ to $\mathbf{X}$ in the least-squares sense, is obtained by solving:
+$$\min_{\mathrm{rank} (\hat{\mathbf{X}})=M }\Big\{ \sum_{i=1}^{n}\sum_{j=1}^{p}(x_{ij} - \hat x_{ij} )^2 \Big\}$$
+
+* The solution is
+$$\hat{x}_{ij} = \sum_{m=1}^{M} z_{im} \phi_{jm}$$
+or, in matrix form,
+$$
+\hat{\mathbf{X}} = \mathbf{U}_M \mathbf{D}_M \mathbf{V}^\mathsf{T}_M = \mathbf{Z}_M \mathbf{\Phi}_M^\mathsf{T}
+$$
+
+
+## Best 1-rank approximation
+
+If you think about it, the SVD is of great utility because it tells us that the 
+best 1-rank approximation, in the least squares sense, of any matrix 
+$\mathbf{X}$ is 
+$$
+\hat{x}_{ij} = z_{i1} \phi_{j1}
+$$
+
+This implies that, from a conceptual standpoint, we can approximate the 
+$n \times p$ numbers in $\mathbf{X}$ with just $n + p$ values: $n$ numbers 
+in $\mathbf{z}_1$ and $p$ numbers in $\phi_1$.
+
+## Example
+
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+rm(list=ls())
+face <- read.table("https://raw.githubusercontent.com/aldosolari/AE/master/docs/dati/face.txt", header=FALSE)
+X = as.matrix(face)
+n = nrow(face)
+p = ncol(face)
+image(X, col=gray(0:255/255), asp=p/n)
+```
+
+## Example: best M-rank approximation
+
+Obtain the best rank-$M$ approximation of the centered matrix $\mathbf{X}$
+$$\hat{\mathbf{X}}_M = \mathbf{Z}_M \mathbf{\Phi}_M$$
+then construct the compressed image
+$$\hat{\mathbf{X}}_M + \mathbf{1}_n \bar{x}$$
+ensuring that all elements lie in the interval $[0,1]$, where $\mathbf{1}_n$ is an $n\times 1$ vector of ones, and $\bar{x}$ is the $1\times p$ vector of the column means.
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+# PCA
+pca = princomp(X, cor=F)
+V = pca$loadings
+Y = pca$scores
+xbar = matrix(pca$center, ncol=1)
+q = 5
+Yq = Y[,1:q]
+Vq = V[,1:q]
+
+# migliore approssimazione di rango q
+Aq = Yq %*% t(Vq)
+
+# compressione immagine
+one.n = matrix(rep(1,n), ncol=1)
+face2 = Aq + one.n %*% t(xbar)
+
+# forzo i valori tra 0 e 1
+face2 <- pmax(pmin(face2, 1), 0)
+
+image(face2, col=gray(0:255/255), asp=p/n)
+```
 
 ## Required readings from the textbook and course materials
 

@@ -92,15 +92,22 @@ window.Quarto = {
    
   <ul>
   <li><a href="#unsupervised-learning" id="toc-unsupervised-learning" class="nav-link active" data-scroll-target="#unsupervised-learning">Unsupervised Learning</a></li>
-  <li><a href="#principal-components-analysis" id="toc-principal-components-analysis" class="nav-link" data-scroll-target="#principal-components-analysis">Principal Components Analysis</a>
-  <ul class="collapse">
+  <li><a href="#data-marks" id="toc-data-marks" class="nav-link" data-scroll-target="#data-marks">Data Marks</a></li>
+  <li><a href="#principal-components-analysis" id="toc-principal-components-analysis" class="nav-link" data-scroll-target="#principal-components-analysis">Principal Components Analysis</a></li>
   <li><a href="#principal-components-analysis-details" id="toc-principal-components-analysis-details" class="nav-link" data-scroll-target="#principal-components-analysis-details">Principal Components Analysis: details</a></li>
   <li><a href="#figure-6.14-isl" id="toc-figure-6.14-isl" class="nav-link" data-scroll-target="#figure-6.14-isl">Figure 6.14 ISL</a></li>
   <li><a href="#computation-of-principal-components" id="toc-computation-of-principal-components" class="nav-link" data-scroll-target="#computation-of-principal-components">Computation of Principal Components</a></li>
   <li><a href="#computation-continued" id="toc-computation-continued" class="nav-link" data-scroll-target="#computation-continued">Computation: continued</a></li>
+  <li><a href="#geometry-of-pca" id="toc-geometry-of-pca" class="nav-link" data-scroll-target="#geometry-of-pca">Geometry of PCA</a></li>
+  <li><a href="#further-principal-components" id="toc-further-principal-components" class="nav-link" data-scroll-target="#further-principal-components">Further principal components</a></li>
+  <li><a href="#further-principal-components-continued" id="toc-further-principal-components-continued" class="nav-link" data-scroll-target="#further-principal-components-continued">Further principal components: continued</a></li>
+  <li><a href="#singular-value-decomposition" id="toc-singular-value-decomposition" class="nav-link" data-scroll-target="#singular-value-decomposition">Singular Value Decomposition</a></li>
+  <li><a href="#svd-rank-reduction-theorem" id="toc-svd-rank-reduction-theorem" class="nav-link" data-scroll-target="#svd-rank-reduction-theorem">SVD Rank-Reduction Theorem</a></li>
+  <li><a href="#best-1-rank-approximation" id="toc-best-1-rank-approximation" class="nav-link" data-scroll-target="#best-1-rank-approximation">Best 1-rank approximation</a></li>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a></li>
+  <li><a href="#example-best-m-rank-approximation" id="toc-example-best-m-rank-approximation" class="nav-link" data-scroll-target="#example-best-m-rank-approximation">Example: best M-rank approximation</a></li>
   <li><a href="#required-readings-from-the-textbook-and-course-materials" id="toc-required-readings-from-the-textbook-and-course-materials" class="nav-link" data-scroll-target="#required-readings-from-the-textbook-and-course-materials">Required readings from the textbook and course materials</a></li>
   <li><a href="#required-readings-from-the-textbook-and-course-materials-1" id="toc-required-readings-from-the-textbook-and-course-materials-1" class="nav-link" data-scroll-target="#required-readings-from-the-textbook-and-course-materials-1">Required readings from the textbook and course materials</a></li>
-  </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="un_C_slides.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
 </div>
@@ -144,8 +151,8 @@ window.Quarto = {
 <li>Principal Components Analysis</li>
 <li>Matrix Completion</li>
 </ul>
-<section id="unsupervised-learning" class="level1">
-<h1>Unsupervised Learning</h1>
+<section id="unsupervised-learning" class="level2">
+<h2 class="anchored" data-anchor-id="unsupervised-learning">Unsupervised Learning</h2>
 <ul>
 <li>Most of this course focuses on <span class="orange">supervised learning</span> methods such as regression</li>
 <li>In supervised learning:
@@ -165,14 +172,29 @@ window.Quarto = {
 </ul></li>
 </ul>
 </section>
-<section id="principal-components-analysis" class="level1">
-<h1>Principal Components Analysis</h1>
+<section id="data-marks" class="level2">
+<h2 class="anchored" data-anchor-id="data-marks">Data Marks</h2>
+<p>Data on 88 students who took examinations in 5 subjects. Some where with open book and other with closed book.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  Mechanics Vectors Algebra Analysis Statistics
+1        77      82      67       67         81
+2        63      78      80       70         81
+3        75      73      71       66         81
+4        55      72      63       70         68
+5        63      63      65       70         63
+6        53      61      72       64         73</code></pre>
+</div>
+</div>
+</section>
+<section id="principal-components-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="principal-components-analysis">Principal Components Analysis</h2>
 <ul>
-<li><p>PCA produces a low-dimensional representation of a dataset<br>
-</p></li>
+<li><p>PCA produces a low-dimensional representation of a dataset</p></li>
 <li><p>It finds a sequence of linear combinations of the variables that have maximal variance and are mutually uncorrelated</p></li>
 <li><p>Apart from producing derived variables for use in supervised learning problems, PCA also serves as a tool for data visualization</p></li>
 </ul>
+</section>
 <section id="principal-components-analysis-details" class="level2">
 <h2 class="anchored" data-anchor-id="principal-components-analysis-details">Principal Components Analysis: details</h2>
 <ul>
@@ -215,8 +237,120 @@ z_{i1} = \phi_{11}x_{i1} + \phi_{21}x_{i2} + \cdots + \phi_{p1}x_{ip}
 \max_{\phi_{11}, ..., \phi_{p1}}\sum_{i=1}^{n} \left( \sum_{j=1}^{p} \phi_{j1} x_{ij} \right)^2\quad \mathrm{subject\,\,to\,\,}\sum_{j=1}^{p} \phi_{j1}^2 = 1.
 </span></p></li>
 <li><p>This problem can be solved via <span class="blue">singular value decomposition</span> (SVD) of the matrix <span class="math inline">\mathbf{X}</span>, a standard technique in linear algebra.</p></li>
-<li><p>We refer to <span class="math inline">Z_1</span> as the first principal component, with realized values <span class="math inline">z_{11}, ..., z_{n1}</span></p></li>
+<li><p>We refer to <span class="math inline">Z_1</span> as the first principal component, with realized values <span class="math inline">z_{11}, \ldots, z_{n1}</span></p></li>
 </ul>
+</section>
+<section id="geometry-of-pca" class="level2">
+<h2 class="anchored" data-anchor-id="geometry-of-pca">Geometry of PCA</h2>
+<ul>
+<li><p>The loading vector <span class="math inline">\phi_1</span> with elements <span class="math inline">\phi_{11},\phi_{21}, \ldots, \phi_{p1}</span> defines a direction in feature space along which the data vary the most.</p></li>
+<li><p>If we project the <span class="math inline">n</span> data points <span class="math inline">x_1,\ldots,x_n</span> onto this direction, the projected values are the principal component scores <span class="math inline">z_{11},z_{21},\ldots,z_{n1}</span> themselves.</p></li>
+</ul>
+</section>
+<section id="further-principal-components" class="level2">
+<h2 class="anchored" data-anchor-id="further-principal-components">Further principal components</h2>
+<ul>
+<li><p>The second principal component is the linear combination of <span class="math inline">X_1,...,X_p</span> that has maximal variance among all linear combinations that are uncorrelated with <span class="math inline">Z_1</span>.</p></li>
+<li><p>The second principal component scores <span class="math inline">z_{12},z_{22},\ldots,z_{n2}</span> take the form <span class="math display">
+z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
+</span> where <span class="math inline">\phi_2</span> is the second principal component loading vector, with elements, with elements <span class="math inline">\phi_{12},\phi_{22}, \ldots, \phi_{p2}</span>.</p></li>
+</ul>
+</section>
+<section id="further-principal-components-continued" class="level2">
+<h2 class="anchored" data-anchor-id="further-principal-components-continued">Further principal components: continued</h2>
+<ul>
+<li><p>The principal component directions <span class="math inline">\phi_1, \phi_2, \phi_3, \ldots</span> are the ordered sequence of <span class="blue">right singular vectors</span> of the matrix <span class="math inline">\textbf X</span>, and the variances of the components are <span class="math inline">1/n</span> times the squares of the <span class="blue">singular values</span>. There are at most <span class="math inline">\min(n−1,p)</span> principal components.</p></li>
+<li><p>Let <span class="math display">\mathbf{Z} = ( \mathbf{z}_1 \,\, \mathbf{z}_2 \,\, \ldots \,\, \mathbf{z}_p )</span> denote the matrix of principal component scores, and let <span class="math display">\mathbf{\Phi} = ( \phi_1 \,\, \phi_2 \,\, \ldots \,\, \phi_p )</span> denote the matrix of loading vectors</p></li>
+</ul>
+</section>
+<section id="singular-value-decomposition" class="level2">
+<h2 class="anchored" data-anchor-id="singular-value-decomposition">Singular Value Decomposition</h2>
+<p>The Singular Value Decomposition expresses any matrix, such as an <span class="math inline">n \times p</span> matrix <span class="math inline">\mathbf{X}</span>, as the product of three other matrices:</p>
+<p><span class="math display">
+\mathbf{X = U D V^\mathsf{T}}
+</span></p>
+<p>where:</p>
+<ul>
+<li><p><span class="math inline">\mathbf{U}</span> is a <span class="math inline">n \times p</span> column <em>orthonormal</em> matrix containing the <strong>left singular vectors</strong>.</p></li>
+<li><p><span class="math inline">\mathbf{D}</span> is a <span class="math inline">p \times p</span> <em>diagonal</em> matrix containing the <strong>singular values</strong> of <span class="math inline">\mathbf{X}</span>.</p></li>
+<li><p><span class="math inline">\mathbf{V}</span> is a <span class="math inline">p \times p</span> column <em>orthonormal</em> matrix containing the <strong>right singular vectors</strong>.</p></li>
+</ul>
+<p>In terms of the shapes of the matrices, the SVD decomposition has this form:</p>
+<p><span class="math display">
+\begin{bmatrix}
+&amp;   &amp; \\
+&amp;   &amp; \\
+&amp; \mathbf{X} &amp; \\
+&amp;   &amp; \\
+&amp;   &amp; \\
+\end{bmatrix}
+=
+\
+\begin{bmatrix}
+&amp;   &amp; \\
+&amp;   &amp; \\
+&amp; \mathbf{U} &amp; \\
+&amp;   &amp; \\
+&amp;   &amp; \\
+\end{bmatrix}
+\
+\begin{bmatrix}
+&amp;   &amp; \\
+&amp; \mathbf{D} &amp; \\
+&amp;   &amp; \\
+\end{bmatrix}
+\
+\begin{bmatrix}
+&amp;   &amp; \\
+&amp; \mathbf{V}^\mathsf{T} &amp; \\
+&amp;   &amp; \\
+\end{bmatrix}
+</span></p>
+<p>If we assume that each of the variables in <span class="math inline">\mathbf{X}</span> has been centered to have mean zero (that is, the column means of <span class="math inline">\mathbf{X}</span> are zero), then <span class="math display">
+\mathbf{X} = \mathbf{Z} \mathbf{\Phi}^\mathsf{T}
+</span> where <span class="math inline">\mathbf{Z} = \mathbf{UD}</span> and <span class="math inline">\mathbf{\Phi}=\mathbf{V}</span>.</p>
+</section>
+<section id="svd-rank-reduction-theorem" class="level2">
+<h2 class="anchored" data-anchor-id="svd-rank-reduction-theorem">SVD Rank-Reduction Theorem</h2>
+<ul>
+<li><p>The Eckart–Young theorem (1936) addresses the problem of approximating a matrix by one of lower rank.</p></li>
+<li><p>Let <span class="math inline">\mathbf{X}</span> be an <span class="math inline">n \times p</span> rectangular matrix. The best <span class="math inline">M</span>-dimensional approximation <span class="math inline">\hat{\mathbf{X}}</span> to <span class="math inline">\mathbf{X}</span> in the least-squares sense, is obtained by solving: <span class="math display">\min_{\mathrm{rank} (\hat{\mathbf{X}})=M }\Big\{ \sum_{i=1}^{n}\sum_{j=1}^{p}(x_{ij} - \hat x_{ij} )^2 \Big\}</span></p></li>
+<li><p>The solution is <span class="math display">\hat{x}_{ij} = \sum_{m=1}^{M} z_{im} \phi_{jm}</span> or, in matrix form, <span class="math display">
+\hat{\mathbf{X}} = \mathbf{U}_M \mathbf{D}_M \mathbf{V}^\mathsf{T}_M = \mathbf{Z}_M \mathbf{\Phi}_M^\mathsf{T}
+</span></p></li>
+</ul>
+</section>
+<section id="best-1-rank-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="best-1-rank-approximation">Best 1-rank approximation</h2>
+<p>If you think about it, the SVD is of great utility because it tells us that the best 1-rank approximation, in the least squares sense, of any matrix <span class="math inline">\mathbf{X}</span> is <span class="math display">
+\hat{x}_{ij} = z_{i1} \phi_{j1}
+</span></p>
+<p>This implies that, from a conceptual standpoint, we can approximate the <span class="math inline">n \times p</span> numbers in <span class="math inline">\mathbf{X}</span> with just <span class="math inline">n + p</span> values: <span class="math inline">n</span> numbers in <span class="math inline">\mathbf{z}_1</span> and <span class="math inline">p</span> numbers in <span class="math inline">\phi_1</span>.</p>
+</section>
+<section id="example" class="level2">
+<h2 class="anchored" data-anchor-id="example">Example</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="example-best-m-rank-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="example-best-m-rank-approximation">Example: best M-rank approximation</h2>
+<p>Obtain the best rank-<span class="math inline">M</span> approximation of the centered matrix <span class="math inline">\mathbf{X}</span> <span class="math display">\hat{\mathbf{X}}_M = \mathbf{Z}_M \mathbf{\Phi}_M</span> then construct the compressed image <span class="math display">\hat{\mathbf{X}}_M + \mathbf{1}_n \bar{x}</span> ensuring that all elements lie in the interval <span class="math inline">[0,1]</span>, where <span class="math inline">\mathbf{1}_n</span> is an <span class="math inline">n\times 1</span> vector of ones, and <span class="math inline">\bar{x}</span> is the <span class="math inline">1\times p</span> vector of the column means.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="required-readings-from-the-textbook-and-course-materials" class="level2">
 <h2 class="anchored" data-anchor-id="required-readings-from-the-textbook-and-course-materials">Required readings from the textbook and course materials</h2>
@@ -251,7 +385,6 @@ z_{i1} = \phi_{11}x_{i1} + \phi_{21}x_{i2} + \cdots + \phi_{p1}x_{ip}
 <p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 12.2 Higher Order Principal Components - 17:40</a></p>
 <p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 12.5 Matrix Completion - 15:52</a></p>
 <p><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e">Video SL 12.R.1 Principal Components - 6:29</a></p>
-</section>
 </section>
 
 </main>
