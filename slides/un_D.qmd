@@ -999,8 +999,7 @@ $$\hat f(x) = \sum_{b=1}^{B} \lambda \hat f^b(x)$$
 
 ##   What is the idea behind this procedure?
 
-Unlike fitting a single large decision tree to the data, which
-amounts to [fitting the data hard]{.blue} and potentially overfitting,
+Unlike fitting a single large decision tree to the data, which amounts to [fitting the data hard]{.blue} and potentially overfitting,
 the boosting approach instead [learns slowly]{.blue}.
 
 *  Given the current model, we fit a decision tree to the
@@ -1012,8 +1011,7 @@ residuals.
 terminal nodes, determined by the parameter d in the
 algorithm.
 
-*  By fitting small trees to the residuals, we slowly improve $\hat f$
-in areas where it does not perform well. The shrinkage
+*  By fitting small trees to the residuals, we slowly improve $\hat f$ in areas where it does not perform well. The shrinkage
 parameter $\lambda$ slows the process down even further, allowing
 more and different shaped trees to attack the residuals.
 
@@ -1054,9 +1052,9 @@ Boosting achieves a lower test MSE than a random forest. However, as the number 
 
 ![](img/Fig17_8.png){width="80%"}
 
-**Figure 17.8.** ALS test error for boosted models with different tree depths $d$, all using the same shrinkage parameter $\lambda 00.02$.
+**Figure 17.8.** ALS test error for boosted models with different tree depths $d$, all using the same shrinkage parameter $\lambda =0.02$.
 
-The model with $d = 1$ performs worse than the others, while \( d = 4 \) appears to perform best overall. For $d = 7$, overfitting begins at around 200 trees; for $d = 4$, it begins around 300 trees. The remaining models show no clear evidence of overfitting even up to 500 trees.
+The model with $d = 1$ performs worse than the others, while $d = 4$ appears to perform best overall. For $d = 7$, overfitting begins at around 200 trees; for $d = 4$, it begins around 300 trees. The remaining models show no clear evidence of overfitting even up to 500 trees.
 
 
 
@@ -1097,7 +1095,7 @@ learning. However their results can be diﬃcult to interpret.
     - 8.2.1 Bagging
     - 8.2.2 Random Forests
     - 8.2.3 Boosting
-    - 8.2.5 Summary of Tree Ensemble Methods . . . . . . . . 351
+    - 8.2.5 Summary of Tree Ensemble Methods
 
 
 [Video SL 8.1 Tree-Based Methods - 14:38](https://www.youtube.com/playlist?list=PLoROMvodv4rOzrYsAxzQyHb8n_RWNuS1e)  
