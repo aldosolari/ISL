@@ -406,25 +406,28 @@ z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
 &amp;   &amp; \\
 \end{bmatrix}
 </span></p>
-<p>If we assume that each of the variables in <span class="math inline">\mathbf{X}</span> has been centered to have mean zero (that is, the column means of <span class="math inline">\mathbf{X}</span> are zero), then <span class="math display">
-\mathbf{X} = \mathbf{Z} \mathbf{\Phi}^\mathsf{T}
-</span> where <span class="math inline">\mathbf{Z} = \mathbf{UD}</span> and <span class="math inline">\mathbf{\Phi}=\mathbf{V}</span>.</p>
 </section>
 <section id="section-6" class="slide level2 center">
 <h2></h2>
 
 <img data-src="img/svd-decomposition1.png" style="width:40.0%" class="r-stretch"></section>
+<section id="section-7" class="slide level2 center">
+<h2></h2>
+<p>If we assume that each of the variables in <span class="math inline">\mathbf{X}</span> has been centered to have mean zero (that is, the column means of <span class="math inline">\mathbf{X}</span> are zero), then <span class="math display">
+\mathbf{X} = \mathbf{Z} \mathbf{\Phi}^\mathsf{T}
+</span> where <span class="math inline">\mathbf{Z} = \mathbf{UD}</span> and <span class="math inline">\mathbf{\Phi}=\mathbf{V}</span>.</p>
+</section>
 <section id="svd-rank-reduction-theorem" class="slide level2 center">
 <h2>SVD Rank-Reduction Theorem</h2>
 <ul>
 <li><p>The Eckart–Young theorem (1936) addresses the problem of approximating a matrix by one of lower rank.</p></li>
-<li><p>Let <span class="math inline">\mathbf{X}</span> be an <span class="math inline">n \times p</span> rectangular matrix. The best <span class="math inline">M</span>-dimensional approximation <span class="math inline">\hat{\mathbf{X}}</span> to <span class="math inline">\mathbf{X}</span> in the least-squares sense, is obtained by solving: <span class="math display">\min_{\mathrm{rank} (\hat{\mathbf{X}})=M }\Big\{ \sum_{i=1}^{n}\sum_{j=1}^{p}(x_{ij} - \hat x_{ij} )^2 \Big\}</span></p></li>
+<li><p>Let <span class="math inline">\mathbf{X}</span> be an <span class="math inline">n \times p</span> rectangular matrix (centered). The best <span class="math inline">M</span>-dimensional approximation <span class="math inline">\hat{\mathbf{X}}</span> to <span class="math inline">\mathbf{X}</span> in the least-squares sense, is obtained by solving: <span class="math display">\min_{\mathrm{rank} (\hat{\mathbf{X}})=M }\Big\{ \sum_{i=1}^{n}\sum_{j=1}^{p}(x_{ij} - \hat x_{ij} )^2 \Big\}</span></p></li>
 <li><p>The solution is <span class="math display">\hat{x}_{ij} = \sum_{m=1}^{M} z_{im} \phi_{jm}</span> or, in matrix form, <span class="math display">
 \hat{\mathbf{X}} = \mathbf{U}_M \mathbf{D}_M \mathbf{V}^\mathsf{T}_M = \mathbf{Z}_M \mathbf{\Phi}_M^\mathsf{T}
 </span></p></li>
 </ul>
 </section>
-<section id="section-7" class="slide level2 center">
+<section id="section-8" class="slide level2 center">
 <h2></h2>
 
 <img data-src="img/svd-decomposition2.png" style="width:40.0%" class="r-stretch"></section>
@@ -442,6 +445,9 @@ z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
 <section id="example-best-m-rank-approximation" class="slide level2 center">
 <h2>Example: best M-rank approximation</h2>
 <p>Obtain the best rank-<span class="math inline">M</span> approximation of the centered matrix <span class="math inline">\mathbf{X}</span> <span class="math display">\hat{\mathbf{X}}_M = \mathbf{Z}_M \mathbf{\Phi}_M</span> then construct the compressed image <span class="math display">\hat{\mathbf{X}}_M + \mathbf{1}_n \bar{x}</span> ensuring that all elements lie in the interval <span class="math inline">[0,1]</span>, where <span class="math inline">\mathbf{1}_n</span> is an <span class="math inline">n\times 1</span> vector of ones, and <span class="math inline">\bar{x}</span> is the <span class="math inline">1\times p</span> vector of the column means.</p>
+</section>
+<section id="section-9" class="slide level2 center">
+<h2></h2>
 
 <img data-src="un_E_files/figure-revealjs/unnamed-chunk-9-1.png" width="1200" class="r-stretch"></section>
 <section id="required-readings-from-the-textbook-and-course-materials" class="slide level2 center">

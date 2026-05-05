@@ -94,12 +94,13 @@ window.Quarto = {
   <li><a href="#unsupervised-learning" id="toc-unsupervised-learning" class="nav-link active" data-scroll-target="#unsupervised-learning">Unsupervised Learning</a></li>
   <li><a href="#principal-components-analysis" id="toc-principal-components-analysis" class="nav-link" data-scroll-target="#principal-components-analysis">Principal Components Analysis</a></li>
   <li><a href="#galton-data" id="toc-galton-data" class="nav-link" data-scroll-target="#galton-data">Galton data</a></li>
-  <li><a href="#principal-components-analysis-details" id="toc-principal-components-analysis-details" class="nav-link" data-scroll-target="#principal-components-analysis-details">Principal Components Analysis: details</a></li>
   <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#principal-components-analysis-details" id="toc-principal-components-analysis-details" class="nav-link" data-scroll-target="#principal-components-analysis-details">Principal Components Analysis: details</a></li>
   <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"></a></li>
   <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2"></a></li>
   <li><a href="#section-3" id="toc-section-3" class="nav-link" data-scroll-target="#section-3"></a></li>
   <li><a href="#section-4" id="toc-section-4" class="nav-link" data-scroll-target="#section-4"></a></li>
+  <li><a href="#section-5" id="toc-section-5" class="nav-link" data-scroll-target="#section-5"></a></li>
   <li><a href="#computation-of-principal-components" id="toc-computation-of-principal-components" class="nav-link" data-scroll-target="#computation-of-principal-components">Computation of Principal Components</a></li>
   <li><a href="#computation-continued" id="toc-computation-continued" class="nav-link" data-scroll-target="#computation-continued">Computation: continued</a></li>
   <li><a href="#geometry-of-pca" id="toc-geometry-of-pca" class="nav-link" data-scroll-target="#geometry-of-pca">Geometry of PCA</a></li>
@@ -109,12 +110,14 @@ window.Quarto = {
   <li><a href="#isl-figure-12.2" id="toc-isl-figure-12.2" class="nav-link" data-scroll-target="#isl-figure-12.2">ISL Figure 12.2</a></li>
   <li><a href="#proportion-variance-explained" id="toc-proportion-variance-explained" class="nav-link" data-scroll-target="#proportion-variance-explained">Proportion Variance Explained</a></li>
   <li><a href="#singular-value-decomposition" id="toc-singular-value-decomposition" class="nav-link" data-scroll-target="#singular-value-decomposition">Singular Value Decomposition</a></li>
-  <li><a href="#section-5" id="toc-section-5" class="nav-link" data-scroll-target="#section-5"></a></li>
-  <li><a href="#svd-rank-reduction-theorem" id="toc-svd-rank-reduction-theorem" class="nav-link" data-scroll-target="#svd-rank-reduction-theorem">SVD Rank-Reduction Theorem</a></li>
   <li><a href="#section-6" id="toc-section-6" class="nav-link" data-scroll-target="#section-6"></a></li>
+  <li><a href="#section-7" id="toc-section-7" class="nav-link" data-scroll-target="#section-7"></a></li>
+  <li><a href="#svd-rank-reduction-theorem" id="toc-svd-rank-reduction-theorem" class="nav-link" data-scroll-target="#svd-rank-reduction-theorem">SVD Rank-Reduction Theorem</a></li>
+  <li><a href="#section-8" id="toc-section-8" class="nav-link" data-scroll-target="#section-8"></a></li>
   <li><a href="#best-1-rank-approximation" id="toc-best-1-rank-approximation" class="nav-link" data-scroll-target="#best-1-rank-approximation">Best 1-rank approximation</a></li>
   <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a></li>
   <li><a href="#example-best-m-rank-approximation" id="toc-example-best-m-rank-approximation" class="nav-link" data-scroll-target="#example-best-m-rank-approximation">Example: best M-rank approximation</a></li>
+  <li><a href="#section-9" id="toc-section-9" class="nav-link" data-scroll-target="#section-9"></a></li>
   <li><a href="#required-readings-from-the-textbook-and-course-materials" id="toc-required-readings-from-the-textbook-and-course-materials" class="nav-link" data-scroll-target="#required-readings-from-the-textbook-and-course-materials">Required readings from the textbook and course materials</a></li>
   <li><a href="#required-readings-from-the-textbook-and-course-materials-1" id="toc-required-readings-from-the-textbook-and-course-materials-1" class="nav-link" data-scroll-target="#required-readings-from-the-textbook-and-course-materials-1">Required readings from the textbook and course materials</a></li>
   </ul>
@@ -210,6 +213,18 @@ window.Quarto = {
 <p>Thus, <span class="math inline">\mathbf{X}</span> is an <span class="math inline">n \times 2</span>, where <span class="math inline">n=173</span> is the number of distinct fathers in the dataset.</p>
 <p>The goal of the analysis is to summarize the relationship between fathers’ and sons’ heights using a single underlying dimension (tallness) that captures their shared variation.</p>
 </section>
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section"></h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 <section id="principal-components-analysis-details" class="level2">
 <h2 class="anchored" data-anchor-id="principal-components-analysis-details">Principal Components Analysis: details</h2>
 <ul>
@@ -225,19 +240,6 @@ Z_1 = \phi_{11}X_1 + \phi_{21}X_2 + \cdots + \phi_{p1}X_p
 <li><p>We constrain the loadings so that their sum of squares is equal to one. Otherwise, arbitrarily large values would lead to arbitrarily large variance</p></li>
 </ul>
 </section>
-<section id="section" class="level2">
-<h2 class="anchored" data-anchor-id="section"></h2>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="un_E_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="900"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The father and son heights, measured in centimeters, are shown as purple circles. The green solid line indicates the first principal component direction, and the blue dashed line indicates the second principal component direction.</p>
-</section>
 <section id="section-1" class="level2">
 <h2 class="anchored" data-anchor-id="section-1"></h2>
 <div class="cell">
@@ -249,12 +251,25 @@ Z_1 = \phi_{11}X_1 + \phi_{21}X_2 + \cdots + \phi_{p1}X_p
 </div>
 </div>
 </div>
+<p>The father and son heights, measured in centimeters, are shown as purple circles. The green solid line indicates the first principal component direction, and the blue dashed line indicates the second principal component direction.</p>
+</section>
+<section id="section-2" class="level2">
+<h2 class="anchored" data-anchor-id="section-2"></h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
 <p>The Galton data are shown, where fathers’ heights and sons’ heights are plotted as purple points. The mean father height and mean son height are indicated by a blue circle.</p>
 <p>Left: The first principal component direction is shown in green. It is the direction along which the data exhibit the greatest variability. The perpendicular distances from each observation to this line are illustrated by black dashed segments. The blue dot represents <span class="math inline">(\overline{\mathrm{Father}}, \overline{\mathrm{Height}})</span>.</p>
 <p>Right: The data from the left panel have been rotated so that the first principal component direction aligns with the x-axis.</p>
 </section>
-<section id="section-2" class="level2">
-<h2 class="anchored" data-anchor-id="section-2"></h2>
+<section id="section-3" class="level2">
+<h2 class="anchored" data-anchor-id="section-3"></h2>
 <p>Mathematically, the first principal component can be written as a linear combination of the centered variables:</p>
 <p><span class="math display">
 Z_1 = 0.700\,(\mathrm{Father} - \overline{\mathrm{Father}}) + 0.714\,(\mathrm{Height} - \overline{\mathrm{Height}})
@@ -265,19 +280,6 @@ z_{i1} = 0.700\,(\mathrm{Father}_i - \overline{\mathrm{Father}}) + 0.714\,(\math
 </span></p>
 <p>The values of <span class="math inline">z_{11},z_{21},\ldots,z_{n1}</span> are known as the first principal component <span class="orange">scores</span>.</p>
 </section>
-<section id="section-3" class="level2">
-<h2 class="anchored" data-anchor-id="section-3"></h2>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="un_E_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="900"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Plots of the first principal component scores <span class="math inline">z_{i1}</span> versus father height and son height. The relationships are strong.</p>
-</section>
 <section id="section-4" class="level2">
 <h2 class="anchored" data-anchor-id="section-4"></h2>
 <div class="cell">
@@ -285,6 +287,19 @@ z_{i1} = 0.700\,(\mathrm{Father}_i - \overline{\mathrm{Father}}) + 0.714\,(\math
 <div>
 <figure class="figure">
 <p><img src="un_E_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Plots of the first principal component scores <span class="math inline">z_{i1}</span> versus father height and son height. The relationships are strong.</p>
+</section>
+<section id="section-5" class="level2">
+<h2 class="anchored" data-anchor-id="section-5"></h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="900"></p>
 </figure>
 </div>
 </div>
@@ -428,26 +443,29 @@ z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
 &amp;   &amp; \\
 \end{bmatrix}
 </span></p>
+</section>
+<section id="section-6" class="level2">
+<h2 class="anchored" data-anchor-id="section-6"></h2>
+<p><img src="img/svd-decomposition1.png" class="img-fluid" style="width:40.0%"></p>
+</section>
+<section id="section-7" class="level2">
+<h2 class="anchored" data-anchor-id="section-7"></h2>
 <p>If we assume that each of the variables in <span class="math inline">\mathbf{X}</span> has been centered to have mean zero (that is, the column means of <span class="math inline">\mathbf{X}</span> are zero), then <span class="math display">
 \mathbf{X} = \mathbf{Z} \mathbf{\Phi}^\mathsf{T}
 </span> where <span class="math inline">\mathbf{Z} = \mathbf{UD}</span> and <span class="math inline">\mathbf{\Phi}=\mathbf{V}</span>.</p>
-</section>
-<section id="section-5" class="level2">
-<h2 class="anchored" data-anchor-id="section-5"></h2>
-<p><img src="img/svd-decomposition1.png" class="img-fluid" style="width:40.0%"></p>
 </section>
 <section id="svd-rank-reduction-theorem" class="level2">
 <h2 class="anchored" data-anchor-id="svd-rank-reduction-theorem">SVD Rank-Reduction Theorem</h2>
 <ul>
 <li><p>The Eckart–Young theorem (1936) addresses the problem of approximating a matrix by one of lower rank.</p></li>
-<li><p>Let <span class="math inline">\mathbf{X}</span> be an <span class="math inline">n \times p</span> rectangular matrix. The best <span class="math inline">M</span>-dimensional approximation <span class="math inline">\hat{\mathbf{X}}</span> to <span class="math inline">\mathbf{X}</span> in the least-squares sense, is obtained by solving: <span class="math display">\min_{\mathrm{rank} (\hat{\mathbf{X}})=M }\Big\{ \sum_{i=1}^{n}\sum_{j=1}^{p}(x_{ij} - \hat x_{ij} )^2 \Big\}</span></p></li>
+<li><p>Let <span class="math inline">\mathbf{X}</span> be an <span class="math inline">n \times p</span> rectangular matrix (centered). The best <span class="math inline">M</span>-dimensional approximation <span class="math inline">\hat{\mathbf{X}}</span> to <span class="math inline">\mathbf{X}</span> in the least-squares sense, is obtained by solving: <span class="math display">\min_{\mathrm{rank} (\hat{\mathbf{X}})=M }\Big\{ \sum_{i=1}^{n}\sum_{j=1}^{p}(x_{ij} - \hat x_{ij} )^2 \Big\}</span></p></li>
 <li><p>The solution is <span class="math display">\hat{x}_{ij} = \sum_{m=1}^{M} z_{im} \phi_{jm}</span> or, in matrix form, <span class="math display">
 \hat{\mathbf{X}} = \mathbf{U}_M \mathbf{D}_M \mathbf{V}^\mathsf{T}_M = \mathbf{Z}_M \mathbf{\Phi}_M^\mathsf{T}
 </span></p></li>
 </ul>
 </section>
-<section id="section-6" class="level2">
-<h2 class="anchored" data-anchor-id="section-6"></h2>
+<section id="section-8" class="level2">
+<h2 class="anchored" data-anchor-id="section-8"></h2>
 <p><img src="img/svd-decomposition2.png" class="img-fluid" style="width:40.0%"></p>
 </section>
 <section id="best-1-rank-approximation" class="level2">
@@ -463,7 +481,7 @@ z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="un_E_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="900"></p>
+<p><img src="un_E_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="900"></p>
 </figure>
 </div>
 </div>
@@ -472,11 +490,14 @@ z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
 <section id="example-best-m-rank-approximation" class="level2">
 <h2 class="anchored" data-anchor-id="example-best-m-rank-approximation">Example: best M-rank approximation</h2>
 <p>Obtain the best rank-<span class="math inline">M</span> approximation of the centered matrix <span class="math inline">\mathbf{X}</span> <span class="math display">\hat{\mathbf{X}}_M = \mathbf{Z}_M \mathbf{\Phi}_M</span> then construct the compressed image <span class="math display">\hat{\mathbf{X}}_M + \mathbf{1}_n \bar{x}</span> ensuring that all elements lie in the interval <span class="math inline">[0,1]</span>, where <span class="math inline">\mathbf{1}_n</span> is an <span class="math inline">n\times 1</span> vector of ones, and <span class="math inline">\bar{x}</span> is the <span class="math inline">1\times p</span> vector of the column means.</p>
+</section>
+<section id="section-9" class="level2">
+<h2 class="anchored" data-anchor-id="section-9"></h2>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="un_E_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="900"></p>
+<p><img src="un_E_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="900"></p>
 </figure>
 </div>
 </div>

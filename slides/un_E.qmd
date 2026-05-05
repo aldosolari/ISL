@@ -521,7 +521,11 @@ $$
 $$
 
 
+##
 
+![](img/svd-decomposition1){width="40%"}
+
+##
 
 If we assume that each of
 the variables in $\mathbf{X}$ has been centered to have mean zero (that is, the column means of $\mathbf{X}$ are zero), then 
@@ -530,9 +534,7 @@ $$
 $$
 where $\mathbf{Z} = \mathbf{UD}$ and $\mathbf{\Phi}=\mathbf{V}$.
 
-##
 
-![](img/svd-decomposition1){width="40%"}
 
 
 ## SVD Rank-Reduction Theorem
@@ -540,7 +542,7 @@ where $\mathbf{Z} = \mathbf{UD}$ and $\mathbf{\Phi}=\mathbf{V}$.
 * The Eckart–Young theorem (1936) addresses the problem of approximating a matrix by one of lower rank.
 
 * Let $\mathbf{X}$ be an 
-$n \times p$ rectangular matrix. The best $M$-dimensional approximation 
+$n \times p$ rectangular matrix (centered). The best $M$-dimensional approximation 
 $\hat{\mathbf{X}}$ to $\mathbf{X}$ in the least-squares sense, is obtained by solving:
 $$\min_{\mathrm{rank} (\hat{\mathbf{X}})=M }\Big\{ \sum_{i=1}^{n}\sum_{j=1}^{p}(x_{ij} - \hat x_{ij} )^2 \Big\}$$
 
@@ -592,6 +594,8 @@ $$\hat{\mathbf{X}}_M = \mathbf{Z}_M \mathbf{\Phi}_M$$
 then construct the compressed image
 $$\hat{\mathbf{X}}_M + \mathbf{1}_n \bar{x}$$
 ensuring that all elements lie in the interval $[0,1]$, where $\mathbf{1}_n$ is an $n\times 1$ vector of ones, and $\bar{x}$ is the $1\times p$ vector of the column means.
+
+##
 
 ```{r}
 #| warning: false
@@ -659,7 +663,6 @@ for (q in qs) {
          - Uniqueness of the Principal Components
          - Deciding How Many Principal Components to Use
       - 12.2.5 Other Uses for Principal Components
-      
       
   - 12.3 Missing Values and Matrix Completion
     - Principal Components with Missing Values
