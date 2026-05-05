@@ -14,7 +14,7 @@ format:
     center: true
     html-math-method: katex
     transition: none
-    output-file: un_C_slides.html
+    output-file: un_E_slides.html
     slide-number: true
     callout-appearance: minimal
     code-line-numbers: true
