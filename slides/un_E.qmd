@@ -74,22 +74,6 @@ This unit will cover the following [topics]{.orange}:
   - Goal is not prediction, but discovering structure in the data  
 
 
-## Data Marks
-
-Data on 88 students who took examinations in 5 subjects. Some where with open book and other with closed book.
-
-```{r}
-#| warning: false
-#| message: false
-#| fig-width: 6
-#| fig-height: 5
-library(bootstrap)
-data(scor, package = "bootstrap")
-X <- scor
-colnames(X) <- c("Mechanics", "Vectors", "Algebra", "Analysis", "Statistics")
-head(X)
-```
-
 ## Principal Components Analysis
 
 - PCA produces a low-dimensional representation of a dataset  
@@ -98,6 +82,63 @@ head(X)
 
 - Apart from producing derived variables for use in supervised learning problems, PCA also serves as a tool for data visualization 
 
+
+
+
+## Galton data
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+library(readr)
+library(dplyr)
+
+galton <- read_csv(
+  "https://dspiegel29.github.io/ArtofStatistics/05-1-sons-fathers-heights/05-1-galton-x.csv"
+)
+
+# Convert to numeric and cm
+galton <- galton %>%
+  mutate(
+    Father = as.numeric(Father) * 2.54,
+    Height = as.numeric(Height) * 2.54
+  )
+
+# Keep only the first son for each father
+galton_first_sons <- galton %>%
+  filter(Gender == "M") %>%     # keep only sons
+  group_by(Family) %>%          # group by family
+  slice(1) %>%                  # take first son in each family
+  ungroup()
+
+# Build X
+X <- as.matrix(galton_first_sons[, c("Father", "Height")])
+head(X)
+apply(X,2,mean)
+```
+
+The data matrix contains paired observations of father and son heights (in centimeters), where each row corresponds to a single family (using only the first son per father), and the two columns correspond to: `Father` the father’s height, and `Height`, the son’s height.
+
+Thus, $\mathbf{X}$ is an $n \times 2$, where $n=173$ is the number of distinct fathers in the dataset.
+
+The goal of the analysis is to summarize the relationship between fathers’ and sons’ heights using a single underlying dimension (tallness) that captures their shared variation.
+
+##
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+plot(X, asp = 1,
+     col = "purple", pch = 16,
+     xlab = "Father height (cm)",
+     ylab = "Son height (cm)")
+mu <- colMeans(X)
+points(mu[1], mu[2], col = "blue", pch = 19)
+```
 
 ## Principal Components Analysis: details
 
@@ -117,14 +158,180 @@ head(X)
 
 - We constrain the loadings so that their sum of squares is equal to one. Otherwise, arbitrarily large values would lead to arbitrarily large variance 
 
-## Figure 6.14 ISL
+## 
 
-![](img/6_14.png){width="100%"}
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+# Center
+mu <- colMeans(X)
+Xc <- scale(X, center = TRUE, scale = FALSE)
 
-The population size (`pop`) and ad spending (`ad`) for 100 different
-cities are shown as purple circles. The green solid line indicates
-the first principal component direction, and the blue dashed
-line indicates the second principal component direction.
+# PCA
+pca <- prcomp(Xc)
+
+v1 <- pca$rotation[, 1]
+v2 <- pca$rotation[, 2]
+
+plot(X, asp = 1,
+     col = "purple", pch = 16,
+     xlab = "Father height (cm)",
+     ylab = "Son height (cm)")
+
+points(mu[1], mu[2], col = "black", pch = 19)
+
+t_vals <- seq(-max(abs(Xc)) * 2, max(abs(Xc)) * 2, length = 100)
+
+lines(mu[1] + t_vals * v1[1],
+      mu[2] + t_vals * v1[2],
+      col = "green", lwd = 2)
+
+lines(mu[1] + t_vals * v2[1],
+      mu[2] + t_vals * v2[2],
+      col = "blue", lwd = 2, lty = 2)
+```
+
+The father and son heights, measured in centimeters, are shown as purple circles. The green solid line indicates the first principal component direction, and the blue dashed line indicates the second principal component direction.
+
+##
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+mu <- colMeans(X)
+Xc <- scale(X, center = TRUE, scale = FALSE)
+
+pca <- prcomp(Xc)
+v1 <- pca$rotation[, 1]
+
+scores1 <- Xc %*% v1
+
+proj <- scores1 %*% t(v1)
+proj_orig <- sweep(proj, 2, mu, "+")
+
+par(mfrow = c(1, 2))
+
+plot(X, asp = 1, pch = 16, col = "purple",
+     xlab = "Father height (cm)",
+     ylab = "Son height (cm)")
+points(mu[1], mu[2], col = "blue", pch = 19)
+
+t_vals <- seq(-max(abs(Xc)) * 2, max(abs(Xc)) * 2, length = 100)
+pc1_line <- cbind(mu[1] + t_vals * v1[1],
+                  mu[2] + t_vals * v1[2])
+
+lines(pc1_line, col = "green", lwd = 2)
+
+for (i in 1:nrow(X)) {
+  segments(X[i, 1], X[i, 2],
+           proj_orig[i, 1], proj_orig[i, 2],
+           col = "black", lty = 2)
+}
+
+Z <- Xc %*% pca$rotation
+
+plot(Z, asp = 1, pch = 16, col = "purple",
+     xlab = "PC1", ylab = "PC2")
+points(0, 0, col = "blue", pch = 19)
+
+abline(h = 0, v = 0, col = "gray")
+```
+
+The Galton data are shown, where fathers’ heights and sons’ heights are plotted as purple points. The mean father height and mean son height are indicated by a blue circle.
+
+Left: The first principal component direction is shown in green. It is the direction along which the data exhibit the greatest variability. The perpendicular distances from each observation to this line are illustrated by black dashed segments. The blue dot represents $(\overline{\mathrm{Father}}, \overline{\mathrm{Height}})$.
+
+Right: The data from the left panel have been rotated so that the first principal component direction aligns with the x-axis.
+
+##
+
+Mathematically, the first principal component can be written as a linear combination of the centered variables:
+
+$$
+Z_1 = 0.700\,(\mathrm{Father} - \overline{\mathrm{Father}}) + 0.714\,(\mathrm{Height} - \overline{\mathrm{Height}})
+$$
+
+Here, the coefficients $\phi_{11}=0.7$ and $\phi_{21}=0.714$ (called [loadings]{.orange}) define the principal component direction. They satisfy $0.7^2 + 0.714^2 =1$.
+
+Since both loadings are positive and of similar magnitude, $Z_1$ is essentially an average of father’s and son’s heights, capturing a common overall height dimension. For each family $i$,
+$$
+z_{i1} = 0.700\,(\mathrm{Father}_i - \overline{\mathrm{Father}}) + 0.714\,(\mathrm{Height}_i - \overline{\mathrm{Height}})
+$$
+
+The values of $z_{11},z_{21},\ldots,z_{n1}$ are known as the first principal component [scores]{.orange}.
+
+##
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+Xc <- scale(X, center = TRUE, scale = FALSE)
+
+pca <- prcomp(Xc)
+z1 <- -pca$x[, 1]
+
+par(mfrow = c(1, 2), mar = c(5, 5, 4, 2))
+
+# Father vs z1 (z1 on x-axis)
+plot(z1, X[, "Father"], asp = 1,
+     pch = 16, col = "purple",
+     xlab = expression(z[i1]),
+     ylab = "Father height (cm)",
+     main = "Father vs PC1 scores")
+#abline(lm(X[, "Father"] ~ z1), col = "blue", lwd = 2)
+
+# Son height vs z1 (z1 on x-axis)
+plot(z1, X[, "Height"], asp = 1,
+     pch = 16, col = "purple",
+     xlab = expression(z[i1]),
+     ylab = "Son height (cm)",
+     main = "Son height vs PC1 scores")
+#abline(lm(X[, "Height"] ~ z1), col = "blue", lwd = 2)
+```
+
+Plots of the first principal component scores $z_{i1}$
+ versus father height and son height. The relationships are strong.
+ 
+##
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+
+Xc <- scale(X, center = TRUE, scale = FALSE)
+
+pca <- prcomp(Xc)
+z2 <- -pca$x[, 2]
+
+par(mfrow = c(1, 2), mar = c(5, 5, 4, 2))
+
+# Father vs z2
+plot(z2, X[, "Father"], asp = 1,
+     pch = 16, col = "purple",
+     xlab = expression(z[i2]),
+     ylab = "Father height (cm)",
+     main = "Father vs PC2 scores")
+#abline(lm(X[, "Father"] ~ z2), col = "blue", lwd = 2)
+
+# Son height vs z2
+plot(z2, X[, "Height"], asp = 1,
+     pch = 16, col = "purple",
+     xlab = expression(z[i2]),
+     ylab = "Son height (cm)",
+     main = "Son height vs PC2 scores")
+#abline(lm(X[, "Height"] ~ z2), col = "blue", lwd = 2)
+```
+
+Plots of the second principal component scores $z_{i2}$
+ versus father height and son height. The relationships are weak.
 
 
 ## Computation of Principal Components
@@ -159,8 +366,7 @@ linear algebra.
 
 ## Geometry of PCA
 
-* The loading vector $\phi_1$ with elements $\phi_{11},\phi_{21}, \ldots, \phi_{p1}$ defines a direction in feature space along which the data
-vary the most.
+* The loading vector $\phi_1$ with elements $\phi_{11},\phi_{21}, \ldots, \phi_{p1}$ defines a direction in feature space along which the data vary the most.
 
 * If we project the $n$ data points $x_1,\ldots,x_n$ onto this
 direction, the projected values are the principal component
@@ -194,6 +400,73 @@ denote the matrix of principal component scores, and let
 $$\mathbf{\Phi} = ( \phi_1 \,\, \phi_2 \,\, \ldots \,\, \phi_p )$$ 
 denote the matrix of loading vectors
 
+## Another Interpretation of Principal Components
+
+* The first principal component loading vector has a very
+special property: it defines the line in $p$-dimensional space
+that is closest to the $n$ observations (using average squared
+Euclidean distance as a measure of closeness)
+
+* The notion of principal components as the dimensions that
+are closest to the $n$ observations extends beyond just the
+first principal component.
+
+* For instance, the first two principal components of a data
+set span the plane that is closest to the $n$ observations, in
+terms of average squared Euclidean distance.
+
+## ISL Figure 12.2
+
+![](img/12_2a.png){width="40%"}
+![](img/12_2b.png){width="40%"}
+
+
+Ninety observations simulated in three dimensions. The observations are displayed in color for ease of visualization. 
+
+Left: the first two principal
+component directions span the plane that best fits the data. The plane is positioned
+to minimize the sum of squared distances to each point. 
+
+Right: the first two principal component score vectors give the coordinates of the projection of the 90
+observations onto the plane.
+
+## Proportion Variance Explained
+
+* To understand the strength of each principal component, we consider the **proportion of variance explained (PVE)** by each component.
+
+* The total variance in the data (assuming the variables are centered) is
+$$
+\sum_{j=1}^{p} \mathrm{Var}(X_j)
+=
+\sum_{j=1}^{p} \frac{1}{n} \sum_{i=1}^{n} x_{ij}^2.
+$$
+
+* The variance explained by the $m$-th principal component is
+$$
+\mathrm{Var}(Z_m)
+=
+\frac{1}{n} \sum_{i=1}^{n} z_{im}^2.
+$$
+
+It can be shown that the total variance is preserved under PCA:
+$$
+\sum_{j=1}^{p} \mathrm{Var}(X_j)
+=
+\sum_{m=1}^{M} \mathrm{Var}(Z_m),
+\quad \text{where } M = \min(n-1, p).
+$$
+
+* The proportion of variance explained (PVE) by the $m$-th principal component is given by the ratio
+$$
+\mathrm{PVE}_m
+=
+\frac{\sum_{i=1}^{n} z_{im}^2}
+{\sum_{j=1}^{p} \sum_{i=1}^{n} x_{ij}^2},
+$$
+which is a value between 0 and 1.
+
+* The PVEs sum to one. We sometimes display the
+cumulative PVEs
 
 ## Singular Value Decomposition
 
@@ -248,12 +521,19 @@ $$
 $$
 
 
+
+
 If we assume that each of
 the variables in $\mathbf{X}$ has been centered to have mean zero (that is, the column means of $\mathbf{X}$ are zero), then 
 $$
 \mathbf{X} = \mathbf{Z} \mathbf{\Phi}^\mathsf{T}
 $$
 where $\mathbf{Z} = \mathbf{UD}$ and $\mathbf{\Phi}=\mathbf{V}$.
+
+##
+
+![](img/svd-decomposition1){width="40%"}
+
 
 ## SVD Rank-Reduction Theorem
 
@@ -271,6 +551,10 @@ $$
 \hat{\mathbf{X}} = \mathbf{U}_M \mathbf{D}_M \mathbf{V}^\mathsf{T}_M = \mathbf{Z}_M \mathbf{\Phi}_M^\mathsf{T}
 $$
 
+
+##
+
+![](img/svd-decomposition2){width="40%"}
 
 ## Best 1-rank approximation
 
@@ -298,7 +582,7 @@ face <- read.table("https://raw.githubusercontent.com/aldosolari/AE/master/docs/
 X = as.matrix(face)
 n = nrow(face)
 p = ncol(face)
-image(X, col=gray(0:255/255), asp=p/n)
+image(t(X)[, ncol(X):1], col = gray(0:255/255), asp = p/n)
 ```
 
 ## Example: best M-rank approximation
@@ -328,16 +612,39 @@ Aq = Yq %*% t(Vq)
 
 # compressione immagine
 one.n = matrix(rep(1,n), ncol=1)
-face2 = Aq + one.n %*% t(xbar)
 
-# forzo i valori tra 0 e 1
-face2 <- pmax(pmin(face2, 1), 0)
+qs <- c(2, 5, 10, 20)
 
-image(face2, col=gray(0:255/255), asp=p/n)
+par(mfrow = c(2, 2), mar = c(2, 2, 3, 1))
+
+for (q in qs) {
+  
+  Yq <- Y[, 1:q]
+  Vq <- V[, 1:q]
+  
+  # Best rank-q approximation
+  Aq <- Yq %*% t(Vq)
+  
+  # Reconstructed image
+  face2 <- Aq + one.n %*% t(xbar)
+  
+  # Force values between 0 and 1
+  face2 <- pmax(pmin(face2, 1), 0)
+  
+  image(t(face2)[, ncol(face2):1],
+        col = gray(0:255 / 255),
+        asp = p / n,
+        axes = FALSE,
+        main = paste("M =", q))
+}
+
 ```
 
 ## Required readings from the textbook and course materials
 
+- **Chapter 6**
+
+- 6.3.1 An Overview of Principal Components Analysis
 
 - **Chapter 12: Unsupervised Learning**
 

@@ -92,17 +92,26 @@ window.Quarto = {
    
   <ul>
   <li><a href="#unsupervised-learning" id="toc-unsupervised-learning" class="nav-link active" data-scroll-target="#unsupervised-learning">Unsupervised Learning</a></li>
-  <li><a href="#data-marks" id="toc-data-marks" class="nav-link" data-scroll-target="#data-marks">Data Marks</a></li>
   <li><a href="#principal-components-analysis" id="toc-principal-components-analysis" class="nav-link" data-scroll-target="#principal-components-analysis">Principal Components Analysis</a></li>
+  <li><a href="#galton-data" id="toc-galton-data" class="nav-link" data-scroll-target="#galton-data">Galton data</a></li>
   <li><a href="#principal-components-analysis-details" id="toc-principal-components-analysis-details" class="nav-link" data-scroll-target="#principal-components-analysis-details">Principal Components Analysis: details</a></li>
-  <li><a href="#figure-6.14-isl" id="toc-figure-6.14-isl" class="nav-link" data-scroll-target="#figure-6.14-isl">Figure 6.14 ISL</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"></a></li>
+  <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2"></a></li>
+  <li><a href="#section-3" id="toc-section-3" class="nav-link" data-scroll-target="#section-3"></a></li>
+  <li><a href="#section-4" id="toc-section-4" class="nav-link" data-scroll-target="#section-4"></a></li>
   <li><a href="#computation-of-principal-components" id="toc-computation-of-principal-components" class="nav-link" data-scroll-target="#computation-of-principal-components">Computation of Principal Components</a></li>
   <li><a href="#computation-continued" id="toc-computation-continued" class="nav-link" data-scroll-target="#computation-continued">Computation: continued</a></li>
   <li><a href="#geometry-of-pca" id="toc-geometry-of-pca" class="nav-link" data-scroll-target="#geometry-of-pca">Geometry of PCA</a></li>
   <li><a href="#further-principal-components" id="toc-further-principal-components" class="nav-link" data-scroll-target="#further-principal-components">Further principal components</a></li>
   <li><a href="#further-principal-components-continued" id="toc-further-principal-components-continued" class="nav-link" data-scroll-target="#further-principal-components-continued">Further principal components: continued</a></li>
+  <li><a href="#another-interpretation-of-principal-components" id="toc-another-interpretation-of-principal-components" class="nav-link" data-scroll-target="#another-interpretation-of-principal-components">Another Interpretation of Principal Components</a></li>
+  <li><a href="#isl-figure-12.2" id="toc-isl-figure-12.2" class="nav-link" data-scroll-target="#isl-figure-12.2">ISL Figure 12.2</a></li>
+  <li><a href="#proportion-variance-explained" id="toc-proportion-variance-explained" class="nav-link" data-scroll-target="#proportion-variance-explained">Proportion Variance Explained</a></li>
   <li><a href="#singular-value-decomposition" id="toc-singular-value-decomposition" class="nav-link" data-scroll-target="#singular-value-decomposition">Singular Value Decomposition</a></li>
+  <li><a href="#section-5" id="toc-section-5" class="nav-link" data-scroll-target="#section-5"></a></li>
   <li><a href="#svd-rank-reduction-theorem" id="toc-svd-rank-reduction-theorem" class="nav-link" data-scroll-target="#svd-rank-reduction-theorem">SVD Rank-Reduction Theorem</a></li>
+  <li><a href="#section-6" id="toc-section-6" class="nav-link" data-scroll-target="#section-6"></a></li>
   <li><a href="#best-1-rank-approximation" id="toc-best-1-rank-approximation" class="nav-link" data-scroll-target="#best-1-rank-approximation">Best 1-rank approximation</a></li>
   <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a></li>
   <li><a href="#example-best-m-rank-approximation" id="toc-example-best-m-rank-approximation" class="nav-link" data-scroll-target="#example-best-m-rank-approximation">Example: best M-rank approximation</a></li>
@@ -172,21 +181,6 @@ window.Quarto = {
 </ul></li>
 </ul>
 </section>
-<section id="data-marks" class="level2">
-<h2 class="anchored" data-anchor-id="data-marks">Data Marks</h2>
-<p>Data on 88 students who took examinations in 5 subjects. Some where with open book and other with closed book.</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>  Mechanics Vectors Algebra Analysis Statistics
-1        77      82      67       67         81
-2        63      78      80       70         81
-3        75      73      71       66         81
-4        55      72      63       70         68
-5        63      63      65       70         63
-6        53      61      72       64         73</code></pre>
-</div>
-</div>
-</section>
 <section id="principal-components-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="principal-components-analysis">Principal Components Analysis</h2>
 <ul>
@@ -194,6 +188,27 @@ window.Quarto = {
 <li><p>It finds a sequence of linear combinations of the variables that have maximal variance and are mutually uncorrelated</p></li>
 <li><p>Apart from producing derived variables for use in supervised learning problems, PCA also serves as a tool for data visualization</p></li>
 </ul>
+</section>
+<section id="galton-data" class="level2">
+<h2 class="anchored" data-anchor-id="galton-data">Galton data</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>     Father  Height
+[1,] 199.39 185.928
+[2,] 175.26 180.848
+[3,] 175.26 190.500
+[4,] 175.26 177.800
+[5,] 175.26 185.420
+[6,] 176.53 179.070</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Father   Height 
+175.4905 178.9070 </code></pre>
+</div>
+</div>
+<p>The data matrix contains paired observations of father and son heights (in centimeters), where each row corresponds to a single family (using only the first son per father), and the two columns correspond to: <code>Father</code> the father’s height, and <code>Height</code>, the son’s height.</p>
+<p>Thus, <span class="math inline">\mathbf{X}</span> is an <span class="math inline">n \times 2</span>, where <span class="math inline">n=173</span> is the number of distinct fathers in the dataset.</p>
+<p>The goal of the analysis is to summarize the relationship between fathers’ and sons’ heights using a single underlying dimension (tallness) that captures their shared variation.</p>
 </section>
 <section id="principal-components-analysis-details" class="level2">
 <h2 class="anchored" data-anchor-id="principal-components-analysis-details">Principal Components Analysis: details</h2>
@@ -210,10 +225,71 @@ Z_1 = \phi_{11}X_1 + \phi_{21}X_2 + \cdots + \phi_{p1}X_p
 <li><p>We constrain the loadings so that their sum of squares is equal to one. Otherwise, arbitrarily large values would lead to arbitrarily large variance</p></li>
 </ul>
 </section>
-<section id="figure-6.14-isl" class="level2">
-<h2 class="anchored" data-anchor-id="figure-6.14-isl">Figure 6.14 ISL</h2>
-<p><img src="img/6_14.png" class="img-fluid" style="width:100.0%"></p>
-<p>The population size (<code>pop</code>) and ad spending (<code>ad</code>) for 100 different cities are shown as purple circles. The green solid line indicates the first principal component direction, and the blue dashed line indicates the second principal component direction.</p>
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section"></h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The father and son heights, measured in centimeters, are shown as purple circles. The green solid line indicates the first principal component direction, and the blue dashed line indicates the second principal component direction.</p>
+</section>
+<section id="section-1" class="level2">
+<h2 class="anchored" data-anchor-id="section-1"></h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The Galton data are shown, where fathers’ heights and sons’ heights are plotted as purple points. The mean father height and mean son height are indicated by a blue circle.</p>
+<p>Left: The first principal component direction is shown in green. It is the direction along which the data exhibit the greatest variability. The perpendicular distances from each observation to this line are illustrated by black dashed segments. The blue dot represents <span class="math inline">(\overline{\mathrm{Father}}, \overline{\mathrm{Height}})</span>.</p>
+<p>Right: The data from the left panel have been rotated so that the first principal component direction aligns with the x-axis.</p>
+</section>
+<section id="section-2" class="level2">
+<h2 class="anchored" data-anchor-id="section-2"></h2>
+<p>Mathematically, the first principal component can be written as a linear combination of the centered variables:</p>
+<p><span class="math display">
+Z_1 = 0.700\,(\mathrm{Father} - \overline{\mathrm{Father}}) + 0.714\,(\mathrm{Height} - \overline{\mathrm{Height}})
+</span></p>
+<p>Here, the coefficients <span class="math inline">\phi_{11}=0.7</span> and <span class="math inline">\phi_{21}=0.714</span> (called <span class="orange">loadings</span>) define the principal component direction. They satisfy <span class="math inline">0.7^2 + 0.714^2 =1</span>.</p>
+<p>Since both loadings are positive and of similar magnitude, <span class="math inline">Z_1</span> is essentially an average of father’s and son’s heights, capturing a common overall height dimension. For each family <span class="math inline">i</span>, <span class="math display">
+z_{i1} = 0.700\,(\mathrm{Father}_i - \overline{\mathrm{Father}}) + 0.714\,(\mathrm{Height}_i - \overline{\mathrm{Height}})
+</span></p>
+<p>The values of <span class="math inline">z_{11},z_{21},\ldots,z_{n1}</span> are known as the first principal component <span class="orange">scores</span>.</p>
+</section>
+<section id="section-3" class="level2">
+<h2 class="anchored" data-anchor-id="section-3"></h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Plots of the first principal component scores <span class="math inline">z_{i1}</span> versus father height and son height. The relationships are strong.</p>
+</section>
+<section id="section-4" class="level2">
+<h2 class="anchored" data-anchor-id="section-4"></h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Plots of the second principal component scores <span class="math inline">z_{i2}</span> versus father height and son height. The relationships are weak.</p>
 </section>
 <section id="computation-of-principal-components" class="level2">
 <h2 class="anchored" data-anchor-id="computation-of-principal-components">Computation of Principal Components</h2>
@@ -263,6 +339,52 @@ z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
 <li><p>Let <span class="math display">\mathbf{Z} = ( \mathbf{z}_1 \,\, \mathbf{z}_2 \,\, \ldots \,\, \mathbf{z}_p )</span> denote the matrix of principal component scores, and let <span class="math display">\mathbf{\Phi} = ( \phi_1 \,\, \phi_2 \,\, \ldots \,\, \phi_p )</span> denote the matrix of loading vectors</p></li>
 </ul>
 </section>
+<section id="another-interpretation-of-principal-components" class="level2">
+<h2 class="anchored" data-anchor-id="another-interpretation-of-principal-components">Another Interpretation of Principal Components</h2>
+<ul>
+<li><p>The first principal component loading vector has a very special property: it defines the line in <span class="math inline">p</span>-dimensional space that is closest to the <span class="math inline">n</span> observations (using average squared Euclidean distance as a measure of closeness)</p></li>
+<li><p>The notion of principal components as the dimensions that are closest to the <span class="math inline">n</span> observations extends beyond just the first principal component.</p></li>
+<li><p>For instance, the first two principal components of a data set span the plane that is closest to the <span class="math inline">n</span> observations, in terms of average squared Euclidean distance.</p></li>
+</ul>
+</section>
+<section id="isl-figure-12.2" class="level2">
+<h2 class="anchored" data-anchor-id="isl-figure-12.2">ISL Figure 12.2</h2>
+<p><img src="img/12_2a.png" class="img-fluid" style="width:40.0%"> <img src="img/12_2b.png" class="img-fluid" style="width:40.0%"></p>
+<p>Ninety observations simulated in three dimensions. The observations are displayed in color for ease of visualization.</p>
+<p>Left: the first two principal component directions span the plane that best fits the data. The plane is positioned to minimize the sum of squared distances to each point.</p>
+<p>Right: the first two principal component score vectors give the coordinates of the projection of the 90 observations onto the plane.</p>
+</section>
+<section id="proportion-variance-explained" class="level2">
+<h2 class="anchored" data-anchor-id="proportion-variance-explained">Proportion Variance Explained</h2>
+<ul>
+<li><p>To understand the strength of each principal component, we consider the <strong>proportion of variance explained (PVE)</strong> by each component.</p></li>
+<li><p>The total variance in the data (assuming the variables are centered) is <span class="math display">
+\sum_{j=1}^{p} \mathrm{Var}(X_j)
+=
+\sum_{j=1}^{p} \frac{1}{n} \sum_{i=1}^{n} x_{ij}^2.
+</span></p></li>
+<li><p>The variance explained by the <span class="math inline">m</span>-th principal component is <span class="math display">
+\mathrm{Var}(Z_m)
+=
+\frac{1}{n} \sum_{i=1}^{n} z_{im}^2.
+</span></p></li>
+</ul>
+<p>It can be shown that the total variance is preserved under PCA: <span class="math display">
+\sum_{j=1}^{p} \mathrm{Var}(X_j)
+=
+\sum_{m=1}^{M} \mathrm{Var}(Z_m),
+\quad \text{where } M = \min(n-1, p).
+</span></p>
+<ul>
+<li><p>The proportion of variance explained (PVE) by the <span class="math inline">m</span>-th principal component is given by the ratio <span class="math display">
+\mathrm{PVE}_m
+=
+\frac{\sum_{i=1}^{n} z_{im}^2}
+{\sum_{j=1}^{p} \sum_{i=1}^{n} x_{ij}^2},
+</span> which is a value between 0 and 1.</p></li>
+<li><p>The PVEs sum to one. We sometimes display the cumulative PVEs</p></li>
+</ul>
+</section>
 <section id="singular-value-decomposition" class="level2">
 <h2 class="anchored" data-anchor-id="singular-value-decomposition">Singular Value Decomposition</h2>
 <p>The Singular Value Decomposition expresses any matrix, such as an <span class="math inline">n \times p</span> matrix <span class="math inline">\mathbf{X}</span>, as the product of three other matrices:</p>
@@ -310,6 +432,10 @@ z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
 \mathbf{X} = \mathbf{Z} \mathbf{\Phi}^\mathsf{T}
 </span> where <span class="math inline">\mathbf{Z} = \mathbf{UD}</span> and <span class="math inline">\mathbf{\Phi}=\mathbf{V}</span>.</p>
 </section>
+<section id="section-5" class="level2">
+<h2 class="anchored" data-anchor-id="section-5"></h2>
+<p><img src="img/svd-decomposition1.png" class="img-fluid" style="width:40.0%"></p>
+</section>
 <section id="svd-rank-reduction-theorem" class="level2">
 <h2 class="anchored" data-anchor-id="svd-rank-reduction-theorem">SVD Rank-Reduction Theorem</h2>
 <ul>
@@ -319,6 +445,10 @@ z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
 \hat{\mathbf{X}} = \mathbf{U}_M \mathbf{D}_M \mathbf{V}^\mathsf{T}_M = \mathbf{Z}_M \mathbf{\Phi}_M^\mathsf{T}
 </span></p></li>
 </ul>
+</section>
+<section id="section-6" class="level2">
+<h2 class="anchored" data-anchor-id="section-6"></h2>
+<p><img src="img/svd-decomposition2.png" class="img-fluid" style="width:40.0%"></p>
 </section>
 <section id="best-1-rank-approximation" class="level2">
 <h2 class="anchored" data-anchor-id="best-1-rank-approximation">Best 1-rank approximation</h2>
@@ -333,7 +463,7 @@ z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="un_E_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="900"></p>
+<p><img src="un_E_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="900"></p>
 </figure>
 </div>
 </div>
@@ -346,7 +476,7 @@ z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="un_E_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="900"></p>
+<p><img src="un_E_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="900"></p>
 </figure>
 </div>
 </div>
@@ -355,6 +485,8 @@ z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
 <section id="required-readings-from-the-textbook-and-course-materials" class="level2">
 <h2 class="anchored" data-anchor-id="required-readings-from-the-textbook-and-course-materials">Required readings from the textbook and course materials</h2>
 <ul>
+<li><p><strong>Chapter 6</strong></p></li>
+<li><p>6.3.1 An Overview of Principal Components Analysis</p></li>
 <li><p><strong>Chapter 12: Unsupervised Learning</strong></p>
 <ul>
 <li><p>12.1 The Challenge of Unsupervised Learning</p></li>
