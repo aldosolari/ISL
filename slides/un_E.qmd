@@ -1545,6 +1545,7 @@ This model learns latent user and movie factors to predict ratings.
 #| message: false
 #| fig-width: 6
 #| fig-height: 5
+#| eval: FALSE
 # -------------------------
 # Matrix factorization with recosystem
 # -------------------------
@@ -1633,6 +1634,7 @@ rmse_reco
 
 ## Results
 
+
 ```{r}
 #| warning: false
 #| message: false
@@ -1641,7 +1643,7 @@ rmse_reco
 # -------------------------
 # RESULTS
 # -------------------------
-
+rmse_reco <- 0.7890856
 results <- data.frame(
   model = c(
     "global_mean",
