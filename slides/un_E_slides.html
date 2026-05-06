@@ -450,6 +450,26 @@ z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
 <h2></h2>
 
 <img data-src="un_E_files/figure-revealjs/unnamed-chunk-9-1.png" width="1200" class="r-stretch"></section>
+<section id="matrix-completion-and-missing-values" class="slide level2 center">
+<h2>Matrix Completion and Missing Values</h2>
+<ul>
+<li><p>It is often the case that data matrices <span class="math inline">\mathbf{X}</span> have missing entries, often represented by <code>NA</code>s (not available).</p></li>
+<li><p>This is a nuisance, since many of our modeling procedures, such as linear regression and GLMs require complete data.</p></li>
+<li><p>Sometimes imputation <span class="blue">is the prediction problem</span>! — as in recommender systems.</p></li>
+<li><p>One simple approach is <span class="orange">mean imputation</span> — replace missing values for a variable by the mean of the non-missing entries.</p></li>
+<li><p>This ignores the correlations among variables; we should be able to exploit these correlations when imputing missing values.</p></li>
+<li><p>We assume values are missing <span class="blue">at random</span>; i.e.&nbsp;the missingness should not be informative.</p></li>
+<li><p>We present an approach based on principal components.</p></li>
+</ul>
+</section>
+<section id="recommender-systems" class="slide level2 center">
+<h2>Recommender Systems</h2>
+
+<img data-src="img/table_12_2.png" class="quarto-figure quarto-figure-center r-stretch"><ul>
+<li><p>Netflix users rate movies they have seen, usually a very from 1 (worst) to 5 (best). The symbol • represents a missing value: a movie that was not rated by the corresponding customer. small fraction of available movies.</p></li>
+<li><p>Predicting missing ratings provides a way to recommend movies to users. Matrix completion is one of the primary tools.</p></li>
+</ul>
+</section>
 <section id="required-readings-from-the-textbook-and-course-materials" class="slide level2 center">
 <h2>Required readings from the textbook and course materials</h2>
 <ul>

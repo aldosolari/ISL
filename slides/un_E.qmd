@@ -589,11 +589,11 @@ image(t(X)[, ncol(X):1], col = gray(0:255/255), asp = p/n)
 
 ## Example: best M-rank approximation
 
-Obtain the best rank-$M$ approximation of the centered matrix $\mathbf{X}$
+Obtain the best rank-$M$ approximation of the column centered matrix $\mathbf{X}^c$
 $$\hat{\mathbf{X}}_M = \mathbf{Z}_M \mathbf{\Phi}_M$$
 then construct the compressed image
 $$\hat{\mathbf{X}}_M + \mathbf{1}_n \bar{x}$$
-ensuring that all elements lie in the interval $[0,1]$, where $\mathbf{1}_n$ is an $n\times 1$ vector of ones, and $\bar{x}$ is the $1\times p$ vector of the column means.
+ensuring that all elements lie in the interval $[0,1]$, where $\mathbf{1}_n$ is an $n\times 1$ vector of ones, and $\bar{x}$ is the $1\times p$ vector of the column means of the original (not column centered) matrix $\mathbf{X}$.
 
 ##
 
@@ -643,6 +643,1029 @@ for (q in qs) {
 }
 
 ```
+
+
+## Matrix Completion and Missing Values
+
+* It is often the case that data matrices $\mathbf{X}$ have missing
+entries, often represented by `NA`s (not available).
+
+* This is a nuisance, since many of our modeling procedures,
+such as linear regression and GLMs require complete data.
+
+* Sometimes imputation [is the prediction problem]{.blue}! — as in recommender systems.
+
+* One simple approach is [mean imputation]{.orange} — replace missing values for a variable by the mean of the non-missing entries.
+
+* This ignores the correlations among variables; we should be
+able to exploit these correlations when imputing missing
+values.
+
+* We assume values are missing [at random]{.blue}; i.e. the
+missingness should not be informative.
+
+* We present an approach based on principal components.
+
+## Recommender Systems 
+
+![](img/table_12_2.png){fig-align="center"}
+
+* Netflix users rate movies they have seen, usually a very
+from 1 (worst) to 5 (best). The symbol • represents a missing value: a movie that was not rated by the corresponding customer small fraction of available movies.
+
+* Predicting missing ratings provides a way to recommend
+movies to users. Matrix completion is one of the primary
+tools.
+
+
+## Matrix Approximation via Principal Components
+
+* Previously we gave an interpretation of principal
+components in terms of matrix approximation:
+
+$$\min_{\mathbf{A} \in \mathbb{R}^{n\times M},\, \mathbf{B} \in \mathbb{R}^{p \times M} }\Big\{ \sum_{i=1}^{n}\sum_{j=1}^{p}(x_{ij} - \sum_{m=1}^{M} a_{im}b_{jm} )^2 \Big\}$$
+$\mathbf{A}$ is a $n\times M$ matrix whose $(i,m)$ element is $a_{im}$, and $\mathbf{B}$ is a
+$p \times M$ element whose $(j,m)$ element is $b_{jm}$.
+
+* It can be shown that for any value of $M$, the first $M$
+[principal components]{.orange} provide a solution: 
+$$\hat{a}_{jm} = z_{im},\quad \hat{b}_{jm} = \phi_{jm}.$$
+
+* But what to do if the matrix has missing elements?
+
+## Matrix Completion via Principal Components
+
+* We pose instead a modified version of the approximation
+criterion:
+
+$$\min_{\mathbf{A} \in \mathbb{R}^{n\times M},\, \mathbf{B} \in \mathbb{R}^{p \times M} }\Big\{ \sum_{(i,j) \in \mathcal{O}} (x_{ij} - \sum_{m=1}^{M} a_{im}b_{jm} )^2 \Big\}$$
+where $\mathcal{O}$ is the set of all [observed]{.blue} pairs of indices $(i,j)$, a subset
+of the possible $n \times p$ pairs.
+
+* Once we solve this problem: 
+
+   * we can estimate a missing observation $x_{ij}$ using:
+$$\hat{x}_{ij} = \sum_{m=1}^{M} \hat{a}_{im} \hat{b}_{jm},$$
+where $\hat{a}_{im}$ and
+$\hat{b}_{jm}$ are the $(i,m)$ and
+$(j,m)$ elements of the solution matrices
+$\hat{\mathbf{A}}$ and $\hat{\mathbf{B}}$. 
+
+  * we can (approximately) recover the $M$ principal component
+scores and loadings, as if data were complete.
+
+
+## Iterative Algorithm for Matrix Completion
+
+1. [Initialize]{.orange}: create a complete data matrix $\tilde{\mathbf{X}}$ by filling in the
+missing values using mean imputation. 
+
+2. [repeat]{.orange}: steps (a)–(c) until the objective in (c) fails to decrease:
+
+   (a). $$\min_{\mathbf{A} \in \mathbb{R}^{n\times M},\, \mathbf{B} \in \mathbb{R}^{p \times M} }\Big\{ \sum_{i=1}^{n}\sum_{j=1}^{p}( \tilde{x}_{ij} - \sum_{m=1}^{M} a_{im}b_{jm} )^2 \Big\}$$
+   by computing the principal components of $\tilde{\mathbf{X}}$
+
+   (b). For each missing entry $(i,j) \notin \mathcal{O}$, set
+   $$\tilde{x}_{ij} \leftarrow \sum_{m=1}^{M} \hat{a}_{im} \hat{b}_{jm}$$
+  (c). Compute the objective
+  $$\sum_{(i,j) \in \mathcal{O}}( x_{ij} - \sum_{m=1}^{M} \hat{a}_{im}\hat{b}_{jm} )^2$$
+3. Return the estimated missing entries 
+$$\tilde{x}_{ij}, \quad (i,j) \notin \mathcal{O}$$
+  
+## MovieLens data
+
+* [Source]{.blue}: MovieLens, provided by GroupLens Research Group, University of Minnesota
+
+* [Citation]{.blue} Harper, F. M., & Konstan, J. A. (2015). The MovieLens Datasets: History and Context. ACM Transactions on Interactive Intelligent Systems (TiiS), 5(4).
+
+* [Full dataset (2024)]{.blue}: ~32M ratings, 87K movies, 200K users. 
+
+* [Reduced dataset (2009)]{.blue}: ~10M ratings, 10K movies, 72K users. 
+
+* [Link]{.blue}: [https://grouplens.org/datasets/movielens/10m/](https://grouplens.org/datasets/movielens/10m/)
+
+* [Train / Test split]{.blue}: ~9M / ~1M (The test set includes only users and movies that are also present in the training set)
+
+## 
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+rm(list=ls())
+library(data.table)
+library(stringr)
+movielens <- readRDS("/Users/aldo/Desktop/movielens_10m.rds")
+movielens[, date := as.POSIXct(timestamp, origin = "1970-01-01")]
+head(movielens)
+
+set.seed(123)
+
+test_index <- sample(seq_len(nrow(movielens)), 0.1 * nrow(movielens))
+
+training_set <- movielens[-test_index, ]
+temp <- movielens[test_index, ]
+
+test_set <- temp[
+  temp$movieId %in% training_set$movieId &
+    temp$userId %in% training_set$userId,
+]
+
+removed <- temp[
+  !(temp$movieId %in% test_set$movieId &
+      temp$userId %in% test_set$userId),
+]
+
+training_set <- rbind(training_set, removed)
+
+dim(training_set)
+dim(test_set)
+```
+
+##  Basic summaries
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+#| echo: TRUE
+# Ratings distribution:
+table(training_set$rating)
+# Ratings mean:
+mean(training_set$rating)
+# Ratings per movie:
+summary(as.numeric(table(training_set$movieId)))
+# Ratings per user:
+summary(as.numeric(table(training_set$userId)))
+```
+
+##  Rating distribution
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+rating_count <- table(training_set$rating)
+
+barplot(
+  rating_count,
+  col = "#8888ff",
+  xlab = "Rating",
+  ylab = "Count"
+)
+```
+
+##  Ratings per year
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+# Extract year
+year_vec <- as.numeric(format(
+  as.POSIXct(training_set$timestamp, origin = "1970-01-01"),
+  "%Y"
+))
+
+# Count ratings per year
+year_count <- table(year_vec)
+
+# Plot
+barplot(
+  year_count,
+  col = "#8888ff",
+  xlab = "Year",
+  ylab = "Number of Ratings",
+  las = 2  # rotate labels for readability
+)
+```
+
+## Average rating per year
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+# Average rating per year
+training_set$year <- as.numeric(format(
+  as.POSIXct(training_set$timestamp, origin = "1970-01-01"),
+  "%Y"
+))
+
+avg_year <- aggregate(rating ~ year, data = training_set, mean)
+
+plot(
+  avg_year$year,
+  avg_year$rating,
+  type = "b",
+  pch = 19,
+  col = "#4020dd",
+  xlab = "Year",
+  ylab = "Average Rating",
+  ylim = c(3, 5)
+)
+```
+
+## Ratings per movie
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+# Ratings per movie
+movie_counts <- data.frame(table(training_set$movieId))
+colnames(movie_counts) <- c("movieId", "count")
+movie_counts$movieId <- as.numeric(as.character(movie_counts$movieId))
+
+plot(
+  movie_counts$movieId,
+  movie_counts$count,
+  pch = 19,
+  col = rgb(0.25, 0.12, 0.87, 0.2),
+  xlab = "Movie ID",
+  ylab = "Number of Ratings"
+)
+```
+
+## Movies' rating histogram
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+# -------------------------
+# Movies' rating histogram (base R, log scale)
+# -------------------------
+
+# Count ratings per movie
+movie_counts <- table(training_set$movieId)
+
+# Log-transform (equivalent to scale_x_log10)
+log_counts <- log10(movie_counts)
+
+hist(
+  log_counts,
+  breaks = 30,
+  col = "#8888ff",
+  border = "#4020dd",
+  main = "",
+  xlab = "Number of Ratings (log scale)",
+  ylab = "Number of Movies",
+  xaxt = "n"
+)
+
+# Add axis with original scale labels
+axis(
+  1,
+  at = pretty(log_counts),
+  labels = round(10^pretty(log_counts))
+)
+```
+
+## Ratings per user
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+# Ratings per user
+user_counts <- data.frame(table(training_set$userId))
+colnames(user_counts) <- c("userId", "count")
+user_counts$userId <- as.numeric(as.character(user_counts$userId))
+
+plot(
+  user_counts$userId,
+  user_counts$count,
+  pch = 19,
+  col = rgb(0.25, 0.12, 0.87, 0.2),
+  xlab = "User ID",
+  ylab = "Number of Ratings"
+)
+```
+
+## Users' rating histogram
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+# -------------------------
+# Users' rating histogram (base R, log scale)
+# -------------------------
+
+# Count ratings per user
+user_counts <- table(training_set$userId)
+
+# Log-transform (equivalent to scale_x_log10)
+log_counts <- log10(user_counts)
+
+hist(
+  log_counts,
+  breaks = 30,
+  col = "#8888ff",
+  border = "#4020dd",
+  main = "",
+  xlab = "Number of Ratings (log scale)",
+  ylab = "Number of Users",
+  xaxt = "n"
+)
+
+# Add axis with original (non-log) labels
+axis(
+  1,
+  at = pretty(log_counts),
+  labels = round(10^pretty(log_counts))
+)
+```
+
+
+## Genre Popularity
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+# -------------------------
+# Genre counts + plot (base R)
+# -------------------------
+
+genres <- c("Action", "Adventure", "Animation", 
+            "Children", "Comedy", "Crime", 
+            "Documentary", "Drama", "Fantasy", 
+            "Film-Noir", "Horror", "Musical", 
+            "Mystery", "Romance", "Sci-Fi", 
+            "Thriller", "War", "Western")
+
+# Count occurrences (fixed = TRUE is faster than regex)
+genre_counts <- sapply(genres, function(g) {
+  sum(grepl(g, training_set$genres, fixed = TRUE))
+})
+
+genres_df <- data.frame(
+  Genres = genres,
+  Count = genre_counts,
+  stringsAsFactors = FALSE
+)
+
+print(genres_df)
+
+# Sort for nicer plot
+ord <- order(genres_df$Count)
+genres_df <- genres_df[ord, ]
+
+# Plot (horizontal barplot)
+barplot(
+  genres_df$Count,
+  names.arg = genres_df$Genres,
+  horiz = TRUE,
+  col = "#8888ff",
+  border = "#4020dd",
+  main = "",
+  xlab = "Number of Ratings",
+  las = 1,          # horizontal labels
+  cex.names = 0.8
+)
+```
+
+
+## Genre Average Rating
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+genres_df_2 <- data.frame(
+  Genres = genres,
+  Rating = sapply(genres, function(g) {
+    idx <- grepl(g, training_set$genres, fixed = TRUE)
+    mean(training_set$rating[idx], na.rm = TRUE)
+  }),
+  stringsAsFactors = FALSE
+)
+
+# Sort for readability
+ord <- order(genres_df_2$Rating)
+genres_df_2 <- genres_df_2[ord, ]
+
+dotchart(
+  genres_df_2$Rating,
+  labels = genres_df_2$Genres,
+  xlim = c(0, 5),
+  pch = 19,
+  col = "#4020dd",
+  main = "",
+  xlab = "Average Rating"
+)
+
+# Optional: light reference grid
+abline(v = seq(0, 5, by = 0.5), col = "grey90", lty = "dotted")
+```
+
+
+## User x Movie matrix sample
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+# Ratings per user
+set.seed(1)
+
+limit <- 60
+sample_users <- sample(unique(training_set$userId), limit)
+
+small <- training_set[training_set$userId %in% sample_users, ]
+
+user_movie_matrix <- as.matrix(table(small$userId, small$movieId))
+
+sample_movies <- sample(seq_len(ncol(user_movie_matrix)), limit)
+user_movie_matrix <- user_movie_matrix[, sample_movies]
+
+user_movie_matrix[user_movie_matrix > 0] <- 1
+
+image(
+  seq_len(ncol(user_movie_matrix)),
+  seq_len(nrow(user_movie_matrix)),
+  t(user_movie_matrix),
+  xlab = "Movies",
+  ylab = "Users",
+  main = "User x Movie Matrix",
+  col = c("white", "#4020dd")
+)
+
+abline(
+  h = seq_len(nrow(user_movie_matrix)) + 0.5,
+  v = seq_len(ncol(user_movie_matrix)) + 0.5,
+  col = "grey"
+)
+```
+
+## Global mean baseline model 
+
+* Predicts every rating as the overall average rating in the training set
+$$\hat{r}_{ui} = \mu$$
+where $\hat{r}_{ui}$ is the model’s prediction of how user $u$ would rate movie $i$, and $\mu$ is the global mean of all ratings
+
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+#| echo: TRUE
+
+mu <- mean(training_set$rating)
+pred_global <- rep(mu, nrow(test_set))
+RMSE <- function(true, pred) {
+  sqrt(mean((true - pred)^2))
+}
+rmse_global <- RMSE(test_set$rating, pred_global)
+rmse_global
+```
+
+
+
+## User bias model 
+
+Predicts each rating as the overall average rating plus a user-specific bias:
+$$
+\hat{r}_{ui} = \mu + b_u
+$$
+
+where $b_u$ is the average deviation of user $u$ from the global mean, estimated as:
+$$
+b_u = \frac{1}{N_u} \sum_i (r_{ui} - \mu)
+$$
+
+with $N_u$ the number of ratings made by user $u$, and $\sum_i$ the sum over all movies rated by user $u$.
+
+Substituting $b_u$ into the prediction shows that:
+$$
+\hat{r}_{ui} = \mu + (\bar{r}_u - \mu) = \bar{r}_u
+$$
+
+where $\bar{r}_u$ is the average rating given by user $u$.
+
+Therefore, this model predicts the same value for all movies for a given user, equal to the user’s average rating.
+
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+#| eval: FALSE
+#| echo: TRUE
+
+# -------------------------
+# User bias model via lm()
+# -------------------------
+
+# Fit linear model with user fixed effects
+fit_user <- lm(rating ~ factor(userId), data = training_set)
+
+# Predict on test set
+pred_user_lm <- predict(fit_user, newdata = test_set)
+
+# Handle unseen users (NA predictions)
+pred_user_lm[is.na(pred_user_lm)] <- mu
+
+# RMSE
+rmse_user_lm <- RMSE(test_set$rating, pred_user_lm)
+
+rmse_user_lm
+```
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+user_sum <- tapply(training_set$rating - mu, training_set$userId, sum)
+user_n <- table(training_set$userId)
+
+b_u_only <- user_sum / user_n
+
+pred_user <- mu + b_u_only[as.character(test_set$userId)]
+pred_user[is.na(pred_user)] <- mu
+
+rmse_user <- RMSE(test_set$rating, pred_user)
+
+rmse_user
+```
+
+## Movie bias model 
+
+Predicts each rating as the overall average rating plus a movie-specific bias:
+$$
+\hat{r}_{ui} = \mu + b_i
+$$
+
+where $b_i$ is the average deviation of movie $i$ from the global mean, estimated as:
+$$
+b_i = \frac{1}{N_i} \sum_u (r_{ui} - \mu)
+$$
+
+with $N_i$ the number of ratings received by movie $i$, and $\sum_u$ the sum over all users who rated movie $i$.
+
+Therefore, this model predicts the same value for all users for a given movie, equal to the movie’s average rating.
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+movie_sum <- tapply(training_set$rating - mu, training_set$movieId, sum)
+movie_n <- table(training_set$movieId)
+
+b_i_only <- movie_sum / movie_n
+
+pred_movie <- mu + b_i_only[as.character(test_set$movieId)]
+pred_movie[is.na(pred_movie)] <- mu
+
+rmse_movie <- RMSE(test_set$rating, pred_movie)
+
+rmse_movie
+```
+
+
+## User + Movie bias model
+
+This model improves the previous models by adding both a movie-specific bias and a user-specific bias:
+
+$$
+\hat{r}_{ui} = \mu + b_i + b_u
+$$
+
+* Step 1: Estimate movie bias
+
+The movie bias measures how much movie $i$ tends to be rated above or below the global average:
+
+$$
+b_i = \frac{1}{N_i} \sum_u (r_{ui} - \mu)
+$$
+
+
+* Step 2: Estimate user bias after removing movie bias
+
+The user bias measures how much user $u$ tends to rate above or below what is expected after accounting for the movie effect:
+$$
+b_u = \frac{1}{N_u} \sum_i (r_{ui} - \mu - b_i)
+$$
+
+
+* Step 3: Make predictions
+
+The final prediction adds together the global mean, movie bias, and user bias:
+
+$$
+\hat{r}_{ui} = \mu + b_i + b_u
+$$
+
+Predictions are then limited to the valid rating range:
+
+$$
+0.5 \leq \hat{r}_{ui} \leq 5
+$$
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+setDT(training_set)
+setDT(test_set)
+
+lambda <- 0
+
+movie_bias <- training_set[
+  , .(b_i = sum(rating - mu) / (.N + lambda)),
+  by = movieId
+]
+
+training_set <- merge(
+  training_set,
+  movie_bias,
+  by = "movieId",
+  all.x = TRUE
+)
+
+training_set[is.na(b_i), b_i := 0]
+
+user_bias <- training_set[
+  , .(b_u = sum(rating - mu - b_i) / (.N + lambda)),
+  by = userId
+]
+
+test_pred <- merge(
+  test_set,
+  movie_bias,
+  by = "movieId",
+  all.x = TRUE
+)
+
+test_pred <- merge(
+  test_pred,
+  user_bias,
+  by = "userId",
+  all.x = TRUE
+)
+
+test_pred[is.na(b_i), b_i := 0]
+test_pred[is.na(b_u), b_u := 0]
+
+pred_user_movie <- test_pred[, mu + b_i + b_u]
+pred_user_movie <- pmin(pmax(pred_user_movie, 0.5), 5)
+
+rmse_user_movie <- RMSE(test_pred$rating, pred_user_movie)
+
+rmse_user_movie
+```
+
+## Matrix completion with SVD
+
+This model extends the user + movie bias model by learning an additional latent interaction term using SVD.
+
+The prediction is:
+$$
+\hat{r}_{ui} = \mu + b_i + b_u + s_{ui}
+$$
+where:
+
+- $\mu$ is the global mean rating
+- $b_i$ is the movie bias
+- $b_u$ is the user bias
+- $s_{ui}$ is the SVD residual effect for user $u$ and movie $i$
+
+* Step 1: Select a smaller user-movie matrix
+
+The full MovieLens matrix is too large for base R SVD, so the code keeps only the 1000 most active users and 1000 most rated movies.
+
+* Step 2: Compute residuals
+
+The code first removes the user + movie bias prediction:
+
+$$
+e_{ui} = r_{ui} - \mu - b_i - b_u
+$$
+
+So SVD is applied only to what remains unexplained by the bias model.
+
+* Step 3: Build the residual matrix
+
+A matrix $X$ is created where:
+
+- rows are users
+- columns are movies
+- observed cells contain residuals $e_{ui}$
+- missing cells are `NA`
+
+* Step 4: Initialize missing values
+
+Because SVD cannot handle missing values, missing entries are first replaced by column means:
+
+$$
+\hat{X}_{ui} = \bar{X}_i
+$$
+
+This gives a reasonable starting estimate for unrated movies.
+
+* Step 5: Iterative SVD completion
+
+At each iteration:
+
+1. Approximate the filled matrix using rank-$M$ SVD:
+$$
+X_{\text{app}} = U_M D_M V_M^T
+$$
+
+2. Replace only the missing values with the SVD approximation:
+$$
+\hat{X}_{ui} = X_{\text{app},ui}
+$$
+
+3. Keep the observed residuals fixed.
+
+The loop stops when improvement becomes very small or `max_iter` is reached.
+
+* Step 6: Predict on the test set
+
+For users and movies included in the SVD matrix, the model adds the SVD residual effect:
+
+$$
+\hat{r}_{ui} = \mu + b_i + b_u + s_{ui}
+$$
+
+For users or movies not included in the SVD subset, the SVD effect is set to zero, so the model falls back to:
+
+$$
+\hat{r}_{ui} = \mu + b_i + b_u
+$$
+
+Finally, predictions are clipped to the valid rating range:
+
+$$
+0.5 \leq \hat{r}_{ui} \leq 5
+$$
+
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+# -------------------------
+# Simple matrix completion with SVD
+# Uses residuals after movie + user bias
+# -------------------------
+
+M <- 3          # number of SVD components
+max_iter <- 20
+thresh <- 1e-7
+
+# Use only reasonably frequent users/movies to keep base R SVD manageable
+top_users <- names(sort(table(training_set$userId), decreasing = TRUE))[1:1000]
+top_movies <- names(sort(table(training_set$movieId), decreasing = TRUE))[1:1000]
+
+svd_train <- training_set[
+  as.character(userId) %in% top_users &
+    as.character(movieId) %in% top_movies,
+]
+
+# residual = rating - baseline prediction
+svd_train$residual <- svd_train$rating - mu - svd_train$b_i - 
+  user_bias$b_u[match(svd_train$userId, user_bias$userId)]
+
+svd_train$residual[is.na(svd_train$residual)] <- 0
+
+# Build user x movie residual matrix
+Xna <- matrix(
+  NA_real_,
+  nrow = length(top_users),
+  ncol = length(top_movies),
+  dimnames = list(top_users, top_movies)
+)
+
+row_id <- match(as.character(svd_train$userId), top_users)
+col_id <- match(as.character(svd_train$movieId), top_movies)
+
+Xna[cbind(row_id, col_id)] <- svd_train$residual
+
+# SVD helper
+fit.svd <- function(X, M = 1) {
+  svdob <- svd(X)
+  svdob$u[, 1:M, drop = FALSE] %*%
+    (svdob$d[1:M] * t(svdob$v[, 1:M, drop = FALSE]))
+}
+
+# Initial imputation: column means
+Xhat <- Xna
+ismiss <- is.na(Xna)
+
+xbar <- colMeans(Xna, na.rm = TRUE)
+xbar[is.na(xbar)] <- 0
+
+for (j in seq_len(ncol(Xhat))) {
+  Xhat[is.na(Xhat[, j]), j] <- xbar[j]
+}
+
+# Correct initialization
+mssold <- mean((scale(Xna, center = xbar, scale = FALSE)[!ismiss])^2)
+mss0 <- mean(Xna[!ismiss]^2)
+
+rel_err <- 1
+iter <- 0
+
+while (rel_err > thresh && iter < max_iter) {
+  iter <- iter + 1
+  
+  # Step 2(a): low-rank SVD approximation
+  Xapp <- fit.svd(Xhat, M = M)
+  
+  # Step 2(b): update missing entries only
+  Xhat[ismiss] <- Xapp[ismiss]
+  
+  # Step 2(c): compute reconstruction error on observed values
+  mss <- mean((Xna[!ismiss] - Xapp[!ismiss])^2)
+  rel_err <- (mssold - mss) / mss0
+  mssold <- mss
+  
+  cat("Iter:", iter, "MSS:", mss, "Rel. Err:", rel_err, "\n")
+}
+
+
+# -------------------------
+# SVD predictions on test set
+# -------------------------
+
+test_svd <- test_pred
+
+test_svd$svd_effect <- 0
+
+r <- match(as.character(test_svd$userId), rownames(Xhat))
+c <- match(as.character(test_svd$movieId), colnames(Xhat))
+
+has_svd <- !is.na(r) & !is.na(c)
+
+test_svd$svd_effect[has_svd] <- Xhat[cbind(r[has_svd], c[has_svd])]
+
+pred_svd <- test_svd[, mu + b_i + b_u + svd_effect]
+pred_svd <- pmin(pmax(pred_svd, 0.5), 5)
+
+rmse_svd <- RMSE(test_svd$rating, pred_svd)
+
+rmse_svd
+```
+
+
+## Matrix factorization with recosystem
+
+This model learns latent user and movie factors to predict ratings.
+
+1. Convert user and movie IDs to integer indices (required by `recosystem`)
+2. Train a matrix factorization model (learns hidden features of users and movies)
+3. Tune hyperparameters (dimension, learning rate, regularization)
+4. Predict ratings on the test set
+
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+# -------------------------
+# Matrix factorization with recosystem
+# -------------------------
+
+library(recosystem)
+library(parallel)
+
+set.seed(1)
+
+# recosystem needs integer user/item ids
+user_levels <- sort(unique(training_set$userId))
+movie_levels <- sort(unique(training_set$movieId))
+
+training_set$user_index <- match(training_set$userId, user_levels)
+training_set$item_index <- match(training_set$movieId, movie_levels)
+
+test_set$user_index <- match(test_set$userId, user_levels)
+test_set$item_index <- match(test_set$movieId, movie_levels)
+
+# keep only test rows with known users and movies
+test_reco_set <- test_set[
+  !is.na(test_set$user_index) & !is.na(test_set$item_index),
+]
+
+train_recosystem <- with(
+  training_set,
+  data_memory(
+    user_index = user_index,
+    item_index = item_index,
+    rating = rating
+  )
+)
+
+test_recosystem <- with(
+  test_reco_set,
+  data_memory(
+    user_index = user_index,
+    item_index = item_index,
+    rating = rating
+  )
+)
+
+n_threads <- max(1, detectCores() - 1)
+
+recommendation_system <- Reco()
+
+# Faster tuning grid
+tuning <- recommendation_system$tune(
+  train_recosystem,
+  opts = list(
+    dim = c(10, 20),
+    lrate = c(0.05, 0.1),
+    costp_l1 = 0,
+    costq_l1 = 0,
+    costp_l2 = c(0.01, 0.1),
+    costq_l2 = c(0.01, 0.1),
+    nthread = n_threads,
+    niter = 10,
+    verbose = FALSE
+  )
+)
+
+tuning$min
+
+recommendation_system$train(
+  train_recosystem,
+  opts = c(
+    tuning$min,
+    nthread = n_threads,
+    niter = 20,
+    verbose = FALSE
+  )
+)
+
+pred_reco <- recommendation_system$predict(
+  test_recosystem,
+  out_memory()
+)
+
+pred_reco <- pmin(pmax(pred_reco, 0.5), 5)
+
+rmse_reco <- RMSE(test_reco_set$rating, pred_reco)
+
+rmse_reco
+```
+
+## Results
+
+```{r}
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 5
+# -------------------------
+# RESULTS
+# -------------------------
+
+results <- data.frame(
+  model = c(
+    "global_mean",
+    "user_bias",
+    "movie_bias",
+    "user_movie_bias",
+    "user_movie_svd",
+    "recosystem_matrix_factorization"
+  ),
+  rmse = c(
+    rmse_global,
+    rmse_user,
+    rmse_movie,
+    rmse_user_movie,
+    rmse_svd,
+    rmse_reco
+  )
+)
+
+results <- results[order(results$rmse), ]
+
+results
+```
+
 
 ## Required readings from the textbook and course materials
 

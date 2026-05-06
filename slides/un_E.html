@@ -21,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -118,6 +153,31 @@ window.Quarto = {
   <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a></li>
   <li><a href="#example-best-m-rank-approximation" id="toc-example-best-m-rank-approximation" class="nav-link" data-scroll-target="#example-best-m-rank-approximation">Example: best M-rank approximation</a></li>
   <li><a href="#section-9" id="toc-section-9" class="nav-link" data-scroll-target="#section-9"></a></li>
+  <li><a href="#matrix-completion-and-missing-values" id="toc-matrix-completion-and-missing-values" class="nav-link" data-scroll-target="#matrix-completion-and-missing-values">Matrix Completion and Missing Values</a></li>
+  <li><a href="#recommender-systems" id="toc-recommender-systems" class="nav-link" data-scroll-target="#recommender-systems">Recommender Systems</a></li>
+  <li><a href="#matrix-approximation-via-principal-components" id="toc-matrix-approximation-via-principal-components" class="nav-link" data-scroll-target="#matrix-approximation-via-principal-components">Matrix Approximation via Principal Components</a></li>
+  <li><a href="#matrix-completion-via-principal-components" id="toc-matrix-completion-via-principal-components" class="nav-link" data-scroll-target="#matrix-completion-via-principal-components">Matrix Completion via Principal Components</a></li>
+  <li><a href="#iterative-algorithm-for-matrix-completion" id="toc-iterative-algorithm-for-matrix-completion" class="nav-link" data-scroll-target="#iterative-algorithm-for-matrix-completion">Iterative Algorithm for Matrix Completion</a></li>
+  <li><a href="#movielens-data" id="toc-movielens-data" class="nav-link" data-scroll-target="#movielens-data">MovieLens data</a></li>
+  <li><a href="#section-10" id="toc-section-10" class="nav-link" data-scroll-target="#section-10"></a></li>
+  <li><a href="#basic-summaries" id="toc-basic-summaries" class="nav-link" data-scroll-target="#basic-summaries">Basic summaries</a></li>
+  <li><a href="#rating-distribution" id="toc-rating-distribution" class="nav-link" data-scroll-target="#rating-distribution">Rating distribution</a></li>
+  <li><a href="#ratings-per-year" id="toc-ratings-per-year" class="nav-link" data-scroll-target="#ratings-per-year">Ratings per year</a></li>
+  <li><a href="#average-rating-per-year" id="toc-average-rating-per-year" class="nav-link" data-scroll-target="#average-rating-per-year">Average rating per year</a></li>
+  <li><a href="#ratings-per-movie" id="toc-ratings-per-movie" class="nav-link" data-scroll-target="#ratings-per-movie">Ratings per movie</a></li>
+  <li><a href="#movies-rating-histogram" id="toc-movies-rating-histogram" class="nav-link" data-scroll-target="#movies-rating-histogram">Movies’ rating histogram</a></li>
+  <li><a href="#ratings-per-user" id="toc-ratings-per-user" class="nav-link" data-scroll-target="#ratings-per-user">Ratings per user</a></li>
+  <li><a href="#users-rating-histogram" id="toc-users-rating-histogram" class="nav-link" data-scroll-target="#users-rating-histogram">Users’ rating histogram</a></li>
+  <li><a href="#genre-popularity" id="toc-genre-popularity" class="nav-link" data-scroll-target="#genre-popularity">Genre Popularity</a></li>
+  <li><a href="#genre-average-rating" id="toc-genre-average-rating" class="nav-link" data-scroll-target="#genre-average-rating">Genre Average Rating</a></li>
+  <li><a href="#user-x-movie-matrix-sample" id="toc-user-x-movie-matrix-sample" class="nav-link" data-scroll-target="#user-x-movie-matrix-sample">User x Movie matrix sample</a></li>
+  <li><a href="#global-mean-baseline-model" id="toc-global-mean-baseline-model" class="nav-link" data-scroll-target="#global-mean-baseline-model">Global mean baseline model</a></li>
+  <li><a href="#user-bias-model" id="toc-user-bias-model" class="nav-link" data-scroll-target="#user-bias-model">User bias model</a></li>
+  <li><a href="#movie-bias-model" id="toc-movie-bias-model" class="nav-link" data-scroll-target="#movie-bias-model">Movie bias model</a></li>
+  <li><a href="#user-movie-bias-model" id="toc-user-movie-bias-model" class="nav-link" data-scroll-target="#user-movie-bias-model">User + Movie bias model</a></li>
+  <li><a href="#matrix-completion-with-svd" id="toc-matrix-completion-with-svd" class="nav-link" data-scroll-target="#matrix-completion-with-svd">Matrix completion with SVD</a></li>
+  <li><a href="#matrix-factorization-with-recosystem" id="toc-matrix-factorization-with-recosystem" class="nav-link" data-scroll-target="#matrix-factorization-with-recosystem">Matrix factorization with recosystem</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
   <li><a href="#required-readings-from-the-textbook-and-course-materials" id="toc-required-readings-from-the-textbook-and-course-materials" class="nav-link" data-scroll-target="#required-readings-from-the-textbook-and-course-materials">Required readings from the textbook and course materials</a></li>
   <li><a href="#required-readings-from-the-textbook-and-course-materials-1" id="toc-required-readings-from-the-textbook-and-course-materials-1" class="nav-link" data-scroll-target="#required-readings-from-the-textbook-and-course-materials-1">Required readings from the textbook and course materials</a></li>
   </ul>
@@ -489,7 +549,7 @@ z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
 </section>
 <section id="example-best-m-rank-approximation" class="level2">
 <h2 class="anchored" data-anchor-id="example-best-m-rank-approximation">Example: best M-rank approximation</h2>
-<p>Obtain the best rank-<span class="math inline">M</span> approximation of the centered matrix <span class="math inline">\mathbf{X}</span> <span class="math display">\hat{\mathbf{X}}_M = \mathbf{Z}_M \mathbf{\Phi}_M</span> then construct the compressed image <span class="math display">\hat{\mathbf{X}}_M + \mathbf{1}_n \bar{x}</span> ensuring that all elements lie in the interval <span class="math inline">[0,1]</span>, where <span class="math inline">\mathbf{1}_n</span> is an <span class="math inline">n\times 1</span> vector of ones, and <span class="math inline">\bar{x}</span> is the <span class="math inline">1\times p</span> vector of the column means.</p>
+<p>Obtain the best rank-<span class="math inline">M</span> approximation of the column centered matrix <span class="math inline">\mathbf{X}^c</span> <span class="math display">\hat{\mathbf{X}}_M = \mathbf{Z}_M \mathbf{\Phi}_M</span> then construct the compressed image <span class="math display">\hat{\mathbf{X}}_M + \mathbf{1}_n \bar{x}</span> ensuring that all elements lie in the interval <span class="math inline">[0,1]</span>, where <span class="math inline">\mathbf{1}_n</span> is an <span class="math inline">n\times 1</span> vector of ones, and <span class="math inline">\bar{x}</span> is the <span class="math inline">1\times p</span> vector of the column means of the original (not column centered) matrix <span class="math inline">\mathbf{X}</span>.</p>
 </section>
 <section id="section-9" class="level2">
 <h2 class="anchored" data-anchor-id="section-9"></h2>
@@ -500,6 +560,531 @@ z_{i2} = \phi_{12}x_{i1} + \phi_{22}x_{i2} + \cdots + \phi_{p2}x_{ip}
 <p><img src="un_E_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="900"></p>
 </figure>
 </div>
+</div>
+</div>
+</section>
+<section id="matrix-completion-and-missing-values" class="level2">
+<h2 class="anchored" data-anchor-id="matrix-completion-and-missing-values">Matrix Completion and Missing Values</h2>
+<ul>
+<li><p>It is often the case that data matrices <span class="math inline">\mathbf{X}</span> have missing entries, often represented by <code>NA</code>s (not available).</p></li>
+<li><p>This is a nuisance, since many of our modeling procedures, such as linear regression and GLMs require complete data.</p></li>
+<li><p>Sometimes imputation <span class="blue">is the prediction problem</span>! — as in recommender systems.</p></li>
+<li><p>One simple approach is <span class="orange">mean imputation</span> — replace missing values for a variable by the mean of the non-missing entries.</p></li>
+<li><p>This ignores the correlations among variables; we should be able to exploit these correlations when imputing missing values.</p></li>
+<li><p>We assume values are missing <span class="blue">at random</span>; i.e.&nbsp;the missingness should not be informative.</p></li>
+<li><p>We present an approach based on principal components.</p></li>
+</ul>
+</section>
+<section id="recommender-systems" class="level2">
+<h2 class="anchored" data-anchor-id="recommender-systems">Recommender Systems</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/table_12_2.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<ul>
+<li><p>Netflix users rate movies they have seen, usually a very from 1 (worst) to 5 (best). The symbol • represents a missing value: a movie that was not rated by the corresponding customer small fraction of available movies.</p></li>
+<li><p>Predicting missing ratings provides a way to recommend movies to users. Matrix completion is one of the primary tools.</p></li>
+</ul>
+</section>
+<section id="matrix-approximation-via-principal-components" class="level2">
+<h2 class="anchored" data-anchor-id="matrix-approximation-via-principal-components">Matrix Approximation via Principal Components</h2>
+<ul>
+<li>Previously we gave an interpretation of principal components in terms of matrix approximation:</li>
+</ul>
+<p><span class="math display">\min_{\mathbf{A} \in \mathbb{R}^{n\times M},\, \mathbf{B} \in \mathbb{R}^{p \times M} }\Big\{ \sum_{i=1}^{n}\sum_{j=1}^{p}(x_{ij} - \sum_{m=1}^{M} a_{im}b_{jm} )^2 \Big\}</span> <span class="math inline">\mathbf{A}</span> is a <span class="math inline">n\times M</span> matrix whose <span class="math inline">(i,m)</span> element is <span class="math inline">a_{im}</span>, and <span class="math inline">\mathbf{B}</span> is a <span class="math inline">p \times M</span> element whose <span class="math inline">(j,m)</span> element is <span class="math inline">b_{jm}</span>.</p>
+<ul>
+<li><p>It can be shown that for any value of <span class="math inline">M</span>, the first <span class="math inline">M</span> <span class="orange">principal components</span> provide a solution: <span class="math display">\hat{a}_{jm} = z_{im},\quad \hat{b}_{jm} = \phi_{jm}.</span></p></li>
+<li><p>But what to do if the matrix has missing elements?</p></li>
+</ul>
+</section>
+<section id="matrix-completion-via-principal-components" class="level2">
+<h2 class="anchored" data-anchor-id="matrix-completion-via-principal-components">Matrix Completion via Principal Components</h2>
+<ul>
+<li>We pose instead a modified version of the approximation criterion:</li>
+</ul>
+<p><span class="math display">\min_{\mathbf{A} \in \mathbb{R}^{n\times M},\, \mathbf{B} \in \mathbb{R}^{p \times M} }\Big\{ \sum_{(i,j) \in \mathcal{O}} (x_{ij} - \sum_{m=1}^{M} a_{im}b_{jm} )^2 \Big\}</span> where <span class="math inline">\mathcal{O}</span> is the set of all <span class="blue">observed</span> pairs of indices <span class="math inline">(i,j)</span>, a subset of the possible <span class="math inline">n \times p</span> pairs.</p>
+<ul>
+<li><p>Once we solve this problem:</p>
+<ul>
+<li><p>we can estimate a missing observation <span class="math inline">x_{ij}</span> using: <span class="math display">\hat{x}_{ij} = \sum_{m=1}^{M} \hat{a}_{im} \hat{b}_{jm},</span> where <span class="math inline">\hat{a}_{im}</span> and <span class="math inline">\hat{b}_{jm}</span> are the <span class="math inline">(i,m)</span> and <span class="math inline">(j,m)</span> elements of the solution matrices <span class="math inline">\hat{\mathbf{A}}</span> and <span class="math inline">\hat{\mathbf{B}}</span>.</p></li>
+<li><p>we can (approximately) recover the <span class="math inline">M</span> principal component scores and loadings, as if data were complete.</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="iterative-algorithm-for-matrix-completion" class="level2">
+<h2 class="anchored" data-anchor-id="iterative-algorithm-for-matrix-completion">Iterative Algorithm for Matrix Completion</h2>
+<ol type="1">
+<li><p><span class="orange">Initialize</span>: create a complete data matrix <span class="math inline">\tilde{\mathbf{X}}</span> by filling in the missing values using mean imputation.</p></li>
+<li><p><span class="orange">repeat</span>: steps (a)–(c) until the objective in (c) fails to decrease:</p>
+<p>(a). <span class="math display">\min_{\mathbf{A} \in \mathbb{R}^{n\times M},\, \mathbf{B} \in \mathbb{R}^{p \times M} }\Big\{ \sum_{i=1}^{n}\sum_{j=1}^{p}( \tilde{x}_{ij} - \sum_{m=1}^{M} a_{im}b_{jm} )^2 \Big\}</span> by computing the principal components of <span class="math inline">\tilde{\mathbf{X}}</span></p>
+<p>(b). For each missing entry <span class="math inline">(i,j) \notin \mathcal{O}</span>, set <span class="math display">\tilde{x}_{ij} \leftarrow \sum_{m=1}^{M} \hat{a}_{im} \hat{b}_{jm}</span> (c). Compute the objective <span class="math display">\sum_{(i,j) \in \mathcal{O}}( x_{ij} - \sum_{m=1}^{M} \hat{a}_{im}\hat{b}_{jm} )^2</span></p></li>
+<li><p>Return the estimated missing entries <span class="math display">\tilde{x}_{ij}, \quad (i,j) \notin \mathcal{O}</span></p></li>
+</ol>
+</section>
+<section id="movielens-data" class="level2">
+<h2 class="anchored" data-anchor-id="movielens-data">MovieLens data</h2>
+<ul>
+<li><p><span class="blue">Source</span>: MovieLens, provided by GroupLens Research Group, University of Minnesota</p></li>
+<li><p><span class="blue">Citation</span> Harper, F. M., &amp; Konstan, J. A. (2015). The MovieLens Datasets: History and Context. ACM Transactions on Interactive Intelligent Systems (TiiS), 5(4).</p></li>
+<li><p><span class="blue">Full dataset (2024)</span>: ~32M ratings, 87K movies, 200K users.</p></li>
+<li><p><span class="blue">Reduced dataset (2009)</span>: ~10M ratings, 10K movies, 72K users.</p></li>
+<li><p><span class="blue">Link</span>: <a href="https://grouplens.org/datasets/movielens/10m/">https://grouplens.org/datasets/movielens/10m/</a></p></li>
+<li><p><span class="blue">Train / Test split</span>: ~9M / ~1M (The test set includes only users and movies that are also present in the training set)</p></li>
+</ul>
+</section>
+<section id="section-10" class="level2">
+<h2 class="anchored" data-anchor-id="section-10"></h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Key: &lt;movieId&gt;
+   movieId userId rating  timestamp            title
+     &lt;int&gt;  &lt;int&gt;  &lt;num&gt;      &lt;int&gt;           &lt;char&gt;
+1:       1      5      1  857911264 Toy Story (1995)
+2:       1     14      3 1133572007 Toy Story (1995)
+3:       1     18      3 1111545931 Toy Story (1995)
+4:       1     23      5  849543482 Toy Story (1995)
+5:       1     24      5  868254237 Toy Story (1995)
+6:       1     30      5  876526432 Toy Story (1995)
+                                        genres                date
+                                        &lt;char&gt;              &lt;POSc&gt;
+1: Adventure|Animation|Children|Comedy|Fantasy 1997-03-09 13:41:04
+2: Adventure|Animation|Children|Comedy|Fantasy 2005-12-03 02:06:47
+3: Adventure|Animation|Children|Comedy|Fantasy 2005-03-23 03:45:31
+4: Adventure|Animation|Children|Comedy|Fantasy 1996-12-02 17:18:02
+5: Adventure|Animation|Children|Comedy|Fantasy 1997-07-07 07:43:57
+6: Adventure|Animation|Children|Comedy|Fantasy 1997-10-11 01:33:52</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9000058       7</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 999996      7</code></pre>
+</div>
+</div>
+</section>
+<section id="basic-summaries" class="level2">
+<h2 class="anchored" data-anchor-id="basic-summaries">Basic summaries</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Ratings distribution:</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">table</span>(training_set<span class="sc">$</span>rating)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    0.5       1     1.5       2     2.5       3     3.5       4     4.5       5 
+  85446  345991  106455  711099  333180 2120675  791792 2588053  526609 1390758 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Ratings mean:</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">mean</span>(training_set<span class="sc">$</span>rating)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.512487</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Ratings per movie:</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">summary</span>(<span class="fu">as.numeric</span>(<span class="fu">table</span>(training_set<span class="sc">$</span>movieId)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    1.0    31.0   122.0   842.9   563.0 31358.0 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># Ratings per user:</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="fu">summary</span>(<span class="fu">as.numeric</span>(<span class="fu">table</span>(training_set<span class="sc">$</span>userId)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   12.0    32.0    62.0   128.8   141.0  6626.0 </code></pre>
+</div>
+</div>
+</section>
+<section id="rating-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="rating-distribution">Rating distribution</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="ratings-per-year" class="level2">
+<h2 class="anchored" data-anchor-id="ratings-per-year">Ratings per year</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="average-rating-per-year" class="level2">
+<h2 class="anchored" data-anchor-id="average-rating-per-year">Average rating per year</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="ratings-per-movie" class="level2">
+<h2 class="anchored" data-anchor-id="ratings-per-movie">Ratings per movie</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="movies-rating-histogram" class="level2">
+<h2 class="anchored" data-anchor-id="movies-rating-histogram">Movies’ rating histogram</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="ratings-per-user" class="level2">
+<h2 class="anchored" data-anchor-id="ratings-per-user">Ratings per user</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="users-rating-histogram" class="level2">
+<h2 class="anchored" data-anchor-id="users-rating-histogram">Users’ rating histogram</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="genre-popularity" class="level2">
+<h2 class="anchored" data-anchor-id="genre-popularity">Genre Popularity</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>                 Genres   Count
+Action           Action 2560840
+Adventure     Adventure 1908742
+Animation     Animation  466973
+Children       Children  738081
+Comedy           Comedy 3541159
+Crime             Crime 1327771
+Documentary Documentary   93051
+Drama             Drama 3910447
+Fantasy         Fantasy  925708
+Film-Noir     Film-Noir  118375
+Horror           Horror  691252
+Musical         Musical  432683
+Mystery         Mystery  567649
+Romance         Romance 1712206
+Sci-Fi           Sci-Fi 1341182
+Thriller       Thriller 2325571
+War                 War  511247
+Western         Western  189350</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="genre-average-rating" class="level2">
+<h2 class="anchored" data-anchor-id="genre-average-rating">Genre Average Rating</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="user-x-movie-matrix-sample" class="level2">
+<h2 class="anchored" data-anchor-id="user-x-movie-matrix-sample">User x Movie matrix sample</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="un_E_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="global-mean-baseline-model" class="level2">
+<h2 class="anchored" data-anchor-id="global-mean-baseline-model">Global mean baseline model</h2>
+<ul>
+<li>Predicts every rating as the overall average rating in the training set <span class="math display">\hat{r}_{ui} = \mu</span> where <span class="math inline">\hat{r}_{ui}</span> is the model’s prediction of how user <span class="math inline">u</span> would rate movie <span class="math inline">i</span>, and <span class="math inline">\mu</span> is the global mean of all ratings</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">mean</span>(training_set<span class="sc">$</span>rating)</span>
+<span id="cb15-2"><a href="#cb15-2"></a>pred_global <span class="ot">&lt;-</span> <span class="fu">rep</span>(mu, <span class="fu">nrow</span>(test_set))</span>
+<span id="cb15-3"><a href="#cb15-3"></a>RMSE <span class="ot">&lt;-</span> <span class="cf">function</span>(true, pred) {</span>
+<span id="cb15-4"><a href="#cb15-4"></a>  <span class="fu">sqrt</span>(<span class="fu">mean</span>((true <span class="sc">-</span> pred)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb15-5"><a href="#cb15-5"></a>}</span>
+<span id="cb15-6"><a href="#cb15-6"></a>rmse_global <span class="ot">&lt;-</span> <span class="fu">RMSE</span>(test_set<span class="sc">$</span>rating, pred_global)</span>
+<span id="cb15-7"><a href="#cb15-7"></a>rmse_global</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.059676</code></pre>
+</div>
+</div>
+</section>
+<section id="user-bias-model" class="level2">
+<h2 class="anchored" data-anchor-id="user-bias-model">User bias model</h2>
+<p>Predicts each rating as the overall average rating plus a user-specific bias: <span class="math display">
+\hat{r}_{ui} = \mu + b_u
+</span></p>
+<p>where <span class="math inline">b_u</span> is the average deviation of user <span class="math inline">u</span> from the global mean, estimated as: <span class="math display">
+b_u = \frac{1}{N_u} \sum_i (r_{ui} - \mu)
+</span></p>
+<p>with <span class="math inline">N_u</span> the number of ratings made by user <span class="math inline">u</span>, and <span class="math inline">\sum_i</span> the sum over all movies rated by user <span class="math inline">u</span>.</p>
+<p>Substituting <span class="math inline">b_u</span> into the prediction shows that: <span class="math display">
+\hat{r}_{ui} = \mu + (\bar{r}_u - \mu) = \bar{r}_u
+</span></p>
+<p>where <span class="math inline">\bar{r}_u</span> is the average rating given by user <span class="math inline">u</span>.</p>
+<p>Therefore, this model predicts the same value for all movies for a given user, equal to the user’s average rating.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># -------------------------</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="co"># User bias model via lm()</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="co"># -------------------------</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a></span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="co"># Fit linear model with user fixed effects</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a>fit_user <span class="ot">&lt;-</span> <span class="fu">lm</span>(rating <span class="sc">~</span> <span class="fu">factor</span>(userId), <span class="at">data =</span> training_set)</span>
+<span id="cb17-7"><a href="#cb17-7"></a></span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="co"># Predict on test set</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a>pred_user_lm <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_user, <span class="at">newdata =</span> test_set)</span>
+<span id="cb17-10"><a href="#cb17-10"></a></span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="co"># Handle unseen users (NA predictions)</span></span>
+<span id="cb17-12"><a href="#cb17-12"></a>pred_user_lm[<span class="fu">is.na</span>(pred_user_lm)] <span class="ot">&lt;-</span> mu</span>
+<span id="cb17-13"><a href="#cb17-13"></a></span>
+<span id="cb17-14"><a href="#cb17-14"></a><span class="co"># RMSE</span></span>
+<span id="cb17-15"><a href="#cb17-15"></a>rmse_user_lm <span class="ot">&lt;-</span> <span class="fu">RMSE</span>(test_set<span class="sc">$</span>rating, pred_user_lm)</span>
+<span id="cb17-16"><a href="#cb17-16"></a></span>
+<span id="cb17-17"><a href="#cb17-17"></a>rmse_user_lm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9769863</code></pre>
+</div>
+</div>
+</section>
+<section id="movie-bias-model" class="level2">
+<h2 class="anchored" data-anchor-id="movie-bias-model">Movie bias model</h2>
+<p>Predicts each rating as the overall average rating plus a movie-specific bias: <span class="math display">
+\hat{r}_{ui} = \mu + b_i
+</span></p>
+<p>where <span class="math inline">b_i</span> is the average deviation of movie <span class="math inline">i</span> from the global mean, estimated as: <span class="math display">
+b_i = \frac{1}{N_i} \sum_u (r_{ui} - \mu)
+</span></p>
+<p>with <span class="math inline">N_i</span> the number of ratings received by movie <span class="math inline">i</span>, and <span class="math inline">\sum_u</span> the sum over all users who rated movie <span class="math inline">i</span>.</p>
+<p>Therefore, this model predicts the same value for all users for a given movie, equal to the movie’s average rating.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9432398</code></pre>
+</div>
+</div>
+</section>
+<section id="user-movie-bias-model" class="level2">
+<h2 class="anchored" data-anchor-id="user-movie-bias-model">User + Movie bias model</h2>
+<p>This model improves the previous models by adding both a movie-specific bias and a user-specific bias:</p>
+<p><span class="math display">
+\hat{r}_{ui} = \mu + b_i + b_u
+</span></p>
+<ul>
+<li>Step 1: Estimate movie bias</li>
+</ul>
+<p>The movie bias measures how much movie <span class="math inline">i</span> tends to be rated above or below the global average:</p>
+<p><span class="math display">
+b_i = \frac{1}{N_i} \sum_u (r_{ui} - \mu)
+</span></p>
+<ul>
+<li>Step 2: Estimate user bias after removing movie bias</li>
+</ul>
+<p>The user bias measures how much user <span class="math inline">u</span> tends to rate above or below what is expected after accounting for the movie effect: <span class="math display">
+b_u = \frac{1}{N_u} \sum_i (r_{ui} - \mu - b_i)
+</span></p>
+<ul>
+<li>Step 3: Make predictions</li>
+</ul>
+<p>The final prediction adds together the global mean, movie bias, and user bias:</p>
+<p><span class="math display">
+\hat{r}_{ui} = \mu + b_i + b_u
+</span></p>
+<p>Predictions are then limited to the valid rating range:</p>
+<p><span class="math display">
+0.5 \leq \hat{r}_{ui} \leq 5
+</span></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8647311</code></pre>
+</div>
+</div>
+</section>
+<section id="matrix-completion-with-svd" class="level2">
+<h2 class="anchored" data-anchor-id="matrix-completion-with-svd">Matrix completion with SVD</h2>
+<p>This model extends the user + movie bias model by learning an additional latent interaction term using SVD.</p>
+<p>The prediction is: <span class="math display">
+\hat{r}_{ui} = \mu + b_i + b_u + s_{ui}
+</span> where:</p>
+<ul>
+<li><p><span class="math inline">\mu</span> is the global mean rating</p></li>
+<li><p><span class="math inline">b_i</span> is the movie bias</p></li>
+<li><p><span class="math inline">b_u</span> is the user bias</p></li>
+<li><p><span class="math inline">s_{ui}</span> is the SVD residual effect for user <span class="math inline">u</span> and movie <span class="math inline">i</span></p></li>
+<li><p>Step 1: Select a smaller user-movie matrix</p></li>
+</ul>
+<p>The full MovieLens matrix is too large for base R SVD, so the code keeps only the 1000 most active users and 1000 most rated movies.</p>
+<ul>
+<li>Step 2: Compute residuals</li>
+</ul>
+<p>The code first removes the user + movie bias prediction:</p>
+<p><span class="math display">
+e_{ui} = r_{ui} - \mu - b_i - b_u
+</span></p>
+<p>So SVD is applied only to what remains unexplained by the bias model.</p>
+<ul>
+<li>Step 3: Build the residual matrix</li>
+</ul>
+<p>A matrix <span class="math inline">X</span> is created where:</p>
+<ul>
+<li><p>rows are users</p></li>
+<li><p>columns are movies</p></li>
+<li><p>observed cells contain residuals <span class="math inline">e_{ui}</span></p></li>
+<li><p>missing cells are <code>NA</code></p></li>
+<li><p>Step 4: Initialize missing values</p></li>
+</ul>
+<p>Because SVD cannot handle missing values, missing entries are first replaced by column means:</p>
+<p><span class="math display">
+\hat{X}_{ui} = \bar{X}_i
+</span></p>
+<p>This gives a reasonable starting estimate for unrated movies.</p>
+<ul>
+<li>Step 5: Iterative SVD completion</li>
+</ul>
+<p>At each iteration:</p>
+<ol type="1">
+<li><p>Approximate the filled matrix using rank-<span class="math inline">M</span> SVD: <span class="math display">
+X_{\text{app}} = U_M D_M V_M^T
+</span></p></li>
+<li><p>Replace only the missing values with the SVD approximation: <span class="math display">
+\hat{X}_{ui} = X_{\text{app},ui}
+</span></p></li>
+<li><p>Keep the observed residuals fixed.</p></li>
+</ol>
+<p>The loop stops when improvement becomes very small or <code>max_iter</code> is reached.</p>
+<ul>
+<li>Step 6: Predict on the test set</li>
+</ul>
+<p>For users and movies included in the SVD matrix, the model adds the SVD residual effect:</p>
+<p><span class="math display">
+\hat{r}_{ui} = \mu + b_i + b_u + s_{ui}
+</span></p>
+<p>For users or movies not included in the SVD subset, the SVD effect is set to zero, so the model falls back to:</p>
+<p><span class="math display">
+\hat{r}_{ui} = \mu + b_i + b_u
+</span></p>
+<p>Finally, predictions are clipped to the valid rating range:</p>
+<p><span class="math display">
+0.5 \leq \hat{r}_{ui} \leq 5
+</span></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Iter: 1 MSS: 0.6192552 Rel. Err: 0.1031086 
+Iter: 2 MSS: 0.6053771 Rel. Err: 0.01962035 
+Iter: 3 MSS: 0.6011958 Rel. Err: 0.005911385 
+Iter: 4 MSS: 0.599638 Rel. Err: 0.002202408 
+Iter: 5 MSS: 0.5989684 Rel. Err: 0.0009466317 
+Iter: 6 MSS: 0.5986465 Rel. Err: 0.0004550276 
+Iter: 7 MSS: 0.5984768 Rel. Err: 0.0002399279 
+Iter: 8 MSS: 0.5983801 Rel. Err: 0.0001366785 
+Iter: 9 MSS: 0.5983214 Rel. Err: 8.299461e-05 
+Iter: 10 MSS: 0.5982839 Rel. Err: 5.307632e-05 
+Iter: 11 MSS: 0.5982589 Rel. Err: 3.537903e-05 
+Iter: 12 MSS: 0.5982416 Rel. Err: 2.437109e-05 
+Iter: 13 MSS: 0.5982294 Rel. Err: 1.723272e-05 
+Iter: 14 MSS: 0.5982206 Rel. Err: 1.244319e-05 
+Iter: 15 MSS: 0.5982142 Rel. Err: 9.139424e-06 
+Iter: 16 MSS: 0.5982093 Rel. Err: 6.808772e-06 
+Iter: 17 MSS: 0.5982057 Rel. Err: 5.134232e-06 
+Iter: 18 MSS: 0.5982029 Rel. Err: 3.912838e-06 
+Iter: 19 MSS: 0.5982008 Rel. Err: 3.010699e-06 
+Iter: 20 MSS: 0.5981992 Rel. Err: 2.33722e-06 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8617393</code></pre>
+</div>
+</div>
+</section>
+<section id="matrix-factorization-with-recosystem" class="level2">
+<h2 class="anchored" data-anchor-id="matrix-factorization-with-recosystem">Matrix factorization with recosystem</h2>
+<p>This model learns latent user and movie factors to predict ratings.</p>
+<ol type="1">
+<li>Convert user and movie IDs to integer indices (required by <code>recosystem</code>)</li>
+<li>Train a matrix factorization model (learns hidden features of users and movies)</li>
+<li>Tune hyperparameters (dimension, learning rate, regularization)</li>
+<li>Predict ratings on the test set</li>
+</ol>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$dim
+[1] 20
+
+$costp_l1
+[1] 0
+
+$costp_l2
+[1] 0.1
+
+$costq_l1
+[1] 0
+
+$costq_l2
+[1] 0.01
+
+$lrate
+[1] 0.1
+
+$loss_fun
+[1] 0.8019973</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7890856</code></pre>
+</div>
+</div>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>                            model      rmse
+6 recosystem_matrix_factorization 0.7890856
+5                  user_movie_svd 0.8617393
+4                 user_movie_bias 0.8647311
+3                      movie_bias 0.9432398
+2                       user_bias 0.9769863
+1                     global_mean 1.0596762</code></pre>
 </div>
 </div>
 </section>
